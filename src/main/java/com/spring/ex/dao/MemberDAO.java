@@ -1,12 +1,12 @@
-package com.srping.ex.dao;
+package src.main.java.com.spring.ex.dao;
 
 import com.spring.ex.dto.MemberDTO;
 
 public interface MemberDAO {
 	
-	//íšŒì› ê°€ì…
+	//?šŒ?› ê°??…
 	public void signUp(MemberDTO dto) throws Exception;
 	
-	//ë¡œê·¸ì¸
+	//ë¡œê·¸?¸
 	public MemberDTO login(MemberDTO dto) throws Exception;
 }

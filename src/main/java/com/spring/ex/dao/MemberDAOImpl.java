@@ -1,4 +1,4 @@
-package com.srping.ex.dao;
+package src.main.java.com.spring.ex.dao;
 
 import javax.inject.Inject;
 
@@ -17,13 +17,13 @@ public class MemberDAOImpl implements MemberDAO {
 	//mapper
 	private static String namespcae = "com.spring.mappers.memberMapper";
 	
-	//íšŒì›ê°€ì…
+	//?šŒ?›ê°??…
 	@Override
 	public void signUp(MemberDTO dto) throws Exception {
 		sql.insert(namespcae + ".signUp", dto);
 	}
 
-	//ë¡œê·¸ì¸
+	//ë¡œê·¸?¸
 	@Override
 	public MemberDTO login(MemberDTO dto) throws Exception {
 		return sql.selectOne(namespcae + ".login", dto);
