@@ -16,13 +16,22 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	@Inject
 	private CommunityBoardDAO dao;
 	
-	//게시판 출력
-	public List<CommunityBoardDTO> getCommunityBoardPage(HashMap<String, Integer> map) throws Exception {
-		return dao.getCommunityBoardPage(map);
+	//게시판 최신순 출력
+	@Override
+	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Integer> map) throws Exception {
+		return dao.getCommunityBoardChatRegDateShowPage(map);
+	}
+	
+	//게시판 좋아요순 출력
+	@Override
+	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Integer> map) throws Exception {
+		return dao.getCommunityBoardChatGoodShowPage(map);
 	}
 	
 	//게시판 목록 총 갯수 - 페이징
+	@Override
 	public int getCommunityBoardTotalCount() throws Exception {
 		return dao.getCommunityBoardTotalCount();
 	}
+
 }

@@ -18,16 +18,26 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	private SqlSession sqlSession;
 	private static final String namespace = "com.spring.ex.CommunityBoardMapper";
 	
-	//게시판 출력
+	//게시판 최신순 출력
 	@Override
-	public List<CommunityBoardDTO> getCommunityBoardPage(HashMap<String, Integer> map) throws Exception {
-		return sqlSession.selectList(namespace + ".getCommunityBoardPage", map) ;
+	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Integer> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getCommunityBoardChatRegDateShowPage", map) ;
 	}
 
+	//게시판 좋아요순 출력
+	@Override
+	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Integer> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getCommunityBoardChatGoodShowPage", map);
+	}
+	
 	//게시판 총 갯수
 	@Override
 	public int getCommunityBoardTotalCount() throws Exception {
 		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount") ;
 	}
+
+
+
+
 
 }
