@@ -3,11 +3,12 @@ package com.spring.ex.dao;
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.MemberDTO;
 
-@Service
+@Repository
 public class MemberDAOImpl implements MemberDAO {
 
 	//mybatis
@@ -15,12 +16,18 @@ public class MemberDAOImpl implements MemberDAO {
 	private SqlSession sql;
 	
 	//mapper
-	private static String namespcae = "com.spring.mappers.memberMapper";
+	private static final String namespcae = "com.spring.mappers.memberMapper";
 	
 	//회원가입
 	@Override
 	public void signUp(MemberDTO dto) throws Exception {
 		sql.insert(namespcae + ".signUp", dto);
+	}
+	
+	// 아이디 중복 체크
+	@Override
+	public MemberDTO memberIdCheck(String m_id) throws Exception {
+		return sql.selectOne(namespcae + ".memberIdCheck", m_id);
 	}
 
 	//로그인

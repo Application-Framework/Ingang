@@ -56,15 +56,30 @@
                                                     <li><a href="/community/studies">스터디</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/mypage">마이페이지</a></li>
+                                            <!-- 로그인을 수행해야 마이페이지 보임 -->
+                                            <c:if test="${member != null}">
+                                            	<li><a href="/mypage">마이페이지</a></li>
+                                            </c:if>
+                                            
                                         </ul>
                                     </nav>
                                 </div>          
                                 <!-- Header-btn -->
-                                <div class="header-btn d-none f-right d-lg-block">
-                                    <a href="/signUp" class="btn head-btn1">가입하기</a>
-                                    <a href="/login" class="btn head-btn2">로그인</a>
-                                </div>
+                                <!-- 로그인에 성공한 경우 환영문구, 가입하기, 로그인 버튼 숨김 -->
+                                <c:if test="${member == null}">
+                                	<div class="header-btn d-none f-right d-lg-block">
+	                                    <a href="/signUp" class="btn head-btn1">가입하기</a>
+	                                    <a href="/loginPageView" class="btn head-btn2">로그인</a>
+                                	</div>
+                                </c:if>
+                                
+                                <!-- 로그인에 성공한 경우 로그아웃 버튼 보여줌 -->
+                                <c:if test="${member != null}">
+                              		${member.m_name}님 환영합니다!
+                                	<div class="header-btn d-none f-right d-lg-block">
+	                                    <a href="/logOut" class="btn head-btn2">로그아웃</a>
+                                	</div>
+                                </c:if>
                             </div>
                         </div>
                         <!-- Mobile Menu -->

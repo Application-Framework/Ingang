@@ -34,151 +34,167 @@
 	    <%------------ header section  ------------%>
 	    <jsp:include page="./fix/header.jsp" />
     <main>
-        <!-- Hero Area Start-->
-        <div class="slider-area ">
-        <div class="single-slider section-overly slider-height2 d-flex align-items-center" data-background="assets/img/hero/about.jpg">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-12">
-                        <div class="hero-cap text-center">
-                            <h2>마이페이지</h2><br/><br/>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        </div>
-        <!-- Hero Area End -->
         <br/><br/>
-        
-        <!-- Sidebar Start -->
-        <div class="sidebar pe-4 pb-3">
-            <nav class="navbar bg-light navbar-light">
-                <div class="navbar-nav w-100">
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fa fa-laptop me-2"></i>회원정보</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="/mypage" class="dropdown-item">정보수정</a>
-                            <a href="/mypage" class="dropdown-item">회원탈퇴</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>구매내역</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="/mypage" class="dropdown-item">강의내역</a>
-                            <a href="/mypage" class="dropdown-item">노트내역</a>
-                        </div>
-                    </div>
-                    <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="far fa-file-alt me-2"></i>My</a>
-                        <div class="dropdown-menu bg-transparent border-0">
-                            <a href="/mypage" class="dropdown-item">내 강의</a>
-                            <a href="/mypage" class="dropdown-item">내 노트</a>
-                            <a href="/mypage" class="dropdown-item">내 게시글</a>
-                        </div>
-                    </div>
-                </div>
-            </nav>
-        </div>
-        <!-- Sidebar End -->
-        
-        <div class="container">
-			<div class="single-testimonial text-center">
-				<!-- Testimonial Content -->
-				<div class="testimonial-caption ">
-					<!-- founder -->
-					<div class="testimonial-founder  ">
-						<div class="founder-img mb-30">
-							<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt=""> <span>회원 아이디</span>
-							<p>강의이름</p>
-							<button type="button" class="btn head-btn2" name="btn_modify" onclick="location.href=''">정보수정</button> &nbsp;&nbsp;
-							<button type="button" class="btn head-btn1" name="btn_delete" onclick="location.href=''">회원탈퇴</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<center><h3>신상정보</h3></center>
-		</div>
-		<br/><br/><br/>
-		
-		<!-- 구매내역 start -->
+
 		<div class="container">
-			<div class="text-center">
-				<h3>구매내역</h3>
-				<br/>
-			</div>
 			<div class="row">
-				<div class="col-lg-6 col-md-8">
-					<div class="single-process text-center mb-30">
-						<div class="process-cap">
-							<h5>강의 구매 건수</h5>
-							<p>Sorem spsum dolor sit amsectetur adipisclit, seddo eiusmod
-								tempor incididunt ut laborea.</p>
-						</div>
-					</div>
+				<!-- Left content -->
+				<div class="col-lg-2 sidebar pe-4 pb-3">
+					<aside class="single_sidebar_widget post_category_widget">
+						<nav class="navbar bg-light navbar-light">
+							<div class="navbar-nav w-100">
+								<div class="nav-item dropdown">
+									<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+										<i class="fa fa-laptop me-2"></i>회원정보
+									</a>
+									<div class="dropdown-menu bg-transparent border-0">
+										<a href="/mypage" class="dropdown-item">정보수정</a> 
+										<a href="/mypage" class="dropdown-item">회원탈퇴</a>
+									</div>
+								</div>
+								<div class="nav-item dropdown">
+									<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+										<i class="far fa-file-alt me-2"></i>구매내역
+									</a>
+									<div class="dropdown-menu bg-transparent border-0">
+										<a href="/mypage" class="dropdown-item">강의내역</a> 
+										<a href="/mypage" class="dropdown-item">노트내역</a>
+									</div>
+								</div>
+								<div class="nav-item dropdown">
+									<a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">
+										<i class="far fa-file-alt me-2"></i>My
+									</a>
+									<div class="dropdown-menu bg-transparent border-0">
+										<a href="/mypage" class="dropdown-item">내 강의</a> <a
+											href="/mypage" class="dropdown-item">내 노트</a> <a
+											href="/mypage" class="dropdown-item">내 게시글</a>
+									</div>
+								</div>
+							</div>
+						</nav>
+					</aside>
 				</div>
-				<div class="col-lg-6 col-md-8">
-					<div class="single-process text-center mb-30">
-						<div class="process-cap">
-							<h5>노트 구매 건수</h5>
-							<p>Sorem spsum dolor sit amsectetur adipisclit, seddo eiusmod
-								tempor incididunt ut laborea.</p>
+				<!-- Right content -->
+				<div class="col-lg-10">
+					<div class="container">
+						<div class="single-testimonial text-center">
+							<!-- Testimonial Content -->
+							<div class="testimonial-caption ">
+								<!-- founder -->
+								<div class="testimonial-founder  ">
+									<div class="founder-img mb-30">
+										<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt="">
+										<span>${member.m_id}</span>
+										<p>${member.m_name}</p>
+										<button type="button" class="btn head-btn2" name="btn_modify" onclick="location.href=''">정보수정</button>
+										&nbsp;&nbsp;
+										<button type="button" class="btn head-btn1" name="btn_delete" onclick="location.href=''">회원탈퇴</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<center>
+							<h3>신상정보</h3>
+						</center>
+					</div>
+					<br />
+					<br />
+					<br />
+
+					<!-- 구매내역 start -->
+					<div class="container">
+						<div class="text-center">
+							<h3>구매내역</h3>
+							<br />
+						</div>
+						<div class="row">
+							<div class="col-lg-6 col-md-8">
+								<div class="single-process text-center mb-30">
+									<div class="process-cap">
+										<h5>강의 구매 건수</h5>
+										<p>Sorem spsum dolor sit amsectetur adipisclit, seddo
+											eiusmod tempor incididunt ut laborea.</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-6 col-md-8">
+								<div class="single-process text-center mb-30">
+									<div class="process-cap">
+										<h5>노트 구매 건수</h5>
+										<p>Sorem spsum dolor sit amsectetur adipisclit, seddo
+											eiusmod tempor incididunt ut laborea.</p>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
+					<!-- 구매내역 end -->
+					<br />
+					<br />
+					<br />
+
+					<!-- My start -->
+					<div class="container">
+						<div class="text-center">
+							<h3>My</h3>
+							<br />
+						</div>
+						<!-- Apply Process Caption -->
+						<div class="row">
+							<div class="col-lg-4 col-md-6">
+								<div class="single-process text-center mb-30">
+									<div class="process-cap">
+										<h5>내 강의</h5>
+										<p>Sorem spsum dolor sit amsectetur adipisclit, seddo
+											eiusmod tempor incididunt ut laborea.</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6">
+								<div class="single-process text-center mb-30">
+									<div class="process-cap">
+										<h5>내 노트</h5>
+										<p>Sorem spsum dolor sit amsectetur adipisclit, seddo
+											eiusmod tempor incididunt ut laborea.</p>
+									</div>
+								</div>
+							</div>
+							<div class="col-lg-4 col-md-6">
+								<div class="single-process text-center mb-30">
+									<div class="process-cap">
+										<h5>내 게시글</h5>
+										<p>Sorem spsum dolor sit amsectetur adipisclit, seddo
+											eiusmod tempor incididunt ut laborea.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- My end -->
+					<br />
+					<br />
+					<br />
+
+					<div class="container">
+						<div class="text-center">
+							<h3>문의하기</h3>
+							<br />
+							<button type="button" class="btn head-btn1" name="btn_inquire"
+								onclick="location.href=''">1:1 문의하기</button>
+						</div>
+					</div>
+					<br />
+					<br />
+					<br />
 				</div>
 			</div>
+			</section>
 		</div>
-		<!-- 구매내역 end -->
-		<br/><br/><br/>
-	
-		<!-- My start -->
-		<div class="container">
-			<div class="text-center">
-				<h3>My</h3>
-				<br/>
-			</div>
-			<!-- Apply Process Caption -->
-			<div class="row">
-				<div class="col-lg-4 col-md-6">
-					<div class="single-process text-center mb-30">
-						<div class="process-cap">
-							<h5>내 강의</h5>
-							<p>Sorem spsum dolor sit amsectetur adipisclit, seddo eiusmod
-								tempor incididunt ut laborea.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="single-process text-center mb-30">
-						<div class="process-cap">
-							<h5>내 노트</h5>
-							<p>Sorem spsum dolor sit amsectetur adipisclit, seddo eiusmod
-								tempor incididunt ut laborea.</p>
-						</div>
-					</div>
-				</div>
-				<div class="col-lg-4 col-md-6">
-					<div class="single-process text-center mb-30">
-						<div class="process-cap">
-							<h5>내 게시글</h5>
-							<p>Sorem spsum dolor sit amsectetur adipisclit, seddo eiusmod
-								tempor incididunt ut laborea.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<!-- My end -->
-		<br/><br/><br/>
+
 		
-		<div class="container">
-			<div class="text-center">
-				<h3>문의하기</h3>
-				<br/>
-				<button type="button" class="btn head-btn1" name="btn_inquire" onclick="location.href=''">1:1 문의하기</button>
-			</div>
-		</div>
-		<br/><br/><br/>
+        
+        
 
     </main>
     	<jsp:include page="./fix/footer.jsp" />
@@ -222,12 +238,8 @@
 </html>
 <style>
 .sidebar {
-    position: fixed;
-    top: 90px;
-    left: 0;
-    bottom: 0;
-    width: 250px;
-    height: 100vh;
+    width: 400px;
+    height: 500px;
     overflow-y: auto;
     background: var(--light);
     transition: 0.5s;
@@ -257,9 +269,9 @@
         margin-left: 0;
     }
 }
-/*** Navbar ***/
+
 .sidebar .navbar .navbar-nav .nav-link {
-    padding: 7px 20px;
+    padding: 7px 10px;
     color: var(--dark);
     font-weight: 500;
     border-left: 3px solid var(--light);
@@ -307,7 +319,7 @@
 .sidebar .navbar .dropdown-item {
     padding-left: 25px;
     border-radius: 0 30px 30px 0;
-}
+} 
 </style>
 
 <!-- 드롭박스 기능 -->

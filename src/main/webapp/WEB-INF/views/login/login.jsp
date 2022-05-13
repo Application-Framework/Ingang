@@ -45,13 +45,13 @@
                         <h3>로그인</h3>
                         <form role="form" method="post" autocomplete="off">
                             <div class="input__item">
-                                <input type="text" class="form-control" placeholder="id를 입력해 주세요">
+                                <input type="text" name="m_id" class="form-control" placeholder="id를 입력해 주세요">
                                 <span class="material-symbols-outlined">
                                 	account_circle
                                 </span>
                             </div>
                             <div class="input__item">
-                                <input type="password" class="form-control"  placeholder="pw를 입력해 주세요">
+                                <input type="password" name="m_pw" class="form-control"  placeholder="pw를 입력해 주세요">
                                 <span class="material-symbols-outlined">
                                 	lock
                                 </span>
@@ -64,7 +64,7 @@
                 <div class="col-lg-6">
                     <div class="login__register">
                         <h3>회원이 아니십니까?</h3>
-                        <a href="/signUp" class="primary-btn">가입하기</a>
+                        <a href="/signUp" class="btn head-btn1">가입하기</a>
                     </div>
                 </div>
             </div>

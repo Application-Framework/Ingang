@@ -7,6 +7,7 @@ public class MemberDTO {
 	private String m_birth;
 	private String m_sex;
 	private String m_phone;
+	private int m_authority;
 	
 	public String getM_id() {
 		return m_id;
@@ -43,5 +44,11 @@ public class MemberDTO {
 	}
 	public void setM_phone(String m_phone) {
 		this.m_phone = m_phone;
+	}
+	public int getM_authority() {
+		return m_authority;
+	}
+	public void setM_authority(int m_authority) {
+		this.m_authority = m_authority;
 	}
 }
