@@ -25,14 +25,29 @@ public class CommunityController {
 	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
 		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
 		
+		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
-		model.addAttribute("cbRegDateList", communityBoardList);
+		
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/community_chats";
+	}
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(Model model, HttpServletRequest request) throws Exception{
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
+		
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		
+		model.addAttribute("Paging", pagingService.getPaging());
+		
+		return "community/community_test";
 	}
 	
 	
