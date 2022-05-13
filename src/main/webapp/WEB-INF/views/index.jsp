@@ -47,13 +47,6 @@
      	<%------------ main section  ------------%>
      	<main>
      	
-     	<ul>
-	        <li><a class="home" href="#">홈</a></li>
-	        <li><a href="#">새소식</a></li>
-	        <li><a href="#">상품</a></li>
-	        <li><a href="#">회사</a></li>
-    	</ul>
-     	
         <!-- slider Area Start-->
 		<!-- Mobile Menu -->
 		<div class="slider-active">
@@ -64,6 +57,8 @@
 						<div class="col-xl-6 col-lg-9 col-md-10">
 							<div class="hero__caption">
 								<h1>인강인강</h1>
+								<p>인강인강이 제공하는 고퀄리티 강의영상을 경험해 보세요. <br/>
+								인강인강은 오직 수강생 여러분의 편의만을 생각합니다.</p>
 							</div>
 						</div>
 					</div>
@@ -93,91 +88,96 @@
 			</div>
 		</div>
 		<!-- slider Area End-->
-		
-	
+		<br/><br/>
+
 		<!-- 좌측 사이드 영역 start -->
 		<div class="left-box">
-			<center><h3>실시간 강의 평가</h3></center>
 			<!-- Testimonial Start -->
-        <div class="testimonial-area testimonial-padding">
-            <div class="container">
-                <!-- Testimonial contents -->
-                <div class="row d-flex justify-content-center">
-                    <div class="col-xl-8 col-lg-8 col-md-10">
-                        <div class="h1-testimonial-active dot-style">
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <!-- Testimonial Content -->
-                                <div class="testimonial-caption ">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder  ">
-                                        <div class="founder-img mb-30">
-                                            <img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt="">
-                                            <span>회원 아이디</span>
-                                            <p>강의이름</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“강의평”</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <!-- Testimonial Content -->
-                                <div class="testimonial-caption ">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder  ">
-                                        <div class="founder-img mb-30">
-                                            <img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt="">
-                                            <span>회원 아이디</span>
-                                            <p>강의이름</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“강의평”</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Single Testimonial -->
-                            <div class="single-testimonial text-center">
-                                <!-- Testimonial Content -->
-                                <div class="testimonial-caption ">
-                                    <!-- founder -->
-                                    <div class="testimonial-founder  ">
-                                        <div class="founder-img mb-30">
-                                            <img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt="">
-                                            <span>회원 아이디</span>
-                                            <p>강의이름</p>
-                                        </div>
-                                    </div>
-                                    <div class="testimonial-top-cap">
-                                        <p>“강의평”</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Testimonial End -->
-			<center><h3>핫 트랜드 검색어</h3></center>
-			<ul>
-				<li>1</li>
-				<li>2</li>
-				<li>3</li>
-				<li>4</li>
-				<li>5</li>
-				<li>6</li>
-				<li>7</li>
-				<li>8</li>
-				<li>9</li>
-				<li>10</li>
-			</ul>
+			<div class="testimonial-area testimonial-padding">
+				<div class="container">
+				<center><h3>실시간 강의 평가</h3></center>
+					<!-- Testimonial contents -->
+					<div class="row d-flex justify-content-center">
+						<div class="col-xl-8 col-lg-8 col-md-10">
+							<div class="h1-testimonial-active dot-style">
+								<!-- Single Testimonial -->
+								<div class="single-testimonial text-center">
+									<!-- Testimonial Content -->
+									<div class="testimonial-caption ">
+										<!-- founder -->
+										<div class="testimonial-founder  ">
+											<div class="founder-img mb-30">
+												<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt=""> 
+												<span>회원 아이디</span>
+												<p>강의이름</p>
+											</div>
+										</div>
+										<div class="testimonial-top-cap">
+											<p>“강의평”</p>
+										</div>
+									</div>
+								</div>
+								<!-- Single Testimonial -->
+								<div class="single-testimonial text-center">
+									<!-- Testimonial Content -->
+									<div class="testimonial-caption ">
+										<!-- founder -->
+										<div class="testimonial-founder  ">
+											<div class="founder-img mb-30">
+												<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt=""> 
+												<span>회원 아이디</span>
+												<p>강의이름</p>
+											</div>
+										</div>
+										<div class="testimonial-top-cap">
+											<p>“강의평”</p>
+										</div>
+									</div>
+								</div>
+								<!-- Single Testimonial -->
+								<div class="single-testimonial text-center">
+									<!-- Testimonial Content -->
+									<div class="testimonial-caption ">
+										<!-- founder -->
+										<div class="testimonial-founder  ">
+											<div class="founder-img mb-30">
+												<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt=""> 
+												<span>회원 아이디</span>
+												<p>강의이름</p>
+											</div>
+										</div>
+										<div class="testimonial-top-cap">
+											<p>“강의평”</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Testimonial End -->
+			<center>
+				<h3>핫 트랜드 검색어</h3>
+			</center>
+			<div class="container">
+				<ul>
+					<li>1. ㅂㅈㄿ</li>
+					<li>2. ㅂㅈㄷ</li>
+					<li>3. ㅁㄴㅇ</li>
+					<li>4. ㅁㄴㅇ</li>
+					<li>5. ㅇㅁㄴ</li>
+					<li>6. ㅇㅁㄴ</li>
+					<li>7. ㅁㄴㄴㅁㅇ</li>
+					<li>8. 음하핫</li>
+					<li>9. 크하하핫</li>
+					<li>10. 으하하핫</li>
+				</ul>
+			</div>
 		</div>
 		<!-- 좌측 사이드 영역 end -->
-		
+
 		<!-- 이 주의 강의 Start -->
         <div class="our-services section-pad-t30">
             <div class="container">
@@ -185,6 +185,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle text-center">
+                        	<span>인강인강 수강생들이 선택한</span>
                             <h2>이 주의 강의</h2>
                         </div>
                     </div>
@@ -196,7 +197,7 @@
                                 <span class="flaticon-tour"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Creative</a></h5>
+                               <h5><a href="#">Design & Creative</a></h5>
                                 <span>(653)</span>
                             </div>
                         </div>
@@ -207,7 +208,7 @@
                                 <span class="flaticon-cms"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Development</a></h5>
+                               <h5><a href="#">Design & Development</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -218,7 +219,7 @@
                                 <span class="flaticon-report"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Sales & Marketing</a></h5>
+                               <h5><a href="#">Sales & Marketing</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -229,7 +230,7 @@
                                 <span class="flaticon-app"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Mobile Application</a></h5>
+                               <h5><a href="#">Mobile Application</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -240,7 +241,7 @@
                                 <span class="flaticon-helmet"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Construction</a></h5>
+                               <h5><a href="#">Construction</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -251,7 +252,7 @@
                                 <span class="flaticon-high-tech"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Information Technology</a></h5>
+                               <h5><a href="#">Information Technology</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -262,7 +263,7 @@
                                 <span class="flaticon-real-estate"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Real Estate</a></h5>
+                               <h5><a href="#">Real Estate</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -273,7 +274,7 @@
                                 <span class="flaticon-content"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Content Writer</a></h5>
+                               <h5><a href="#">Content Writer</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -284,128 +285,13 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="job_listing.html" class="border-btn2">강의 전체보기</a>
+                            <a href="#" class="border-btn2">강의 전체보기</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <!-- 이 주의 강의 end -->
-        
-        
-        <!-- 이 주의 노트 Start -->
-        <div class="our-services section-pad-t30">
-            <div class="container">
-                <!-- Section Tittle -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-tittle text-center">
-                            <h2>이 주의 노트</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-contnet-center">
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-tour"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Creative</a></h5>
-                                <span>(653)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-cms"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Development</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-report"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Sales & Marketing</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-app"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Mobile Application</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-helmet"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Construction</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-high-tech"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Information Technology</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-real-estate"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Real Estate</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-content"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="job_listing.html">Content Writer</a></h5>
-                                <span>(658)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- More Btn -->
-                <!-- Section Button -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="browse-btn2 text-center mt-50">
-                            <a href="job_listing.html" class="border-btn2">노트 전체보기</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- 이 주의 노트 end -->
         
         <!-- 신규 강의 Start -->
         <div class="our-services section-pad-t30">
@@ -414,6 +300,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle text-center">
+                        	<span>따끈따끈한</span>
                             <h2>신규 강의</h2>
                         </div>
                     </div>
@@ -425,7 +312,7 @@
                                 <span class="flaticon-tour"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Creative</a></h5>
+                               <h5><a href="#">Design & Creative</a></h5>
                                 <span>(653)</span>
                             </div>
                         </div>
@@ -436,7 +323,7 @@
                                 <span class="flaticon-cms"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Development</a></h5>
+                               <h5><a href="#">Design & Development</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -447,7 +334,7 @@
                                 <span class="flaticon-report"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Sales & Marketing</a></h5>
+                               <h5><a href="#">Sales & Marketing</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -458,7 +345,7 @@
                                 <span class="flaticon-app"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Mobile Application</a></h5>
+                               <h5><a href="#">Mobile Application</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -469,7 +356,7 @@
                                 <span class="flaticon-helmet"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Construction</a></h5>
+                               <h5><a href="#">Construction</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -480,7 +367,7 @@
                                 <span class="flaticon-high-tech"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Information Technology</a></h5>
+                               <h5><a href="#">Information Technology</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -491,7 +378,7 @@
                                 <span class="flaticon-real-estate"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Real Estate</a></h5>
+                               <h5><a href="#">Real Estate</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -502,7 +389,7 @@
                                 <span class="flaticon-content"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Content Writer</a></h5>
+                               <h5><a href="#">Content Writer</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -513,7 +400,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="job_listing.html" class="border-btn2">노트 전체보기</a>
+                            <a href="#" class="border-btn2">노트 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -528,6 +415,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle text-center">
+                        	<span>코딩을 배우고 싶은 분들을 위한</span>
                             <h2>입문자용 강의</h2>
                         </div>
                     </div>
@@ -539,7 +427,7 @@
                                 <span class="flaticon-tour"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Creative</a></h5>
+                               <h5><a href="#">Design & Creative</a></h5>
                                 <span>(653)</span>
                             </div>
                         </div>
@@ -550,7 +438,7 @@
                                 <span class="flaticon-cms"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Design & Development</a></h5>
+                               <h5><a href="#">Design & Development</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -561,7 +449,7 @@
                                 <span class="flaticon-report"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Sales & Marketing</a></h5>
+                               <h5><a href="#">Sales & Marketing</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -572,7 +460,7 @@
                                 <span class="flaticon-app"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Mobile Application</a></h5>
+                               <h5><a href="#">Mobile Application</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -583,7 +471,7 @@
                                 <span class="flaticon-helmet"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Construction</a></h5>
+                               <h5><a href="#">Construction</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -594,7 +482,7 @@
                                 <span class="flaticon-high-tech"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Information Technology</a></h5>
+                               <h5><a href="#">Information Technology</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -605,7 +493,7 @@
                                 <span class="flaticon-real-estate"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Real Estate</a></h5>
+                               <h5><a href="#">Real Estate</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -616,7 +504,7 @@
                                 <span class="flaticon-content"></span>
                             </div>
                             <div class="services-cap">
-                               <h5><a href="job_listing.html">Content Writer</a></h5>
+                               <h5><a href="#">Content Writer</a></h5>
                                 <span>(658)</span>
                             </div>
                         </div>
@@ -627,7 +515,7 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="job_listing.html" class="border-btn2">입문자용 강의 전체보기</a>
+                            <a href="#" class="border-btn2">입문자용 강의 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -635,15 +523,15 @@
         </div>
         <!-- 입문자용 강의 end -->
         
-        <!-- Featured_job_start -->
+        <!-- 이 주의 노트 start -->
         <section class="featured-job-area feature-padding">
             <div class="container">
                 <!-- Section Tittle -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="section-tittle text-center">
-                            <span>Recent Job</span>
-                            <h2>Featured Jobs</h2>
+                            <span>강추!!</span>
+                            <h2>이 주의 노트</h2>
                         </div>
                     </div>
                 </div>
@@ -653,10 +541,10 @@
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="job_details.html"><img src="<c:url value='/resources/img/icon/job-list1.png'/>" alt=""></a>
+                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list1.png'/>" alt=""></a>
                                 </div>
                                 <div class="job-tittle">
-                                    <a href="job_details.html"><h4>Digital Marketer</h4></a>
+                                    <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
                                         <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
@@ -665,7 +553,7 @@
                                 </div>
                             </div>
                             <div class="items-link f-right">
-                                <a href="job_details.html">Full Time</a>
+                                <a href="#">Full Time</a>
                                 <span>7 hours ago</span>
                             </div>
                         </div>
@@ -673,10 +561,10 @@
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="job_details.html"><img src="<c:url value='/resources/img/icon/job-list2.png'/>" alt=""></a>
+                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list2.png'/>" alt=""></a>
                                 </div>
                                 <div class="job-tittle">
-                                    <a href="job_details.html"><h4>Digital Marketer</h4></a>
+                                    <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
                                         <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
@@ -685,7 +573,7 @@
                                 </div>
                             </div>
                             <div class="items-link f-right">
-                                <a href="job_details.html">Full Time</a>
+                                <a href="#">Full Time</a>
                                 <span>7 hours ago</span>
                             </div>
                         </div>
@@ -693,10 +581,10 @@
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="job_details.html"><img src="<c:url value='/resources/img/icon/job-list3.png'/>" alt=""></a>
+                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list3.png'/>" alt=""></a>
                                 </div>
                                 <div class="job-tittle">
-                                    <a href="job_details.html"><h4>Digital Marketer</h4></a>
+                                    <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
                                         <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
@@ -705,7 +593,7 @@
                                 </div>
                             </div>
                             <div class="items-link f-right">
-                                <a href="job_details.html">Full Time</a>
+                                <a href="#">Full Time</a>
                                 <span>7 hours ago</span>
                             </div>
                         </div>
@@ -713,10 +601,10 @@
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="job_details.html"><img src="<c:url value='/resources/img/icon/job-list4.png'/>" alt=""></a>
+                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list4.png'/>" alt=""></a>
                                 </div>
                                 <div class="job-tittle">
-                                    <a href="job_details.html"><h4>Digital Marketer</h4></a>
+                                    <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
                                         <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
@@ -725,7 +613,7 @@
                                 </div>
                             </div>
                             <div class="items-link f-right">
-                                <a href="job_details.html">Full Time</a>
+                                <a href="#">Full Time</a>
                                 <span>7 hours ago</span>
                             </div>
                         </div>
@@ -733,7 +621,7 @@
                 </div>
             </div>
         </section>
-        <!-- Featured_job_end -->
+        <!-- 이 주의 노트 end -->
         
         
 

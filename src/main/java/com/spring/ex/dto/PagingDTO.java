@@ -78,7 +78,7 @@ public class PagingDTO {
 
 		//기본 값 설정
 		if (this.pageNo == 0) {
-			this.setPageNo(1);
+			this.setPageNo(0);
 		}
 		if (this.pageSize == 0) {
 			this.setPageSize(10);

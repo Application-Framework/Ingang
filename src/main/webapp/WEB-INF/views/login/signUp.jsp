@@ -49,10 +49,14 @@
                         <h3>회원가입</h3>
                         <form role="form" method="post" autocomplete="off">
                             <div class="input__item">
-                                <input type="text" class="form-control" name="m_id" placeholder="id를 입력해 주세요">
+                                <input type="text" class="form-control" name="m_id" id="m_id" placeholder="id를 입력해 주세요">
                                 <span class="material-symbols-outlined">
 									account_circle 
 								</span>
+								<button type="button" class="memberIdCheck">아이디 중복 확인</button>
+								<p class="result">
+									<span class="msg">아이디를 확인하세요</span>
+								</p>
 							</div>
                             <div class="input__item">
                                 <input type="password" class="form-control" name="m_pw" placeholder="pw를 입력해 주세요">
@@ -73,11 +77,11 @@
 								</span>
                             </div>
                             <div class="gender">
-                                <input type="radio" name="m_sex" value="1" checked>남성
-								<input type="radio" name="m_sex" value="2">여성
-                                <span class="material-symbols-outlined">
+                         	  	<span class="material-symbols-outlined">
 									person
 								</span>
+                                <input type="radio" name="m_sex" value="1" checked>남성
+								<input type="radio" name="m_sex" value="2">여성
                             </div>
                             <div class="input__item">
                                 <input type="text" class="form-control" name="m_phone" placeholder="전화번호를 입력해 주세요" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
@@ -85,11 +89,12 @@
 									call
 								</span>
                             </div>
+                            <input type="text" name="m_authority" value="1" hidden="hidden">
                             <button type="submit" class="btn head-btn2">회원가입</button>
                         </form>
                         <br/>
                         <h5>이미 계정이 있으신가요?</h5>
-                        <a href="/login" class="forget_pass">로그인하러 가기</a>
+                        <a href="/loginPageView" class="forget_pass">로그인하러 가기</a>
                     </div>
                 </div>
             </div>
@@ -138,3 +143,48 @@
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
 </body>
 </html>
+<script>
+	//ID 중복 체크 start
+	$(".memberIdCheck").click(function() {
+
+		var query = {
+			m_id : $("#m_id").val()
+		};
+
+		$.ajax({
+			url : "/memberIdCheck",
+			type : "post",
+			data : query,
+			success : function(data) {
+
+				if (data == 1) {
+					$(".result .msg").text("사용 불가");
+					$(".result .msg").attr("style", "color:#f00");
+
+					$("#submit").attr("disabled", "disabled");
+				} else {
+					$(".result .msg").text("사용 가능");
+					$(".result .msg").attr("style", "color:#00f");
+
+					$("#submit").removeAttr("disabled");
+				}
+			}
+		}); // ajax 끝
+	});
+	//ID 중복 체크 end
+
+	//ID 확인 메시지 start
+	$("#m_id").keyup(function() {
+		$(".result .msg").text("아이디를 확인해주십시오.");
+		$(".result .msg").attr("style", "color:#000");
+
+		$("#submit").attr("disabled", "disabled");
+
+	});
+	//ID 확인 메시지 end
+</script>
+<style>
+	.forget_pass{
+		color: blue;
+	}
+</style>

@@ -1,7 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!doctype html>
 <html>
 <head>
@@ -80,15 +80,16 @@
 						
 							<div class="tab-content">
 								<div class="tab-pane fade show active" id="qwe">
-									<c:forEach var="cbList" items="${cbList}">
+									<c:forEach var="cbList" items="${cbRegDateList}">
 										<article class="blog_item">
 											<div class="blog_details">
 												<a class="d-inline-block" href="single-blog.html">
-													<h2><c:url value="${cbList.title}"/></h2>
+													번호 : <c:url value="${cbList.cb_no}"/>
+													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
-												<p><c:url value="${cbList.content}"/></p>
+												<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
 												<ul class="blog-info-link">
-													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a></li>
+													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
 													<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
 													<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
 													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
@@ -99,18 +100,18 @@
 								</div>
 								<div class="tab-pane fade" id="asd">
 									<div class="tab-pane fade show active" id="qwe">
-										<c:forEach var="cbList" items="${cbList}">
+										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details">
 													<a class="d-inline-block" href="single-blog.html">
-														<h2><c:url value="${cbList.title}"/></h2>
+														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
-													<p><c:url value="${cbList.content}"/></p>
+													<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
 													<ul class="blog-info-link">
-														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a></li>
-														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
-														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
+														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
+														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
+														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
 													</ul>
 												</div>
 											</article>

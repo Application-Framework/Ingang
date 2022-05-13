@@ -23,14 +23,29 @@ public class FileUploadController {
     
     @RequestMapping(value="/upload", method=RequestMethod.POST)
     public String uploadForm(@RequestParam MultipartFile file) throws Exception {
-    	// ·£´ı °ª »ı¼º
+    	createFolder();
     	String uuid = UUID.randomUUID().toString();
     	
-    	// ÆÄÀÏÀ» ÀúÀåÇÏ±â À§ÇÑ °æ·Î¿Í ÆÄÀÏ¸í ÁöÁ¤
         File fileInfo = new File(uploadPath, uuid + file.getOriginalFilename());
-        // ÆÄÀÏ ÀúÀå
         file.transferTo(fileInfo);
         
         return "redirect:uploadPage";
+    }
+    
+    // í´ë” ìƒì„± í•¨ìˆ˜
+    public void createFolder() {
+    	File Folder = new File(uploadPath);
+
+    	if (!Folder.exists()) {
+    		try{
+    		    Folder.mkdir();
+    		    System.out.println("í´ë” ìƒì„±");
+    	        } 
+    	        catch(Exception e){
+    		    e.getStackTrace();
+    		}        
+             }else {
+    		System.out.println("ì´ë¯¸ í´ë” ìˆìŒ");
+    	}
     }
 }

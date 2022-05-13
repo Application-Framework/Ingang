@@ -25,13 +25,16 @@ public class CommunityController {
 	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardPage(pagingService.getMap());
+		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
 		
-		model.addAttribute("cbList", communityBoardList);
+		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		model.addAttribute("cbRegDateList", communityBoardList);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/community_chats";
 	}
+	
 	
 	@RequestMapping("/questions")
 	public String questions() throws Exception {
