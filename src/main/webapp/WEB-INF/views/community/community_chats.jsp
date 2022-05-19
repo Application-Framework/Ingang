@@ -19,18 +19,26 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
+	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	
 <script>
 $(document).ready(function() {
-    if (location.hash) {
-        $("a[href='" + location.hash + "']").tab("show");
-    }
-    $(document.body).on("click", "a[data-toggle='tab']", function(event) {
-        location.hash = this.getAttribute("href");
-    });
-});
-$(window).on("popstate", function() {
-    var anchor = location.hash || $("a[data-toggle='tab']").first().attr("href");
-    $("a[href='" + anchor + "']").tab("show");
+	console.log("tab1: " + sessionStorage.getItem("myTabActive1"));
+	console.log("tab2: " +sessionStorage.getItem("myTabActive2"));
+	
+	if(sessionStorage.getItem("myTabActive") == "a1"){
+		$("#myTab a[href='#qwe']").tab("show"); 
+	} if(sessionStorage.getItem("myTabActive") == "a2"){
+		$("#myTab a[href='#asd']").tab("show"); 
+	}
+	$('#myTabActive1').click(function(){
+		sessionStorage.setItem("myTabActive", "a1"); 
+	});
+	$('#myTabActive2').click(function(){
+		sessionStorage.setItem("myTabActive", "a2"); 
+	});
 });
 </script>
 </head>
@@ -56,49 +64,45 @@ $(window).on("popstate", function() {
     	<div class="row">
 			<jsp:include page="community_left_sidebar.jsp" />
 			
-			<div class="col-lg-7 mb-5 mb-lg-0">
+			<div class="col-lg-7 mb-5 mb-lg-0" style="padding:0 0px;">
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<aside class="single_sidebar_widget search_widget">
-							<form action="#">
-								<div class="row" style="">
-									<div class="col-lg-10" >
-										<input type="text" class="form-control" placeholder='내용을 검색해보세요!'>
-										<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
-									</div>
-									<div class="col-lg-2" style="padding-left: 7px;">
-									
-									<input type="button" class="genric-btn danger-border radius" value="검색" style="width: 100%;" >
-									</div>
+						<form action="#">
+							<div class="row">
+								<div class="col-lg-10" >
+									<input type="text" class="form-control" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 								</div>
-							</form>
-						</aside>
+								<div class="col-lg-2" style="padding:0 15px;">
+									<input type="button" class="genric-btn danger-border radius" value="검색" style="width: 100%;" >
+								</div>
+							</div>
+						</form>
 					</article>
-
+					
 					<div class="container">
 						<div class="row">
-							<ul class="nav nav-tabs" id="myTab">
-								<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;"> 최신순</h6></a></li>
-								<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#asd"><h6 style="color: #5D5D5D;">좋아요순</h6></a></li>
-									&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-									&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
-								<li class="nav-item">
-									<button type="button" onclick="location.href='/'"
-										class="genric-btn danger radius">
-										<font size="1px;">글쓰기</font>
-									</button>
+							<ul class="nav nav-tabs" id="myTab" style="width: 100%;">
+								<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 최신순</h6></a></li>
+								<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">좋아요순</h6></a></li>
+								<li class="nav-item" id="myTabActive3" style="width: 58%; " ><a class="nav-link" data-toggle="tab" href="#asdff" style="display: none;" ></a></li>
+
+								<li class="nav-item" id="myTabActive6" style="width: 12%;">
+								<button type="button" onclick="location.href='/'"  class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
+									<font size="1px;">글작성</font>
+								</button>
 								</li>
 							</ul>
-
-						
+							
 							<div class="tab-content">
 								<div class="tab-pane fade show active" id="qwe">
 									<c:forEach var="cbList" items="${cbRegDateList}">
 										<article class="blog_item">
-											<div class="blog_details">
+											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+											
 												<a class="d-inline-block" href="single-blog.html">
-													번호 : <c:url value="${cbList.cb_no}"/>
+													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
 												<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
@@ -116,8 +120,9 @@ $(window).on("popstate", function() {
 									<div class="tab-pane fade show active" id="qwe">
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
-												<div class="blog_details">
+												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 													<a class="d-inline-block" href="single-blog.html">
+														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
 													<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
@@ -139,7 +144,7 @@ $(window).on("popstate", function() {
 					</div>
 
 
-					<nav class="blog-pagination justify-content-center d-flex">
+					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
 						<ul class="pagination">
 							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 							<c:choose>
@@ -178,10 +183,6 @@ $(window).on("popstate", function() {
     
     <%------------ footer section  ------------%>
     <jsp:include page="../fix/footer.jsp" />
-    <%-- Jquery, Popper, Bootstrap --%>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-   	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
-	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
