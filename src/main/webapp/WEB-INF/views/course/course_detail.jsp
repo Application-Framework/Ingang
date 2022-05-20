@@ -22,35 +22,35 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<style>
 		.stars-outer {
-            position: relative;
-            display: inline-block;
-        }
-
-        .stars-inner {
-            position: absolute;
-            top: 0;
-            left: 0;
-            white-space: nowrap;
-            overflow: hidden;
-            width: 0;
-        }
+			position: relative;
+			display: inline-block;
+		}
+		
+		.stars-inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 0;
+		}
 		.stars-outer::before {
-            content: "\f005 \f005 \f005 \f005 \f005";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            color: #ccc;
-        }
-
-        .stars-inner::before {
-            content: "\f005 \f005 \f005 \f005 \f005";
-            font-family: "Font Awesome 5 Free";
-            font-weight: 900;
-            color: #f8ce0b;
-        }
-        a {
-            color: #635c5c;
-            text-decoration: none;
-        }
+			content: "\f005 \f005 \f005 \f005 \f005";
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			color: #ccc;
+		}
+		
+		.stars-inner::before {
+			content: "\f005 \f005 \f005 \f005 \f005";
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			color: #f8ce0b;
+		}
+		a {
+			color: #635c5c;
+			text-decoration: none;
+		}
 	</style>
 </head>
 
