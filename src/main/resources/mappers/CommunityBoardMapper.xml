@@ -9,9 +9,8 @@
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
 		FROM community_board cb, member m
-		WHERE m.m_no = cb.m_no
-		group BY cb.cb_no, cb.hit, cb.reg_date, good
-		HAVING flag = 1 AND classify = 1 
+		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
+		GROUP BY cb_no 
 		order by cb.reg_date DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
@@ -21,15 +20,53 @@
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
 		FROM community_board cb, member m
-		WHERE m.m_no = cb.m_no
-		group BY cb.cb_no, cb.hit, cb.reg_date, good
-		HAVING flag = 1 AND classify = 1 
+		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
+		GROUP BY cb_no 
 		order by good DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
-		SELECT COUNT(*) FROM community_board
+		SELECT COUNT(*) FROM community_board WHERE flag = 1 AND classify = 1;
+	</select>
+	
+	<sql id="SearchChatBoard">
+		<choose>
+			<when test="searchContent == 'allTheme' and searchTag != 'allArea'">
+				WHERE  m.m_no = cb.m_no AND kind_cd LIKE CONCAT('%', #{searchTag}, '%')
+				GROUP BY cb_no
+				HAVING tname >= 1;
+			</when>
+			<when test="searchContent != 'allTheme' and searchTag == 'allArea'">
+				WHERE  m.m_no = cb.m_no AND title LIKE CONCAT('%', #{searchContent}, '%') OR content LIKE CONCAT('%', #{searchContent}, '%') AND flag = 1 AND classify = 1
+				GROUP BY cb_no
+			</when>
+			<when test="searchContent != 'allTheme' and searchTag != 'allArea'">
+				WHERE  m.m_no = cb.m_no AND title LIKE CONCAT('%', #{searchContent}, '%') OR content LIKE CONCAT('%', #{searchContent}, '%') AND tag LIKE CONCAT('%', #{searchTag}, '%') AND flag = 1 AND classify = 1
+				GROUP BY cb_no
+				HAVING tname >= 1;
+			</when>
+		</choose>
+	</sql>
+	<!-- 자유게시판 검색 최신순 출력 -->
+	<select id="getSearchChatBoardPage" resultType="hashMap">
+		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
+				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
+				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				(SELECT COUNT(*) FROM community_board_tag cbt WHERE cb.cb_no=cbt.cb_no AND tag LIKE CONCAT('%', #{searchTag}, '%') AS tname
+		FROM community_board cb, member m
+		<include refid="SearchChatBoard"></include>
+		LIMIT #{Page}, #{PageSize};
+	</select>
+	
+	<!-- 분양센터 게시글 총 갯수 -->
+	<select id="getSearchChatBoardTotalCount" resultType="int">
+		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
+				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
+				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				(SELECT COUNT(*) FROM community_board_tag cbt WHERE cb.cb_no=cbt.cb_no AND tag LIKE CONCAT('%', #{searchTag}, '%') AS tname
+		FROM community_board cb, member m
+		<include refid="SearchChatBoard"></include> 
 	</select>
 	
 </mapper>
