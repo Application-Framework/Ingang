@@ -30,4 +30,9 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO login(MemberDTO dto) throws Exception {
 		return dao.login(dto);
 	}
+
+	@Override
+	public String getNameByM_no(int m_no) throws Exception {
+		return dao.getNameByM_no(m_no);
+	}
 }

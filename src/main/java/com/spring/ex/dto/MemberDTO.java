@@ -1,14 +1,24 @@
 package com.spring.ex.dto;
 
+import java.sql.Date;
+
 public class MemberDTO {
+	private int m_no;
 	private String m_id;
 	private String m_pw;
 	private String m_name;
-	private String m_birth;
-	private String m_sex;
+	private Date m_birth;
+	private int m_sex;
 	private String m_phone;
 	private int m_authority;
+	private Date reg_date;
 	
+	public int getM_no() {
+		return m_no;
+	}
+	public void setM_no(int m_no) {
+		this.m_no = m_no;
+	}
 	public String getM_id() {
 		return m_id;
 	}
@@ -27,16 +37,16 @@ public class MemberDTO {
 	public void setM_name(String m_name) {
 		this.m_name = m_name;
 	}
-	public String getM_birth() {
+	public Date getM_birth() {
 		return m_birth;
 	}
-	public void setM_birth(String m_birth) {
+	public void setM_birth(Date m_birth) {
 		this.m_birth = m_birth;
 	}
-	public String getM_sex() {
+	public int getM_sex() {
 		return m_sex;
 	}
-	public void setM_sex(String m_sex) {
+	public void setM_sex(int m_sex) {
 		this.m_sex = m_sex;
 	}
 	public String getM_phone() {
@@ -50,5 +60,11 @@ public class MemberDTO {
 	}
 	public void setM_authority(int m_authority) {
 		this.m_authority = m_authority;
+	}
+	public Date getReg_date() {
+		return reg_date;
+	}
+	public void setReg_date(Date reg_date) {
+		this.reg_date = reg_date;
 	}
 }

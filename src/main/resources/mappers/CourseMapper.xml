@@ -54,18 +54,52 @@
 		</if>
 	</sql>
 	
-	<!-- <select id="getCourseDetail" resultType="HashMap">
-		SELECT * 
-		FROM member m, community_board c 
-		WHERE m.m_id=c.m_id AND cb_id=#{pageNo}
+	<select id="getCourseDetail" resultType="CourseDTO">
+		SELECT *
+		FROM online_lecture_introduction
+		WHERE enable = 1 AND oli_no = #{oli_no}
 	</select>
 	
-	<select id="getComment" resultType="HashMap">
-		SELECT name, cbr_content, reg_date
-		FROM member m, community_board_reply cbr
-		WHERE m.m_id = cbr.m_id and cb_id = #{pageNo}
+	
+	<select id="getCourseReplys" resultType="CourseReplyDTO">
+		SELECT *
+		FROM online_lecture_reply
+		WHERE oli_no = #{oli_no}
 	</select>
 	
+	<select id="getCourseTags" resultType="CourseTagDTO">
+		SELECT *
+		FROM online_lecture_tag
+		WHERE oli_no = #{oli_no}
+	</select>
+	
+	<select id="getTeacherInfo" resultType="TeacherDTO">
+		SELECT *
+		FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
+	</select>
+	
+	<select id="getCourseLikeCount" resultType="int">
+		SELECT COUNT(*)
+		FROM online_lecture_like
+		WHERE oli_no = #{oli_no}
+	</select>
+	
+	<insert id="insertCourseLike">
+		INSERT INTO online_lecture_like (oli_no, m_no)
+		SELECT #{oli_no}, #{m_no}
+		WHERE NOT EXISTS (SELECT m_no FROM online_lecture_like WHERE oli_no = #{oli_no} AND m_no = #{m_no})
+	</insert>
+	
+	<delete id="deleteCourseLike">
+		DELETE FROM online_lecture_like
+		WHERE oli_no = #{oli_no} AND m_no = #{m_no} 
+	</delete>
+	
+	<select id="existCourseLike" resultType="int">
+		SELECT EXISTS(SELECT * FROM online_lecture_like WHERE oli_no = #{oli_no} AND m_no = #{m_no})
+	</select>
+	<!-- 
 	<insert id="submitCourse">
 		INSERT INTO community_board(m_id, title, content, img_path, reg_date, classify) 
 		VALUES(#{m_id}, #{title}, #{content}, #{img_path}, #{reg_date}, #{classify})

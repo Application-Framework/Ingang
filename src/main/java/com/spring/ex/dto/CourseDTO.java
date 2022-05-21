@@ -67,4 +67,11 @@ public class CourseDTO {
 	public void setEnable(int enable) {
 		this.enable = enable;
 	}
+	
+	@Override
+	public String toString() {
+		return "CourseDTO [oli_no=" + oli_no + ", olt_no=" + olt_no + ", title=" + title + ", content=" + content
+				+ ", hit=" + hit + ", img_path=" + img_path + ", price=" + price + ", reg_date=" + reg_date
+				+ ", enable=" + enable + "]";
+	}
 }

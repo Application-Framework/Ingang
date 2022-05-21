@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.spring.ex.dto.CourseDTO;
+
 @Repository
 public interface CourseDAO {
 	
@@ -13,4 +15,7 @@ public interface CourseDAO {
 	
 	// 페이지 개수 가져오기
 	public int getCourseTotalCount(HashMap<String, Object> map);
+	
+	// 강의 상세 가져오기
+	public CourseDTO getCourseDetail(int oli_no);
 }

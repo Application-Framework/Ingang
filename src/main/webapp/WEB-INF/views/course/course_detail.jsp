@@ -70,15 +70,13 @@
 	    			<img src="<c:url value='/resources/img/course/sample.jpg'/>" style="width:440px; height:286px;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
-			    	<h3 class="fw-bold text-white mb-5">비전공자를 위한 개발자 취업 올인원 가이드 [통합편]</h3>
+			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
 			    	<div class="stars-outer">
-		                <div class="stars-inner" style="width:99%"></div>
+		                <div class="stars-inner" style="width:${starAvg*20}%"></div>
 		            </div>
-		            <span class="pr-5 number-rating">(4.9)</span>
-		            <span>106개의 수강평 ∙ </span>
-		            <span>1984명의 수강생</span>
-		            
-		            <p class="text-white">강사 이름</p>
+		            <span class="pr-5 number-rating">(${starAvg})</span>
+		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
+		            <p class="text-white">${teacher.name}</p>
 			    </div>
 		    </div>
 	    </div>
@@ -104,9 +102,7 @@
 		<div class="row">
 			<div class="col-lg-8">
 				<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-이미 8000명 이상이 학습하고 만족한 최고의 프로그래밍 입문 강의. 
-비전공자 위치에서 직접 기획하고 준비한 프로그래밍 입문 강의로, 프로그래밍을 전혀 접해보지 못한 사람부터 실제 활용 가능한 프로그래밍 능력까지 갈 수 있도록 도와주는 강의입니다.
-					<%--${pageDetail.content}  --%>
+${course.content}
 				</textarea>
 				
 				<%-- 커리큘럼 --%>
@@ -121,31 +117,26 @@
 					수강평
 				</div>
 				
-	    		<div class="stars-outer">
-	                <div class="stars-inner" style="width:100%"></div>
-	            </div>
-	            <span class="pr-5 number-rating">(5)</span><br/>
-	    		<span class="fw-bold">김홍일</span> <span>2022-05-20</span>
-	    		<p>감사합니다</p>
-		    	<hr>
-		    	
-	    		<div class="stars-outer">
-	                <div class="stars-inner" style="width:80%"></div>
-	            </div>
-	            <span class="pr-5 number-rating">(4)</span><br>
-	    		<span class="fw-bold">김요한</span> <span>2022-05-20</span>
-	    		<p>괜찮았음</p>
+				<c:forEach var="reply" items="${replys}">
+					<div class="stars-outer">
+		                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
+		            </div>
+		            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
+		    		<span class="fw-bold">${memberSerivce.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
+		    		<p>${reply.content}</p>
+			    	<hr>
+				</c:forEach>
 			</div>
 			
 			<%-- 가격, 수강신청 패널 --%>
 			<div class="col-lg-4">
 			    <div class="card">
 			      <div class="card-body p-4">
-			        <h5 class="card-title mb-4 fw-200">33,000원</h5>
+			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
 			        <a href="#" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
-						<i onclick="clickedHeart(this)" class="bi bi-heart me-1" style="font-size:25px;"></i>
-						<span style="font-size:23px">398</span>
+						<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
+						<span id="likeCnt" style="font-size:23px">${likeCnt}</span>
 					</span>
 			      </div>
 			    </div>
@@ -163,29 +154,43 @@
 		    });
 		});
     	
-    	// 좋아요 클릭 이벤트
-        function clickedHeart(x) {
-            var status;
-            if(x.classList.contains("bi-heart-fill")) {
-                status = false;
-            }
-            else {
-                status = true;
-            }
-            
-            console.log(status);
-            x.classList.toggle("bi-heart");
-            x.classList.toggle("bi-heart-fill");
-            x.classList.toggle("text-danger");
-            // $.ajax({
-            //     url: '데이터를 보낼 곳 url',
-            //     type: 'form 태그의 method 속성(post 또는 get)',
-            //     data: {"폼 데이터 변수 이름": status},
-            //     success: function (data) {
-            //             alert("데이터 전송이 성공적으로 끝났을 때 실행");
-            //         }
-            // });
-        }
+		// 좋아요를 이미 클릭했다면 채우기
+		$(function() {
+			if(${existLike}) {
+		 		var x = $('#like')[0]; 
+		 		x.classList.toggle("bi-heart");
+		        x.classList.toggle("bi-heart-fill");
+		        x.classList.toggle("text-danger");
+				}
+		});
+		
+		// 좋아요 클릭 이벤트
+		function clickedHeart(x) {
+			var status;
+			var likeCnt = parseInt($('#likeCnt').html());
+			if(x.classList.contains("bi-heart-fill")) {
+				status = false;
+				likeCnt = likeCnt - 1; 
+			}
+			else {
+				status = true;
+				likeCnt = likeCnt + 1; 
+			}
+		       
+			$('#likeCnt').text(likeCnt);
+		       
+			x.classList.toggle("bi-heart");
+			x.classList.toggle("bi-heart-fill");
+			x.classList.toggle("text-danger");
+			$.ajax({
+				url: '/course/courseClickedLike',
+				type: 'post',
+				data: {
+					status: status,
+					oli_no: ${oli_no}
+				}
+			});
+		}
     </script>
     
     <jsp:include page="../fix/footer.jsp" />
