@@ -166,7 +166,6 @@ public class CourseController {
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
 		model.addAttribute("memberSerivce", memberService);
-		model.addAttribute("oli_no", pageNo);
 		model.addAttribute("existLike", existLike);
 		
 		return "course/course_detail";

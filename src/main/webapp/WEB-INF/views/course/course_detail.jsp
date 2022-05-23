@@ -187,7 +187,7 @@ ${course.content}
 				type: 'post',
 				data: {
 					status: status,
-					oli_no: ${oli_no}
+					oli_no: ${course.oli_no}
 				}
 			});
 		}
