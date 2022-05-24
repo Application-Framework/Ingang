@@ -35,4 +35,9 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberDTO login(MemberDTO dto) throws Exception {
 		return sql.selectOne(namespcae + ".login", dto);
 	}
+
+	@Override
+	public String getNameByM_no(int m_no) throws Exception {
+		return sql.selectOne(namespcae + ".getNameByM_no", m_no);
+	}
 }

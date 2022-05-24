@@ -134,55 +134,68 @@
         <!-- 메인 -->
         <main>
             <%-- 본문의 상단 --%>
-            <div class="job-listing-area pt-120 pb-120">
-                <div class="container">
+            <div class="container">
+            	<c:if test="${member.m_authority == 1}">
+	            	<div class="d-flex flex-row-reverse pt-10">
+	            		<a class="btn head-btn2" href="/course/writeCourse">강의 생성</a>
+	            	</div>
+	            	<div class="job-listing-area pt-40 pb-120">
+	            </c:if>
+            	<c:if test="${member == null || member.m_authority == 0}">
+            		<div class="job-listing-area pt-120 pb-120">
+            	</c:if>
                     <div class="row">
                         <!-- Left content -->
                         <div class="col-lg-3 blog_right_sidebar">
                             <aside class="single_sidebar_widget post_category_widget">
                                 <ul class="list cat-list">
+                                	<li>
+                                        <a href="/courses">
+                                            <p class="d-flex">ALL</p>
+                                        </a>
+                                    </li>
                                     <li>
-                                        <a href="#">
+                                        <a href="/courses/web-dev">
                                             <p class="d-flex">웹 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/front-end" class="d-flex">
                                             <p class="d-flex">프론트엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/back-end" class="d-flex">
                                             <p class="d-flex">백엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/programming-lang" class="d-flex">
                                             <p class="d-flex">프로그래밍 언어</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/database-dev" class="d-flex">
                                             <p class="d-flex">데이터베이스</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/algorithm" class="d-flex">
                                             <p class="d-flex">알고리즘·자료구조</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/mobile-app" class="d-flex">
                                             <p class="d-flex">모바일 앱 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/artificial-intelligence" class="d-flex">
                                             <p class="d-flex">AI</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="#" class="d-flex">
+                                        <a href="/courses/security" class="d-flex">
                                             <p class="d-flex">보안</p>
                                         </a>
                                     </li>
@@ -201,13 +214,18 @@
                                                 <!-- Select job items start -->
                                                 <div class="select-job-items">
                                                     <span>Sort by</span>
-                                                    <select name="select">
-                                                        <option value="">None</option>
-                                                        <option value="">좋아요</option>
-                                                        <option value="">난이도</option>
-                                                        <option value="">리뷰수</option>
-                                                        <option value="">가격순</option>
-                                                    </select>
+                                                    <form>
+                                                    	<c:if test="${keyword != ''}">
+                                                    	<input type="hidden" name="keyword" value="${keyword}"/>
+                                                    	</c:if>
+	                                                    <select onchange="this.form.submit()" name="order">
+	                                                        <option <c:if test="${order == '' || order == 'none'}">selected</c:if> value="none">None</option>
+	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
+	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
+	                                                        <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
+	                                                        <option <c:if test="${order == 'price'}">selected</c:if> value="price">가격순</option>
+	                                                    </select>
+                                                    </form>
                                                 </div>
                                                 <!--  Select job items End-->
                                             </div>
@@ -215,133 +233,35 @@
                                     </div>
 
                                     <%-- 강의 검색 입력 폼 --%>
-                                    <form action="#" class="search-box mb-5">
+                                    <form action="${nowURL}" class="search-box mb-5">
                                         <div class="input-form item" >
-                                            <input type="text" placeholder="강의 제목 검색" tabindex="0">
+                                            <input type="text" name="keyword" value="${keyword}" placeholder="강의 제목 검색" tabindex="0">
                                         </div>
                                         <div class="search-form item">
-                                            <a href="#" tabindex="0">검색</a>
+                                        	<button type="submit" class="btn w-100 h-100">검색</button>
                                         </div>	
                                     </form>
 
                                     <%-- 강의 리스트 출력 부분 --%>
                                     <div class="row row-cols-4 mb-3">
-                                        <div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-                                                    <div id="teacher-name" class="card-text">박조은</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:65%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(14)</span>
-                                                    <div id="course-price" class="card-text">₩66,000</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">코딩으로 학습하는 GoF 디자인패턴</a></div>
-                                                    <div id="teacher-name" class="card-text">백기선</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:99%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(203)</span>
-                                                    <div id="course-price" class="card-text">₩88,000</div>
-                                                </div>
-                                            </div>
-                                        </div><div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">만들고 비교하며 학습하는 리액트</a></div>
-                                                    <div id="teacher-name" class="card-text">김정환</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:90%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(155)</span>
-                                                    <div id="course-price" class="card-text">₩55,000</div>
-                                                </div>
-                                            </div>
-                                        </div><div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">MySQL 데이터베이스</a></div>
-                                                    <div id="teacher-name" class="card-text">코딩사전</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:77%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(17)</span>
-                                                    <div id="course-price" class="card-text">₩18,700</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-                                                    <div id="teacher-name" class="card-text">박조은</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:65%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(14)</span>
-                                                    <div id="course-price" class="card-text">₩66,000</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">코딩으로 학습하는 GoF 디자인패턴</a></div>
-                                                    <div id="teacher-name" class="card-text">백기선</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:99%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(203)</span>
-                                                    <div id="course-price" class="card-text">₩88,000</div>
-                                                </div>
-                                            </div>
-                                        </div><div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">만들고 비교하며 학습하는 리액트</a></div>
-                                                    <div id="teacher-name" class="card-text">김정환</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:90%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(155)</span>
-                                                    <div id="course-price" class="card-text">₩55,000</div>
-                                                </div>
-                                            </div>
-                                        </div><div class="col">
-                                            <div class="card shadow-sm mb-3">
-                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-
-                                                <div class="card-body">
-                                                    <div id="course-title" class="card-text"><a href="/courses_detail">MySQL 데이터베이스</a></div>
-                                                    <div id="teacher-name" class="card-text">코딩사전</div>
-                                                    <div class="stars-outer">
-                                                        <div class="stars-inner" style="width:77%"></div>
-                                                    </div>
-                                                    <span class="number-rating">(17)</span>
-                                                    <div id="course-price" class="card-text">₩18,700</div>
-                                                </div>
-                                            </div>
-                                        </div>
+                                    	
+                                    	<c:forEach var="list" items="${clist}">
+	                                        <div class="col">
+	                                            <div class="card shadow-sm mb-3">
+	                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                                                <div class="card-body">
+	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
+	                                                    <div id="teacher-name" class="card-text">${list.name}</div>
+	                                                    <div class="stars-outer">
+	                                                        <div class="stars-inner" style="width:${list.star_avg*20}%"></div>
+	                                                    </div>
+	                                                    <span class="number-rating">${list.star_avg}</span>
+	                                                    <div id="course-price" class="card-text">₩${list.price}</div>
+	                                                </div>
+	                                            </div>
+	                                        </div>
+                                        </c:forEach>
                                     </div>
                                 </div>
                             </section>
@@ -354,10 +274,16 @@
                                             <div class="single-wrap d-flex justify-content-center">
                                                 <nav aria-label="Page navigation example">
                                                     <ul class="pagination justify-content-start">
-                                                        <li class="page-item active"><a class="page-link" href="#">01</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">02</a></li>
-                                                        <li class="page-item"><a class="page-link" href="#">03</a></li>
-                                                    <li class="page-item"><a class="page-link" href="#"><span class="ti-angle-right"></span></a></li>
+                                                    	<c:forEach var="i" begin="${paging.startPageNo}" end="${paging.endPageNo}" step="1">
+                                                    		<c:choose>
+                                                    			<c:when test="${i == paging.pageNo}">
+                                                    				<li class="page-item active"><a class="page-link" style="pointer-events: none;">${i}</a></li>
+                                                    			</c:when>
+                                                        		<c:otherwise>
+                                                       				<li class="page-item"><a class="page-link" href="${nowURL}?${keywordParam}${orderParam}page=${i}">${i}</a></li>
+                                                        		</c:otherwise>
+                                                    		</c:choose>
+                                                    	</c:forEach>
                                                     </ul>
                                                 </nav>
                                             </div>
@@ -371,9 +297,21 @@
                 </div>
             </div>
         </main>
-    
+    	
+    	<script>
+    		function submitOrder(x) {
+    			console.log(x);
+    			$.ajax({
+   	                 url: '${nowURL}',
+   	                 type: 'GET',
+   	                 data: {order: x}
+   	            });
+    			
+    			
+    		}
+    	</script>
 		<jsp:include page="../fix/footer.jsp" />
         <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>

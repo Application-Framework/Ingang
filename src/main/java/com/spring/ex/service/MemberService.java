@@ -14,4 +14,7 @@ public interface MemberService {
 	
 	//로그인
 	public MemberDTO login(MemberDTO dto) throws Exception;
+	
+	// primary key로 이름 가져오기
+	public String getNameByM_no(int m_no) throws Exception;
 }

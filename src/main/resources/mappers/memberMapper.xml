@@ -21,4 +21,10 @@
 		from member
 		where m_id = #{m_id} and m_pw = #{m_pw}
 	</select>
+	
+	<select id="getNameByM_no" resultType="string">
+		SELECT m_name
+		FROM member
+		WHERE m_no = #{m_no}
+	</select>
 </mapper>

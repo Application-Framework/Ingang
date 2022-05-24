@@ -1,5 +1,6 @@
 package com.spring.ex.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -25,31 +26,17 @@ public class CommunityController {
 	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
 		
-		model.addAttribute("cbRegDateList", cbRegDateList);
-		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("Page", pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardPage(map);
 		
+		model.addAttribute("cbList", communityBoardList);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/community_chats";
 	}
-	
-	@RequestMapping(value = "/test", method = RequestMethod.GET)
-	public String test(Model model, HttpServletRequest request) throws Exception{
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
-		
-		model.addAttribute("cbRegDateList", cbRegDateList);
-		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
-		
-		model.addAttribute("Paging", pagingService.getPaging());
-		
-		return "community/community_test";
-	}
-	
 	
 	@RequestMapping("/questions")
 	public String questions() throws Exception {
