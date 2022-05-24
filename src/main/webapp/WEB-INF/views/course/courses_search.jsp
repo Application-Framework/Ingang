@@ -134,8 +134,16 @@
         <!-- 메인 -->
         <main>
             <%-- 본문의 상단 --%>
-            <div class="job-listing-area pt-120 pb-120">
-                <div class="container">
+            <div class="container">
+            	<c:if test="${member.m_authority == 1}">
+	            	<div class="d-flex flex-row-reverse pt-10">
+	            		<a class="btn head-btn2" href="/course/writeCourse">강의 생성</a>
+	            	</div>
+	            	<div class="job-listing-area pt-40 pb-120">
+	            </c:if>
+            	<c:if test="${member == null || member.m_authority == 0}">
+            		<div class="job-listing-area pt-120 pb-120">
+            	</c:if>
                     <div class="row">
                         <!-- Left content -->
                         <div class="col-lg-3 blog_right_sidebar">

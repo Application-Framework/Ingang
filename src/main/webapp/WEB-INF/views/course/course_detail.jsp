@@ -20,6 +20,8 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
+    <script src="<c:url value='/resources/js/main.js'/>"></script>
 	<style>
 		.stars-outer {
 			position: relative;
@@ -194,12 +196,6 @@ ${course.content}
     </script>
     
     <jsp:include page="../fix/footer.jsp" />
-    <%-- Jquery, Popper, Bootstrap --%>
-   	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
-	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 
-    <%-- Jquery Plugins, main Jquery --%>
-	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-    <script src="<c:url value='/resources/js/main.js'/>"></script>
 </body>
 </html>

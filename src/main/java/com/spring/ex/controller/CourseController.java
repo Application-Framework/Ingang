@@ -1,5 +1,6 @@
 package com.spring.ex.controller;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -10,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.CourseTagDTO;
+import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.MemberService;
@@ -172,7 +173,7 @@ public class CourseController {
 	}
 	
 	@RequestMapping("/course/courseClickedLike")
-	public String courseClickedLike(HttpServletRequest request) {
+	public String clickedLikeInCourse(HttpServletRequest request) {
 		System.out.println("받음");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
 		//int m_no = Integer.parseInt(request.getParameter("m_no"));
@@ -187,4 +188,72 @@ public class CourseController {
 		return "redirect:" + request.getHeader("referer");
 	}
 	
+	//-----------------------
+	// 작업중 mapper 작성 예정
+	//-----------------------
+	@RequestMapping("/course/writeCourse")
+	public String writeCourse(HttpServletRequest request) {
+		
+		return "course/course_write";
+	}
+	/*
+	@RequestMapping("/course/submitCourse")
+	public String submitCourse(HttpServletRequest request) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("Member");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String img_path = request.getParameter("img_path");
+		String price = request.getParameter("price");
+		String[] tags = request.getParameterValues("tags");
+		
+		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
+			return "error";
+		}
+		
+		// 강의 등록
+		CourseDTO courseDTO = new CourseDTO();
+		courseDTO.setOlt_no(memberDTO.getM_no());
+		courseDTO.setTitle(title);
+		courseDTO.setContent(content);
+		courseDTO.setImg_path(img_path);
+		courseDTO.setPrice(Integer.parseInt(price));
+		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
+		
+		courseService.submitCourse(courseDTO);
+		
+		
+		
+		// 태그 등록
+		for(String t : tags) {
+			CourseTagDTO courseTagDTO = new CourseTagDTO();
+			courseTagDTO.setOli_no(courseDTO.getOli_no());
+			courseTagDTO.setTag(t);
+			
+			courseService.submitTag(courseTagDTO);
+		}
+		
+		return "index";
+	}
+	
+	@RequestMapping("/course/submitReply")
+	public String submitReply(HttpServletRequest request) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("Member");
+		String oli_no = request.getParameter("oli_no");
+		String star_rating = request.getParameter("star_rating");
+		String content = request.getParameter("content");
+		
+		if(memberDTO == null || oli_no == null || star_rating == null || content == null) {
+			return "error";
+		}
+		
+		CourseReplyDTO courseReplyDTO = new CourseReplyDTO();
+		courseReplyDTO.setOli_no(Integer.parseInt(oli_no));
+		courseReplyDTO.setM_no(memberDTO.getM_no());
+		courseReplyDTO.setStar_rating(Integer.parseInt(star_rating));
+		courseReplyDTO.setContent(content);
+		courseReplyDTO.setReg_date(new Date(System.currentTimeMillis()));
+		
+		courseService.submitReply(courseReplyDTO);
+		return request.getHeader("referer");
+	}*/
 }
