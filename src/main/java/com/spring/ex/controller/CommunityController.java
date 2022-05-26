@@ -22,7 +22,7 @@ public class CommunityController {
 	
 	PagingService pagingService;
 	
-	@RequestMapping(value = "/chats", method = RequestMethod.GET)
+	@RequestMapping(value = "/ChatsPage", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
@@ -33,8 +33,25 @@ public class CommunityController {
 		
 		model.addAttribute("Paging", pagingService.getPaging());
 		
-		return "community/community_chats";
+		return "community/communityChats";
 	}
+	
+	//게시글 작성 페이지
+	@RequestMapping(value = "/BoardWritePage", method = RequestMethod.GET)
+	public String communityBoardWritePage(Model model, HttpServletRequest request) throws Exception{
+		
+		
+		return "community/boardWrite";
+	}
+	
+	//게시글 글작성
+	@RequestMapping(value = "/BoardWrite", method = RequestMethod.GET)
+	public String communityBoardWrite(Model model, HttpServletRequest request) throws Exception{
+		
+		
+		return "";
+	}
+	
 	
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test(Model model, HttpServletRequest request) throws Exception{
@@ -51,21 +68,21 @@ public class CommunityController {
 	}
 	
 	
-	@RequestMapping("/questions")
+	@RequestMapping("/questionsPage")
 	public String questions() throws Exception {
 		
 		
 		System.out.println(cbService.getCommunityBoardTotalCount());
-		return "community/community_questions";
+		return "community/communityQuestions";
 	}
 	
-	@RequestMapping("/reviews")
+	@RequestMapping("/reviewsPage")
 	public String reviews() {
-		return "community/community_reviews";
+		return "community/communityReviews";
 	}
 	
-	@RequestMapping("/studies")
+	@RequestMapping("/studiesPage")
 	public String studies() {
-		return "community/community_studies";
+		return "community/communityStudies";
 	}
 }

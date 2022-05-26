@@ -33,18 +33,7 @@
 	<sql id="SearchChatBoard">
 		<choose>
 			<when test="searchContent == 'allTheme' and searchTag != 'allArea'">
-				WHERE  m.m_no = cb.m_no AND kind_cd LIKE CONCAT('%', #{searchTag}, '%')
-				GROUP BY cb_no
-				HAVING tname >= 1;
-			</when>
-			<when test="searchContent != 'allTheme' and searchTag == 'allArea'">
-				WHERE  m.m_no = cb.m_no AND title LIKE CONCAT('%', #{searchContent}, '%') OR content LIKE CONCAT('%', #{searchContent}, '%') AND flag = 1 AND classify = 1
-				GROUP BY cb_no
-			</when>
-			<when test="searchContent != 'allTheme' and searchTag != 'allArea'">
-				WHERE  m.m_no = cb.m_no AND title LIKE CONCAT('%', #{searchContent}, '%') OR content LIKE CONCAT('%', #{searchContent}, '%') AND tag LIKE CONCAT('%', #{searchTag}, '%') AND flag = 1 AND classify = 1
-				GROUP BY cb_no
-				HAVING tname >= 1;
+
 			</when>
 		</choose>
 	</sql>

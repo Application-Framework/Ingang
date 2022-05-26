@@ -62,7 +62,7 @@ $(document).ready(function() {
     <!--================Blog Area =================-->
     <div class="container">
     	<div class="row">
-			<jsp:include page="community_left_sidebar.jsp" />
+			<jsp:include page="communityLeftSidebar.jsp" />
 			
 			<div class="col-lg-7 mb-5 mb-lg-0" style="padding:0 0px;">
 			<br>
@@ -177,7 +177,7 @@ $(document).ready(function() {
 					</nav>
 				</div><br>
 			</div>
-			<jsp:include page="community_tag_sidebar.jsp" />
+			<jsp:include page="communityTagSidebar.jsp" />
 		</div>
 	</div>
     
