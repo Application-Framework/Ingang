@@ -40,6 +40,10 @@ $(document).ready(function() {
 		sessionStorage.setItem("myTabActive", "a2"); 
 	});
 });
+
+function test() {
+	var popup = window.open('boardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+}
 </script>
 </head>
 
@@ -83,13 +87,14 @@ $(document).ready(function() {
 					
 					<div class="container">
 						<div class="row">
+						
 							<ul class="nav nav-tabs" id="myTab" style="width: 100%;">
 								<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 최신순</h6></a></li>
 								<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">좋아요순</h6></a></li>
 								<li class="nav-item" id="myTabActive3" style="width: 58%; " ><a class="nav-link" data-toggle="tab" href="#asdff" style="display: none;" ></a></li>
 
 								<li class="nav-item" id="myTabActive6" style="width: 12%;">
-								<button type="button" onclick="location.href='/'"  class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
+								<button type="button"  onclick="javascript:void(test());"  class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
 									<font size="1px;">글작성</font>
 								</button>
 								</li>

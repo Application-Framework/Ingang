@@ -22,7 +22,7 @@ public class CommunityController {
 	
 	PagingService pagingService;
 	
-	@RequestMapping(value = "/ChatsPage", method = RequestMethod.GET)
+	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
@@ -36,16 +36,17 @@ public class CommunityController {
 		return "community/communityChats";
 	}
 	
+	
 	//게시글 작성 페이지
-	@RequestMapping(value = "/BoardWritePage", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardWrite", method = RequestMethod.GET)
 	public String communityBoardWritePage(Model model, HttpServletRequest request) throws Exception{
 		
 		
-		return "community/boardWrite";
+		return "community/communityBoardWrite";
 	}
 	
 	//게시글 글작성
-	@RequestMapping(value = "/BoardWrite", method = RequestMethod.GET)
+	@RequestMapping(value = "/boardWriteDo", method = RequestMethod.GET)
 	public String communityBoardWrite(Model model, HttpServletRequest request) throws Exception{
 		
 		
@@ -68,7 +69,7 @@ public class CommunityController {
 	}
 	
 	
-	@RequestMapping("/questionsPage")
+	@RequestMapping("/questions")
 	public String questions() throws Exception {
 		
 		
