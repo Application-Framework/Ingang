@@ -99,14 +99,30 @@
 	<select id="existCourseLike" resultType="int">
 		SELECT EXISTS(SELECT * FROM online_lecture_like WHERE oli_no = #{oli_no} AND m_no = #{m_no})
 	</select>
-	<!-- 
-	<insert id="submitCourse">
-		INSERT INTO community_board(m_id, title, content, img_path, reg_date, classify) 
-		VALUES(#{m_id}, #{title}, #{content}, #{img_path}, #{reg_date}, #{classify})
+	
+	<insert id="submitCourse" useGeneratedKeys="true" keyProperty="oli_no">
+		INSERT INTO online_lecture_introduction(olt_no, title, content, img_path, price, reg_date, enable) 
+		VALUES(#{olt_no}, #{title}, #{content}, #{img_path}, #{price}, #{reg_date}, 1)
 	</insert>
 	
-	<insert id="submitComment">
-		INSERT INTO community_board_reply(cb_id, m_id, cbr_content, reg_date) 
-		VALUES(#{cb_id}, #{m_id}, #{content}, #{reg_date})
-	</insert>-->
+	<insert id="submitTag">
+		INSERT INTO online_lecture_tag (oli_no, tag)
+		VALUES(#{oli_no}, #{tag})
+	</insert>
+	
+	<insert id="submitReply">
+		INSERT INTO online_lecture_reply (oli_no, m_no, star_rating, content, reg_date)
+		VALUES(#{oli_no}, #{m_no}, #{star_rating}, #{content}, #{reg_date})
+	</insert>
+	
+	<insert id="submitCourseVideo">
+		INSERT INTO online_lecture_video (oli_no, s_file_name, playtime)
+		VALUES(#{oli_no}, #{s_file_name}, #{playtime})
+	</insert>
+	
+	<select id="getOlt_noByM_no" resultType="int">
+		SELECT * FROM online_lecture_teacher
+		WHERE m_no = #{m_no}
+		LIMIT 1
+	</select>
 </mapper>

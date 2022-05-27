@@ -69,7 +69,7 @@
     		<div class="row">
 	    		<%-- 강의 표지 --%>
 	    		<div class="col-xl-5">
-	    			<img src="<c:url value='/resources/img/course/sample.jpg'/>" style="width:440px; height:286px;"/>
+	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
 			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
@@ -137,7 +137,12 @@ ${course.content}
 			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
 			        <a href="#" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
-						<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
+			        	<c:if test="${member != null}">
+							<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
+						</c:if>
+						<c:if test="${member == null}">
+							<i class="bi bi-heart me-1" style="font-size:25px;"></i>
+						</c:if>
 						<span id="likeCnt" style="font-size:23px">${likeCnt}</span>
 					</span>
 			      </div>

@@ -11,10 +11,12 @@ import com.spring.ex.dao.CourseDAO;
 import com.spring.ex.dao.CourseLikeDAO;
 import com.spring.ex.dao.CourseReplyDAO;
 import com.spring.ex.dao.CourseTagDAO;
+import com.spring.ex.dao.CourseVideoDAO;
 import com.spring.ex.dao.TeacherDAO;
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.CourseTagDTO;
+import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.TeacherDTO;
 
 @Service
@@ -34,6 +36,9 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private CourseLikeDAO courseLikeDAO;
+	
+	@Inject
+	private CourseVideoDAO courseVideoDAO;
 	
 	@Override
 	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map) {
@@ -83,5 +88,30 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public int existCourseLike(int oli_no, int m_no) {
 		return courseLikeDAO.existCourseLike(oli_no, m_no);
+	}
+
+	@Override
+	public int submitCourse(CourseDTO dto) {
+		return courseDAO.submitCourse(dto);
+	}
+
+	@Override
+	public int submitReply(CourseReplyDTO dto) {
+		return courseReplyDAO.submitReply(dto);
+	}
+
+	@Override
+	public int submitTag(CourseTagDTO dto) {
+		return courseTagDAO.submitTag(dto);
+	}
+
+	@Override
+	public int submitCourseVideo(CourseVideoDTO dto) {
+		return courseVideoDAO.submitCourseVideo(dto);
+	}
+
+	@Override
+	public int getOlt_noByM_no(int m_no) {
+		return teacherDAO.getOlt_noByM_no(m_no);
 	}
 }

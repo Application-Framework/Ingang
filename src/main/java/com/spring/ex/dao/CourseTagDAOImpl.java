@@ -20,4 +20,8 @@ public class CourseTagDAOImpl implements CourseTagDAO{
 		return sqlSession.selectList(namespace + ".getCourseTags", oli_no);
 	}
 	
+	@Override
+	public int submitTag(CourseTagDTO dto) {
+		return sqlSession.insert(namespace + ".submitTag", dto);
+	}
 }

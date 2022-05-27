@@ -27,7 +27,7 @@
     <jsp:include page="../fix/header.jsp" />
     
     <div class="container">
-    	<form action="/course/submitCourse" method="post">
+    	<form action="/course/submitCourse" method="post" enctype="multipart/form-data">
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
    				<div class="col-sm-10">

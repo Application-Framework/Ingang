@@ -9,6 +9,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.CourseDTO;
+import com.spring.ex.dto.CourseReplyDTO;
+import com.spring.ex.dto.CourseTagDTO;
 
 @Repository
 public class CourseDAOImpl implements CourseDAO {
@@ -31,4 +33,8 @@ public class CourseDAOImpl implements CourseDAO {
 		return sqlSession.selectOne(namespace + ".getCourseDetail", oli_no);
 	}
 	
+	@Override
+	public int submitCourse(CourseDTO dto) {
+		return sqlSession.insert(namespace + ".submitCourse", dto);
+	}
 }

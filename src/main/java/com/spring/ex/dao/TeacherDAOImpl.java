@@ -18,5 +18,10 @@ public class TeacherDAOImpl implements TeacherDAO{
 	public TeacherDTO getTeacherInfo(int olt_no) {
 		return sqlSession.selectOne(namespace + ".getTeacherInfo", olt_no);
 	}
+
+	@Override
+	public int getOlt_noByM_no(int m_no) {
+		return sqlSession.selectOne(namespace + ".getOlt_noByM_no", m_no);
+	}
 	
 }

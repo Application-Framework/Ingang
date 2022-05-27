@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.CourseTagDTO;
+import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.TeacherDTO;
 
 @Service
@@ -41,4 +42,18 @@ public interface CourseService {
 	
 	// 좋아요가 존재하는지
 	public int existCourseLike(int oli_no, int m_no);
+	
+	// 강의 등록
+	public int submitCourse(CourseDTO dto);
+	
+	// 강의에 리뷰 등록
+	public int submitReply(CourseReplyDTO dto);
+	
+	// 강의에 태그 등록
+	public int submitTag(CourseTagDTO dto);
+	
+	// 강의 비디오 등록
+	public int submitCourseVideo(CourseVideoDTO dto);
+	
+	public int getOlt_noByM_no(int m_no);
 }

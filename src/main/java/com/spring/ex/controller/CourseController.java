@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
@@ -18,6 +20,7 @@ import com.spring.ex.dto.CourseTagDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.service.CourseService;
+import com.spring.ex.service.FileUploadService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.PagingService;
 
@@ -31,11 +34,13 @@ public class CourseController {
 	@Inject
 	private MemberService memberService;
 	
+	@Inject
+	private FileUploadService fileUploadService;
+	
 	void showCourses(HttpServletRequest request, Model model, String tag) {
 		String keyword = request.getParameter("keyword");
 		String order = request.getParameter("order");
 				
-		System.out.println(order);
 		keyword = (keyword == null) ? "" : keyword;
 		order = (order == null) ? "" : order;
 		
@@ -59,6 +64,8 @@ public class CourseController {
 		pageMap.put("keyword", keyword);
 		pageMap.put("tag", tag);
 		
+		System.out.println(courseService.getCoursePage(pageMap));
+		
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
 		model.addAttribute("nowURL", request.getServletPath());
@@ -66,8 +73,6 @@ public class CourseController {
 		model.addAttribute("order", order);
 		model.addAttribute("keywordParam", keywordParam);
 		model.addAttribute("orderParam", orderParam);
-		
-		System.out.println("pageNo : " + pagingService.getPaging().getPageNo());
 	}
 	
 	@RequestMapping("/courses")
@@ -150,8 +155,6 @@ public class CourseController {
 		else existLike= false;
 		
 		
-		System.out.println("test: " + memberService.getNameByM_no(2));
-		
 		System.out.println("강의 상세 페이지 정보 출력");
 		System.out.println(courseDTO);
 		System.out.println(teachertDTO);
@@ -196,23 +199,35 @@ public class CourseController {
 		
 		return "course/course_write";
 	}
-	/*
+	
 	@RequestMapping("/course/submitCourse")
-	public String submitCourse(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("Member");
+	public String submitCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
+		System.out.println("등록 시작");
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		System.out.println("member : " + memberDTO.getM_name());
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
-		String img_path = request.getParameter("img_path");
 		String price = request.getParameter("price");
-		String[] tags = request.getParameterValues("tags");
+		String tag = request.getParameter("tag");
+		//String[] tags = request.getParameterValues("tags"); 수정해야 함
+		
+	
+		String img_path = null;
+		
+		if(!thumbnail.isEmpty()) { 
+			img_path = fileUploadService.uploadFile(thumbnail, "/img/course/uploaded_images");
+		}
+		
 		
 		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
 			return "error";
 		}
 		
+		System.out.println("t_no :"+ courseService.getOlt_noByM_no(memberDTO.getM_no()));
+		
 		// 강의 등록
 		CourseDTO courseDTO = new CourseDTO();
-		courseDTO.setOlt_no(memberDTO.getM_no());
+		courseDTO.setOlt_no(courseService.getOlt_noByM_no(memberDTO.getM_no()));
 		courseDTO.setTitle(title);
 		courseDTO.setContent(content);
 		courseDTO.setImg_path(img_path);
@@ -221,9 +236,17 @@ public class CourseController {
 		
 		courseService.submitCourse(courseDTO);
 		
+		System.out.println(courseDTO.getOli_no());
 		
+		// 태그 등록(임시)
+		CourseTagDTO courseTagDTO = new CourseTagDTO();
+		courseTagDTO.setOli_no(courseDTO.getOli_no());
+		courseTagDTO.setTag(tag);
 		
-		// 태그 등록
+		courseService.submitTag(courseTagDTO);
+		
+		// 멀티 태그 추가 예정
+		/*
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
@@ -231,13 +254,22 @@ public class CourseController {
 			
 			courseService.submitTag(courseTagDTO);
 		}
+		*/
 		
-		return "index";
+		// 비디오 추가 예정
+		/* 
+		CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+		courseVideoDTO.setOli_no();
+		courseVideoDTO.setS_file_name();
+		courseVideoDTO.setPlaytime();
+		*/
+		
+		return "redirect:/";
 	}
 	
 	@RequestMapping("/course/submitReply")
 	public String submitReply(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("Member");
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		String oli_no = request.getParameter("oli_no");
 		String star_rating = request.getParameter("star_rating");
 		String content = request.getParameter("content");
@@ -255,5 +287,5 @@ public class CourseController {
 		
 		courseService.submitReply(courseReplyDTO);
 		return request.getHeader("referer");
-	}*/
+	}
 }

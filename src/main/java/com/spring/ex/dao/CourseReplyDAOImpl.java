@@ -22,4 +22,8 @@ public class CourseReplyDAOImpl implements CourseReplyDAO {
 		return sqlSession.selectList(namespace + ".getCourseReplys", oli_no);
 	}
 
+	@Override
+	public int submitReply(CourseReplyDTO dto) {
+		return sqlSession.insert(namespace + ".submitReply", dto);
+	}
 }

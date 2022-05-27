@@ -39,6 +39,7 @@
 	
 	<!--  파일업로드 디렉토리 설정 -->
 	<bean id="uploadPath" class="java.lang.String">
-	  <constructor-arg value="C:/Uploaded Files"/>
+		<!-- 각자 프로젝트 resource 경로로 바꿔주세요 -->
+	  <constructor-arg value="C:/Workspace/Spring/Ingang/Ingang/src/main/webapp/resources"/>
 	</bean>
 </beans>

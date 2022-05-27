@@ -30,7 +30,7 @@ public class CommunityController {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("Page", pagingService.getNowPage());
 		map.put("PageSize", 10);
-		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardPage(map);
+		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		
 		model.addAttribute("cbList", communityBoardList);
 		model.addAttribute("Paging", pagingService.getPaging());

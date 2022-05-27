@@ -248,8 +248,8 @@
                                     	<c:forEach var="list" items="${clist}">
 	                                        <div class="col">
 	                                            <div class="card shadow-sm mb-3">
-	                                                <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
+	                                            	<img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
+	                                                
 	                                                <div class="card-body">
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
 	                                                    <div id="teacher-name" class="card-text">${list.name}</div>

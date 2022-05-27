@@ -1,0 +1,59 @@
+package com.spring.ex.service;
+
+import java.io.File;
+import java.util.UUID;
+
+import javax.annotation.Resource;
+import javax.servlet.ServletContext;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
+
+@Service
+public class FileUploadService {
+	@Resource(name="uploadPath")
+	String uploadPath;
+	
+	@Autowired
+	ServletContext servletContext;
+	
+	public String uploadFile(MultipartFile file, String path) throws Exception {
+		String databasePath; 
+		String serverPath = servletContext.getRealPath("resources" + path); // 서버 경로
+		createFolder(uploadPath + path);
+		createFolder(serverPath);
+		
+		String uuid = UUID.randomUUID().toString();
+		
+		// 데이터베이스에 저장될 경로
+		databasePath = "/resources" + path + "/" + uuid + file.getOriginalFilename();
+		
+		// 로컬에 저장
+		File fileInfo = new File(uploadPath + path, uuid + file.getOriginalFilename());
+		file.transferTo(fileInfo);
+		
+		// refresh 없이 바로 적용되게 서버에 저장
+		fileInfo = new File(serverPath, uuid + file.getOriginalFilename());
+		file.transferTo(fileInfo);
+		
+		return databasePath;
+	}
+	
+	public void createFolder(String path) {
+		File folder = new File(path);
+		
+		if (!folder.exists()) {
+			try{
+			    folder.mkdir(); //폴더 생성합니다.
+			    System.out.println("폴더가 생성되었습니다.");
+	        } 
+	        catch(Exception e){
+			    e.getStackTrace();
+			}        
+        } 
+		else {
+        	System.out.println("이미 폴더가 생성되어 있습니다.");
+		}
+	}
+}

@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.CourseDTO;
+import com.spring.ex.dto.CourseReplyDTO;
+import com.spring.ex.dto.CourseTagDTO;
 
 @Repository
 public interface CourseDAO {
@@ -18,4 +20,8 @@ public interface CourseDAO {
 	
 	// 강의 상세 가져오기
 	public CourseDTO getCourseDetail(int oli_no);
+	
+	// 강의 등록
+	public int submitCourse(CourseDTO dto);
+	
 }
