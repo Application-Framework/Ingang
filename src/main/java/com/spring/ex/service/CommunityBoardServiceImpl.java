@@ -25,4 +25,10 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int getCommunityBoardTotalCount() throws Exception {
 		return dao.getCommunityBoardTotalCount();
 	}
+	
+	//내가 쓴 게시글
+	@Override
+	public List<CommunityBoardDTO> myPostList(Integer m_no) throws Exception {
+		return dao.myPostList(m_no);
+	}
 }

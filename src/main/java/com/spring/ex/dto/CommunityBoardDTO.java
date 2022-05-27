@@ -65,6 +65,12 @@ public class CommunityBoardDTO {
 	public void setEnable(int enable) {
 		this.enable = enable;
 	}
+	@Override
+	public String toString() {
+		return "CommunityBoardDTO [cb_no=" + cb_no + ", m_no=" + m_no + ", title=" + title + ", content=" + content
+				+ ", hit=" + hit + ", img_path=" + img_path + ", reg_date=" + reg_date + ", classify=" + classify
+				+ ", enable=" + enable + "]";
+	}
 	
 	
 	

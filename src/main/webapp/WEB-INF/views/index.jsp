@@ -162,18 +162,11 @@
 				<h3>핫 트랜드 검색어</h3>
 			</center>
 			<div class="container">
-				<ul>
-					<li>1. ㅂㅈㄿ</li>
-					<li>2. ㅂㅈㄷ</li>
-					<li>3. ㅁㄴㅇ</li>
-					<li>4. ㅁㄴㅇ</li>
-					<li>5. ㅇㅁㄴ</li>
-					<li>6. ㅇㅁㄴ</li>
-					<li>7. ㅁㄴㄴㅁㅇ</li>
-					<li>8. 음하핫</li>
-					<li>9. 크하하핫</li>
-					<li>10. 으하하핫</li>
-				</ul>
+				<c:forEach var="tagList" items="${tagList}" varStatus="status">
+					<ul>
+						<li> ${status.count}. ${tagList.t_name}</li>
+					</ul>
+				</c:forEach>
 			</div>
 		</div>
 		<!-- 좌측 사이드 영역 end -->

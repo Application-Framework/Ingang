@@ -39,6 +39,7 @@ public class LoginController {
 			rttr.addFlashAttribute("msg", false);
 		} else {
 			session.setAttribute("member", login);
+			session.setAttribute("m_no", login.getM_no());
 		}
 
 		return "redirect:/";

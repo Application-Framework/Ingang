@@ -15,4 +15,7 @@ public interface CommunityBoardService {
 	
 	//게시판 목록 총 갯수 - 페이징
 	public int getCommunityBoardTotalCount() throws Exception;
+	
+	//내가 쓴 게시글
+	public List<CommunityBoardDTO> myPostList(Integer m_no) throws Exception;
 }

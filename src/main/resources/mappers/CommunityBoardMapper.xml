@@ -20,4 +20,10 @@
 		SELECT COUNT(*) FROM community_board
 	</select>
 	
+	<!-- 내가 쓴 글 -->
+	<select id="myPostList" resultType="com.spring.ex.dto.CommunityBoardDTO">
+		select *
+		from community_board
+		where m_no = #{m_no}
+	</select>
 </mapper>

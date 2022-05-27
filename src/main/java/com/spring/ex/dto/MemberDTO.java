@@ -1,6 +1,7 @@
 package com.spring.ex.dto;
 
 public class MemberDTO {
+	private int m_no;
 	private String m_id;
 	private String m_pw;
 	private String m_name;
@@ -9,6 +10,12 @@ public class MemberDTO {
 	private String m_phone;
 	private int m_authority;
 	
+	public int getM_no() {
+		return m_no;
+	}
+	public void setM_no(int m_no) {
+		this.m_no = m_no;
+	}
 	public String getM_id() {
 		return m_id;
 	}

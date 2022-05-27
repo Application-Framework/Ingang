@@ -75,8 +75,12 @@
 					</nav>
 				</aside>
 			</div>
-			<div class="col-lg-9">
-
+			<div class="col-lg-5">
+				<h3>내 노트</h3>
+			</div>
+			
+			<div class="col-lg-4">
+				<h3>관심 노트</h3>
 			</div>
 		</div>
 	</div>

@@ -76,7 +76,19 @@
 				</aside>
 			</div>
 			<div class="col-lg-9">
-
+				<h3>내가 쓴 글</h3>
+				
+				<c:forEach var="cbList" items="${cbList}">
+					<a class="d-inline-block" href="single-blog.html">
+						<h2><c:url value="${cbList.title}"/></h2>
+					</a>
+					<p><c:url value="${cbList.content}"/></p>
+					<ul class="blog-info-link">
+						<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.cb_no}"/></a></li>
+						<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.hit}"/></a></li>
+						<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+					</ul>
+				</c:forEach>
 			</div>
 		</div>
 	</div>
