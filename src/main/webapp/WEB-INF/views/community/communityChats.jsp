@@ -44,6 +44,9 @@ $(document).ready(function() {
 function test() {
 	var popup = window.open('boardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 }
+
+
+
 </script>
 </head>
 
