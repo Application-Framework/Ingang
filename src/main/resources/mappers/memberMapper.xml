@@ -10,8 +10,9 @@
 	</insert>
 	
 	<!-- 아이디 중복 체크 -->
-	<select id="memberIdCheck" resultType="com.spring.ex.dto.MemberDTO">
-		select m_id from member
+	<select id="idCheck" resultType="com.spring.ex.dto.MemberDTO">
+		select m_id 
+		from member
 		where m_id = #{m_id}
 	</select>
 	

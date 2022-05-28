@@ -162,18 +162,11 @@
 				<h3>핫 트랜드 검색어</h3>
 			</center>
 			<div class="container">
-				<ul>
-					<li>1. ㅂㅈㄿ</li>
-					<li>2. ㅂㅈㄷ</li>
-					<li>3. ㅁㄴㅇ</li>
-					<li>4. ㅁㄴㅇ</li>
-					<li>5. ㅇㅁㄴ</li>
-					<li>6. ㅇㅁㄴ</li>
-					<li>7. ㅁㄴㄴㅁㅇ</li>
-					<li>8. 음하핫</li>
-					<li>9. 크하하핫</li>
-					<li>10. 으하하핫</li>
-				</ul>
+				<c:forEach var="tagList" items="${tagList}" varStatus="status">
+					<ul>
+						<li> ${status.count}. ${tagList.t_name}</li>
+					</ul>
+				</c:forEach>
 			</div>
 		</div>
 		<!-- 좌측 사이드 영역 end -->
@@ -192,100 +185,132 @@
                 </div>
                 <div class="row d-flex justify-contnet-center">
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-tour"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Creative</a></h5>
-                                <span>(653)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-cms"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Development</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-report"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Sales & Marketing</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-app"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Mobile Application</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-helmet"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Construction</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-high-tech"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Information Technology</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-real-estate"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Real Estate</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-content"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Content Writer</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                 </div>
                 <!-- More Btn -->
                 <!-- Section Button -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="#" class="border-btn2">강의 전체보기</a>
+                            <a href="/courses" class="border-btn2">강의 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -307,100 +332,132 @@
                 </div>
                 <div class="row d-flex justify-contnet-center">
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-tour"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Creative</a></h5>
-                                <span>(653)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-cms"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Development</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-report"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Sales & Marketing</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-app"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Mobile Application</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-helmet"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Construction</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-high-tech"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Information Technology</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-real-estate"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Real Estate</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-content"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Content Writer</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                 </div>
                 <!-- More Btn -->
                 <!-- Section Button -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="#" class="border-btn2">노트 전체보기</a>
+                            <a href="/courses" class="border-btn2">신규 강의 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -422,100 +479,132 @@
                 </div>
                 <div class="row d-flex justify-contnet-center">
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-tour"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Creative</a></h5>
-                                <span>(653)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-cms"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Design & Development</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-report"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Sales & Marketing</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-app"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Mobile Application</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-helmet"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Construction</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-high-tech"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Information Technology</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-real-estate"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Real Estate</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                     <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-                        <div class="single-services text-center mb-30">
-                            <div class="services-ion">
-                                <span class="flaticon-content"></span>
-                            </div>
-                            <div class="services-cap">
-                               <h5><a href="#">Content Writer</a></h5>
-                                <span>(658)</span>
-                            </div>
+						<div class="card shadow-sm mb-3">
+	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
+	
+	                        <div class="card-body">
+	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
+		                        <div id="teacher-name" class="card-text">박조은</div>
+		                        <div class="stars-outer">
+		                        	<div class="stars-inner" style="width:65%"></div>
+		                        </div>
+								<span class="number-rating">(14)</span>
+								<div id="course-price" class="card-text">₩66,000</div>
+	                    	</div>
                         </div>
-                    </div>
+					</div>
                 </div>
                 <!-- More Btn -->
                 <!-- Section Button -->
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
-                            <a href="#" class="border-btn2">입문자용 강의 전체보기</a>
+                            <a href="/courses" class="border-btn2">입문자용 강의 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -547,7 +636,6 @@
                                     <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
-                                        <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
                                         <li>$3500 - $4000</li>
                                     </ul>
                                 </div>
@@ -567,7 +655,6 @@
                                     <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
-                                        <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
                                         <li>$3500 - $4000</li>
                                     </ul>
                                 </div>
@@ -587,7 +674,6 @@
                                     <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
-                                        <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
                                         <li>$3500 - $4000</li>
                                     </ul>
                                 </div>
@@ -607,7 +693,6 @@
                                     <a href="#"><h4>Digital Marketer</h4></a>
                                     <ul>
                                         <li>Creative Agency</li>
-                                        <li><i class="fas fa-map-marker-alt"></i>Athens, Greece</li>
                                         <li>$3500 - $4000</li>
                                     </ul>
                                 </div>
@@ -616,6 +701,13 @@
                                 <a href="#">Full Time</a>
                                 <span>7 hours ago</span>
                             </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="browse-btn2 text-center mt-50">
+                            <a href="/notes" class="border-btn2">노트 전체보기</a>
                         </div>
                     </div>
                 </div>
@@ -636,7 +728,7 @@
 				</div>
 				<div class="carousel-inner">
 					<div class="carousel-item active">
-						<img src="" onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="..." onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 					<div class="carousel-item">
 						<img src="..." style="width: 100px;" class="d-block w-100" alt="...">
@@ -705,5 +797,9 @@
 .left-box {
 	width: 300px;
     float: left;
+}
+
+a {
+	color: orange;
 }
 </style>

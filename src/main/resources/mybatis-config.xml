@@ -9,5 +9,6 @@
 		<typeAlias type="com.spring.ex.dto.CourseTagDTO" alias="CourseTagDTO"/>
 		<typeAlias type="com.spring.ex.dto.CourseVideoDTO" alias="CourseVideoDTO"/>
 		<typeAlias type="com.spring.ex.dto.TeacherDTO" alias="TeacherDTO"/>
+		<typeAlias type="com.spring.ex.dto.TagDTO" alias="TagDTO"/>
 	</typeAliases>
 </configuration>

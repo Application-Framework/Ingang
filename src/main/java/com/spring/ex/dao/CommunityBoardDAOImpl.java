@@ -35,9 +35,18 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int getCommunityBoardTotalCount() throws Exception {
 		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount") ;
 	}
+<<<<<<< HEAD
 
 
 
 
 
+=======
+	
+	//내가 쓴 게시글
+	@Override
+	public List<CommunityBoardDTO> myPostList(Integer m_no) throws Exception {
+		return sqlSession.selectList(namespace + ".myPostList", m_no);
+	}
+>>>>>>> origin/sunki
 }

@@ -32,6 +32,9 @@
     <link rel="stylesheet" href="<c:url value='/resources/css/slick.css'/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
     <link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+    
+    <!-- 제이쿼리 CDN -->
+	<script src='https://code.jquery.com/jquery-3.3.1.min.js'></script>
 </head>
 <body>
 	<%-- Preloader --%>
@@ -53,7 +56,7 @@
                                 <span class="material-symbols-outlined">
 									account_circle 
 								</span>
-								<button type="button" class="memberIdCheck">아이디 중복 확인</button>
+								<button type="button" class="idCheck">아이디 중복 확인</button>
 								<p class="result">
 									<span class="msg">아이디를 확인하세요</span>
 								</p>
@@ -90,7 +93,7 @@
 								</span>
                             </div>
                             <input type="text" name="m_authority" value="1" hidden="hidden">
-                            <button type="submit" class="btn head-btn2">회원가입</button>
+                            <button type="submit" id="submit" disabled="disabled" class="btn head-btn2">회원가입</button>
                         </form>
                         <br/>
                         <h5>이미 계정이 있으신가요?</h5>
@@ -145,14 +148,14 @@
 </html>
 <script>
 	//ID 중복 체크 start
-	$(".memberIdCheck").click(function() {
+	$(".idCheck").click(function() {
 
 		var query = {
 			m_id : $("#m_id").val()
 		};
 
 		$.ajax({
-			url : "/memberIdCheck",
+			url : "/idCheck",
 			type : "post",
 			data : query,
 			success : function(data) {

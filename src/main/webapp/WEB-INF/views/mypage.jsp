@@ -57,8 +57,8 @@
 										<i class="far fa-file-alt me-2"></i>구매내역
 									</a>
 									<div class="dropdown-menu bg-transparent border-0">
-										<a href="/mypage" class="dropdown-item">강의내역</a> 
-										<a href="/mypage" class="dropdown-item">노트내역</a>
+										<a href="/courses_history" class="dropdown-item">강의내역</a> 
+										<a href="/notes_history" class="dropdown-item">노트내역</a>
 									</div>
 								</div>
 								<div class="nav-item dropdown">
@@ -66,9 +66,9 @@
 										<i class="far fa-file-alt me-2"></i>My
 									</a>
 									<div class="dropdown-menu bg-transparent border-0">
-										<a href="/mypage" class="dropdown-item">내 강의</a> <a
-											href="/mypage" class="dropdown-item">내 노트</a> <a
-											href="/mypage" class="dropdown-item">내 게시글</a>
+										<a href="/my_course" class="dropdown-item">내 강의</a> 
+										<a href="/my_note" class="dropdown-item">내 노트</a> 
+										<a href="/my_post" class="dropdown-item">내 게시글</a>
 									</div>
 								</div>
 							</div>
