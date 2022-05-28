@@ -114,4 +114,14 @@ public class CourseServiceImpl implements CourseService {
 	public int getOlt_noByM_no(int m_no) {
 		return teacherDAO.getOlt_noByM_no(m_no);
 	}
+
+	@Override
+	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
+		return courseVideoDAO.getCourseVideoList(oli_no);
+	}
+
+	@Override
+	public CourseVideoDTO getCourseVideo(int olv_no) {
+		return courseVideoDAO.getCourseVideo(olv_no);
+	}
 }

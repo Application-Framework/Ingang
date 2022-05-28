@@ -1,5 +1,7 @@
 package com.spring.ex.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -18,6 +20,16 @@ public class CourseVideoDAOImpl implements CourseVideoDAO {
 	@Override
 	public int submitCourseVideo(CourseVideoDTO dto) {
 		return sqlSession.insert(namespace + ".submitCourseVideo", dto);
+	}
+
+	@Override
+	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
+		return sqlSession.selectList(namespace + ".getCourseVideoList", oli_no);
+	}
+
+	@Override
+	public CourseVideoDTO getCourseVideo(int olv_no) {
+		return sqlSession.selectOne(namespace + ".getCourseVideo", olv_no);
 	}
 
 }

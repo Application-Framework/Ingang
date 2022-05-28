@@ -137,7 +137,7 @@
             <div class="container">
             	<c:if test="${member.m_authority == 1}">
 	            	<div class="d-flex flex-row-reverse pt-10">
-	            		<a class="btn head-btn2" href="/course/writeCourse">강의 생성</a>
+	            		<a class="btn head-btn2" href="/courses/writeCourse">강의 생성</a>
 	            	</div>
 	            	<div class="job-listing-area pt-40 pb-120">
 	            </c:if>

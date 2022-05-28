@@ -56,4 +56,10 @@ public interface CourseService {
 	public int submitCourseVideo(CourseVideoDTO dto);
 	
 	public int getOlt_noByM_no(int m_no);
+	
+	// 강의 비디오 리스트 가져오기
+	public List<CourseVideoDTO> getCourseVideoList(int oli_no);
+	
+	// 강의 비디오 가져오기
+	public CourseVideoDTO getCourseVideo(int olv_no);
 }

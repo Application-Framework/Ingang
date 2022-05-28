@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.CourseTagDTO;
+import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.service.CourseService;
@@ -64,7 +65,8 @@ public class CourseController {
 		pageMap.put("keyword", keyword);
 		pageMap.put("tag", tag);
 		
-		System.out.println(courseService.getCoursePage(pageMap));
+		
+		System.out.println("pagingDTO : " + pagingService.getPaging());
 		
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
@@ -141,6 +143,7 @@ public class CourseController {
 		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
+		List<CourseVideoDTO> videos = courseService.getCourseVideoList(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		int starAvg = 0;
 		if(replys.size() != 0) {
@@ -161,6 +164,7 @@ public class CourseController {
 		System.out.println(replys);
 		System.out.println(tags);
 		System.out.println(likeCnt);
+		System.out.println(videos);
 		
 		model.addAttribute("course", courseDTO);
 		model.addAttribute("teacher", teachertDTO);
@@ -171,21 +175,36 @@ public class CourseController {
 		model.addAttribute("stdCnt", stdCnt);
 		model.addAttribute("memberSerivce", memberService);
 		model.addAttribute("existLike", existLike);
+		model.addAttribute("pageNo", pageNo);
+		model.addAttribute("videos", videos);
 		
 		return "course/course_detail";
 	}
 	
-	@RequestMapping("/course/courseClickedLike")
+	@RequestMapping("/courses/{pageNo}/play/{olv_no}")
+	public String course_play(HttpServletRequest request, Model model, @PathVariable int pageNo, @PathVariable int olv_no) {
+		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
+		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
+		
+		model.addAttribute("videoPath", courseVideoDTO.getS_file_name());
+		model.addAttribute("pageNo", pageNo);
+		model.addAttribute("olv_no", olv_no);
+		model.addAttribute("videoList", videoList);
+		
+		return "course/course_play";
+	}
+	
+	@RequestMapping("/courses/courseClickedLike")
 	public String clickedLikeInCourse(HttpServletRequest request) {
-		System.out.println("받음");
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
 		//int m_no = Integer.parseInt(request.getParameter("m_no"));
 		String status = request.getParameter("status");
 		if(status.equals("true")) {
-			courseService.insertCourseLike(oli_no, 2);
+			courseService.insertCourseLike(oli_no, memberDTO.getM_no());
 		}
 		else {
-			courseService.deleteCourseLike(oli_no, 2);
+			courseService.deleteCourseLike(oli_no, memberDTO.getM_no());
 		}
 		
 		return "redirect:" + request.getHeader("referer");
@@ -194,23 +213,23 @@ public class CourseController {
 	//-----------------------
 	// 작업중 mapper 작성 예정
 	//-----------------------
-	@RequestMapping("/course/writeCourse")
+	@RequestMapping("/courses/writeCourse")
 	public String writeCourse(HttpServletRequest request) {
 		
 		return "course/course_write";
 	}
 	
-	@RequestMapping("/course/submitCourse")
+	@RequestMapping("/courses/submitCourse")
 	public String submitCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
 		System.out.println("등록 시작");
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		System.out.println("member : " + memberDTO.getM_name());
+		String pageNo = request.getParameter("pageNo");
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
-		String tag = request.getParameter("tag");
-		//String[] tags = request.getParameterValues("tags"); 수정해야 함
-		
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
 	
 		String img_path = null;
 		
@@ -238,15 +257,8 @@ public class CourseController {
 		
 		System.out.println(courseDTO.getOli_no());
 		
-		// 태그 등록(임시)
-		CourseTagDTO courseTagDTO = new CourseTagDTO();
-		courseTagDTO.setOli_no(courseDTO.getOli_no());
-		courseTagDTO.setTag(tag);
-		
-		courseService.submitTag(courseTagDTO);
-		
 		// 멀티 태그 추가 예정
-		/*
+		
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
@@ -254,27 +266,33 @@ public class CourseController {
 			
 			courseService.submitTag(courseTagDTO);
 		}
-		*/
+		
 		
 		// 비디오 추가 예정
-		/* 
-		CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
-		courseVideoDTO.setOli_no();
-		courseVideoDTO.setS_file_name();
-		courseVideoDTO.setPlaytime();
-		*/
+		for(int i = 0; i < videoTitles.length; i++) {
+			System.out.println("videoPaths:" + videoPaths[i]);
+			System.out.println("videoTitles:" + videoTitles[i]);
+			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+			courseVideoDTO.setOli_no(courseDTO.getOli_no());
+			courseVideoDTO.setTitle(videoTitles[i]);
+			courseVideoDTO.setS_file_name(videoPaths[i]);
+			
+			courseService.submitCourseVideo(courseVideoDTO);
+		}
 		
 		return "redirect:/";
 	}
 	
-	@RequestMapping("/course/submitReply")
+	@RequestMapping("/courses/submitReply")
 	public String submitReply(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		String oli_no = request.getParameter("oli_no");
+		String oli_no = request.getParameter("pageNo");
 		String star_rating = request.getParameter("star_rating");
 		String content = request.getParameter("content");
 		
-		if(memberDTO == null || oli_no == null || star_rating == null || content == null) {
+		System.out.println("star_rating:" + star_rating);
+		
+		if(memberDTO == null || oli_no == null || star_rating == "" || content == null) {
 			return "error";
 		}
 		
@@ -286,6 +304,6 @@ public class CourseController {
 		courseReplyDTO.setReg_date(new Date(System.currentTimeMillis()));
 		
 		courseService.submitReply(courseReplyDTO);
-		return request.getHeader("referer");
+		return "redirect:" + request.getHeader("referer");
 	}
 }

@@ -19,6 +19,7 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
@@ -52,6 +53,18 @@
 		a {
 			color: #635c5c;
 			text-decoration: none;
+		}
+		
+		.nice-select {
+		    width: 50px;
+		    height: 30px;
+		    background: #fff;
+		    border-radius: 0px;
+		    padding: 10px 12px;
+		    color: #5d5d5d;
+		    line-height: 6px;
+		    border: 1px solid #ededed;
+		    border-radius: 5px;
 		}
 	</style>
 </head>
@@ -112,6 +125,11 @@ ${course.content}
 					커리큘럼
 				</div>
 				<div class="mb-4">
+					<c:forEach var="video" items="${videos}">
+						<div class="p-2">
+							<a href="/courses/${pageNo}/play/${video.olv_no}" class="link-secondary" target="_blank">${video.title}</a>
+						</div>
+					</c:forEach>
 				</div>
 				
 				<%-- 수강평 --%>
@@ -119,6 +137,7 @@ ${course.content}
 					수강평
 				</div>
 				
+				<%-- 수강평 출력 --%>
 				<c:forEach var="reply" items="${replys}">
 					<div class="stars-outer">
 		                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
@@ -128,6 +147,28 @@ ${course.content}
 		    		<p>${reply.content}</p>
 			    	<hr>
 				</c:forEach>
+				
+				<%-- 수강평 입력 --%>
+				<c:if test="${member != null}">
+					<form action="/courses/submitReply" method="post">
+						<input type="hidden" name="pageNo" value="${pageNo}"/>
+						<div class="d-flex align-items-center select-job-items mb-1">
+						<span class="mr-5">평점</span>
+							<select name="star_rating">
+							  <option selected value=""></option>
+							  <option value="1">1</option>
+							  <option value="2">2</option>
+							  <option value="3">3</option>
+							  <option value="4">4</option>
+							  <option value="5">5</option>
+							</select>
+						</div>
+						<textarea class="form-control mb-2" name="content" rows="3"></textarea>
+						<div class="d-flex flex-row-reverse">
+							<button class="btn head-btn1" type="submit">등록</button>
+						</div>
+					</form>
+				</c:if>
 			</div>
 			
 			<%-- 가격, 수강신청 패널 --%>
@@ -190,7 +231,7 @@ ${course.content}
 			x.classList.toggle("bi-heart-fill");
 			x.classList.toggle("text-danger");
 			$.ajax({
-				url: '/course/courseClickedLike',
+				url: '/courses/courseClickedLike',
 				type: 'post',
 				data: {
 					status: status,
@@ -199,7 +240,6 @@ ${course.content}
 			});
 		}
     </script>
-    
     <jsp:include page="../fix/footer.jsp" />
 
 </body>

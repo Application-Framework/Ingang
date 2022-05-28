@@ -41,7 +41,7 @@
 	</select>
 	
 	<select id="getCourseTotalCount" resultType="int">
-		SELECT count(*) 
+		SELECT count(DISTINCT oli.oli_no)
 		FROM online_lecture_introduction oli, online_lecture_teacher olt, online_lecture_tag oltag
 		<include refid="search"></include>
 	</select>
@@ -116,13 +116,26 @@
 	</insert>
 	
 	<insert id="submitCourseVideo">
-		INSERT INTO online_lecture_video (oli_no, s_file_name, playtime)
-		VALUES(#{oli_no}, #{s_file_name}, #{playtime})
+		INSERT INTO online_lecture_video (oli_no, title, s_file_name)
+		VALUES(#{oli_no}, #{title}, #{s_file_name})
 	</insert>
 	
 	<select id="getOlt_noByM_no" resultType="int">
 		SELECT * FROM online_lecture_teacher
 		WHERE m_no = #{m_no}
 		LIMIT 1
+	</select>
+	
+	<select id="getCourseVideoList" resultType="CourseVideoDTO">
+		SELECT *
+		FROM online_lecture_video
+		WHERE oli_no = #{oli_no}
+		ORDER BY olv_no
+	</select>
+	
+	<select id="getCourseVideo" resultType="CourseVideoDTO">
+		SELECT *
+		FROM online_lecture_video
+		WHERE olv_no = #{olv_no}
 	</select>
 </mapper>

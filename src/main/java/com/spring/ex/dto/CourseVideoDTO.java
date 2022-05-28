@@ -5,6 +5,7 @@ import java.sql.Time;
 public class CourseVideoDTO {
 	private int olv_no;
 	private int oli_no;
+	private String title;
 	private String s_file_name;
 	private Time playtime;
 	
@@ -19,6 +20,12 @@ public class CourseVideoDTO {
 	}
 	public void setOli_no(int oli_no) {
 		this.oli_no = oli_no;
+	}
+	public String getTitle() {
+		return title;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public String getS_file_name() {
 		return s_file_name;
