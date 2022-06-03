@@ -33,12 +33,12 @@ public class FileUploadService {
 		databasePath = "/resources" + path + "/" + uuid + file.getOriginalFilename();
 		
 		// 로컬에 저장
-		File fileInfo = new File(uploadPath + path, uuid + file.getOriginalFilename());
-		file.transferTo(fileInfo);
+		File localFile = new File(uploadPath + path, uuid + file.getOriginalFilename());
+		file.transferTo(localFile);
 		
 		// refresh 없이 바로 적용되게 서버에 저장
 		File serverFile = new File(serverPath, uuid + file.getOriginalFilename());
-		Files.copy(fileInfo.toPath(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		Files.copy(localFile.toPath(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		
 		return databasePath;
 	}
