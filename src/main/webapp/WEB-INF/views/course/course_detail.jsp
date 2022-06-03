@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!doctype html>
 <html>
 <head>
@@ -103,10 +103,10 @@
     		<nav class="navbar navbar-expand-lg navbar-light">
 				<div class="px-5">
 					<ul class="navbar-nav">
-						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="#">강의소개</a></li>
+						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="/courses/${pageNo}">강의소개</a></li>
 						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#curriculum">커리큘럼</a></li>
 						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#reviews">수강평</a></li>
-						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#community">커뮤니티</a></li>
+						<li class="nav-item me-3"><a class="nav-link fw-bold" href="/courses/${pageNo}/community">커뮤니티</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -115,59 +115,145 @@
 	
 	<div class="container p-5">
 		<div class="row">
+			<%-- content 영역 --%>
 			<div class="col-lg-8">
-				<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
+				<%-- 강의 소개 출력 --%>
+				<c:if test="${contentType == 'main'}">
+					<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
 ${course.content}
-				</textarea>
-				
-				<%-- 커리큘럼 --%>
-				<div class="mb-3 fs-3 fw-bold">
-					커리큘럼
-				</div>
-				<div class="mb-4">
-					<c:forEach var="video" items="${videos}">
-						<div class="p-2">
-							<a href="/courses/${pageNo}/play/${video.olv_no}" class="link-secondary" target="_blank">${video.title}</a>
-						</div>
+					</textarea>
+					
+					<%-- 커리큘럼 --%>
+					<div class="mb-3 fs-3 fw-bold">
+						커리큘럼
+					</div>
+					<div class="mb-4">
+						<c:forEach var="video" items="${videos}">
+							<div class="p-2">
+								<a href="/courses/${pageNo}/play/${video.olv_no}" class="link-secondary" target="_blank">${video.title}</a>
+							</div>
+						</c:forEach>
+					</div>
+					
+					<%-- 수강평 --%>
+					<div class="mb-3 fs-3 fw-bold">
+						수강평
+					</div>
+					
+					<%-- 수강평 출력 --%>
+					<c:forEach var="reply" items="${replys}">
+						<div class="stars-outer">
+			                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
+			            </div>
+			            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
+			    		<span class="fw-bold">${memberSerivce.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
+			    		<p>${reply.content}</p>
+				    	<hr>
 					</c:forEach>
-				</div>
+					
+					<%-- 수강평 입력 --%>
+					<c:if test="${member != null}">
+						<form action="/courses/submitReply" method="post">
+							<input type="hidden" name="pageNo" value="${pageNo}"/>
+							<div class="d-flex align-items-center select-job-items mb-1">
+							<span class="mr-5">평점</span>
+								<select name="star_rating">
+								  <option selected value=""></option>
+								  <option value="1">1</option>
+								  <option value="2">2</option>
+								  <option value="3">3</option>
+								  <option value="4">4</option>
+								  <option value="5">5</option>
+								</select>
+							</div>
+							<textarea class="form-control mb-2" name="content" rows="3"></textarea>
+							<div class="d-flex flex-row-reverse">
+								<button class="btn head-btn1" type="submit">등록</button>
+							</div>
+						</form>
+					</c:if>
+				</c:if>
 				
-				<%-- 수강평 --%>
-				<div class="mb-3 fs-3 fw-bold">
-					수강평
-				</div>
-				
-				<%-- 수강평 출력 --%>
-				<c:forEach var="reply" items="${replys}">
-					<div class="stars-outer">
-		                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
-		            </div>
-		            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
-		    		<span class="fw-bold">${memberSerivce.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
-		    		<p>${reply.content}</p>
-			    	<hr>
-				</c:forEach>
-				
-				<%-- 수강평 입력 --%>
-				<c:if test="${member != null}">
-					<form action="/courses/submitReply" method="post">
-						<input type="hidden" name="pageNo" value="${pageNo}"/>
-						<div class="d-flex align-items-center select-job-items mb-1">
-						<span class="mr-5">평점</span>
-							<select name="star_rating">
-							  <option selected value=""></option>
-							  <option value="1">1</option>
-							  <option value="2">2</option>
-							  <option value="3">3</option>
-							  <option value="4">4</option>
-							  <option value="5">5</option>
-							</select>
+				<c:if test="${contentType == 'community'}">
+					<%-- 게시물 영역 --%>
+					<div class="tab-content">
+						<div class="tab-pane fade show active" id="qwe">
+							<c:forEach var="cbList" items="${cbRegDateList}">
+								<article class="blog_item">
+									<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+									
+										<a class="d-inline-block" href="boardRead?cb_no=${cbList.cb_no}&classify=1">
+											<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
+											<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
+										</a>
+										<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+										<ul class="blog-info-link">
+											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
+											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
+											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
+											<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+										</ul>
+									</div>
+								</article>
+							</c:forEach>
 						</div>
-						<textarea class="form-control mb-2" name="content" rows="3"></textarea>
-						<div class="d-flex flex-row-reverse">
-							<button class="btn head-btn1" type="submit">등록</button>
+						<div class="tab-pane fade" id="asd">
+							<div class="tab-pane fade show active" id="qwe">
+								<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
+									<article class="blog_item">
+										<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+											<a class="d-inline-block" href="boardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
+												<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
+												<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
+											</a>
+											<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+											<ul class="blog-info-link">
+												<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
+												<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
+												<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
+												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
+											</ul>
+										</div>
+									</article>
+								</c:forEach>
+							</div>
 						</div>
-					</form>
+					</div>
+					<%-- 게시물 영역 끝 --%>
+					
+					<%-- Pagination 영역 --%>
+					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
+						<ul class="pagination">
+							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
+							<c:choose>
+								<c:when test="${paging.pageNo eq paging.firstPageNo }">
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+								</c:otherwise>
+							</c:choose>
+							<!-- 페이지 갯수만큼 버튼 생성 -->
+							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+								<c:choose>
+									<c:when test="${i eq paging.pageNo }">
+										<li class="page-item  active"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									</c:when>
+									<c:otherwise>
+										<li class="page-item"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+							<c:choose>
+								<c:when test="${paging.pageNo eq paging.finalPageNo }">
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+								</c:otherwise>
+							</c:choose>
+						</ul>
+					</nav>
+					<%-- Pagination 영역 끝 --%>
 				</c:if>
 			</div>
 			
@@ -238,7 +324,7 @@ ${course.content}
 					oli_no: ${course.oli_no}
 				}
 			});
-		}
+		}		
     </script>
     <jsp:include page="../fix/footer.jsp" />
 

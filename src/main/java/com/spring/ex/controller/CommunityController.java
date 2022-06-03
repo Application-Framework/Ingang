@@ -26,8 +26,13 @@ public class CommunityController {
 	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
+		
+		HashMap<String, Integer> pageMap = new HashMap<String, Integer>();
+		pageMap.put("Page", pagingService.getNowPage());
+		pageMap.put("PageSize", 10);
+		
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pageMap);
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pageMap);
 		
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
@@ -64,7 +69,6 @@ public class CommunityController {
 	@RequestMapping(value = "/boardWriteDo", method = RequestMethod.GET)
 	public String communityBoardWrite(Model model, HttpServletRequest request) throws Exception{
 		
-		
 		return "";
 	}
 	
@@ -72,8 +76,13 @@ public class CommunityController {
 	@RequestMapping(value = "/test", method = RequestMethod.GET)
 	public String test(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
+		
+		HashMap<String, Integer> pageMap = new HashMap<String, Integer>();
+		pageMap.put("Page", pagingService.getNowPage());
+		pageMap.put("PageSize", 10);
+		
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pageMap);
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pageMap);
 		
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);

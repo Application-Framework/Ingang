@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CourseDTO;
 import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.CourseTagDTO;
 import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
+import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileUploadService;
 import com.spring.ex.service.MemberService;
@@ -34,6 +36,9 @@ public class CourseController {
 	
 	@Inject
 	private MemberService memberService;
+	
+	@Inject
+	CommunityBoardService cbService;
 	
 	@Inject
 	private FileUploadService fileUploadService;
@@ -144,6 +149,8 @@ public class CourseController {
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videos = courseService.getCourseVideoList(pageNo);
+		
+		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		int starAvg = 0;
 		if(replys.size() != 0) {
@@ -177,9 +184,63 @@ public class CourseController {
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("videos", videos);
+		model.addAttribute("contentType", "main");
 		
 		return "course/course_detail";
 	}
+	
+	@RequestMapping("/courses/{pageNo}/main")
+	public String course_main(Model model) {
+		model.addAttribute("contentType", "main");
+		
+		return "course/course_detail";
+	}
+	
+	@RequestMapping("/courses/{pageNo}/community")
+	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		
+		HashMap<String, Integer> pageMap = new HashMap<String, Integer>();
+		pageMap.put("Page", pagingService.getNowPage());
+		pageMap.put("PageSize", 10);
+		
+		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
+		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pageMap);
+		
+		System.out.println(cbRegDateList);
+		
+		int likeCnt = courseService.getCourseLikeCount(pageNo);
+		int starAvg = 0;
+		if(replys.size() != 0) {
+			for(CourseReplyDTO reply : replys)
+				 starAvg += reply.getStar_rating();
+			starAvg /= replys.size();
+		}
+		int stdCnt = 0;
+		boolean existLike; 
+		if(courseService.existCourseLike(pageNo, 2) == 1) // m_no 임시
+			existLike = true;
+		else existLike= false;
+		
+		model.addAttribute("course", courseDTO);
+		model.addAttribute("teacher", teachertDTO);
+		model.addAttribute("tags", tags);
+		model.addAttribute("likeCnt", likeCnt);
+		model.addAttribute("starAvg", starAvg);
+		model.addAttribute("stdCnt", stdCnt);
+		model.addAttribute("memberSerivce", memberService);
+		model.addAttribute("existLike", existLike);
+		model.addAttribute("pageNo", pageNo);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("contentType", "community");
+		model.addAttribute("paging", pagingService.getPaging());
+		
+		return "course/course_detail";
+	}
+	
 	
 	@RequestMapping("/courses/{pageNo}/play/{olv_no}")
 	public String course_play(HttpServletRequest request, Model model, @PathVariable int pageNo, @PathVariable int olv_no) {
