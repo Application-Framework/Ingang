@@ -1,12 +1,15 @@
 package com.spring.ex.service;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -34,8 +37,8 @@ public class FileUploadService {
 		file.transferTo(fileInfo);
 		
 		// refresh 없이 바로 적용되게 서버에 저장
-		fileInfo = new File(serverPath, uuid + file.getOriginalFilename());
-		file.transferTo(fileInfo);
+		File serverFile = new File(serverPath, uuid + file.getOriginalFilename());
+		Files.copy(fileInfo.toPath(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 		
 		return databasePath;
 	}
