@@ -1,5 +1,6 @@
 package com.spring.ex.controller;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -34,6 +35,20 @@ public class CommunityController {
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/communityChats";
+	}
+	
+	//게시글 상세 페이지
+	@RequestMapping(value = "/boardRead", method = RequestMethod.GET)
+	public String communityBoardRead(Model model, HttpServletRequest request) throws Exception{
+		int cb_no = Integer.parseInt(request.getParameter("cb_no"));
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("cb_no", cb_no);
+		map.put("classify", Integer.parseInt(request.getParameter("classify")));
+		
+		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
+		model.addAttribute("cbrList", cbService.getReplyCommunityBoard(cb_no));
+		
+		return "community/communityRead";
 	}
 	
 	

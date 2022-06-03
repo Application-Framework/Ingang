@@ -2,6 +2,7 @@ package com.spring.ex.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -9,6 +10,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.CommunityBoardReplyDTO;
 
 
 @Repository
@@ -36,8 +38,16 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount") ;
 	}
 
+	//게시글 상세페이지 출력 
+	@Override
+	public Map<String, Object> getReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getReadCommunityBoard", map);
+	}
 
-
-
+	//게시글 상세페이지 댓글 출력
+	@Override
+	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception {
+		return sqlSession.selectList(namespace + ".getReplyCommunityBoard", cb_no);
+	}
 
 }
