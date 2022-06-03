@@ -2,6 +2,7 @@ package com.spring.ex.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.CommunityBoardReplyDTO;
 
 @Service
 public class CommunityBoardServiceImpl implements CommunityBoardService{
@@ -33,10 +35,16 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int getCommunityBoardTotalCount() throws Exception {
 		return dao.getCommunityBoardTotalCount();
 	}
-	
-	//내가 쓴 게시글
+
+	//게시글 상세페이지 출력 
 	@Override
-	public List<CommunityBoardDTO> myPostList(Integer m_no) throws Exception {
-		return dao.myPostList(m_no);
+	public Map<String, Object> getReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.getReadCommunityBoard(map);
+	}
+	
+	//게시글 상세페이지 댓글 출력
+	@Override
+	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception {
+		return dao.getReplyCommunityBoard(cb_no);
 	}
 }

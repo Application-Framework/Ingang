@@ -40,6 +40,13 @@ $(document).ready(function() {
 		sessionStorage.setItem("myTabActive", "a2"); 
 	});
 });
+
+function test() {
+	var popup = window.open('boardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+}
+
+
+
 </script>
 </head>
 
@@ -62,7 +69,7 @@ $(document).ready(function() {
     <!--================Blog Area =================-->
     <div class="container">
     	<div class="row">
-			<jsp:include page="community_left_sidebar.jsp" />
+			<jsp:include page="communityLeftSidebar.jsp" />
 			
 			<div class="col-lg-7 mb-5 mb-lg-0" style="padding:0 0px;">
 			<br>
@@ -83,13 +90,14 @@ $(document).ready(function() {
 					
 					<div class="container">
 						<div class="row">
+						
 							<ul class="nav nav-tabs" id="myTab" style="width: 100%;">
 								<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 최신순</h6></a></li>
 								<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">좋아요순</h6></a></li>
 								<li class="nav-item" id="myTabActive3" style="width: 58%; " ><a class="nav-link" data-toggle="tab" href="#asdff" style="display: none;" ></a></li>
 
 								<li class="nav-item" id="myTabActive6" style="width: 12%;">
-								<button type="button" onclick="location.href='/'"  class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
+								<button type="button"  onclick="javascript:void(test());"  class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
 									<font size="1px;">글작성</font>
 								</button>
 								</li>
@@ -101,7 +109,7 @@ $(document).ready(function() {
 										<article class="blog_item">
 											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 											
-												<a class="d-inline-block" href="single-blog.html">
+												<a class="d-inline-block" href="boardRead?cb_no=${cbList.cb_no}&classify=1">
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
@@ -121,7 +129,7 @@ $(document).ready(function() {
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="single-blog.html">
+													<a class="d-inline-block" href="boardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
@@ -177,7 +185,7 @@ $(document).ready(function() {
 					</nav>
 				</div><br>
 			</div>
-			<jsp:include page="community_tag_sidebar.jsp" />
+			<jsp:include page="communityTagSidebar.jsp" />
 		</div>
 	</div>
     

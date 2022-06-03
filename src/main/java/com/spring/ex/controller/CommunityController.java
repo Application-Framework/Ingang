@@ -26,33 +26,79 @@ public class CommunityController {
 	@RequestMapping(value = "/chats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
 		
-		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		map.put("Page", pagingService.getNowPage());
-		map.put("PageSize", 10);
-		List<CommunityBoardDTO> communityBoardList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
 		
-		model.addAttribute("cbList", communityBoardList);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
-		return "community/community_chats";
+		return "community/communityChats";
 	}
+	
+	//게시글 상세 페이지
+	@RequestMapping(value = "/boardRead", method = RequestMethod.GET)
+	public String communityBoardRead(Model model, HttpServletRequest request) throws Exception{
+		int cb_no = Integer.parseInt(request.getParameter("cb_no"));
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("cb_no", cb_no);
+		map.put("classify", Integer.parseInt(request.getParameter("classify")));
+		
+		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
+		model.addAttribute("cbrList", cbService.getReplyCommunityBoard(cb_no));
+		
+		return "community/communityRead";
+	}
+	
+	
+	//게시글 작성 페이지
+	@RequestMapping(value = "/boardWrite", method = RequestMethod.GET)
+	public String communityBoardWritePage(Model model, HttpServletRequest request) throws Exception{
+		
+		
+		return "community/communityBoardWrite";
+	}
+	
+	//게시글 글작성
+	@RequestMapping(value = "/boardWriteDo", method = RequestMethod.GET)
+	public String communityBoardWrite(Model model, HttpServletRequest request) throws Exception{
+		
+		
+		return "";
+	}
+	
+	
+	@RequestMapping(value = "/test", method = RequestMethod.GET)
+	public String test(Model model, HttpServletRequest request) throws Exception{
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pagingService.getMap());
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(pagingService.getMap());
+		
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		
+		model.addAttribute("Paging", pagingService.getPaging());
+		
+		return "community/community_test";
+	}
+	
 	
 	@RequestMapping("/questions")
 	public String questions() throws Exception {
 		
 		
 		System.out.println(cbService.getCommunityBoardTotalCount());
-		return "community/community_questions";
+		return "community/communityQuestions";
 	}
 	
-	@RequestMapping("/reviews")
+	@RequestMapping("/reviewsPage")
 	public String reviews() {
-		return "community/community_reviews";
+		return "community/communityReviews";
 	}
 	
-	@RequestMapping("/studies")
+	@RequestMapping("/studiesPage")
 	public String studies() {
-		return "community/community_studies";
+		return "community/communityStudies";
 	}
 }
