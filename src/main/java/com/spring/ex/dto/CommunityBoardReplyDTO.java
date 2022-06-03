@@ -5,7 +5,7 @@ public class CommunityBoardReplyDTO {
 	private int cb_no;
 	private int m_no;
 	private String content;
-	private String reg_date;
+	private Object reg_date;
 	public int getCbr_no() {
 		return cbr_no;
 	}
@@ -30,10 +30,10 @@ public class CommunityBoardReplyDTO {
 	public void setContent(String content) {
 		this.content = content;
 	}
-	public String getReg_date() {
+	public Object getReg_date() {
 		return reg_date;
 	}
-	public void setReg_date(String reg_date) {
+	public void setReg_date(Object reg_date) {
 		this.reg_date = reg_date;
 	}
 	

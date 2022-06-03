@@ -29,14 +29,15 @@
 	<select id="getReadCommunityBoard" resultType="hashMap">
 		SELECT cb.*, 
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
+				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				m_id
 		FROM community_board cb, member m
 		WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify}
 	</select>
 	
 	<!-- 게시판 상세페이지 댓글 출력 -->
-	<select id="getReplyCommunityBoard" resultType="CommunityBoardReplyDTO">
-		SELECT cbr.*, m.m_id
+	<select id="getReplyCommunityBoard" resultType="hashMap">
+		SELECT cbr.*, m_id
 		FROM community_board_reply cbr, member m
 		WHERE cb_no = #{cb_no} AND m.m_no = cbr.m_no
 	</select>
