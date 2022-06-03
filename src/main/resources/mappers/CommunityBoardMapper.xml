@@ -14,15 +14,15 @@
 		order by cb.reg_date DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
-	<!-- 자유게시판 최신순 출력 -->
-	<select id="getCommunityBoardChatRegDateShowPage" resultType="hashMap">
+	<!-- 자유게시판 좋아요순 출력 -->
+	<select id="getCommunityBoardChatGoodShowPage" resultType="hashMap">
 		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
 		FROM community_board cb, member m
 		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
 		GROUP BY cb_no 
-		order by cb.reg_date DESC LIMIT #{Page}, #{PageSize};
+		order by good DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
 	<!-- 게시판 상세페이지 출력 -->
