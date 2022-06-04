@@ -72,6 +72,12 @@ public class CommunityBoardDTO {
 	public void setOli_no(int oli_no) {
 		this.oli_no = oli_no;
 	}
+	@Override
+	public String toString() {
+		return "CommunityBoardDTO [cb_no=" + cb_no + ", m_no=" + m_no + ", title=" + title + ", content=" + content
+				+ ", hit=" + hit + ", img_path=" + img_path + ", reg_date=" + reg_date + ", classify=" + classify
+				+ ", enable=" + enable + "]";
+	}
 	
 	
 	

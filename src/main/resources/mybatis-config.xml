@@ -5,5 +5,11 @@
 		<typeAlias type="com.spring.ex.dto.CommunityBoardDTO" alias="CommunityBoardDTO"/>
 		<typeAlias type="com.spring.ex.dto.CommunityBoardDTO" alias="CommunityBoardReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.MemberDTO" alias="MemberDTO"/>
+		<typeAlias type="com.spring.ex.dto.CourseDTO" alias="CourseDTO"/>
+		<typeAlias type="com.spring.ex.dto.CourseReplyDTO" alias="CourseReplyDTO"/>
+		<typeAlias type="com.spring.ex.dto.CourseTagDTO" alias="CourseTagDTO"/>
+		<typeAlias type="com.spring.ex.dto.CourseVideoDTO" alias="CourseVideoDTO"/>
+		<typeAlias type="com.spring.ex.dto.TeacherDTO" alias="TeacherDTO"/>
+		<typeAlias type="com.spring.ex.dto.TagDTO" alias="TagDTO"/>
 	</typeAliases>
 </configuration>

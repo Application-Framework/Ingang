@@ -26,13 +26,18 @@ public class MemberDAOImpl implements MemberDAO {
 	
 	// 아이디 중복 체크
 	@Override
-	public MemberDTO memberIdCheck(String m_id) throws Exception {
-		return sql.selectOne(namespcae + ".memberIdCheck", m_id);
+	public MemberDTO idCheck(String m_id) throws Exception {
+		return sql.selectOne(namespcae + ".idCheck", m_id);
 	}
 
 	//로그인
 	@Override
 	public MemberDTO login(MemberDTO dto) throws Exception {
 		return sql.selectOne(namespcae + ".login", dto);
+	}
+
+	@Override
+	public String getNameByM_no(int m_no) throws Exception {
+		return sql.selectOne(namespcae + ".getNameByM_no", m_no);
 	}
 }

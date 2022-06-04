@@ -131,4 +131,11 @@ public class PagingDTO {
 		//마지막 페이지 번호
 		this.setFinalPageNo(finalPage);
 	}
+	
+	@Override
+	public String toString() {
+		return "PagingDTO [pageSize=" + pageSize + ", totalCount=" + totalCount + ", pageNo=" + pageNo
+				+ ", firstPageNo=" + firstPageNo + ", prevPageNo=" + prevPageNo + ", nextPageNo=" + nextPageNo
+				+ ", finalPageNo=" + finalPageNo + ", startPageNo=" + startPageNo + ", endPageNo=" + endPageNo + "]";
+	}
 }
