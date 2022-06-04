@@ -5,11 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dto.CourseDTO;
-import com.spring.ex.dto.CourseReplyDTO;
-import com.spring.ex.dto.CourseTagDTO;
-import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.TeacherDTO;
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
 
 @Service
 public interface CourseService {

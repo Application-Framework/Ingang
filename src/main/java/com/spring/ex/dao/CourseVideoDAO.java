@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.CourseVideoDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
 
 @Repository
 public interface CourseVideoDAO {

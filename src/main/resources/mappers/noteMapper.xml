@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.NoteMapper">
+	<!-- 노트 생성 -->
+	<insert id="createNote">
+		INSERT INTO note(oli_no, m_no, title, content, price, reg_date, classify, enable)
+		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{reg_date}, #{classify}, 1)
+	</insert>
+	
+	<!-- 노트 리스트 출력 -->
+	<select id="getNoteList" resultType="NoteDTO">
+		SELECT n.n_no, n.oli_no, n.m_no, n.title, n.content, n.price, n.reg_date, n.classify
+		FROM note n, online_lecture_introduction oli, online_lecture_tag olt
+		WHERE n.oli_no = oli.oli_no AND n.oli_no = olt.oli_no
+		<choose>
+			<when test="note">
+				AND n.title LIKE '%${keyword}%'
+			</when>
+			<when test="course">
+				AND oli.title LIKE '%${keyword}%'
+			</when>
+		</choose>
+	
+		<if test="tag != null">
+			AND olt.tag = #{tag}
+		</if>
+		GROUP BY n_no
+		LIMIT 0, 10
+	</select>
+	
+	<!-- 노트 댓글 등록 -->
+	<insert id="submitNoteReply">
+		INSERT INTO note_reply(n_no, m_no, star_rating, content, reg_date)
+		VALUES(#{n_no}, #{m_no}, #{star_rating}, #{content}, #{reg_date})
+	</insert>
+	
+	<!-- 노트 댓글 출력 -->
+	<select id="getNoteReplyList" resultType="NoteReplyDTO">
+		SELECT * 
+		FROM note_reply
+	</select>
+	
+	<!-- 노트 좋아요 추가 -->
+	<insert id="insertNoteLike">
+		INSERT INTO note_like(n_no, m_no)
+		VALUES(#{n_no}, #{m_no})
+	</insert>
+	
+	<!-- 노트 좋아요 삭제 -->
+	<delete id="deleteNoteLike">
+		DELETE FROM note_like
+		WHERE n_no = #{n_no} AND m_no = #{m_no}
+	</delete>
+	
+	<!-- 노트 좋아요 개수 가져오기 -->
+	<select id="getNoteLikeCount" resultType="int">
+		SELECT COUNT(*)
+		FROM note_like
+		WHERE n_no = #{n_no}
+	</select>
+	
+	<!-- 노트 좋아요 있는지 확인 -->
+	<select id="existNoteLike" resultType="int">
+		SELECT EXISTS(SELECT * FROM note_like WHERE n_no = #{n_no} AND m_no = #{m_no})
+	</select>
+	
+	<!-- 노트 글 등록 -->
+	<insert id="submitNoteArticle">
+		INSERT INTO note_article(n_no, olv_no, title, content)
+		VALUES(#{n_no}, #{olv_no], #{title}, #{content})
+	</insert>
+	
+	<!-- 노트 글 리스트 출력 -->
+	<select id="getNoteArticleList" resultType="NoteArticleDTO">
+		SELECT * FROM note_article
+		WHERE n_no = #{n_no}
+	</select>
+	
+	<!-- 노트 글 출력 -->
+	<select id="getNoteArticle" resultType="NoteArticleDTO">
+		SELECT * FROM note_article
+		WHERE na_no = #{na_no}
+	</select>
+</mapper>

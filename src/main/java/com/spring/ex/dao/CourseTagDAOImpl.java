@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.CourseTagDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
 
 @Repository
 public class CourseTagDAOImpl implements CourseTagDAO{

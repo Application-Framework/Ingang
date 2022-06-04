@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.CourseVideoDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
 
 @Repository
 public class CourseVideoDAOImpl implements CourseVideoDAO {

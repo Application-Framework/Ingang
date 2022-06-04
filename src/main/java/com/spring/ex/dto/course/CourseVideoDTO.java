@@ -1,4 +1,4 @@
-package com.spring.ex.dto;
+package com.spring.ex.dto.course;
 
 import java.sql.Time;
 

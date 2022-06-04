@@ -1,4 +1,4 @@
-package com.spring.ex.dto;
+package com.spring.ex.dto.course;
 
 public class CourseTagDTO {
 	private int olt_no;

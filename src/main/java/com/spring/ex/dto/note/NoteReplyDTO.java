@@ -1,26 +1,26 @@
-package com.spring.ex.dto.course;
+package com.spring.ex.dto.note;
 
 import java.sql.Date;
 
-public class CourseReplyDTO {
-	private int olr_no;
-	private int oli_no;
+public class NoteReplyDTO {
+	private int nr_no;
+	private int n_no;
 	private int m_no;
 	private int star_rating;
 	private String content;
 	private Date reg_date;
 	
-	public int getOlr_no() {
-		return olr_no;
+	public int getNr_no() {
+		return nr_no;
 	}
-	public void setOlr_no(int olr_no) {
-		this.olr_no = olr_no;
+	public void setNr_no(int nr_no) {
+		this.nr_no = nr_no;
 	}
-	public int getOli_no() {
-		return oli_no;
+	public int getN_no() {
+		return n_no;
 	}
-	public void setOli_no(int oli_no) {
-		this.oli_no = oli_no;
+	public void setN_no(int n_no) {
+		this.n_no = n_no;
 	}
 	public int getM_no() {
 		return m_no;
@@ -48,7 +48,7 @@ public class CourseReplyDTO {
 	}
 	@Override
 	public String toString() {
-		return "CourseReplyDTO [olr_no=" + olr_no + ", oli_no=" + oli_no + ", m_no=" + m_no + ", star_rating="
-				+ star_rating + ", content=" + content + ", reg_date=" + reg_date + "]";
+		return "NoteReplyDTO [nr_no=" + nr_no + ", n_no=" + n_no + ", m_no=" + m_no + ", star_rating=" + star_rating
+				+ ", content=" + content + ", reg_date=" + reg_date + "]";
 	}
 }
