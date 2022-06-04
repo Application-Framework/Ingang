@@ -49,5 +49,29 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception {
 		return sqlSession.selectList(namespace + ".getReplyCommunityBoard", cb_no);
 	}
+	
+	//게시물 조회수 증가
+	@Override
+	public void addReadCommunityBoardHit(int cb_no) throws Exception {
+		sqlSession.update(namespace + ".addReadCommunityBoardHit", cb_no);
+	}
+	
+	//게시물 좋아요 유무 체크
+	@Override
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getGoodCheckReadCommunityBoard", map);
+	}
+	
+	//게시물 좋아요 추가
+	@Override
+	public int addGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.insert(namespace + ".addGoodReadCommunityBoard", map);
+	}
+	
+	//게시물 좋아요 삭제
+	@Override
+	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.delete(namespace + ".subtractGoodReadCommunityBoard", map);
+	}
 
 }

@@ -47,4 +47,28 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception {
 		return dao.getReplyCommunityBoard(cb_no);
 	}
+	
+	//게시물 조회수 증가
+	@Override
+	public void addReadCommunityBoardHit(int cb_no) throws Exception {
+		dao.addReadCommunityBoardHit(cb_no);
+	}
+	
+	//게시물 좋아요 유무 체크
+	@Override
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.getGoodCheckReadCommunityBoard(map);
+	}
+	
+	//게시물 좋아요 추가
+	@Override
+	public int addGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.addGoodReadCommunityBoard(map);
+	}
+	
+	//게시물 좋아요 삭제
+	@Override
+	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.subtractGoodReadCommunityBoard(map);
+	}
 }

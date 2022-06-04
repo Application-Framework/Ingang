@@ -26,4 +26,16 @@ public interface CommunityBoardService {
 	
 	//게시글 상세페이지 댓글 출력
 	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception;
+	
+	//게시물 조회수 증가
+	public void addReadCommunityBoardHit(int cb_no) throws Exception;
+	
+	//게시물 좋아요 유무 체크
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//게시물 좋아요 추가
+	public int addGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//게시물 좋아요 삭제
+	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception;
 }

@@ -22,8 +22,9 @@
 	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 </head>
 
 <body>
@@ -53,7 +54,15 @@
 							<h2>${cbReadPage.title}</h2>
 							<ul class="blog-info-link mt-3 mb-4">
 								<li><a href="#"><i class="fa fa-user"></i> ${cbReadPage.m_id}</a></li>
-								<li><a href="#">조회수 ${cbReadPage.hit}</a></li>
+								<c:choose>
+									<c:when test="${hitReadPage eq 1}"> 
+										<li><a  href="#">조회수 ${cbReadPage.hit+1}</a></li>
+									</c:when>
+									<c:otherwise> 
+										<li><a  href="#">조회수 ${cbReadPage.hit}</a></li>
+									 </c:otherwise>
+								</c:choose>
+								
 								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
 							</ul>
 							<P>
@@ -62,7 +71,7 @@
 						</div>
 					</div>
 					<div class="comments-area">
-						<h4>05 댓글</h4>
+						<h4><c:out value="${cbReadPage.cbr.conunt}"/> 댓글</h4>
 						<div class="comment-list">
 							<div >
 							<c:forEach var="cbrList" items="${cbrList}">
@@ -71,9 +80,9 @@
 										<img alt="" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
 									</div>
 									<div class="desc">
-										<div class="">
+										<div>
 											<div class="d-flex align-items-center">
-														<ul class="blog-info-link mt-3 mb-4">
+												<ul class="blog-info-link mt-3 mb-4">
 													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
 													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
 												</ul>
@@ -104,11 +113,21 @@
 						</form>
 					</div>
 				</div>
-				<div class="col-lg-2">
+				<div class="col-lg-2" id="heartDiv">
 					<ul>
-						<li>
-							<button class="genric-btn danger-border radius"> <i class="fa fa-heart"></i> 6</button>
-						</li><br>
+						<c:choose>
+							<c:when test="${member ne null && boardLikeCheck eq 1}"> 
+								<li><button class="genric-btn danger-border radius" id="subtractGood"> <i class="fas fa-heart"></i> ${cbReadPage.good}</button></li>
+							</c:when>
+							<c:when test="${member ne null && boardLikeCheck ne 1}">
+							
+								<li><button class="genric-btn danger-border radius" id="addGood"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+							</c:when>
+							<c:otherwise> 
+								<li><button class="genric-btn danger-border radius" id="buttonNoLogin"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+							 </c:otherwise>
+						</c:choose>
+						<br>
 						<li>
 							<button class="genric-btn danger-border radius"> 댓글</button>
 						</li>
@@ -121,8 +140,42 @@
 	<%------------ footer section  ------------%>
 	<jsp:include page="../fix/footer.jsp" />
 
-	<%-- Jquery Plugins, main Jquery --%>
-	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-	<script src="<c:url value='/resources/js/main.js'/>"></script>
+<%-- Jquery Plugins, main Jquery --%>
+<script src="<c:url value='/resources/js/plugins.js'/>"></script>
+<script src="<c:url value='/resources/js/main.js'/>"></script>
+<script>
+	$('#addGood').click(function(){
+		$.ajax({
+			url: "addGoodCommunityBoard",
+			type: "GET",
+			data: {'cb_no':${cbReadPage.cb_no}},
+			success: function() {
+				var reLoadUrl = "/community/boardRead?cb_no=" + ${cbReadPage.cb_no};
+				$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			}
+		});
+	});
+	
+	$('#subtractGood').click(function(){
+		$.ajax({
+			url: "subtractGoodCommunityBoard",
+			type: "GET",
+			data: {'cb_no':${cbReadPage.cb_no}},
+			success: function() {
+				var reLoadUrl = "/community/boardRead?cb_no=" + ${cbReadPage.cb_no};
+				$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			}
+		});
+	});
+	
+	$('#buttonNoLogin').click(function(){
+		swal({
+			title: "로그인",
+			text: "로그인이 되어야 좋아요가 가능합니다.",
+			icon: "warning",
+		});
+	});
+
+</script>
 </body>
 </html>
