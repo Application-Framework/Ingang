@@ -12,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.PagingService;
@@ -119,6 +121,20 @@ public class CommunityController {
 		//System.out.println("좋아요 추가 : "+map);
 		cbService.addGoodReadCommunityBoard(map);
 		return "community/communityRead";
+	}
+	
+	//게시글 댓글 작성
+	@RequestMapping(value = "/writeReplyCommunityBoard" ,  method = RequestMethod.POST)
+	public @ResponseBody int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception{
+		return cbService.writeReplyCommunityBoard(dto);
+	}
+	
+	//게시글 댓글 삭제
+	@RequestMapping(value = "/deleteReplyCommunityBoard" ,  method = RequestMethod.POST)
+	public  @ResponseBody int deleteReplyCommunityBoard(int cbr_no) throws Exception{
+		int result = cbService.deleteReplyCommunityBoard(cbr_no);
+		
+		return result;
 	}
 	
 	

@@ -73,5 +73,23 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return sqlSession.delete(namespace + ".subtractGoodReadCommunityBoard", map);
 	}
+	
+	//게시물 댓글 작성
+	@Override
+	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".writeReplyCommunityBoard", dto);
+	}
+	
+	//게시물 댓글 수정
+	@Override
+	public int updateReplyCommunityBoard(int cbr_no) throws Exception {
+		return sqlSession.update(namespace + ".updateReplyCommunityBoard", cbr_no);
+	}
+	
+	//게시물 댓글 삭제
+	@Override
+	public int deleteReplyCommunityBoard(int cbr_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteReplyCommunityBoard", cbr_no);
+	}
 
 }

@@ -68,8 +68,8 @@
 							</P>
 						</div>
 					</div>
-					<div class="comments-area">
-						<h4><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.  ${classify}</h4>
+					<div class="comments-area" style="padding: 20px 0px" id="replyList">
+						<h4><a name="target"><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.</a></h4>
 						<div class="comment-list">
 							<div >
 							<c:forEach var="cbrList" items="${cbrList}">
@@ -83,6 +83,10 @@
 												<ul class="blog-info-link mt-3 mb-4">
 													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
 													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
+													<c:if test="${sessionScope.member.getM_no() eq cbrList.m_no}">
+														<li><a href="javascript:void(0)" onclick=""><i class="far fa-edit"></i> 수정</a></li>
+														<li><a href="" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
+													</c:if>
 												</ul>
 											</div>
 										</div>
@@ -95,20 +99,22 @@
 							</div>
 						</div>
 					</div>
-					<div class="comment-form">
+					<div class="comment-form" id="replyTop">
 						<c:choose>
 							<c:when test="${member ne null}"> 
 							<h4>댓글</h4>
-								<form class="form-contact comment_form" action="#" id="commentForm">
+								<form class="form-contact comment_form" id="commentForm" method="POST">
 									<div class="row">
 										<div class="col-12">
+											<input type="hidden" id="cb_no" name="cb_no" value="${cbReadPage.cb_no}">
+											<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
 											<div class="form-group">
-												<textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
+												<textarea class="form-control w-100" name="content" id="content" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
 											</div>
 										</div>
 									</div>
 									<div class="form-group" align="right">
-										<button type="submit" class="button button-contactForm btn_1 boxed-btn">작성</button>
+										<button type="button"  id="btnReplyWrite" class="button button-contactForm btn_1 boxed-btn">작성</button>
 									</div>
 								</form>
 							</c:when>
@@ -121,7 +127,7 @@
 						</c:choose>
 					</div>
 				</div>
-				<div class="col-lg-2">
+				<div class="col-lg-2" id="sidebox">
 					<div id="heartDiv">
 						<ul>
 							<c:choose>
@@ -136,7 +142,7 @@
 								 </c:otherwise>
 							</c:choose>
 							<li style="margin-top: 10px;">
-								<button class="genric-btn danger-border radius"> 댓글</button>
+								<a href="javascript:pageReplyScroll();" target="_self"><button class="genric-btn danger-border radius">댓글</button></a>
 							</li>
 						</ul>
 					</div>
@@ -153,7 +159,6 @@
 <script src="<c:url value='/resources/js/plugins.js'/>"></script>
 <script src="<c:url value='/resources/js/main.js'/>"></script>
 <script>
-
 $('#addGood').click(function(){
 	console.log("asdsd");
 	$.ajax({
@@ -189,6 +194,93 @@ $('#buttonNoLogin').click(function(){
 	});
 });
 
+
+$('#btnReplyWrite').click(function() {
+	var m_no = $("#m_no").val();
+	var content = $("#content").val();
+	var param = {'m_no': m_no , 'content': content, 'cb_no': $("#cb_no").val()};
+	
+	if(!content) {
+		swal({
+			title: "댓글작성",
+			text: "내용이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	else {
+		$.ajax({
+			url: "writeReplyCommunityBoard",
+			type: "POST",
+			data: param,
+			success: function(data) {
+				if (data != 1) {
+					swal({
+						title: "댓글작성",
+						text: "댓글 등록이 실패하였습니다.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+				else {
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+					location.href = reLoadUrl;
+				}
+			},
+			error: function() {
+				swal({
+					title: "인강인강",
+					text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+		});
+	}
+})
+
+// 게시글 댓글 삭제
+function replyDelete(cbr_no) {
+	$.ajax({
+		url: "deleteReplyCommunityBoard",
+		type: "POST",
+		data:  {'cbr_no': cbr_no},
+		success: function(data) {
+			if (data = null) {
+				swal({
+					title: "댓글삭제",
+					text: "댓글 삭제가 실패하였습니다.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+			else {
+			}
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+}
+/*우측 사이드바*/
+var target = document.getElementById("replyTop");
+var abTop =  target.getBoundingClientRect().top;
+//console.log(abTop);
+function pageReplyScroll() {
+	window.scrollTo( 0, abTop);
+}
+
+var currentPosition = parseInt($("#sidebox").css("top"));
+$(window).scroll(function(){
+	var position = $(window).scrollTop();
+	$("#sidebox").stop().animate({"top":position+currentPosition+"px"},1000);
+});
 </script>
 </body>
 </html>

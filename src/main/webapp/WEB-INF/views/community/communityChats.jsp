@@ -145,7 +145,7 @@
 								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a href="chats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+									<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 								</c:otherwise>
 							</c:choose>
 							<!-- 페이지 갯수만큼 버튼 생성 -->
@@ -155,7 +155,7 @@
 										<li class="page-item  active"> <a href="chats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"> <a href="chats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -164,7 +164,7 @@
 								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a href="chats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+									<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 								</c:otherwise>
 							</c:choose>
 						</ul>

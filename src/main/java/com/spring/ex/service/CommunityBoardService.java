@@ -38,4 +38,13 @@ public interface CommunityBoardService {
 	
 	//게시물 좋아요 삭제
 	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//게시물 댓글 작성
+	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception;
+	
+	//게시물 댓글 수정
+	public int updateReplyCommunityBoard(int cbr_no) throws Exception;
+	
+	//게시물 댓글 삭제
+	public int deleteReplyCommunityBoard(int cbr_no) throws Exception;
 }

@@ -71,4 +71,22 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return dao.subtractGoodReadCommunityBoard(map);
 	}
+	
+	//게시물 댓글 작성
+	@Override
+	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception {
+		return dao.writeReplyCommunityBoard(dto);
+	}
+	
+	//게시물 댓글 수정
+	@Override
+	public int updateReplyCommunityBoard(int cbr_no) throws Exception {
+		return dao.updateReplyCommunityBoard(cbr_no);
+	}
+	
+	//게시물 댓글 삭제
+	@Override
+	public int deleteReplyCommunityBoard(int cbr_no) throws Exception{
+		return dao.deleteReplyCommunityBoard(cbr_no);
+	}
 }

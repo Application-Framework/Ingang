@@ -77,11 +77,24 @@
 		WHERE cb_no = #{cb_no} AND m_no = #{m_no}
 	</delete>
 	
+	<!--게시글 댓글 작성  -->
+	<insert id="writeReplyCommunityBoard">
+		INSERT INTO community_board_reply(cb_no, m_no, content, reg_date)
+		VALUES(#{cb_no}, #{m_no}, #{content} ,NOW());
+	</insert>
 	
+	<!--게시글 댓글 수정  -->
+	<update id="updateReplyCommunityBoard">
+		UPDATE community_board_reply
+		SET content = #{content}
+		WHERE m_no = #{m_no}; 
+	</update>
 	
-	
-	
-	
+	<!--게시글 댓글 삭제  -->	
+	<delete id="deleteReplyCommunityBoard">
+		DELETE FROM community_board_reply
+		WHERE cbr_no = #{cbr_no}
+	</delete>
 	
 	
 	<sql id="SearchChatBoard">

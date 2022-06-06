@@ -205,18 +205,14 @@ $(function() {
 						</div>
 					</div>
 					
-					<!-- 개요 -->
 					내용
 					<div class="form-group">
-						<textarea class="form-control" rows="15" id="content" name="content" placeholder="자유롭게 게시글을 작성해보세요">
-							자유롭게 게시글을 작성해보세요
-						</textarea>	
+						<textarea class="form-control" rows="15" id="content" name="content" placeholder="내용을 작성해주세요"></textarea>	
 					</div>
-												
 					<div align="right">
 						<button type="button" class="btn btn-danger" onclick="">작성</button>
 						<button type="button" class="btn btn-outline-danger" onclick="self.close();">취소</button>
-			        </div>
+					</div>
 				</form>
 				
 				
