@@ -247,7 +247,7 @@ function replyDelete(cbr_no) {
 		type: "POST",
 		data:  {'cbr_no': cbr_no},
 		success: function(data) {
-			if (data = null) {
+			if (data != 1) {
 				swal({
 					title: "댓글삭제",
 					text: "댓글 삭제가 실패하였습니다.",
