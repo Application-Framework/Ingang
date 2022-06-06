@@ -62,7 +62,7 @@
 	<select id="getGoodCheckReadCommunityBoard" resultType="int">
 		SELECT COUNT(*)
 		FROM community_board_good
-		WHERE m_no = #{m_no} AND cb_no = #{cb_no};
+		WHERE cb_no = #{cb_no} AND  m_no = #{m_no};
 	</select>
 	
 	<!-- 좋아요 추가 -->

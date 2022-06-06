@@ -19,12 +19,10 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
-	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+
 </head>
 
 <body>
@@ -71,7 +69,7 @@
 						</div>
 					</div>
 					<div class="comments-area">
-						<h4><c:out value="${cbReadPage.cbr.conunt}"/> 댓글</h4>
+						<h4><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.  ${classify}</h4>
 						<div class="comment-list">
 							<div >
 							<c:forEach var="cbrList" items="${cbrList}">
@@ -98,40 +96,50 @@
 						</div>
 					</div>
 					<div class="comment-form">
-						<h4>댓글</h4>
-						<form class="form-contact comment_form" action="#" id="commentForm">
-							<div class="row">
-								<div class="col-12">
-									<div class="form-group">
-										<textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
+						<c:choose>
+							<c:when test="${member ne null}"> 
+							<h4>댓글</h4>
+								<form class="form-contact comment_form" action="#" id="commentForm">
+									<div class="row">
+										<div class="col-12">
+											<div class="form-group">
+												<textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="form-group" align="right">
-								<button type="submit" class="button button-contactForm btn_1 boxed-btn">작성</button>
-							</div>
-						</form>
+									<div class="form-group" align="right">
+										<button type="submit" class="button button-contactForm btn_1 boxed-btn">작성</button>
+									</div>
+								</form>
+							</c:when>
+							<c:otherwise>
+								<div align="center"><a href="loginPageView">
+									<button type="button"  class="button button-contactForm btn_1 boxed-btn" style="width: 80%;">로그인 후, 댓글 작성이 가능합니다!</button>
+									</a>
+								</div><br>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
-				<div class="col-lg-2" id="heartDiv">
-					<ul>
-						<c:choose>
-							<c:when test="${member ne null && boardLikeCheck eq 1}"> 
-								<li><button class="genric-btn danger-border radius" id="subtractGood"> <i class="fas fa-heart"></i> ${cbReadPage.good}</button></li>
-							</c:when>
-							<c:when test="${member ne null && boardLikeCheck ne 1}">
-							
-								<li><button class="genric-btn danger-border radius" id="addGood"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
-							</c:when>
-							<c:otherwise> 
-								<li><button class="genric-btn danger-border radius" id="buttonNoLogin"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
-							 </c:otherwise>
-						</c:choose>
-						<br>
-						<li>
-							<button class="genric-btn danger-border radius"> 댓글</button>
-						</li>
-					</ul>
+				<div class="col-lg-2">
+					<div id="heartDiv">
+						<ul>
+							<c:choose>
+								<c:when test="${member ne null && boardLikeCheck eq 1}"> 
+									<li><button class="genric-btn danger-border radius" id="subtractGood"> <i class="fas fa-heart"></i> ${cbReadPage.good}</button></li>
+								</c:when>
+								<c:when test="${member ne null && boardLikeCheck ne 1}">
+									<li><button class="genric-btn danger-border radius" id="addGood"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+								</c:when>
+								<c:otherwise> 
+									<li><button class="genric-btn danger-border radius" id="buttonNoLogin"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+								 </c:otherwise>
+							</c:choose>
+							<li style="margin-top: 10px;">
+								<button class="genric-btn danger-border radius"> 댓글</button>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -139,42 +147,47 @@
 			<!--================ Blog Area end =================-->
 	<%------------ footer section  ------------%>
 	<jsp:include page="../fix/footer.jsp" />
-
+	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 <%-- Jquery Plugins, main Jquery --%>
 <script src="<c:url value='/resources/js/plugins.js'/>"></script>
 <script src="<c:url value='/resources/js/main.js'/>"></script>
 <script>
-	$('#addGood').click(function(){
-		$.ajax({
-			url: "addGoodCommunityBoard",
-			type: "GET",
-			data: {'cb_no':${cbReadPage.cb_no}},
-			success: function() {
-				var reLoadUrl = "/community/boardRead?cb_no=" + ${cbReadPage.cb_no};
-				$("#heartDiv").load(reLoadUrl + " #heartDiv");
-			}
-		});
+
+$('#addGood').click(function(){
+	console.log("asdsd");
+	$.ajax({
+		url: "addGoodCommunityBoard",
+		type: "GET",
+		data: {'cb_no':${cbReadPage.cb_no}},
+		success: function() {
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			//location.href = reLoadUrl;
+		}
 	});
-	
-	$('#subtractGood').click(function(){
-		$.ajax({
-			url: "subtractGoodCommunityBoard",
-			type: "GET",
-			data: {'cb_no':${cbReadPage.cb_no}},
-			success: function() {
-				var reLoadUrl = "/community/boardRead?cb_no=" + ${cbReadPage.cb_no};
-				$("#heartDiv").load(reLoadUrl + " #heartDiv");
-			}
-		});
+});
+
+$('#subtractGood').click(function(){
+	console.log("asdsdsdsd");
+	$.ajax({
+		url: "subtractGoodCommunityBoard",
+		type: "GET",
+		data: {'cb_no':${cbReadPage.cb_no}},
+		success: function() {
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+		}
 	});
-	
-	$('#buttonNoLogin').click(function(){
-		swal({
-			title: "로그인",
-			text: "로그인이 되어야 좋아요가 가능합니다.",
-			icon: "warning",
-		});
+});
+
+$('#buttonNoLogin').click(function(){
+	swal({
+		title: "로그인",
+		text: "로그인이 되어야 좋아요가 가능합니다.",
+		icon: "warning",
 	});
+});
 
 </script>
 </body>

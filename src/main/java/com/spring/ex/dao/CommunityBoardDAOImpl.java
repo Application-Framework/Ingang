@@ -22,13 +22,13 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//게시판 최신순 출력
 	@Override
-	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Integer> map) throws Exception {
+	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Object> map) throws Exception {
 		return sqlSession.selectList(namespace + ".getCommunityBoardChatRegDateShowPage", map) ;
 	}
 
 	//게시판 좋아요순 출력
 	@Override
-	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Integer> map) throws Exception {
+	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception {
 		return sqlSession.selectList(namespace + ".getCommunityBoardChatGoodShowPage", map);
 	}
 	
@@ -58,7 +58,7 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//게시물 좋아요 유무 체크
 	@Override
-	public int getGoodCheckReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Integer> map) throws Exception {
 		return sqlSession.selectOne(namespace + ".getGoodCheckReadCommunityBoard", map);
 	}
 	

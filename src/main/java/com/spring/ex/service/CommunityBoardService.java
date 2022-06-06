@@ -13,10 +13,10 @@ import com.spring.ex.dto.CommunityBoardReplyDTO;
 public interface CommunityBoardService {
 	
 	//게시판 최신순 출력
-	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Integer> map) throws Exception;
+	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Object> map) throws Exception;
 	
 	//게시판 최신순 출력
-	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Integer> map) throws Exception;
+	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception;
 	
 	//게시판 목록 총 갯수 - 페이징
 	public int getCommunityBoardTotalCount() throws Exception;
@@ -31,7 +31,7 @@ public interface CommunityBoardService {
 	public void addReadCommunityBoardHit(int cb_no) throws Exception;
 	
 	//게시물 좋아요 유무 체크
-	public int getGoodCheckReadCommunityBoard(HashMap<String, Object> map) throws Exception;
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Integer> map) throws Exception;
 	
 	//게시물 좋아요 추가
 	public int addGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception;

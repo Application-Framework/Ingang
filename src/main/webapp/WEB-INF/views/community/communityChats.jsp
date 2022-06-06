@@ -95,7 +95,7 @@
 										<article class="blog_item">
 											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 											
-												<a class="d-inline-block" href="boardRead?cb_no=${cbList.cb_no}&classify=1">
+												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=1">
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
@@ -115,7 +115,7 @@
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="boardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
@@ -178,7 +178,7 @@
     <%------------ footer section  ------------%>
     <jsp:include page="../fix/footer.jsp" />
     
-       	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 
     <%-- Jquery Plugins, main Jquery --%>
@@ -204,14 +204,14 @@ $(document).ready(function() {
 });
 
 $('#buttonWrite').click(function(){
-	var popup = window.open('boardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
 $('#buttonNoLogin').click(function(){
 	console.log("asd");
 	swal({
 		title: "로그인",
-		text: "로그인이 되어야 좋아요가 가능합니다.",
+		text: "로그인이 되어야 게시글 작성이 가능합니다.",
 		icon: "warning",
 	});
 });
