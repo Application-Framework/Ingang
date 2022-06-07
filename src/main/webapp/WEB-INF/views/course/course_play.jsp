@@ -42,14 +42,28 @@
            		</div>
             </div>
         </div>
-
+		
+		<%-- content --%>
         <div class="slidebar" id="mySlidebar">
+        	<div class="p-3 d-flex justify-content-between">
+	        	<span class="fs-4 fw-bold">목차</span>
+	        	<a href="#" onclick="clickNav()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
+        	</div>
+        	
+        	<c:forEach var="video" items="${videoList}">
+	        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
+	        		<i class="fs-5 bi bi-play-circle me-2"></i>
+		       		<div class="fs-5">${video.title}</div>
+		       		<a class="stretched-link" href="${video.olv_no}"></a>
+	       		</div>
+       		</c:forEach>
         </div>
-
+		
+		<%-- 우측 메뉴 --%>
         <div class="rightMenubar">   
-            <a class="toggleButton" onclick="clickNav()"><i class="bi bi-list-ul"></i></a>
-            <a class="toggleButton" onclick="clickNav()"><i class="bi bi-chat-square-dots-fill"></i></a>
-            <a class="toggleButton" onclick="clickNav()"><i class="bi bi-sticky-fill"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-list-ul"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-chat-square-dots-fill"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-sticky-fill"></i></a>
         </div>
     </div>
     
@@ -58,10 +72,12 @@
 
         function clickNav() {
             if(status1 == false ){
+            	console.log("open");
                 document.getElementById("mySlidebar").style.width = "250px";
                 status1 = true;
             }
             else if(status1 == true) {
+            	console.log("close");
                 document.getElementById("mySlidebar").style.width = "0";
                 status1 = false;
             }

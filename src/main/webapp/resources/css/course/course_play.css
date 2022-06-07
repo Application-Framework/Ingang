@@ -4,7 +4,7 @@
     top: 0;
     right: 0;
     float: right;
-    background-color: rgb(222, 222, 222);
+    background-color: rgb(242, 242, 242);
 }
 
 .rightMenubar a{
@@ -23,14 +23,42 @@
 }
 
 .slidebar {
-    padding-top: 10px;
     width: 0px;
     top: 0;
-    right: 70px;
+    right: 0px;
     float: right;
-    background-color: rgb(199, 199, 199);
+    background-color: rgb(255, 255, 255);
     transition: 0.5s;
+    overflow: hidden;
 }
+
+.slidebar .content {
+	overflow: hidden;
+	position: relative;
+}
+
+.slidebar .content:hover {
+	background-color: #e6e6e6;
+	transition: 0.2s;
+}
+
+.slidebar .notSelected > *{
+	opacity: 0.5;
+}
+
+.slidebar .selected{
+	background-color: rgb(238,248,249);
+}
+
+.slidebar .selected > * {
+	font-size: 1.25rem;
+	font-weight: 600;
+}
+
+#closeBtn {
+	color:rgb(0,0,0);
+}
+
 
 #main {
     transition: 0.5s;
