@@ -84,8 +84,8 @@
 													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
 													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
 													<c:if test="${sessionScope.member.getM_no() eq cbrList.m_no}">
-														<li><a href="javascript:void(0)" onclick=""><i class="far fa-edit"></i> 수정</a></li>
-														<li><a href="" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
+														<li><a href="javascript:void(0)" onclick="replyEdit(${cbrList.cbr_no}, '${cbrList.content}')"><i class="far fa-edit"></i> 수정</a></li>
+														<li><a href="javascript:void(0)" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
 													</c:if>
 												</ul>
 											</div>
@@ -256,6 +256,8 @@ function replyDelete(cbr_no) {
 				});
 			}
 			else {
+				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+				location.href = reLoadUrl;
 			}
 		},
 		error: function() {
@@ -268,6 +270,91 @@ function replyDelete(cbr_no) {
 		}
 	});
 }
+
+/* 여행 포토 댓글 수정 */
+function replyEdit(cbr_no, reply) {
+	var htmls = "";
+	
+	htmls += '<form action="travelreplyModify" method="POST" class="contact-one__form">';
+	htmls += '<div class="input-group">';
+	htmls += '<textarea id="replyEditContent" name="Content" placeholder="댓글을 입력하세요..." cols="100">'+reply+'</textarea>';
+	htmls += '<button id="btnReplyModify" name="btnReplyModify" class="thm-btn-psd2" type="button" onclick="replySave('+cbr_no+')">등록</button>';
+	htmls += '<button class="thm-btn-psd2" type="button" onclick="replyCancel(' + cbr_no + ', \'' + reply + '\')">취소</button>';
+	htmls += '</div>';
+	htmls += '</form>';
+	
+	$("#replyContentSection"+cbr_no).html(htmls);
+	$('#replyEditContent').focus();
+}
+
+/* 여행 포토 댓글 수정 취소 */
+function replyCancel(cbr_no, reply) {
+	var htmls = "";
+	
+	htmls += reply;
+	
+	$("#replyContentSection"+cbr_no).html(htmls);
+}
+
+/* 여행 포토 댓글 수정 등록 */
+function replySave(cbr_no) {
+	var Content = $("#replyEditContent").val();
+	var param = {'Content': Content, 'cbr_no': cbr_no};
+	
+	if(!Content) {
+		swal({
+			title: "여행포토",
+			text: "댓글이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	else {
+		$.ajax({
+			url: "travelreplyModify",
+			type: "POST",
+			data: param,
+			success: function(data) {
+				if (data != 1) {
+					swal({
+						title: "댓글수정",
+						text: "댓글 수정이 실패하였습니다.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+				else {
+					swal({
+						title: "댓글수정",
+						text: "댓글이 성공적으로 수정되었습니다.",
+						icon: "success",
+						buttons : {
+							confirm : {
+								value : true
+							}
+						}
+					}).then((result) => {
+						if(result) {
+							location.reload();
+						}
+					});
+				}
+			},
+			error: function() {
+				swal({
+					title: "댓글수정",
+					text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+		});
+	}
+}
+
+
+
 /*우측 사이드바*/
 var target = document.getElementById("replyTop");
 var abTop =  target.getBoundingClientRect().top;

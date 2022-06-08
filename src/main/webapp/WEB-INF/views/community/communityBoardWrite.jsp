@@ -17,15 +17,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
 <!-- 태그 -->
 <link rel="stylesheet" type="text/css" href="/tag_create.css">
 <script type="module" src="/tag_create.js"></script>
-<!--코드미러 -->
-<script src="<c:url value="/resources/js/codemirror.js"/>"></script>
-<link href='<c:url value="/resources/css/codemirror.css"/>' rel='stylesheet' />
 <style type="text/css">
 
 .containerTop {
@@ -171,6 +175,16 @@ $(function() {
   });
 
 });
+
+$(document).ready(function() {
+	  $('#summernote').summernote({
+	    	placeholder: '내용을 입력해주세요.',
+	        minHeight: 370,
+	        maxHeight: null,
+	        focus: true, 
+	        lang : 'ko-KR'
+	  });
+});
 </script>
 </head>
 
@@ -207,7 +221,8 @@ $(function() {
 					
 					내용
 					<div class="form-group">
-						<textarea class="form-control" rows="15" id="content" name="content" placeholder="내용을 작성해주세요"></textarea>	
+						<textarea id="summernote" class="form-control" name="content">
+						</textarea>
 					</div>
 					<div align="right">
 						<button type="button" class="btn btn-danger" onclick="">작성</button>
@@ -219,67 +234,6 @@ $(function() {
 			</div>
 		</div>
 	</div>
-
-
-	<script> 
-	  var editor = CodeMirror.fromTextArea(myTextarea, {
-	    lineNumbers: true
-	  });
-
-	  function scheduleDetailGo(sId) { 
-		  var popup = window.open('ScheduleDetailView?schedule_id='+sId , 'a', 'width=800px,height=840px,left=300,top=100');
-	  }
-
-	 
-	</script>
-
-
-
-<!-- Modal -->
-<!--
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			
-			<div class="modal-body">
-			
-				<ul class="nav nav-pills" id="myTab" style="width: 100%;">
-					<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 자유주제</h6></a></li>
-					<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">질문</h6></a></li>
-					<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">스터디</h6></a></li>
-				</ul>
-				
-				<div class="tab-content">
-					<div class="tab-pane fade show active" id="qwe">
-						<article class="blog_item">
-							<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-							
-								<a class="d-inline-block" href="single-blog.html">
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="tab-pane fade" id="asd">
-						<div class="tab-pane fade show active" id="qwe">
-							<article class="blog_item">
-								<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-									<a class="d-inline-block" href="single-blog.html">
-									</a>
-								</div>
-							</article>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">작성</button>
-			</div>
-		</div>
-	</div>
-</div>
--->
 
 
 </body>
