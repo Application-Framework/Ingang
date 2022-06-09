@@ -5,8 +5,11 @@
 <mapper namespace="com.spring.mappers.tagMapper">
 	
 	<!-- 핫 트랜드 검색어 순위 -->
+	<!-- 조회수 기준 상위 10개 -->
 	<select id="tagRanking" resultType="com.spring.ex.dto.TagDTO">
-		select *
+		select t_name, t_viewCnt
 		from tag_search
+		order by t_viewCnt desc
+		limit 0,10
 	</select>
 </mapper>

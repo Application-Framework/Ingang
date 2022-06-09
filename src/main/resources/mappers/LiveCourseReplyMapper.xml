@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mappers.LiveCourseReplyMapper">
+	
+	<!-- index 강의댓글  띄우기 start -->
+	<!-- 강의 댓글 -->
+	<!-- 등록 후 하루이내 작성된 댓글 출력 -->
+	<select id="live_replyList" resultType="com.spring.ex.dto.CourseReplyDTO">
+		select oli_no, star_rating, content, reg_date
+		from online_lecture_reply
+		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 DAY)
+		order by reg_date desc
+		limit 0,8
+	</select>
+	
+	<!-- index 강의 댓글 띄우기 end -->
+</mapper>

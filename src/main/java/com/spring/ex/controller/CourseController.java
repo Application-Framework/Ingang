@@ -76,12 +76,11 @@ public class CourseController {
 		model.addAttribute("keywordParam", keywordParam);
 		model.addAttribute("orderParam", orderParam);
 	}
-	
-	@RequestMapping("/courses")
-	public String courses(HttpServletRequest request, Model model) {
-		showCourses(request, model, null);
-		return "course/courses_search";
-	}
+	/*
+	 * @RequestMapping("/courses") public String courses(HttpServletRequest request,
+	 * Model model) { showCourses(request, model, null); return
+	 * "course/courses_search"; }
+	 */
 	
 	@RequestMapping("/courses/web-dev")
 	public String coursesWebDev(HttpServletRequest request, Model model) {

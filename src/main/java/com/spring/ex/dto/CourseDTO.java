@@ -11,6 +11,7 @@ public class CourseDTO {
 	private String img_path;
 	private int price;
 	private Date reg_date;
+	private int like;
 	private int enable;
 	
 	public int getOli_no() {
@@ -60,6 +61,12 @@ public class CourseDTO {
 	}
 	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
+	}
+	public int getLike() {
+		return like;
+	}
+	public void setLike(int like) {
+		this.like = like;
 	}
 	public int getEnable() {
 		return enable;
