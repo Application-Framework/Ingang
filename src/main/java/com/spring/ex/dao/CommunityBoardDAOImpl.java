@@ -91,5 +91,11 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int deleteReplyCommunityBoard(int cbr_no) throws Exception {
 		return sqlSession.delete(namespace + ".deleteReplyCommunityBoard", cbr_no);
 	}
+	
+	//게시물 작성
+	@Override
+	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".writeCommunityBoard", dto);
+	}
 
 }

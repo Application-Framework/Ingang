@@ -49,8 +49,6 @@
 		WHERE cb_no = #{cb_no} AND m.m_no = cbr.m_no
 	</select>
 	
-	
-	
 	<!-- 조회수 증가 -->
 	<update id="addReadCommunityBoardHit">
 		UPDATE community_board
@@ -96,6 +94,11 @@
 		WHERE cbr_no = #{cbr_no}
 	</delete>
 	
+	<!--게시글 작성-->
+	<insert id="writeCommunityBoard">
+		INSERT INTO community_board(oli_no, m_no, title, content, hit, reg_date, classify, flag)
+		VALUES(0, #{m_no}, #{title}, #{content}, 0, NOW(), #{classify}, 1);
+	</insert>
 	
 	<sql id="SearchChatBoard">
 		<choose>

@@ -148,10 +148,16 @@ public class CommunityController {
 	
 	//게시글 글작성
 	@RequestMapping(value = "/communityBoardWriteDo", method = RequestMethod.GET)
-	public String communityBoardWrite(Model model, HttpServletRequest request) throws Exception{
+	public String communityBoardWrite(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
+		int res = cbService.writeCommunityBoard(dto);
+		String resUrl = null;
+		
+		if(res == 1) {
+			resUrl = "redirect:";
+		}
 		
 		
-		return "";
+		return resUrl;
 	}
 	
 	

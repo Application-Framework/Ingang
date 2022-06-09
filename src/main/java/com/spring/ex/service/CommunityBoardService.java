@@ -47,4 +47,7 @@ public interface CommunityBoardService {
 	
 	//게시물 댓글 삭제
 	public int deleteReplyCommunityBoard(int cbr_no) throws Exception;
+	
+	//게시물 작성
+	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception;
 }
