@@ -204,7 +204,7 @@ $(document).ready(function() {
 });
 
 $('#buttonWrite').click(function(){
-	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=800px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
 $('#buttonNoLogin').click(function(){
