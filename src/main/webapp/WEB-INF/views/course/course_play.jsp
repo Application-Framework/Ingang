@@ -43,45 +43,99 @@
             </div>
         </div>
 		
-		<%-- content --%>
-        <div class="slidebar" id="mySlidebar">
-        	<div class="p-3 d-flex justify-content-between">
-	        	<span class="fs-4 fw-bold">목차</span>
-	        	<a href="#" onclick="clickNav()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
-        	</div>
+		
+		
+		<%-- contents --%>
+        <div class="tab-content slidebar" id="mySlidebar">
         	
-        	<c:forEach var="video" items="${videoList}">
-	        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
-	        		<i class="fs-5 bi bi-play-circle me-2"></i>
-		       		<div class="fs-5">${video.title}</div>
-		       		<a class="stretched-link" href="${video.olv_no}"></a>
-	       		</div>
-       		</c:forEach>
+        		<%-- 목차 불러오기 --%>
+        		<c:when test="${type == 'content'}">
+		        	<div class="p-3 d-flex justify-content-between">
+			        	<span class="fs-4 fw-bold">커뮤니티</span>
+			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
+		        	</div>
+		        	
+		        	<c:forEach var="video" items="${videoList}">
+			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
+			        		<i class="fs-5 bi bi-play-circle me-2"></i>
+				       		<div class="fs-5">${video.title}</div>
+				       		<a class="stretched-link" href="${video.olv_no}"></a>
+			       		</div>
+		       		</c:forEach>
+	       		</c:when>
+	       		
+	       		<%-- 커뮤니티 불러오기 --%>
+	       		<c:when test="${type == 'community'}">
+		        	<div class="p-3 d-flex justify-content-between">
+			        	<span class="fs-4 fw-bold">커뮤니티</span>
+			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
+		        	</div>
+		        	
+		        	<c:forEach var="video" items="${videoList}">
+			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
+			        		<i class="fs-5 bi bi-play-circle me-2"></i>
+				       		<div class="fs-5">${video.title}</div>
+				       		<a class="stretched-link" href="${video.olv_no}"></a>
+			       		</div>
+		       		</c:forEach>
+	       		</c:when>
+	       		
+	       		<%-- 노트 불러오기 --%>
+	       		<c:when test="${type == 'note'}">
+		        	<div class="p-3 d-flex justify-content-between">
+			        	<span class="fs-4 fw-bold">노트</span>
+			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
+		        	</div>
+		        	
+		        	<c:forEach var="video" items="${videoList}">
+			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
+			        		<i class="fs-5 bi bi-play-circle me-2"></i>
+				       		<div class="fs-5">${video.title}</div>
+				       		<a class="stretched-link" href="${video.olv_no}"></a>
+			       		</div>
+		       		</c:forEach>
+	       		</c:when>
+       		</c:choose>
         </div>
 		
 		<%-- 우측 메뉴 --%>
         <div class="rightMenubar">   
-            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-list-ul"></i></a>
-            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-chat-square-dots-fill"></i></a>
-            <a href="#" class="toggleButton" onclick="clickNav()"><i class="bi bi-sticky-fill"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav('content')"><i class="bi bi-list-ul"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav('community')"><i class="bi bi-chat-square-dots-fill"></i></a>
+            <a href="#" class="toggleButton" onclick="clickNav('note')"><i class="bi bi-sticky-fill"></i></a>
         </div>
     </div>
     
     <script>
-        var status1 = false;
-
-        function clickNav() {
-            if(status1 == false ){
-            	console.log("open");
-                document.getElementById("mySlidebar").style.width = "250px";
-                status1 = true;
-            }
-            else if(status1 == true) {
-            	console.log("close");
-                document.getElementById("mySlidebar").style.width = "0";
-                status1 = false;
-            }
+        var openFlag = false;
+		
+        function openContents() {
+            document.getElementById("mySlidebar").style.width = "250px";
+            openFlag = true;
         }
+        
+        function closeContents() {
+            document.getElementById("mySlidebar").style.width = "0";
+            openFlag = false;
+        }
+        
+        function clickNav(type) {
+        	if(!openFlag) openContents();
+        	
+        	$.ajax({
+            	type: "POST",
+            	url: "/courses/clickNav",
+            	data: {
+            		type: type
+            	},
+            	success: function() {
+            		$("#mySlidebar").load(window.location.href + " #mySlidebar>*", "");    		
+            	}
+            });
+        	
+        	
+        }
+        
     </script>
 </body>
 </html>

@@ -251,7 +251,7 @@ public class CourseController {
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("olv_no", olv_no);
 		model.addAttribute("videoList", videoList);
-		
+		model.addAttribute("type", "content");
 		return "course/course_play";
 	}
 	
@@ -365,6 +365,17 @@ public class CourseController {
 		courseReplyDTO.setReg_date(new Date(System.currentTimeMillis()));
 		
 		courseService.submitReply(courseReplyDTO);
+		return "redirect:" + request.getHeader("referer");
+	}
+	
+	// 강의 재생 페이지의 우측 아이콘 클릭했을 때
+	@RequestMapping("/courses/clickNav")
+	public String clickNav(HttpServletRequest request, Model model) {
+		String type = request.getParameter("type");
+		
+		System.out.println("type : " + type);
+		
+		model.addAttribute("type", type);
 		return "redirect:" + request.getHeader("referer");
 	}
 }
