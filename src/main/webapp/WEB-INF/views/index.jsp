@@ -79,6 +79,14 @@
 		    border: 1px solid #ededed;
 		    border-radius: 5px;
 		}
+		
+		.white-color {
+			color: white;
+		}
+		
+		#carouselExampleIndicators {
+			margin: 30px;
+		}
 	</style>
    <body>
 	   	<%-- Preloader --%>
@@ -93,14 +101,15 @@
         <!-- slider Area Start-->
 		<!-- Mobile Menu -->
 		<div class="slider-active">
-			<div class="single-slider slider-height d-flex align-items-center"
-				data-background="<c:url value='/resources/img/hero/h1_hero.jpg'/>">
+			<%-- <div class="single-slider slider-height d-flex align-items-center"
+				data-background="<c:url value='/resources/img/hero/h1_hero.jpg'/>"> --%>
+				<div class="single-slider slider-height d-flex align-items-center" style="background-color:rgb(95, 204, 255, 0.8);">
 				<div class="container">
 					<div class="row">
 						<div class="col-xl-6 col-lg-9 col-md-10">
 							<div class="hero__caption">
-								<h1>인강인강</h1>
-								<p>인강인강이 제공하는 고퀄리티 강의영상을 경험해 보세요. <br/>
+								<h1 class="white-color">인강인강</h1>
+								<p class="white-color">인강인강이 제공하는 고퀄리티 강의영상을 경험해 보세요. <br/>
 								인강인강은 오직 수강생 여러분의 편의만을 생각합니다.</p>
 							</div>
 						</div>
@@ -528,7 +537,9 @@
         
 
 		<div class="container">
-			<p>이벤트 슬라이드</p>
+			<div class="text-center">
+            	<h2>이벤트</h2>
+            </div>
 			<!-- 이벤트 슬라이드 start -->
 			<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
 				<div class="carousel-indicators">
@@ -538,13 +549,13 @@
 				</div>
 				<div class="carousel-inner">
 					<div class="carousel-item active">
-						<img src="..." onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="../resources/img/event/hongil.jpg" height="300px;" onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 					<div class="carousel-item">
-						<img src="..." style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="../resources/img/event/hongil.jpg" height="300px;" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 					<div class="carousel-item">
-						<img src="..." style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="../resources/img/event/hongil.jpg" height="300px;" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 				</div>
 				<button class="carousel-control-prev" type="button"	data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">

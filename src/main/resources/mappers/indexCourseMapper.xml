@@ -8,7 +8,7 @@
 	<!-- 이 주의 강의 -->
 	<select id="thisweek_bestCourseList" resultType="com.spring.ex.dto.CourseDTO">
 		select title, olt_no, content, price, img_path, reg_date
-		from online_lecture_introduction
+		from online_lecture_introduction olt
 		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK) and o_like >= 20
 		order by o_like desc
 		limit 0,8

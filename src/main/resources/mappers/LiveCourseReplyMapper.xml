@@ -8,7 +8,7 @@
 	<!-- 강의 댓글 -->
 	<!-- 등록 후 하루이내 작성된 댓글 출력 -->
 	<select id="live_replyList" resultType="com.spring.ex.dto.CourseReplyDTO">
-		select oli_no, star_rating, content, reg_date
+		select oli_no, m_no, star_rating, content, reg_date
 		from online_lecture_reply
 		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 DAY)
 		order by reg_date desc

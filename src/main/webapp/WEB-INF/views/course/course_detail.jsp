@@ -117,7 +117,7 @@
 		<div class="row">
 			<div class="col-lg-8">
 				<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${course.content}
+					${course.content}
 				</textarea>
 				
 				<%-- 커리큘럼 --%>
