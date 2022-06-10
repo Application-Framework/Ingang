@@ -178,7 +178,20 @@ public class CommunityController {
 		
 		
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
+		model.addAttribute("classify", classify);
 		return "community/communityBoardModify";
+	}
+	
+	//게시글 수정
+	@RequestMapping(value = "/doModfiyCommunityBoard", method = RequestMethod.POST)
+	@ResponseBody
+	public int doModfiyCommunityBoard(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
+		int res = cbService.updateCommunityBoard(dto);
+		System.out.println("res : "+ res);
+		System.out.println(dto.getCb_no());
+		System.out.println(dto.getClassify());
+		System.out.println(dto.getContent());
+		return res;
 	}
 	
 	@RequestMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")

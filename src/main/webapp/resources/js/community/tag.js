@@ -1,8 +1,3 @@
-$(document).ready(function () {
-	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
-		sessionStorage.setItem("classifyActive", "1"); 
-	}
-	
 
   var tag = {};
   var counter = 0;
@@ -64,4 +59,3 @@ $(document).ready(function () {
         .parent()
         .remove();
     });
-})

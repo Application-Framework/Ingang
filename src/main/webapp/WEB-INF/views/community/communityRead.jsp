@@ -64,7 +64,7 @@
 								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
 								
 								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
-									<li><a href="javascript:void(0)" onclick=""><i class="far fa-edit"></i> 수정</a></li>
+									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${classify})"><i class="far fa-edit"></i> 수정</a></li>
 									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
 								</c:if>
 							</ul>
@@ -386,6 +386,12 @@ function boardDelete(cb_no) {
 			});
 		}
 	});
+}
+
+//게시글 수정
+function buttonModify(cb_no, classify) {
+	var urlModify = "modfiyPageCommunityBoard?cb_no=" + cb_no+ "&classify=" + classify;
+	var popup = window.open(urlModify , '게시글수정' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 }
 
 /*우측 사이드바*/
