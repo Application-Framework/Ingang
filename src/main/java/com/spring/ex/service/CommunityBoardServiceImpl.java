@@ -95,4 +95,16 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception {
 		return dao.writeCommunityBoard(dto);
 	}
+	
+	//게시물 수정
+	@Override
+	public int updateCommunityBoard(CommunityBoardDTO dto) throws Exception {
+		return dao.updateCommunityBoard(dto);
+	}
+	
+	//게시물 삭제
+	@Override
+	public int deleteCommunityBoard(int cb_no) throws Exception {
+		return dao.deleteCommunityBoard(cb_no);
+	}
 }

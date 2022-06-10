@@ -133,6 +133,10 @@ ul li.tag-item {
 
 <script type="text/javascript">
 $(document).ready(function () {
+	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
+		sessionStorage.setItem("classifyActive", "1"); 
+	}
+	
 
   var tag = {};
   var counter = 0;
@@ -332,8 +336,9 @@ $('#btnWrite').click(function() {
 					});
 				}
 				else {
-					//var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
-					//location.href = reLoadUrl;
+					sessionStorage.setItem("classifyActive", "0"); 
+					opener.parent.location.reload();
+					window.close();
 				}
 			},
 			error: function() {

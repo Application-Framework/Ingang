@@ -142,31 +142,43 @@ public class CommunityController {
 	@RequestMapping(value = "/deleteReplyCommunityBoard" ,  method = RequestMethod.POST)
 	public  @ResponseBody int deleteReplyCommunityBoard(int cbr_no) throws Exception{
 		int result = cbService.deleteReplyCommunityBoard(cbr_no);
-		
 		return result;
 	}
 	
-	
 	//게시글 작성 페이지
 	@RequestMapping(value = "/communityBoardWrite", method = RequestMethod.GET)
-	public String communityBoardWritePage(Model model, HttpServletRequest request) throws Exception{
-		
-		
+	public String communityBoardWritePage() throws Exception{
 		return "community/communityBoardWrite";
 	}
 	
 	//게시글 글작성
 	@RequestMapping(value = "/doWriteCommunityBoard", method = RequestMethod.POST)
-	public String communityBoardWrite(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
+	@ResponseBody
+	public int communityBoardWrite(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
 		int res = cbService.writeCommunityBoard(dto);
-		String resUrl = null;
+		return res;
+	}
+	
+	//게시글 삭제
+	@RequestMapping(value = "/deleteCommunityBoard", method = RequestMethod.POST)
+	@ResponseBody
+	public int deleteCommunityBoard(int cb_no) throws Exception{
+		int res = cbService.deleteCommunityBoard(cb_no);
+		return res;
+	}
+	
+	//게시글 수정 페이지
+	@RequestMapping(value = "/modfiyPageCommunityBoard", method = RequestMethod.GET)
+	public String modfiyPageCommunityBoard(Model model, HttpServletRequest request) throws Exception{
+		int cb_no = Integer.parseInt(request.getParameter("cb_no"));
+		int classify = Integer.parseInt(request.getParameter("classify"));
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("cb_no", cb_no);
+		map.put("classify", classify);
 		
-		if(res == 1) {
-			resUrl = "redirect:";
-		}
 		
-		
-		return resUrl;
+		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
+		return "community/communityBoardModify";
 	}
 	
 	@RequestMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")

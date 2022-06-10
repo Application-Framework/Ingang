@@ -97,5 +97,17 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception {
 		return sqlSession.insert(namespace + ".writeCommunityBoard", dto);
 	}
+	
+	//게시물 수정
+	@Override
+	public int updateCommunityBoard(CommunityBoardDTO dto) throws Exception {
+		return sqlSession.update(namespace + ".updateCommunityBoard", dto);
+	}
+	
+	//게시물 삭제
+	@Override
+	public int deleteCommunityBoard(int cb_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteCommunityBoard", cb_no);
+	}
 
 }

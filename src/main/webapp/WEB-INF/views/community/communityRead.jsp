@@ -62,6 +62,11 @@
 								</c:choose>
 								
 								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
+								
+								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
+									<li><a href="javascript:void(0)" onclick=""><i class="far fa-edit"></i> 수정</a></li>
+									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
+								</c:if>
 							</ul>
 							<P>
 								${cbReadPage.content}
@@ -193,7 +198,6 @@ $('#buttonNoLogin').click(function(){
 		icon: "warning",
 	});
 });
-
 
 $('#btnReplyWrite').click(function() {
 	var m_no = $("#m_no").val();
@@ -353,7 +357,36 @@ function replySave(cbr_no) {
 	}
 }
 
-
+//게시글 삭제
+function boardDelete(cb_no) {
+	$.ajax({
+		url: "deleteCommunityBoard",
+		type: "POST",
+		data:  {'cb_no': cb_no},
+		success: function(data) {
+			if (data != 1) {
+				swal({
+					title: "글삭제",
+					text: "글 삭제가 실패하였습니다.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+			else {
+				var reLoadUrl = "/communityChats";
+				location.href = reLoadUrl;
+			}
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+}
 
 /*우측 사이드바*/
 var target = document.getElementById("replyTop");

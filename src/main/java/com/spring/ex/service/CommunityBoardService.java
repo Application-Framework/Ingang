@@ -50,4 +50,10 @@ public interface CommunityBoardService {
 	
 	//게시물 작성
 	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception;
+	
+	//게시물 수정
+	public int updateCommunityBoard(CommunityBoardDTO dto) throws Exception;
+	
+	//게시물 삭제
+	public int deleteCommunityBoard(int cb_no) throws Exception;
 }

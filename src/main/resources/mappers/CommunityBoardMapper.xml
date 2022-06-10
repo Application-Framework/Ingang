@@ -100,6 +100,19 @@
 		VALUES(0, #{m_no}, #{title}, #{content}, 0, NOW(), #{classify}, 1);
 	</insert>
 	
+	<!--게시글 삭제  -->	
+	<delete id="deleteCommunityBoard">
+		DELETE FROM community_board
+		WHERE cb_no = #{cb_no}
+	</delete>
+	
+	<!--게시글 댓글 수정  -->
+	<update id="updateCommunityBoard">
+		UPDATE community_board
+		SET title = #{title}, content = #{content}, classify = #{classify}
+		WHERE cb_no = #{cb_no}; 
+	</update>
+	
 	<sql id="SearchChatBoard">
 		<choose>
 			<when test="searchContent == 'allTheme' and searchTag != 'allArea'">
