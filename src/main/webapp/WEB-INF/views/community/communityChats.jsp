@@ -53,7 +53,7 @@
 						<form action="#">
 							<div class="row">
 								<div class="col-lg-10" >
-									<input type="text" class="form-control" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" name='tags' placeholder='내용을 검색해보세요!'>
 									<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
@@ -186,6 +186,8 @@
     <script src="<c:url value='/resources/js/main.js'/>"></script>
     
 <script type="text/javascript">
+
+
 $(document).ready(function() {
 	console.log("tab1: " + sessionStorage.getItem("myTabActive1"));
 	console.log("tab2: " +sessionStorage.getItem("myTabActive2"));

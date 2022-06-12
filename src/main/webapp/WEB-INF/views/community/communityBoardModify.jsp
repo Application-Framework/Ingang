@@ -84,7 +84,7 @@
 			</div>
 		</div>
 	</div>
-
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
 //Classify따라서 자동으로 바뀌도록, Modal에 하면 변경하고 수정페이지 재출력시 이전껄로 적용되어서
 //현재 페이지 url에서 원하는 값 가져온 것

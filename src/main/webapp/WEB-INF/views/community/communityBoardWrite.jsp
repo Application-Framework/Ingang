@@ -32,7 +32,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
-<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 
 <title>게시글 작성</title>
 </head>
@@ -84,8 +83,9 @@
 			</div>
 		</div>
 	</div>
-
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
+
 $(document).ready(function () {
 	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
 		sessionStorage.setItem("classifyActive", "1"); 
