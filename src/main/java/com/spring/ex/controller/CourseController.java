@@ -21,10 +21,14 @@ import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
+import com.spring.ex.dto.course.HistoryOrderLectureDTO;
+import com.spring.ex.dto.note.NoteArticleDTO;
+import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileUploadService;
 import com.spring.ex.service.MemberService;
+import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
 
 @Controller
@@ -42,6 +46,9 @@ public class CourseController {
 	
 	@Inject
 	private FileUploadService fileUploadService;
+	
+	@Inject
+	private NoteService noteService;
 	
 	void showCourses(HttpServletRequest request, Model model, String tag) {
 		String keyword = request.getParameter("keyword");
@@ -80,76 +87,83 @@ public class CourseController {
 		model.addAttribute("order", order);
 		model.addAttribute("keywordParam", keywordParam);
 		model.addAttribute("orderParam", orderParam);
+		model.addAttribute("totalCount", totalCount);
 	}
 	
 	@RequestMapping("/courses")
 	public String courses(HttpServletRequest request, Model model) {
 		showCourses(request, model, null);
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/web-dev")
 	public String coursesWebDev(HttpServletRequest request, Model model) {
 		showCourses(request, model, "웹 개발");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/front-end")
 	public String coursesFrontEnd(HttpServletRequest request, Model model) {
 		showCourses(request, model, "프론트엔드");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/back-end")
 	public String coursesBackEnd(HttpServletRequest request, Model model) {
 		showCourses(request, model, "백엔드");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/programming-lang")
 	public String coursesProgrammingLang(HttpServletRequest request, Model model) {
 		showCourses(request, model, "프로그래밍 언어");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/database-dev")
 	public String coursesDatabaseDev(HttpServletRequest request, Model model) {
 		showCourses(request, model, "데이터베이스");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/algorithm")
 	public String coursesAlgorithm(HttpServletRequest request, Model model) {
 		showCourses(request, model, "알고리즘");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/mobile-app")
 	public String coursesMobileApp(HttpServletRequest request, Model model) {
 		showCourses(request, model, "모바일 앱 개발");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/artificial-intelligence")
 	public String coursesArtificialIntelligence(HttpServletRequest request, Model model) {
 		showCourses(request, model, "AI");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
 	@RequestMapping("/courses/security")
 	public String coursesSecurity(HttpServletRequest request, Model model) {
 		showCourses(request, model, "보안");
-		return "course/courses_search";
+		return "course/course_search";
 	}
 	
+	// 강의 상세 페이지
 	@RequestMapping("/courses/{pageNo}")
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videos = courseService.getCourseVideoList(pageNo);
-		
+		if(memberDTO != null) {
+			HistoryOrderLectureDTO historyOrderLectureDTO = courseService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
+			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
+			model.addAttribute("purchased", purchased);
+		}
 		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		int starAvg = 0;
@@ -210,8 +224,6 @@ public class CourseController {
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pageMap);
 		
-		System.out.println(cbRegDateList);
-		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		int starAvg = 0;
 		if(replys.size() != 0) {
@@ -241,17 +253,28 @@ public class CourseController {
 		return "course/course_detail";
 	}
 	
-	
+	// 강의 재생 페이지
 	@RequestMapping("/courses/{pageNo}/play/{olv_no}")
 	public String course_play(HttpServletRequest request, Model model, @PathVariable int pageNo, @PathVariable int olv_no) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
+		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(pageNo, memberDTO.getM_no());
+		System.out.println(noteDTO);
+		if(noteDTO != null) {
+			NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOlv_no(noteDTO.getN_no(), olv_no);
+			System.out.println(noteArticleDTO);
+			model.addAttribute("noteArticle", noteArticleDTO);
+		}
+		
 		
 		model.addAttribute("videoPath", courseVideoDTO.getS_file_name());
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("olv_no", olv_no);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("type", "content");
+		model.addAttribute("note", noteDTO);
+		
 		return "course/course_play";
 	}
 	
@@ -271,9 +294,6 @@ public class CourseController {
 		return "redirect:" + request.getHeader("referer");
 	}
 	
-	//-----------------------
-	// 작업중 mapper 작성 예정
-	//-----------------------
 	@RequestMapping("/courses/writeCourse")
 	public String writeCourse(HttpServletRequest request) {
 		
@@ -316,10 +336,6 @@ public class CourseController {
 		
 		courseService.submitCourse(courseDTO);
 		
-		System.out.println(courseDTO.getOli_no());
-		
-		// 멀티 태그 추가 예정
-		
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
@@ -351,8 +367,6 @@ public class CourseController {
 		String star_rating = request.getParameter("star_rating");
 		String content = request.getParameter("content");
 		
-		System.out.println("star_rating:" + star_rating);
-		
 		if(memberDTO == null || oli_no == null || star_rating == "" || content == null) {
 			return "error";
 		}
@@ -373,9 +387,80 @@ public class CourseController {
 	public String clickNav(HttpServletRequest request, Model model) {
 		String type = request.getParameter("type");
 		
-		System.out.println("type : " + type);
-		
 		model.addAttribute("type", type);
 		return "redirect:" + request.getHeader("referer");
+	}
+	
+	// 강의 구매
+	@RequestMapping("/courses/purchaseCourse")
+	public String purchaseCourse(HttpServletRequest request) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		CourseDTO courseDTO = courseService.getCourseDetail(oli_no);
+		
+		HistoryOrderLectureDTO historyOrderLectureDTO = new HistoryOrderLectureDTO();
+		historyOrderLectureDTO.setOli_no(oli_no);
+		historyOrderLectureDTO.setM_no(memberDTO.getM_no());
+		historyOrderLectureDTO.setPayment(courseDTO.getPrice());
+		historyOrderLectureDTO.setPayment_status(1);
+		
+		courseService.insertHistoryOrderLecture(historyOrderLectureDTO);
+		
+		return "redirect:/";
+	}
+	
+	// 노트 생성
+	@RequestMapping("/courses/createNote")
+	public String createNote(HttpServletRequest request) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		int price = Integer.parseInt(request.getParameter("price"));
+		
+		NoteDTO noteDTO = new NoteDTO();
+		noteDTO.setOli_no(oli_no);
+		noteDTO.setM_no(memberDTO.getM_no());
+		noteDTO.setTitle(title);
+		noteDTO.setContent(content);
+		noteDTO.setPrice(oli_no);
+		noteDTO.setClassify(0);
+		
+		noteService.insertNote(noteDTO);
+		
+		return "redirect:" + request.getHeader("referer");
+	}
+	
+	// 노트 저장
+	@RequestMapping("/courses/saveNote")
+	public String saveNote(HttpServletRequest request) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(oli_no, memberDTO.getM_no());
+		int olv_no = Integer.parseInt(request.getParameter("olv_no"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		
+		NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOlv_no(noteDTO.getN_no(), olv_no);
+		
+		if(noteArticleDTO != null) {
+			int na_no = Integer.parseInt(request.getParameter("na_no"));
+			noteArticleDTO.setNa_no(na_no);
+			noteArticleDTO.setTitle(title);
+			noteArticleDTO.setContent(content);
+			
+			noteService.updateNoteArticle(noteArticleDTO);
+		}
+		else {
+			noteArticleDTO = new NoteArticleDTO();
+			noteArticleDTO.setN_no(noteDTO.getN_no());
+			noteArticleDTO.setOlv_no(olv_no);
+			noteArticleDTO.setTitle(title);
+			noteArticleDTO.setContent(content);
+			
+			noteService.insertNoteArticle(noteArticleDTO);
+		}
+		
+		return "redirect:/";
 	}
 }

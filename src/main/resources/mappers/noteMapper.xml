@@ -3,30 +3,96 @@
 
 <mapper namespace="com.spring.ex.NoteMapper">
 	<!-- 노트 생성 -->
-	<insert id="createNote">
-		INSERT INTO note(oli_no, m_no, title, content, price, reg_date, classify, enable)
-		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{reg_date}, #{classify}, 1)
+	<insert id="insertNote">
+		INSERT INTO note(oli_no, m_no, title, content, price, classify)
+		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{classify})
 	</insert>
 	
+	<!-- 노트 삭제 -->
+	<delete id="deleteNote">
+		DELETE FROM note
+		WHERE n_no = #{n_no}
+	</delete>
+	
+	<!-- 노트 수정 -->
+	<update id="updateNote">
+		UPDATE note 
+		SET title = #{title},
+			content = #{content},
+			price = #{price},
+			enable = #{enable}
+		WHERE n_no = #{n_no}
+	</update>
+	
 	<!-- 노트 리스트 출력 -->
-	<select id="getNoteList" resultType="NoteDTO">
-		SELECT n.n_no, n.oli_no, n.m_no, n.title, n.content, n.price, n.reg_date, n.classify
+	<select id="getNoteList" resultType="HashMap">
+		SELECT n.n_no, n.oli_no, n.m_no, n.title, n.content, n.price, n.reg_date, n.classify,
+			TRUNCATE((SELECT AVG(star_rating) FROM note_reply nr WHERE nr.n_no = n.n_no),0) star_avg,
+			(SELECT COUNT(*) FROM note_like nl WHERE nl.n_no = n.n_no) like_cnt,
+			(SELECT COUNT(*) FROM note_reply nr WHERE nr.n_no = n.n_no) reply_cnt
 		FROM note n, online_lecture_introduction oli, online_lecture_tag olt
+		<include refid="search"></include>
+		GROUP BY n_no
+		<choose>
+			<when test='order.equals("like")'>
+				ORDER BY like_cnt DESC
+			</when>
+			
+			<when test='order.equals("reply")'>
+				ORDER BY reply_cnt DESC
+			</when>
+			
+			<when test='order.equals("star")'>
+				ORDER BY star_avg DESC
+			</when>
+			
+			<when test='order.equals("price")'>
+				ORDER BY price
+			</when>
+			
+			<otherwise>
+				ORDER BY n.n_no DESC
+			</otherwise>
+		</choose>
+		LIMIT #{page}, #{pageSize}
+	</select>
+	
+	<!-- 노트 가져오기 -->
+	<select id="getNote" resultType="NoteDTO">
+		SELECT * FROM note
+		WHERE n_no = #{n_no}
+	</select>
+	
+	<!-- 노트 개수 가져오기 -->
+	<select id="getNoteTotalCount" resultType="int">
+		SELECT count(DISTINCT n.n_no)
+		FROM note n, online_lecture_introduction oli, online_lecture_tag olt
+		<include refid="search"></include>
+	</select>
+	
+	<sql id="search">
 		WHERE n.oli_no = oli.oli_no AND n.oli_no = olt.oli_no
 		<choose>
-			<when test="note">
-				AND n.title LIKE '%${keyword}%'
-			</when>
-			<when test="course">
+			<when test="filter == 'course'">
 				AND oli.title LIKE '%${keyword}%'
 			</when>
+			<when test="filter == 'all'">
+				AND (n.title LIKE '%${keyword}%' OR oli.title LIKE '%${keyword}%') 
+			</when>
+			<otherwise>
+				AND n.title LIKE '%${keyword}%'
+			</otherwise>
 		</choose>
 	
 		<if test="tag != null">
 			AND olt.tag = #{tag}
 		</if>
-		GROUP BY n_no
-		LIMIT 0, 10
+	</sql>
+	
+	<!-- 노트 강의와 회원번호로 가져오기 -->
+	<select id="getNoteByOli_noM_no" resultType="NoteDTO">
+		SELECT * FROM note
+		WHERE oli_no = #{oli_no} AND m_no = #{m_no}
 	</select>
 	
 	<!-- 노트 댓글 등록 -->
@@ -39,6 +105,7 @@
 	<select id="getNoteReplyList" resultType="NoteReplyDTO">
 		SELECT * 
 		FROM note_reply
+		WHERE n_no = #{n_no}
 	</select>
 	
 	<!-- 노트 좋아요 추가 -->
@@ -65,11 +132,26 @@
 		SELECT EXISTS(SELECT * FROM note_like WHERE n_no = #{n_no} AND m_no = #{m_no})
 	</select>
 	
+	<!-- 노트 글 부분 -->
+	
 	<!-- 노트 글 등록 -->
-	<insert id="submitNoteArticle">
+	<insert id="insertNoteArticle">
 		INSERT INTO note_article(n_no, olv_no, title, content)
 		VALUES(#{n_no}, #{olv_no}, #{title}, #{content})
 	</insert>
+	
+	<!-- 노트 글 삭제 -->
+	<delete id="deleteNoteArticle">
+		DELETE FROM note_article
+		WHERE na_no = #{na_no}
+	</delete>
+	
+	<!-- 노트 글 수정 -->
+	<update id="updateNoteArticle">
+		UPDATE note_article
+		SET title = #{title}, content = #{content}
+		WHERE na_no = #{na_no}
+	</update>
 	
 	<!-- 노트 글 리스트 출력 -->
 	<select id="getNoteArticleList" resultType="NoteArticleDTO">
@@ -81,5 +163,31 @@
 	<select id="getNoteArticle" resultType="NoteArticleDTO">
 		SELECT * FROM note_article
 		WHERE na_no = #{na_no}
+	</select>
+	
+	<!-- 노트 번호와 동영상 번호로 노트 글 가져오기 -->
+	<select id="getNoteArticleByN_noOlv_no" resultType="NoteArticleDTO">
+		SELECT * FROM note_article
+		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
+	</select>
+	
+	<!-- 노트 주문 -->
+	
+	<!-- 노트 구매 기록에 추가 -->
+	<insert id="insertHistoryOrderNote">
+		INSERT INTO history_order_note(n_no, m_no, payment, payment_status)
+		VALUES(#{n_no}, #{m_no}, #{payment}, #{payment_status})
+	</insert>
+	
+	<!-- 노트 구매 기록 가져오기 -->
+	<select id="getHistoryOrderNoteByN_noM_no" resultType="HistoryOrderNoteDTO">
+		SELECT * FROM history_order_note
+		WHERE n_no = #{n_no} AND m_no = #{m_no}
+	</select>
+	
+	<!-- 노트 구매 기록 리스트 가져오기 -->
+	<select id="getHistoryOrderNoteList" resultType="HistoryOrderNoteDTO">
+		SELECT * FROM history_order_note
+		WHERE m_no = #{m_no}
 	</select>
 </mapper>

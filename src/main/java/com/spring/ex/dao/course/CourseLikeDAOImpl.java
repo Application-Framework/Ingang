@@ -1,4 +1,4 @@
-package com.spring.ex.dao;
+package com.spring.ex.dao.course;
 
 import java.util.HashMap;
 

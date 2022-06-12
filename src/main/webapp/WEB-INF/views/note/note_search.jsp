@@ -7,7 +7,7 @@
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-         <title> 강의 검색 </title>
+         <title> 노트 검색 </title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
@@ -135,67 +135,59 @@
         <main>
             <%-- 본문의 상단 --%>
             <div class="container">
-            	<c:if test="${member.m_authority == 1}">
-	            	<div class="d-flex flex-row-reverse pt-10">
-	            		<a class="btn head-btn2" href="/courses/writeCourse">강의 생성</a>
-	            	</div>
-	            	<div class="job-listing-area pt-40 pb-120">
-	            </c:if>
-            	<c:if test="${member == null || member.m_authority == 0}">
-            		<div class="job-listing-area pt-120 pb-120">
-            	</c:if>
+           		<div class="job-listing-area pt-120 pb-120">
                     <div class="row">
                         <!-- Left content -->
                         <div class="col-lg-3 blog_right_sidebar">
                             <aside class="single_sidebar_widget post_category_widget">
                                 <ul class="list cat-list">
                                 	<li>
-                                        <a href="/courses">
+                                        <a href="/notes">
                                             <p class="d-flex">ALL</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/web-dev">
+                                        <a href="/notes/web-dev">
                                             <p class="d-flex">웹 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/front-end" class="d-flex">
+                                        <a href="/notes/front-end" class="d-flex">
                                             <p class="d-flex">프론트엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/back-end" class="d-flex">
+                                        <a href="/notes/back-end" class="d-flex">
                                             <p class="d-flex">백엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/programming-lang" class="d-flex">
+                                        <a href="/notes/programming-lang" class="d-flex">
                                             <p class="d-flex">프로그래밍 언어</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/database-dev" class="d-flex">
+                                        <a href="/notes/database-dev" class="d-flex">
                                             <p class="d-flex">데이터베이스</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/algorithm" class="d-flex">
+                                        <a href="/notes/algorithm" class="d-flex">
                                             <p class="d-flex">알고리즘·자료구조</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/mobile-app" class="d-flex">
+                                        <a href="/notes/mobile-app" class="d-flex">
                                             <p class="d-flex">모바일 앱 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/artificial-intelligence" class="d-flex">
+                                        <a href="/notes/artificial-intelligence" class="d-flex">
                                             <p class="d-flex">AI</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/security" class="d-flex">
+                                        <a href="/notes/security" class="d-flex">
                                             <p class="d-flex">보안</p>
                                         </a>
                                     </li>
@@ -210,7 +202,7 @@
                                     <div class="row">
                                         <div class="col-lg-12">
                                             <div class="count-job mb-35">
-                                                <span>39,782 course found</span>
+                                                <span>${totalCount} note found</span>
                                                 <!-- Select job items start -->
                                                 <div class="select-job-items">
                                                     <span>Sort by</span>
@@ -232,27 +224,27 @@
                                         </div>
                                     </div>
 
-                                    <%-- 강의 검색 입력 폼 --%>
+                                    <%-- 노트 검색 입력 폼 --%>
                                     <form action="${nowURL}" class="search-box mb-5">
                                         <div class="input-form item" >
-                                            <input type="text" name="keyword" value="${keyword}" placeholder="강의 제목 검색" tabindex="0">
+                                            <input type="text" name="keyword" value="${keyword}" placeholder="노트 제목 검색" tabindex="0">
                                         </div>
                                         <div class="search-form item">
                                         	<button type="submit" class="btn w-100 h-100">검색</button>
                                         </div>	
                                     </form>
 
-                                    <%-- 강의 리스트 출력 부분 --%>
+                                    <%-- 노트 리스트 출력 부분 --%>
                                     <div class="row row-cols-4 mb-3">
-                                    	
-                                    	<c:forEach var="list" items="${clist}">
+                                    	<c:forEach var="list" items="${nlist}">
 	                                        <div class="col">
 	                                            <div class="card shadow-sm mb-3">
-	                                            	<img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
-	                                                
+	                                            	<img src="<c:url value='${courseService.getCourseDetail(list.oli_no).img_path}'/>" style="height:150px"/>
 	                                                <div class="card-body">
-	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
-	                                                    <div id="teacher-name" class="card-text">${list.name}</div>
+	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
+	                                                    	<a href="/notes/${list.n_no}" class="stretched-link">${list.title}</a>
+	                                                    </div>
+	                                                    <div id="teacher-name" class="card-text">${memberService.getNameByM_no(list.m_no)}</div>
 	                                                    <div class="stars-outer">
 	                                                        <div class="stars-inner" style="width:${list.star_avg*20}%"></div>
 	                                                    </div>
@@ -306,8 +298,6 @@
    	                 type: 'GET',
    	                 data: {order: x}
    	            });
-    			
-    			
     		}
     	</script>
 		<jsp:include page="../fix/footer.jsp" />

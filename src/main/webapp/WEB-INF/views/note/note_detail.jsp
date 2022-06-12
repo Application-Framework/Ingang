@@ -7,7 +7,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    	<title> 강의 상세 </title>
+    	<title> 노트 상세 </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
@@ -96,6 +96,9 @@
 </head>
 
 <body>
+      <%-- Preloader --%>
+    <jsp:include page="../fix/preloader.jsp" />
+   
     <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
@@ -108,13 +111,13 @@
 	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
-			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
+			    	<h3 class="fw-bold text-white mb-5">${note.title}</h3>
 			    	<div class="stars-outer">
 		                <div class="stars-inner" style="width:${starAvg*20}%"></div>
 		            </div>
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
-		            <p class="text-white">${teacher.name}</p>
+		            <p class="text-white">${writerName}</p>
 			    </div>
 		    </div>
 	    </div>
@@ -126,10 +129,10 @@
     		<nav class="navbar navbar-expand-lg navbar-light">
 				<div class="px-5">
 					<ul class="navbar-nav">
-						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="/courses/${pageNo}">강의소개</a></li>
-						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#curriculum">커리큘럼</a></li>
-						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#reviews">수강평</a></li>
-						<li class="nav-item me-3"><a class="nav-link fw-bold" href="/courses/${pageNo}/community">커뮤니티</a></li>
+						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="/notes/${pageNo}">노트 소개</a></li>
+						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#contents">노트 내용</a></li>
+						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#reviews">리뷰</a></li>
+						<%-- <li class="nav-item me-3"><a class="nav-link fw-bold" href="/courses/${pageNo}/community">커뮤니티</a></li> --%>
 					</ul>
 				</div>
 			</nav>
@@ -143,24 +146,24 @@
 				<%-- 강의 소개 출력 --%>
 				<c:if test="${contentType == 'main'}">
 					<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${course.content}
+${note.content}
 					</textarea>
 					
-					<%-- 커리큘럼 --%>
+					<%-- 노트 내용 --%>
 					<div class="mb-3 fs-3 fw-bold">
-						커리큘럼
+						노트 내용
 					</div>
 					<div class="mb-4">
-						<c:forEach var="video" items="${videos}">
+						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true}">href="/courses/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
+								<a <c:if test="${purchased == true}">href="/notes/${pageNo}/read/${article.na_no}"</c:if> class="link-secondary" target="_blank">${article.title}</a>
 							</div>
 						</c:forEach>
 					</div>
 					
-					<%-- 수강평 --%>
+					<%-- 리뷰 --%>
 					<div class="mb-3 fs-3 fw-bold">
-						수강평
+						리뷰
 					</div>
 					
 					<%-- 수강평 출력 --%>
@@ -174,9 +177,9 @@ ${course.content}
 				    	<hr>
 					</c:forEach>
 					
-					<%-- 수강평 입력 --%>
+					<%-- 리뷰 입력 --%>
 					<c:if test="${purchased == true}">
-						<form action="/courses/submitReply" method="post">
+						<form action="/notes/submitReply" method="post">
 							<input type="hidden" name="pageNo" value="${pageNo}"/>
 							<div class="d-flex align-items-center select-job-items mb-1">
 							<span class="mr-5">평점</span>
@@ -188,7 +191,7 @@ ${course.content}
 								  <option value="1">1</option>
 								</select>
 							</div>
-							<textarea class="form-control mb-2" name="content" rows="3"></textarea>
+							<textarea class="form-control mb-2" name="content" rows="3" required></textarea>
 							<div class="d-flex flex-row-reverse">
 								<button class="btn head-btn1" type="submit">등록</button>
 							</div>
@@ -196,8 +199,8 @@ ${course.content}
 					</c:if>
 				</c:if>
 				
-				<c:if test="${contentType == 'community'}">
-					<%-- 게시물 영역 --%>
+				<%-- <c:if test="${contentType == 'community'}">
+					게시물 영역
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="qwe">
 							<c:forEach var="cbList" items="${cbRegDateList}">
@@ -241,9 +244,9 @@ ${course.content}
 							</div>
 						</div>
 					</div>
-					<%-- 게시물 영역 끝 --%>
+					게시물 영역 끝
 					
-					<%-- Pagination 영역 --%>
+					Pagination 영역
 					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
 						<ul class="pagination">
 							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
@@ -275,25 +278,25 @@ ${course.content}
 							</c:choose>
 						</ul>
 					</nav>
-					<%-- Pagination 영역 끝 --%>
-				</c:if>
+					Pagination 영역 끝
+				</c:if> --%>
 			</div>
 			
 			<%-- 가격, 수강신청 패널 --%>
 			<div class="col-lg-4">
 			    <div class="card">
 			      <div class="card-body p-4">
-			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
+			        <h5 class="card-title mb-4 fw-200">${note.price}원</h5>
 			        <c:if test="${member != null}">
 			        	<c:if test="${purchased == true}">
-			        		<a class="btn head-btn2 mb-3" style="min-width:100%;">수강신청 중</a>
+			        		<a class="btn head-btn2 mb-3" style="min-width:100%;">구매 완료</a>
 			        	</c:if>
 			        	<c:if test="${purchased == false}">
-					        <a href="javascript:;" onclick="openRegCoursesModal()" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
+					        <a href="javascript:;" onclick="openRegNotesModal()" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
 			        	</c:if>
 			        </c:if>
 			        <c:if test="${member == null}">
-			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
+			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
 			        </c:if>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
 			        	<c:if test="${member != null}">
@@ -317,8 +320,8 @@ ${course.content}
 	                <h6 class="card-subtitle mb-2 text-muted">안내사항</h6>
 	                <p class="card-text">단순 변심으로 환불은 불가능합니다.</p>
 	                <p class="card-text">정말 구매하시겠습니까?</p>
-	                <a href="javascript:;" onclick="purchaseCourse()" class="btn head-btn1">예</a>
-	                <a href="javascript:;" onclick="closeRegCoursesModal()" class="btn head-btn2">아니오</a>
+	                <a href="javascript:;" onclick="purchaseNote()" class="btn head-btn1">예</a>
+	                <a href="javascript:;" onclick="closeRegNotesModal()" class="btn head-btn2">아니오</a>
 	            </div>
 	        </div>
 	    </div>
@@ -333,7 +336,6 @@ ${course.content}
 	    $(function() {
 		    $('textarea').each(function() {
 		        $(this).height($(this).prop('scrollHeight'));
-		        console.log("늘리기");
 		    });
 		});
     	
@@ -366,22 +368,22 @@ ${course.content}
 			x.classList.toggle("bi-heart-fill");
 			x.classList.toggle("text-danger");
 			$.ajax({
-				url: '/courses/courseClickedLike',
+				url: '/notes/noteClickedLike',
 				type: 'post',
 				data: {
 					status: status,
-					oli_no: ${pageNo}
+					n_no: ${pageNo}
 				}
 			});
 		}
 		
 		// 수강신청 모달창 열기
-		function openRegCoursesModal() {
+		function openRegNotesModal() {
 			$(".modal").fadeIn();
 		}
 		
 		// 수강신청 모달창 닫기
-		function closeRegCoursesModal() {
+		function closeRegNotesModal() {
 			$(".modal").fadeOut();
 		}
 		
@@ -390,17 +392,17 @@ ${course.content}
 			$(document).mouseup(function (e){
 				var modal_content = $(".modal_content");
 				if(modal_content.has(e.target).length === 0){
-					closeRegCoursesModal();
+					closeRegNotesModal();
 				}
 			});
 		});
 		
-		function purchaseCourse() {
+		function purchaseNote() {
 			$.ajax({
-				url: '/courses/purchaseCourse',
+				url: '/notes/purchaseNotes',
 				type: 'post',
 				data: {
-					oli_no: ${pageNo}
+					n_no: ${pageNo}
 				},
 				success: function() {
 					location.reload();

@@ -4,7 +4,7 @@ import java.sql.Date;
 
 public class NoteDTO {
 	private int n_no;
-	private int oil_no;
+	private int oli_no;
 	private int m_no;
 	private String title;
 	private String content;
@@ -19,11 +19,11 @@ public class NoteDTO {
 	public void setN_no(int n_no) {
 		this.n_no = n_no;
 	}
-	public int getOil_no() {
-		return oil_no;
+	public int getOli_no() {
+		return oli_no;
 	}
-	public void setOil_no(int oil_no) {
-		this.oil_no = oil_no;
+	public void setOli_no(int oli_no) {
+		this.oli_no = oli_no;
 	}
 	public int getM_no() {
 		return m_no;
@@ -69,7 +69,7 @@ public class NoteDTO {
 	}
 	@Override
 	public String toString() {
-		return "NoteDTO [n_no=" + n_no + ", oil_no=" + oil_no + ", m_no=" + m_no + ", title=" + title + ", content="
+		return "NoteDTO [n_no=" + n_no + ", oli_no=" + oli_no + ", m_no=" + m_no + ", title=" + title + ", content="
 				+ content + ", price=" + price + ", reg_date=" + reg_date + ", classify=" + classify + ", enable="
 				+ enable + "]";
 	}
