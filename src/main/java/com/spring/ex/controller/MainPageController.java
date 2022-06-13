@@ -33,12 +33,6 @@ public class MainPageController {
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String mainPage(HttpServletRequest request, Model model, String tag, String courses, String notes) throws Exception {
 		
-		/*
-		 * String test = (String) request.getAttribute("search"); String test2 =
-		 * (String) request.getAttribute("courses"); System.out.println("하하 : " + test);
-		 * System.out.println("하하2 : " + test2);
-		 */
-		
 		// 실시간 댓글 목록
 		List<CourseReplyDTO> courseReplylist = null;
 		courseReplylist = liveReplyService.live_replyList();

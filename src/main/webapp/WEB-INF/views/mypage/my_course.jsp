@@ -29,6 +29,127 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 </head>
+<style>
+	a {
+		color: orange;
+	}
+	
+	.sidebar {
+	    width: 400px;
+	    height: 500px;
+	    overflow-y: auto;
+	    background: var(--light);
+	    transition: 0.5s;
+	    z-index: 999;
+	}
+	
+	@media (min-width: 992px) {
+	    .sidebar {
+	        margin-left: 0;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: -250px;
+	    }
+	
+	    .content {
+	        width: calc(100% - 250px);
+	    }
+	}
+	
+	@media (max-width: 991.98px) {
+	    .sidebar {
+	        margin-left: -250px;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: 0;
+	    }
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link {
+	    padding: 7px 10px;
+	    color: var(--dark);
+	    font-weight: 500;
+	    border-left: 3px solid var(--light);
+	    border-radius: 0 30px 30px 0;
+	    outline: none;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover,
+	.sidebar .navbar .navbar-nav .nav-link.active {
+	    color: var(--primary);
+	    background: #FFFFFF;
+	    border-color: var(--primary);
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link i {
+	    width: 40px;
+	    height: 40px;
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    background: #FFFFFF;
+	    border-radius: 40px;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover i,
+	.sidebar .navbar .navbar-nav .nav-link.active i {
+	    background: var(--light);
+	}
+	
+	.sidebar .navbar .dropdown-toggle::after {
+	    position: absolute;
+	    top: 15px;
+	    right: 15px;
+	    border: none;
+	    content: "\f107";
+	    font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    transition: .5s;
+	}
+	
+	.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+	    transform: rotate(-180deg);
+	}
+	
+	.sidebar .navbar .dropdown-item {
+	    padding-left: 25px;
+	    border-radius: 0 30px 30px 0;
+	} 
+
+	.stars-outer {
+                position: relative;
+                display: inline-block;
+            }
+
+            .stars-inner {
+                position: absolute;
+                top: 0;
+                left: 0;
+                white-space: nowrap;
+                overflow: hidden;
+                width: 0;
+            }
+
+            .stars-outer::before {
+                content: "\f005 \f005 \f005 \f005 \f005";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                color: #ccc;
+            }
+
+            .stars-inner::before {
+                content: "\f005 \f005 \f005 \f005 \f005";
+                font-family: "Font Awesome 5 Free";
+                font-weight: 900;
+                color: #f8ce0b;
+            }
+            
+            .text-align {
+            	text-align: center;
+            }
+</style>
 <body>
 	<%-- Preloader --%>
 	<jsp:include page="../fix/preloader.jsp" />
@@ -36,7 +157,7 @@
 	<%------------ header section  ------------%>
 	<jsp:include page="../fix/header.jsp" />
 
-	<div class="container">
+	<div class="container text-align">
 		<div class="row">
 			<!-- Left content -->
 			<div class="col-lg-3 sidebar pe-4 pb-3">
@@ -77,6 +198,35 @@
 			</div>
 			<div class="col-lg-5">
 				<h3>내 강의</h3>
+				<table class="text-align" border="1">
+					<tr>
+						<th style="font-size: 20px;">강의명</th>
+						<th style="font-size: 20px;">구매일자</th>
+					</tr>
+				<c:forEach var="ocList" items="${ocList}">
+				
+					<tr>
+						<td width="300px;"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></td>
+						<td width="300px;">${ocList.payment_date}</td>
+					</tr>
+				
+					
+					<div class="card shadow-sm mb-3">
+	                	<img src="<c:url value='${ocList.img_path}'/>" style="height:150px"/>
+	                                                
+	                    <div class="card-body">
+	                        <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></div>
+	                        <div id="teacher-name" class="card-text">${ocList.name}</div>
+	                        <div class="stars-outer">
+	                            <div class="stars-inner" style="width:${ocList.star_avg*20}%"></div>
+	                        </div>
+	                        <span class="number-rating">${ocList.star_avg}</span>
+	                    	<div id="course-price" class="card-text">₩${ocList.price}</div>
+	                	</div>
+	               	</div>
+
+				</c:forEach>
+				</table> <br><br>
 			</div>
 			
 			<div class="col-lg-4">
@@ -126,95 +276,6 @@
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
 </body>
 </html>
-<style>
-a {
-	color: orange;
-}
-
-.sidebar {
-    width: 400px;
-    height: 500px;
-    overflow-y: auto;
-    background: var(--light);
-    transition: 0.5s;
-    z-index: 999;
-}
-
-@media (min-width: 992px) {
-    .sidebar {
-        margin-left: 0;
-    }
-
-    .sidebar.open {
-        margin-left: -250px;
-    }
-
-    .content {
-        width: calc(100% - 250px);
-    }
-}
-
-@media (max-width: 991.98px) {
-    .sidebar {
-        margin-left: -250px;
-    }
-
-    .sidebar.open {
-        margin-left: 0;
-    }
-}
-
-.sidebar .navbar .navbar-nav .nav-link {
-    padding: 7px 10px;
-    color: var(--dark);
-    font-weight: 500;
-    border-left: 3px solid var(--light);
-    border-radius: 0 30px 30px 0;
-    outline: none;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover,
-.sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
-    background: #FFFFFF;
-    border-color: var(--primary);
-}
-
-.sidebar .navbar .navbar-nav .nav-link i {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFFFFF;
-    border-radius: 40px;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover i,
-.sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--light);
-}
-
-.sidebar .navbar .dropdown-toggle::after {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    transition: .5s;
-}
-
-.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
-    transform: rotate(-180deg);
-}
-
-.sidebar .navbar .dropdown-item {
-    padding-left: 25px;
-    border-radius: 0 30px 30px 0;
-} 
-</style>
 
 <!-- 드롭박스 기능 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -13,13 +13,18 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.PurchaseCourseDTO;
 import com.spring.ex.service.CommunityBoardService;
+import com.spring.ex.service.OrderHistoryService;
 
 @Controller
 public class MyPageController {
 	
 	@Inject
 	CommunityBoardService cbService;
+	
+	@Inject
+	OrderHistoryService orderHistoryService;
 	
 	@RequestMapping("/mypage")
 	public String mypage() {
@@ -36,8 +41,20 @@ public class MyPageController {
 		return "/mypage/notes_history";
 	}
 	
-	@RequestMapping("/my_course")
-	public String myCourse() {
+	@RequestMapping(value = "/my_course", method = RequestMethod.GET)
+	public String myCourse(HttpServletRequest request, Model model) throws Exception {
+		
+		List<PurchaseCourseDTO> list = null;
+		
+		HttpSession session = request.getSession();
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
+		
+		Integer m_no = memberDTO.getM_no();
+		
+		list = orderHistoryService.myPurchaseCourseList(m_no);
+		
+		model.addAttribute("ocList", list);
+		
 		return "/mypage/my_course";
 	}
 	
