@@ -175,8 +175,12 @@
 			<div class="col-lg-4">
 			    <div class="card">
 			      <div class="card-body p-4">
+			      <form class="form" role="form" method="post" autocomplete="off" action="/purchaseCourse">
+			      <input type="hidden" name="oli_no" value="${course.oli_no}">
+			      <input type="hidden" name="m_no" value="${member.m_no}">
+			      <input type="hidden" name="payment" value="${course.price}">
 			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
-			        <a href="#" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
+			        <button type="submit" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</button>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
 			        	<c:if test="${member != null}">
 							<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
@@ -186,6 +190,7 @@
 						</c:if>
 						<span id="likeCnt" style="font-size:23px">${likeCnt}</span>
 					</span>
+					</form>
 			      </div>
 			    </div>
 			</div>

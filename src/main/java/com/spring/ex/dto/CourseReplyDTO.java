@@ -10,6 +10,9 @@ public class CourseReplyDTO {
 	private String content;
 	private Date reg_date;
 	
+	private String m_name;
+	private String m_id;
+	
 	public int getOlr_no() {
 		return olr_no;
 	}
@@ -50,5 +53,17 @@ public class CourseReplyDTO {
 	public String toString() {
 		return "CourseReplyDTO [olr_no=" + olr_no + ", oli_no=" + oli_no + ", m_no=" + m_no + ", star_rating="
 				+ star_rating + ", content=" + content + ", reg_date=" + reg_date + "]";
+	}
+	public String getM_name() {
+		return m_name;
+	}
+	public void setM_name(String m_name) {
+		this.m_name = m_name;
+	}
+	public String getM_id() {
+		return m_id;
+	}
+	public void setM_id(String m_id) {
+		this.m_id = m_id;
 	}
 }

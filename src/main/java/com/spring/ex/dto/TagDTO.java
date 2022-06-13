@@ -5,7 +5,7 @@ import java.util.Date;
 public class TagDTO {
 	private int t_no;
 	private String t_name;
-	private int m_no;
+	private int t_viewCnt;
 	private Date t_regDate;
 	
 	public int getT_no() {
@@ -20,11 +20,11 @@ public class TagDTO {
 	public void setT_name(String t_name) {
 		this.t_name = t_name;
 	}
-	public int getM_no() {
-		return m_no;
+	public int getT_viewCnt() {
+		return t_viewCnt;
 	}
-	public void setM_no(int m_no) {
-		this.m_no = m_no;
+	public void setT_viewCnt(int t_viewCnt) {
+		this.t_viewCnt = t_viewCnt;
 	}
 	public Date getT_regDate() {
 		return t_regDate;
