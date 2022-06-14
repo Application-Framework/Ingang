@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
 
 @Service
 public class CommunityBoardServiceImpl implements CommunityBoardService{
@@ -106,5 +107,11 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	@Override
 	public int deleteCommunityBoard(int cb_no) throws Exception {
 		return dao.deleteCommunityBoard(cb_no);
+	}
+	
+	//태그 출력
+	@Override
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
+		return dao.getTagCommunityBoard(cb_no);
 	}
 }

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
 
 @Service
 public interface CommunityBoardService {
@@ -56,4 +57,7 @@ public interface CommunityBoardService {
 	
 	//게시물 삭제
 	public int deleteCommunityBoard(int cb_no) throws Exception;
+	
+	//태그 출력
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
 }

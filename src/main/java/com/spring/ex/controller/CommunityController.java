@@ -38,14 +38,51 @@ public class CommunityController {
 	
 	@RequestMapping(value = "/communityChats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		//String searchTag = request.getParameter("searchTag");
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
 		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+			System.out.println("No 키워드");
+			System.out.println(searchKeyword);
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+			System.out.println("No 키워드");
+			System.out.println(searchKeyword);
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+			System.out.println("No 키워드");
+			System.out.println(searchKeyword);
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			System.out.println("o 키워드");
+			System.out.println(searchKeyword);
+		}
+		if (searchTag != null) {
+			int size = searchTag.length;
+			
+			for (int i = 0; i < size; i++) {
+				System.out.println(" a =" + searchTag[i]);
+			}
+			map.put("searchTag", searchTag);
+			System.out.println("Tag : " + searchTag);
+		}else {
+			map.put("searchTag","noTag");
+			System.out.println("noTag");
+		}
+		
+		
+		model.addAttribute("test", cbService.getCommunityBoardTotalCount());
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
+		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
 		model.addAttribute("Paging", pagingService.getPaging());
@@ -101,6 +138,7 @@ public class CommunityController {
 			System.out.println("viewCookie 확인 로직 : 쿠키 있당");			//만들어진 쿠키가 있으면 증가로직 진행하지 않음
 		} 																	// 쿠키 조회수 종료
 		
+		model.addAttribute("cbTag", cbService.getTagCommunityBoard(cb_no));
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
 		model.addAttribute("cbrList", cbService.getReplyCommunityBoard(cb_no));
 		model.addAttribute("classify", classify);

@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
-
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 	
@@ -36,7 +36,7 @@
     	<div class="container">
 	    	<div style="padding: 20px;">
 	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">이야기를 나눠요</font></h4>
-	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요</font> 
+	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요 ${test}</font> 
 	    	</div>
     	</div>
     </div><br>
@@ -50,14 +50,15 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form action="#">
+						<form>
 							<div class="row">
 								<div class="col-lg-10" >
-									<input type="text" class="form-control" name='tags' placeholder='내용을 검색해보세요!'>
-									<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<input type="text" class="form-control" id="searchKeyword" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<ul id="tag-list"> </ul>
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
-									<input type="button" class="genric-btn danger-border radius" value="검색" style="width: 100%;" >
+									<input type="button" class="genric-btn danger-border radius"  id="btnSearch" value="검색" style="width: 100%;" >
 								</div>
 							</div>
 						</form>
@@ -89,7 +90,7 @@
 									</c:choose>
 							</ul>
 							
-							<div class="tab-content">
+							<div class="tab-content" id="heartDiv">
 								<div class="tab-pane fade show active" id="qwe">
 									<c:forEach var="cbList" items="${cbRegDateList}">
 										<article class="blog_item">
@@ -99,12 +100,18 @@
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
-												<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+												<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+												<ul id="tag-list" style=""> 
+													<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
+														<li class="tag-item">#${cbTag.tag_name}</li>
+													</c:forEach>
+												</ul>
 												<ul class="blog-info-link">
 													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
 													<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
 													<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+													<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbList.reg_date}" /></font></li>
 												</ul>
 											</div>
 										</article>
@@ -119,12 +126,18 @@
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
-													<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<p style="margin: 0 0px;"><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<ul id="tag-list" style=""> 
+														<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbGoodShowList.cb_no)}">
+															<li class="tag-item">#${cbTag.tag_name}</li>
+														</c:forEach>
+													</ul>
 													<ul class="blog-info-link">
 														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
 														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
 														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
-														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
+														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+														<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbGoodShowList.reg_date}" /></font></li>
 													</ul>
 												</div>
 											</article>
@@ -184,7 +197,7 @@
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
-    
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
 
 
@@ -209,6 +222,7 @@ $('#buttonWrite').click(function(){
 	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
+
 $('#buttonNoLogin').click(function(){
 	console.log("asd");
 	swal({
@@ -217,6 +231,38 @@ $('#buttonNoLogin').click(function(){
 		icon: "warning",
 	});
 });
+
+$('#btnSearch').click(function() {
+	var searchKeyword = $("#searchKeyword").val();
+	var param = {'searchTag': tagArray , 'searchKeyword': searchKeyword};
+	console.log(tagArray);
+	console.log(searchKeyword);
+	$.ajax({
+		url: "communityChats",
+		type: "GET",
+		traditional: true,
+		data: param,
+		success: function(data) {
+			/*
+			var reLoadUrl = "/communityChats?searchKeyword="+searchKeyword+"&searchTag="tagArray;
+			location.href = reLoadUrl;
+			
+			*/
+			//location.href= "/courses"
+			var reLoadUrl = "/communityChats?searchKeyword=" + searchKeyword + "&searchTag=" + tagArray;
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+	
+})
 
 </script>
 </body>

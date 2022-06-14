@@ -1,4 +1,4 @@
-
+  var tagArray = [];
   var tag = {};
   var counter = 0;
 
@@ -30,16 +30,18 @@
         if (tagValue !== "") {
 
           // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-          var result = Object.values(tag)
-            .filter(function (word) {
+          var result = Object.values(tag).filter(function (word) {
               return word === tagValue;
             })
 
           // 태그 중복 검사
           if (result.length == 0) {
-            $("#tag-list")
-              .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
+            $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
             addTag(tagValue);
+            tagArray.push(tagValue);
+            console.log(tag);
+            console.log(tagArray);
+            console.log(typeof(tagArray));
             self.val("");
           } else {
             alert("태그값이 중복됩니다.");
@@ -51,11 +53,11 @@
 
   // 삭제 버튼
   // 삭제 버튼은 비동기적 생성이므로 document 최초 생성시가 아닌 검색을 통해 이벤트를 구현시킨다.
-  $(document) .on("click", ".del-btn", function (e) {
-      var index = $(this)
-        .attr("idx");
-      tag[index] = "";
-      $(this)
-        .parent()
-        .remove();
-    });
+$(document) .on("click", ".del-btn", function (e) {
+	var index = $(this).attr("idx");
+ 	tagArray = tagArray.filter(function(item) {
+		return item !== tag[index];
+	});
+	tag[index] = "";
+	$(this).parent().remove();
+});

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
 
 
 @Repository
@@ -108,6 +109,12 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	@Override
 	public int deleteCommunityBoard(int cb_no) throws Exception {
 		return sqlSession.delete(namespace + ".deleteCommunityBoard", cb_no);
+	}
+	
+	//태그 출력
+	@Override
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
+		return sqlSession.selectList(namespace + ".getTagCommunityBoard", cb_no);
 	}
 
 }
