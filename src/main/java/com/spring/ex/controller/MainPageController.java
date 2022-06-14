@@ -31,7 +31,7 @@ public class MainPageController {
 	LiveCourseReplyService liveReplyService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String mainPage(HttpServletRequest request, Model model, String tag) throws Exception {
+	public String mainPage(HttpServletRequest request, Model model, String tag, String courses, String notes) throws Exception {
 		
 		// 실시간 댓글 목록
 		List<CourseReplyDTO> courseReplylist = null;
@@ -53,11 +53,35 @@ public class MainPageController {
 		
 		taglist = tagService.tagRanking(tagDTO);
 		
+		courses = "courses";
+		notes = "notes";
+		request.setAttribute("courses", courses);
+		request.setAttribute("notes", notes);
 		model.addAttribute("courseReplylist", courseReplylist);
 		model.addAttribute("tagList", taglist);
 		model.addAttribute("crbList", crblist);
 		model.addAttribute("newList", newlist);
 		
 		return "index";
+	}
+	
+	@RequestMapping("/mainSearch")
+	public String redirect(HttpServletRequest request, Model model) throws Exception {
+		String keyword = request.getParameter("keyword");
+		String select1 = request.getParameter("select1");
+		String urlMove;
+		
+		System.out.println(keyword);
+		System.out.println(select1);
+		if(select1.equals("courses")) {
+			urlMove = "redirect:/courses?";
+			System.out.println(urlMove);
+		} else {
+			urlMove = "redirect:/notes?";
+		}
+		
+		model.addAttribute("keyword", keyword);
+		
+		return urlMove;
 	}
 }

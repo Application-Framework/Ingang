@@ -124,10 +124,7 @@
         </style>
    </head>
 
-   <body>
-    	<%-- Preloader --%>
-	    <jsp:include page="../fix/preloader.jsp" />
-	   
+   <body>	   
 	    <%------------ header section  ------------%>
 	    <jsp:include page="../fix/header.jsp" />
     

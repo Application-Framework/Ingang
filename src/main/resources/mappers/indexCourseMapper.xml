@@ -6,21 +6,23 @@
 	
 	<!-- index 강의 띄우기 start -->
 	<!-- 이 주의 강의 -->
-	<select id="thisweek_bestCourseList" resultType="CourseDTO">
-		select title, olt_no, content, price, img_path, reg_date, 
-		(SELECT COUNT(*) FROM online_lecture_like oll WHERE oll.oli_no = oli.oli_no) like_cnt
+	<select id="thisweek_bestCourseList" resultType="HashMap">
+		select oli.oli_no, oli.title, oli.olt_no, oli.content, oli.price, oli.img_path, oli.reg_date,
+				TRUNCATE((SELECT AVG(star_rating) FROM online_lecture_reply olr WHERE olr.oli_no = oli.oli_no),0) star_avg,
+				(SELECT COUNT(*) FROM online_lecture_like oll WHERE oli.oli_no = oll.oli_no) as good
 		from online_lecture_introduction oli
-		having reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK) and like_cnt >= 20
-		order by like_cnt desc
+		where oli.reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK) and (SELECT COUNT(*) FROM online_lecture_like oll WHERE oli.oli_no = oll.oli_no) >= 1
+		order by good desc
 		limit 0,8
 	</select>
 	
 	<!-- 신규 강의 -->
-	<select id="thisweek_newCourseList" resultType="CourseDTO">
-		select title, olt_no, content, price, img_path, reg_date
-		from online_lecture_introduction
-		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK)
-		order by reg_date desc
+	<select id="thisweek_newCourseList" resultType="HashMap">
+		select oli.oli_no, oli.title, oli.olt_no, oli.content, oli.price, oli.img_path, oli.reg_date,
+				TRUNCATE((SELECT AVG(star_rating) FROM online_lecture_reply olr WHERE olr.oli_no = oli.oli_no),0) star_avg
+		from online_lecture_introduction oli
+		where oli.reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK)
+		order by oli.reg_date desc
 		limit 0,8
 	</select>
 	<!-- index 강의 띄우기 end -->

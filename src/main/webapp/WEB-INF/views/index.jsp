@@ -37,6 +37,20 @@
 		<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 </head>
 	<style>
+		.left-box {
+			width: 300px;
+		    float: left;
+		}
+		
+		a {
+			color: #ff9100;
+			font-weight: bold;
+		}
+		
+		a:hover {
+			color : #b17322;
+		}
+		
 		.stars-outer {
 			position: relative;
 			display: inline-block;
@@ -63,10 +77,6 @@
 			font-weight: 900;
 			color: #f8ce0b;
 		}
-		a {
-			color: #635c5c;
-			text-decoration: none;
-		}
 		
 		.nice-select {
 		    width: 50px;
@@ -87,6 +97,14 @@
 		#carouselExampleIndicators {
 			margin: 30px;
 		}
+		
+		.left-text {
+			padding-left: 40px;
+		}
+		
+		.tagList {
+			margin: 5px;
+		}
 	</style>
    <body>
 	   	<%-- Preloader --%>
@@ -97,6 +115,7 @@
      	
      	<%------------ main section  ------------%>
      	<main>
+     	<% String a="courses"; %>
      	
         <!-- slider Area Start-->
 		<!-- Mobile Menu -->
@@ -118,20 +137,20 @@
 					<div class="row">
 						<div class="col-xl-8">
 							<!-- form -->
-							<form action="#" class="search-box">
-								<div class="input-form">
-									<input type="text" placeholder="검색어를 입력해 주세요">
-								</div>
+							<form class="search-box" action="/mainSearch">
 								<div class="select-form">
 									<div class="select-itms">
-										<select name="select" id="select1">
-											<option value="">강의</option>
-											<option value="">노트</option>
+										<select name="select1" >
+											<option value="courses">강의</option>
+											<option value="notes">노트</option>
 										</select>
 									</div>
 								</div>
+								<div class="input-form">
+									<input type="text" name="keyword" placeholder="검색어를 입력해 주세요">
+								</div>
 								<div class="search-form">
-									<a href="#">검색</a>
+									<button type="submit" id="searchBtn" class="btn w-100 h-100">검색</button>
 								</div>
 							</form>
 						</div>
@@ -161,7 +180,8 @@
 										<div class="testimonial-founder  ">
 											<div class="founder-img mb-30">
 												<img src="<c:url value='/resources/img/testmonial/testimonial-founder.png'/>" alt=""> 
-												<span>회원 아이디 : ${list.m_no}</span>
+												<span>${list.m_id}</span>
+												<p>${list.m_name}</p>
 												<div class="stars-outer">
 									                <div class="stars-inner" style="width:${list.star_rating*20}%"></div>
 									            </div>
@@ -185,11 +205,15 @@
 				<h3>핫 트랜드 검색어</h3>
 			</center>
 			<div class="container">
-				<c:forEach var="tagList" items="${tagList}" varStatus="status">
-					<ul>
-						<li> ${status.count}. ${tagList.t_name}</li>
-					</ul>
-				</c:forEach>
+				<div class="row">
+					<div class="left-text">
+						<c:forEach var="tagList" items="${tagList}" varStatus="status">
+						<div class="list-group">
+							<a href="/tag/${tagList.t_name}" class="list-group-item list-group-item-action list-group-item-light">${status.count}. ${tagList.t_name}(${tagList.t_viewCnt})</a>
+						</div>
+					</c:forEach>
+					</div>
+				</div>
 			</div>
 		</div>
 		<!-- 좌측 사이드 영역 end -->
@@ -215,11 +239,11 @@
 				                <div class="card-body">
 					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
 					                <div style="font-size: 10px;">${list.reg_date}</div>
-					                <%-- <div id="teacher-name" class="card-text">${list.name}</div> --%>
-					                <%-- <div class="stars-outer">
+					                <div id="teacher-name" class="card-text">${list.name}</div>
+					                <div class="stars-outer">
 					               		<div class="stars-inner" style="width:${list.star_avg*20}%"></div>
-					                </div> --%>
-					               <%--  <span class="number-rating">${list.star_avg}</span> --%>
+					                </div>
+					                <span class="number-rating">(${list.star_avg})</span>
 					                <div id="course-price" class="card-text">₩${list.price}</div>
 				                </div>
 			                </div>
@@ -260,11 +284,11 @@
 				                <div class="card-body">
 					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
 					                <div style="font-size: 10px;">${list.reg_date}</div>
-					                <%-- <div id="teacher-name" class="card-text">${list.name}</div> --%>
-					                <%-- <div class="stars-outer">
+					                <div id="teacher-name" class="card-text">${list.name}</div>
+					                <div class="stars-outer">
 					               		<div class="stars-inner" style="width:${list.star_avg*20}%"></div>
-					                </div> --%>
-					               <%--  <span class="number-rating">${list.star_avg}</span> --%>
+					                </div>
+					                <span class="number-rating">(${list.star_avg})</span>
 					                <div id="course-price" class="card-text">₩${list.price}</div>
 				                </div>
 			                </div>
@@ -552,10 +576,10 @@
 						<img src="../resources/img/event/hongil.jpg" height="300px;" onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 					<div class="carousel-item">
-						<img src="../resources/img/event/hongil.jpg" height="300px;" style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="../resources/img/event/hongil.jpg" height="300px;" onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 					<div class="carousel-item">
-						<img src="../resources/img/event/hongil.jpg" height="300px;" style="width: 100px;" class="d-block w-100" alt="...">
+						<img src="../resources/img/event/hongil.jpg" height="300px;" onclick="location.href='/'" style="width: 100px;" class="d-block w-100" alt="...">
 					</div>
 				</div>
 				<button class="carousel-control-prev" type="button"	data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -613,14 +637,37 @@
         
     </body>
 </html>
-
-<style>
-.left-box {
-	width: 300px;
-    float: left;
-}
-
-a {
-	color: orange;
-}
-</style>
+<script>
+	var target = document.getElementById("select1");
+	target.options[target.selectedIndex].text
+	
+	$('#searchBtn').click(function() {
+		var select1 = $('#select1').val();
+		var urlSelect = "";
+		
+		if(select1 == "courses") {
+			urlSelect : "/courses";
+		} else {
+			urlSelect : "/notes";
+		}
+		
+		$.ajax({
+			url : urlSelect,
+			type : "get",
+			data : select1,
+			success : function(data) {
+				if (data != 1) {
+					swal({
+						title : "오류",
+						text : "오류",
+						icon : "error" ,
+						timer : 3000
+					})
+				} else {
+					window.location.href=urlSelect+"?keyword";
+				}
+				
+			}
+		}); // ajax 끝
+	});
+</script>
