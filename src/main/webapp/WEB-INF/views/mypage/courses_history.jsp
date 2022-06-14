@@ -29,6 +29,116 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 </head>
+<style>
+	a {
+		color: orange;
+	}
+	
+	.sidebar {
+	    width: 400px;
+	    height: 500px;
+	    overflow-y: auto;
+	    background: var(--light);
+	    transition: 0.5s;
+	    z-index: 999;
+	}
+	
+	@media (min-width: 992px) {
+	    .sidebar {
+	        margin-left: 0;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: -250px;
+	    }
+	
+	    .content {
+	        width: calc(100% - 250px);
+	    }
+	}
+	
+	@media (max-width: 991.98px) {
+	    .sidebar {
+	        margin-left: -250px;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: 0;
+	    }
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link {
+	    padding: 7px 10px;
+	    color: var(--dark);
+	    font-weight: 500;
+	    border-left: 3px solid var(--light);
+	    border-radius: 0 30px 30px 0;
+	    outline: none;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover,
+	.sidebar .navbar .navbar-nav .nav-link.active {
+	    color: var(--primary);
+	    background: #FFFFFF;
+	    border-color: var(--primary);
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link i {
+	    width: 40px;
+	    height: 40px;
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    background: #FFFFFF;
+	    border-radius: 40px;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover i,
+	.sidebar .navbar .navbar-nav .nav-link.active i {
+	    background: var(--light);
+	}
+	
+	.sidebar .navbar .dropdown-toggle::after {
+	    position: absolute;
+	    top: 15px;
+	    right: 15px;
+	    border: none;
+	    content: "\f107";
+	    font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    transition: .5s;
+	}
+	
+	.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+	    transform: rotate(-180deg);
+	}
+	
+	.sidebar .navbar .dropdown-item {
+	    padding-left: 25px;
+	    border-radius: 0 30px 30px 0;
+	}
+
+	/*tab css*/
+	.tab{float:left; width:100%; height:400px;}
+	.tabnav{font-size:0; width:100%; border:1px solid #ddd;}
+	.tabnav li{display: inline-block; width:50%; height:46px; text-align:center; border-right:1px solid #ddd;}
+	.tabnav li a:before{content:""; position:absolute; left:0; top:0px; width:100%; height:3px; }
+	.tabnav li a.active:before{background:rgb(95, 204, 255, 0.8);}
+	.tabnav li a.active{border-bottom:1px solid #fff;}
+	.tabnav li a{ position:relative; display:block; background: #f8f8f8; color: #000; padding:0 30px; line-height:46px; text-decoration:none; font-size:16px;}
+	.tabnav li a:hover,
+	.tabnav li a.active{background:#fff; color:rgb(95, 204, 255, 0.8); font-weight: 800;}
+	.tabcontent{padding: 20px; height:100%; border:1px solid #ddd; border-top:none;}
+			
+	.table-text-align {
+		margin-left:auto;
+		margin-right:auto;
+	}
+	
+	.text-align {
+       	text-align: center;
+    }
+</style>
 <body>
 	<%-- Preloader --%>
 	<jsp:include page="../fix/preloader.jsp" />
@@ -76,179 +186,42 @@
 				</aside>
 			</div>
 			<div class="col-lg-9">
-				<section class="featured-job-area">
-					<div class="container">
-
-						<%-- 강의 검색 입력 폼 --%>
-						<form action="#" class="search-box mb-5">
-							<div class="input-form item">
-								<input type="text" placeholder="강의 제목 검색" tabindex="0">
-							</div>
-							<div class="search-form item">
-								<a href="#" tabindex="0">검색</a>
-							</div>
-						</form>
-
-						<%-- 강의 리스트 출력 부분 --%>
-						<div class="row row-cols-4 mb-3">
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a>
-										</div>
-										<div id="teacher-name" class="card-text">박조은</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 65%"></div>
-										</div>
-										<span class="number-rating">(14)</span>
-										<div id="course-price" class="card-text">₩66,000</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">코딩으로 학습하는 GoF 디자인패턴</a>
-										</div>
-										<div id="teacher-name" class="card-text">백기선</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 99%"></div>
-										</div>
-										<span class="number-rating">(203)</span>
-										<div id="course-price" class="card-text">₩88,000</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">만들고 비교하며 학습하는 리액트</a>
-										</div>
-										<div id="teacher-name" class="card-text">김정환</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 90%"></div>
-										</div>
-										<span class="number-rating">(155)</span>
-										<div id="course-price" class="card-text">₩55,000</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">MySQL 데이터베이스</a>
-										</div>
-										<div id="teacher-name" class="card-text">코딩사전</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 77%"></div>
-										</div>
-										<span class="number-rating">(17)</span>
-										<div id="course-price" class="card-text">₩18,700</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a>
-										</div>
-										<div id="teacher-name" class="card-text">박조은</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 65%"></div>
-										</div>
-										<span class="number-rating">(14)</span>
-										<div id="course-price" class="card-text">₩66,000</div>
-									</div>
-								</div>
-							</div>
-							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-								<div class="card shadow-sm mb-3">
-									<svg class="bd-placeholder-img card-img-top"
-										xmlns="http://www.w3.org/2000/svg" role="img"
-										aria-label="Placeholder: Thumbnail"
-										preserveAspectRatio="xMidYMid slice" focusable="false">
-										<title>Placeholder</title><rect width="100%" height="100%"
-											fill="#55595c"></rect></svg>
-
-									<div class="card-body">
-										<div id="course-title" class="card-text">
-											<a href="/courses_detail">코딩으로 학습하는 GoF 디자인패턴</a>
-										</div>
-										<div id="teacher-name" class="card-text">백기선</div>
-										<div class="stars-outer">
-											<div class="stars-inner" style="width: 99%"></div>
-										</div>
-										<span class="number-rating">(203)</span>
-										<div id="course-price" class="card-text">₩88,000</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
-
-				<%-- 페이지 번호 --%>
-				<div class="pagination-area pb-115 text-center mt-5">
-					<div class="container">
-						<div class="row">
-							<div class="col-xl-12">
-								<div class="single-wrap d-flex justify-content-center">
-									<nav aria-label="Page navigation example">
-										<ul class="pagination justify-content-start">
-											<li class="page-item active"><a class="page-link"
-												href="#">01</a></li>
-											<li class="page-item"><a class="page-link" href="#">02</a></li>
-											<li class="page-item"><a class="page-link" href="#">03</a></li>
-											<li class="page-item"><a class="page-link" href="#"><span
-													class="ti-angle-right"></span></a></li>
-										</ul>
-									</nav>
-								</div>
-							</div>
-						</div>
+				<div class="tab">
+				 	<ul class="tabnav">
+					    <li><a href="#tab01">내 강의</a></li>
+					    <li><a href="#tab02">관심 강의</a></li>
+				    </ul>
+				    <div class="tabcontent">
+					    <div class="text-align" id="tab01">
+						    <table class="table-text-align">
+								<tr>
+									<th style="font-size: 20px;">강의명</th>
+									<th style="font-size: 20px;">구매일자</th>
+								</tr>
+						    	<c:forEach var="ocList" items="${ocList}">
+						    		<tr>
+										<td width="70%;"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></td>
+										<td width="30%;">${ocList.payment_date}</td>
+									</tr>
+						    	</c:forEach>
+						    </table>
+					    </div>
+					    <div class="text-align" id="tab02">
+					    	<table class="table-text-align">
+								<tr>
+									<th style="font-size: 20px;">강의명</th>
+									<th style="font-size: 20px;">관심일자</th>
+								</tr>
+							    <c:forEach var="itList" items="${itList}">
+							    	<tr>
+										<td width="70%;"><a href="/courses/${itList.oli_no}">${itList.title}</a></td>
+										<td width="30%;">${itList.reg_date}</td>
+									</tr>
+							    </c:forEach>
+						    </table>
+					    </div>
 					</div>
 				</div>
-				<%-- 페이지 번호 끝 --%>
 			</div>
 		</div>
 	</div>
@@ -292,97 +265,20 @@
 	<%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
+	
+	<!-- 드롭박스 기능 -->
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+	
+	<script>
+	$(function(){
+		$('.tabcontent > div').hide();
+		$('.tabnav a').click(function () {
+			$('.tabcontent > div').hide().filter(this.hash).fadeIn();
+			$('.tabnav a').removeClass('active');
+			$(this).addClass('active');
+			return false;
+		}).filter(':eq(0)').click();
+	});
+</script>
 </body>
 </html>
-<style>
-a {
-	color: orange;
-}
-
-.sidebar {
-    width: 400px;
-    height: 500px;
-    overflow-y: auto;
-    background: var(--light);
-    transition: 0.5s;
-    z-index: 999;
-}
-
-@media (min-width: 992px) {
-    .sidebar {
-        margin-left: 0;
-    }
-
-    .sidebar.open {
-        margin-left: -250px;
-    }
-
-    .content {
-        width: calc(100% - 250px);
-    }
-}
-
-@media (max-width: 991.98px) {
-    .sidebar {
-        margin-left: -250px;
-    }
-
-    .sidebar.open {
-        margin-left: 0;
-    }
-}
-
-.sidebar .navbar .navbar-nav .nav-link {
-    padding: 7px 10px;
-    color: var(--dark);
-    font-weight: 500;
-    border-left: 3px solid var(--light);
-    border-radius: 0 30px 30px 0;
-    outline: none;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover,
-.sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
-    background: #FFFFFF;
-    border-color: var(--primary);
-}
-
-.sidebar .navbar .navbar-nav .nav-link i {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFFFFF;
-    border-radius: 40px;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover i,
-.sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--light);
-}
-
-.sidebar .navbar .dropdown-toggle::after {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    transition: .5s;
-}
-
-.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
-    transform: rotate(-180deg);
-}
-
-.sidebar .navbar .dropdown-item {
-    padding-left: 25px;
-    border-radius: 0 30px 30px 0;
-} 
-</style>
-
-<!-- 드롭박스 기능 -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -157,7 +157,7 @@
 	<%------------ header section  ------------%>
 	<jsp:include page="../fix/header.jsp" />
 
-	<div class="container text-align">
+	<div class="container">
 		<div class="row">
 			<!-- Left content -->
 			<div class="col-lg-3 sidebar pe-4 pb-3">
@@ -196,41 +196,59 @@
 					</nav>
 				</aside>
 			</div>
-			<div class="col-lg-5">
-				<h3>내 강의</h3>
-				<table class="text-align" border="1">
-					<tr>
-						<th style="font-size: 20px;">강의명</th>
-						<th style="font-size: 20px;">구매일자</th>
-					</tr>
-				<c:forEach var="ocList" items="${ocList}">
-				
-					<tr>
-						<td width="300px;"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></td>
-						<td width="300px;">${ocList.payment_date}</td>
-					</tr>
-				
-					
-					<div class="card shadow-sm mb-3">
-	                	<img src="<c:url value='${ocList.img_path}'/>" style="height:150px"/>
-	                                                
-	                    <div class="card-body">
-	                        <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></div>
-	                        <div id="teacher-name" class="card-text">${ocList.name}</div>
-	                        <div class="stars-outer">
-	                            <div class="stars-inner" style="width:${ocList.star_avg*20}%"></div>
-	                        </div>
-	                        <span class="number-rating">${ocList.star_avg}</span>
-	                    	<div id="course-price" class="card-text">₩${ocList.price}</div>
-	                	</div>
-	               	</div>
+			<div class="col-lg-9">
+				<section class="featured-job-area">
+					<div class="container">
+						<%-- 강의 검색 입력 폼 --%>
+						<form action="${nowURL}" class="search-box mb-5">
+							<div class="input-form item">
+								<input type="text" name="keyword" value="${keyword}" placeholder="강의 제목 검색" tabindex="0">
+							</div>
+							<div class="search-form item">
+								<button type="submit" class="btn w-100 h-100">검색</button>
+							</div>
+						</form>
 
-				</c:forEach>
-				</table> <br><br>
-			</div>
-			
-			<div class="col-lg-4">
-				<h3>관심 강의</h3>
+						<%-- 강의 리스트 출력 부분 --%>
+						<div class="row d-flex justify-contnet-center">
+							<c:forEach var="list" items="${ocList}">
+							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
+						    	<div class="card shadow-sm mb-3">
+							        <img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
+							        <div class="card-body">
+									    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
+									    <div style="font-size: 10px;">${list.reg_date}</div>
+									    <div id="teacher-name" class="card-text">${list.name}</div>
+									    <div class="stars-outer">
+									    		<div class="stars-inner" style="width:${list.star_avg*20}%"></div>
+									    </div>
+									    <span class="number-rating">(${list.star_avg})</span>
+									    <div id="course-price" class="card-text">₩${list.price}</div>
+							        </div>
+						        </div>
+						    </div>
+			               	</c:forEach>
+						</div>
+					</div>
+				</section>
+				<%-- 페이지 번호 --%>
+				<div class="pagination-area pb-115 text-center mt-5">
+					<div class="container">
+						<div class="row">
+							<div class="col-xl-12">
+								<div class="single-wrap d-flex justify-content-center">
+									<nav aria-label="Page navigation example">
+										<ul class="pagination justify-content-start">
+											<li class="page-item active"><a class="page-link"
+												href="#">01</a></li>
+										</ul>
+									</nav>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<%-- 페이지 번호 끝 --%>
 			</div>
 		</div>
 	</div>

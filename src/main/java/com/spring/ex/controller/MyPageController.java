@@ -26,23 +26,47 @@ public class MyPageController {
 	@Inject
 	OrderHistoryService orderHistoryService;
 	
+	
 	@RequestMapping("/mypage")
 	public String mypage() {
 		return "mypage";
 	}
 	
 	@RequestMapping("/courses_history")
-	public String coursesHistory() {
+	public String coursesHistory(HttpServletRequest request, Model model) throws Exception {
+		
+		List<PurchaseCourseDTO> purChaseList = null;
+		List<PurchaseCourseDTO> interestList = null;
+		
+		HttpSession session = request.getSession();
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
+		
+		Integer m_no = memberDTO.getM_no();
+		
+		purChaseList = orderHistoryService.myPurchaseCourseList(m_no);
+		interestList = orderHistoryService.myInterestCourseList(m_no);
+		
+		model.addAttribute("ocList", purChaseList);
+		model.addAttribute("itList", interestList);
+		
 		return "/mypage/courses_history";
 	}
 	
 	@RequestMapping("/notes_history")
-	public String notesHistory() {
+	public String notesHistory() throws Exception {
+		
+		
+		
 		return "/mypage/notes_history";
 	}
 	
 	@RequestMapping(value = "/my_course", method = RequestMethod.GET)
 	public String myCourse(HttpServletRequest request, Model model) throws Exception {
+		
+		String keyword = request.getParameter("keyword");
+		keyword = (keyword == null) ? "" : keyword;
+		
+		String keywordParam = (keyword != "") ? "keyword="+keyword+"&" : "";
 		
 		List<PurchaseCourseDTO> list = null;
 		
@@ -51,9 +75,11 @@ public class MyPageController {
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		list = orderHistoryService.myPurchaseCourseList(m_no);
+		list = orderHistoryService.searchMyPurcaseCourses(m_no, keyword);
 		
 		model.addAttribute("ocList", list);
+		model.addAttribute("keyword", keyword);
+		model.addAttribute("keywordParam", keywordParam);
 		
 		return "/mypage/my_course";
 	}

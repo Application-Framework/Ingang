@@ -115,7 +115,6 @@
      	
      	<%------------ main section  ------------%>
      	<main>
-     	<% String a="courses"; %>
      	
         <!-- slider Area Start-->
 		<!-- Mobile Menu -->
