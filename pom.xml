@@ -190,7 +190,6 @@
             <version>2.6</version>
         </dependency>
         
-        
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <!-- json 변환 -->
         <dependency>
