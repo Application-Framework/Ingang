@@ -65,4 +65,9 @@ public class NoteDAOImpl implements NoteDAO {
 		return sqlSession.selectOne(namespace + ".getNoteTotalCount", map);
 	}
 
+	@Override
+	public List<NoteDTO> getNoteListByOli_no(int oli_no) {
+		return sqlSession.selectList(namespace + ".getNoteListByOli_no", oli_no);
+	}
+
 }

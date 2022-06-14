@@ -55,6 +55,11 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
+	public List<NoteDTO> getNoteListByOli_no(int oli_no) {
+		return noteDAO.getNoteListByOli_no(oli_no);
+	}
+	
+	@Override
 	public NoteDTO getNote(int n_no) {
 		return noteDAO.getNote(n_no);
 	}

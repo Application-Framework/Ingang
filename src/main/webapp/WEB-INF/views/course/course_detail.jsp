@@ -115,6 +115,11 @@
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
 		            <p class="text-white">${teacher.name}</p>
+		            <div>
+		            	<c:forEach var="tag" items="${tags}">
+		            		<span class="border border-info border-3 rounded-pill">#${tag.tag}</span>
+		            	</c:forEach>
+		            </div>
 			    </div>
 		    </div>
 	    </div>
@@ -158,6 +163,18 @@ ${course.content}
 						</c:forEach>
 					</div>
 					
+					<%-- 관련 노트 --%>
+					<div class="mb-3 fs-3 fw-bold">
+						관련 노트
+					</div>
+					
+					<div class="mb-4">
+						<c:forEach var="note" items="${notes}" begin="0" end="10" step="1">
+							<div class="p-2">
+								<a href="/notes/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getNameByM_no(note.m_no)}</a> 
+							</div>
+						</c:forEach>
+					</div>
 					<%-- 수강평 --%>
 					<div class="mb-3 fs-3 fw-bold">
 						수강평

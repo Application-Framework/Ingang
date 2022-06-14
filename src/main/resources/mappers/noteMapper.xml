@@ -57,6 +57,12 @@
 		LIMIT #{page}, #{pageSize}
 	</select>
 	
+	<!-- 강의번호로 노트 리스트 가져오기 -->
+	<select id="getNoteListByOli_no" resultType="NoteDTO">
+		SELECT * FROM note
+		WHERE oli_no = #{oli_no}
+	</select>
+	
 	<!-- 노트 가져오기 -->
 	<select id="getNote" resultType="NoteDTO">
 		SELECT * FROM note

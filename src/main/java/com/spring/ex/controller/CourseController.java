@@ -159,6 +159,8 @@ public class CourseController {
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videos = courseService.getCourseVideoList(pageNo);
+		List<NoteDTO> notes = noteService.getNoteListByOli_no(pageNo);
+		
 		if(memberDTO != null) {
 			HistoryOrderLectureDTO historyOrderLectureDTO = courseService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
@@ -194,11 +196,12 @@ public class CourseController {
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberSerivce", memberService);
+		model.addAttribute("memberService", memberService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("videos", videos);
 		model.addAttribute("contentType", "main");
+		model.addAttribute("notes", notes);
 		
 		return "course/course_detail";
 	}

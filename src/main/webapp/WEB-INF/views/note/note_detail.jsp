@@ -77,7 +77,7 @@
             background: rgba(0,0,0,0.2); 
             top:0; 
             left:0; 
-            display:none;
+            display:none; 
         }
 
         .modal_content{
@@ -118,6 +118,11 @@
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
 		            <p class="text-white">${writerName}</p>
+		            <div>
+		            	<c:forEach var="tag" items="${tags}">
+		            		<span class="border border-info border-3 rounded-pill">#${tag.tag}</span>
+		            	</c:forEach>
+		            </div>
 			    </div>
 		    </div>
 	    </div>
@@ -156,10 +161,23 @@ ${note.content}
 					<div class="mb-4">
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true}">href="/notes/${pageNo}/read/${article.na_no}"</c:if> class="link-secondary" target="_blank">${article.title}</a>
+								<a href="javascript:;" <c:if test="${purchased == true}">onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
+							</div>
+							
+							<%-- 노트 글 모달 --%>
+							<div class="modal" id="${article.na_no}">
+								<div class="modal_content card" style="width:35rem; height:37rem;">
+									<div class="card-body p-4">
+										<h5 class="card-title fw-bold mb-2">${article.title}</h5>
+						                <textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
+${article.content}</textarea>
+									</div>
+								</div>
 							</div>
 						</c:forEach>
 					</div>
+					
+					
 					
 					<%-- 리뷰 --%>
 					<div class="mb-3 fs-3 fw-bold">
@@ -198,88 +216,6 @@ ${note.content}
 						</form>
 					</c:if>
 				</c:if>
-				
-				<%-- <c:if test="${contentType == 'community'}">
-					게시물 영역
-					<div class="tab-content">
-						<div class="tab-pane fade show active" id="qwe">
-							<c:forEach var="cbList" items="${cbRegDateList}">
-								<article class="blog_item">
-									<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-									
-										<a class="d-inline-block" href="boardRead?cb_no=${cbList.cb_no}&classify=1">
-											<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
-											<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
-										</a>
-										<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
-										<ul class="blog-info-link">
-											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
-											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
-											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-											<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
-										</ul>
-									</div>
-								</article>
-							</c:forEach>
-						</div>
-						<div class="tab-pane fade" id="asd">
-							<div class="tab-pane fade show active" id="qwe">
-								<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
-									<article class="blog_item">
-										<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-											<a class="d-inline-block" href="boardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
-												<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
-												<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
-											</a>
-											<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
-											</ul>
-										</div>
-									</article>
-								</c:forEach>
-							</div>
-						</div>
-					</div>
-					게시물 영역 끝
-					
-					Pagination 영역
-					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination">
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.firstPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
-								<c:choose>
-									<c:when test="${i eq paging.pageNo }">
-										<li class="page-item  active"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
-									</c:when>
-									<c:otherwise>
-										<li class="page-item"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.finalPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
-					Pagination 영역 끝
-				</c:if> --%>
 			</div>
 			
 			<%-- 가격, 수강신청 패널 --%>
@@ -292,7 +228,7 @@ ${note.content}
 			        		<a class="btn head-btn2 mb-3" style="min-width:100%;">구매 완료</a>
 			        	</c:if>
 			        	<c:if test="${purchased == false}">
-					        <a href="javascript:;" onclick="openRegNotesModal()" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
+					        <a href="javascript:;" onclick="openModal('#purchaseModal')" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
 			        	</c:if>
 			        </c:if>
 			        <c:if test="${member == null}">
@@ -313,7 +249,7 @@ ${note.content}
 		</div>
 		
 		<%-- 구매 모달창 --%>
-		<div class="modal">
+		<div class="modal" id="purchaseModal">
         	<div class="modal_content card" style="width:20rem; height:16rem;">
 	            <div class="card-body">
 	                <h5 class="card-title">결제</h5>
@@ -321,7 +257,7 @@ ${note.content}
 	                <p class="card-text">단순 변심으로 환불은 불가능합니다.</p>
 	                <p class="card-text">정말 구매하시겠습니까?</p>
 	                <a href="javascript:;" onclick="purchaseNote()" class="btn head-btn1">예</a>
-	                <a href="javascript:;" onclick="closeRegNotesModal()" class="btn head-btn2">아니오</a>
+	                <a href="javascript:;" onclick="closeModal('#purchaseModal')" class="btn head-btn2">아니오</a>
 	            </div>
 	        </div>
 	    </div>
@@ -334,7 +270,7 @@ ${note.content}
     <script>
     	// textarea 자동 늘리기
 	    $(function() {
-		    $('textarea').each(function() {
+	    	$('textarea').each(function() {
 		        $(this).height($(this).prop('scrollHeight'));
 		    });
 		});
@@ -346,7 +282,7 @@ ${note.content}
 		 		x.classList.toggle("bi-heart");
 		        x.classList.toggle("bi-heart-fill");
 		        x.classList.toggle("text-danger");
-				}
+			}
 		});
 		
 		// 좋아요 클릭 이벤트
@@ -377,23 +313,27 @@ ${note.content}
 			});
 		}
 		
+		var selected = "";
 		// 수강신청 모달창 열기
-		function openRegNotesModal() {
-			$(".modal").fadeIn();
+		function openModal(id) {
+			$(id).fadeIn();
+			selected = id;
+			
+			// 선택된 모달의 textarea의 높이 자동 늘리기
+			var txtArea = $(id).find('textarea');
+			txtArea.height(txtArea.prop('scrollHeight'));
 		}
 		
 		// 수강신청 모달창 닫기
-		function closeRegNotesModal() {
-			$(".modal").fadeOut();
+		function closeModal(id) {
+			$(id).fadeOut();
 		}
 		
 		$(function(){ 
 			// 외부영역 클릭 시 팝업 닫기
 			$(document).mouseup(function (e){
-				var modal_content = $(".modal_content");
-				if(modal_content.has(e.target).length === 0){
-					closeRegNotesModal();
-				}
+				if($(".modal_content").has(e.target).length === 0)
+					closeModal(selected);
 			});
 		});
 		
