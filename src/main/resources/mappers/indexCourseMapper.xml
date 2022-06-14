@@ -6,16 +6,17 @@
 	
 	<!-- index 강의 띄우기 start -->
 	<!-- 이 주의 강의 -->
-	<select id="thisweek_bestCourseList" resultType="com.spring.ex.dto.CourseDTO">
-		select title, olt_no, content, price, img_path, reg_date
-		from online_lecture_introduction olt
-		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK) and o_like >= 20
-		order by o_like desc
+	<select id="thisweek_bestCourseList" resultType="CourseDTO">
+		select title, olt_no, content, price, img_path, reg_date, 
+		(SELECT COUNT(*) FROM online_lecture_like oll WHERE oll.oli_no = oli.oli_no) like_cnt
+		from online_lecture_introduction oli
+		having reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK) and like_cnt >= 20
+		order by like_cnt desc
 		limit 0,8
 	</select>
 	
 	<!-- 신규 강의 -->
-	<select id="thisweek_newCourseList" resultType="com.spring.ex.dto.CourseDTO">
+	<select id="thisweek_newCourseList" resultType="CourseDTO">
 		select title, olt_no, content, price, img_path, reg_date
 		from online_lecture_introduction
 		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 WEEK)

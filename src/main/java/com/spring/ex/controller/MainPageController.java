@@ -1,6 +1,5 @@
 package com.spring.ex.controller;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,13 +11,11 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.spring.ex.dto.CourseDTO;
-import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.TagDTO;
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.service.CourseBestService;
-import com.spring.ex.service.CourseService;
 import com.spring.ex.service.LiveCourseReplyService;
-import com.spring.ex.service.PagingService;
 import com.spring.ex.service.TagService;
 
 @Controller
