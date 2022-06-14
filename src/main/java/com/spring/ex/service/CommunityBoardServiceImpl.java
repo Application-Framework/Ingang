@@ -20,13 +20,13 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//게시판 최신순 출력
 	@Override
-	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Integer> map) throws Exception {
+	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Object> map) throws Exception {
 		return dao.getCommunityBoardChatRegDateShowPage(map);
 	}
 	
 	//게시판 좋아요순 출력
 	@Override
-	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Integer> map) throws Exception {
+	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception {
 		return dao.getCommunityBoardChatGoodShowPage(map);
 	}
 	
@@ -46,5 +46,65 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	@Override
 	public List<CommunityBoardReplyDTO> getReplyCommunityBoard(Integer cb_no) throws Exception {
 		return dao.getReplyCommunityBoard(cb_no);
+	}
+	
+	//게시물 조회수 증가
+	@Override
+	public void addReadCommunityBoardHit(int cb_no) throws Exception {
+		dao.addReadCommunityBoardHit(cb_no);
+	}
+	
+	//게시물 좋아요 유무 체크
+	@Override
+	public int getGoodCheckReadCommunityBoard(HashMap<String, Integer> map) throws Exception {
+		return dao.getGoodCheckReadCommunityBoard(map);
+	}
+	
+	//게시물 좋아요 추가
+	@Override
+	public int addGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.addGoodReadCommunityBoard(map);
+	}
+	
+	//게시물 좋아요 삭제
+	@Override
+	public int subtractGoodReadCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.subtractGoodReadCommunityBoard(map);
+	}
+	
+	//게시물 댓글 작성
+	@Override
+	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception {
+		return dao.writeReplyCommunityBoard(dto);
+	}
+	
+	//게시물 댓글 수정
+	@Override
+	public int updateReplyCommunityBoard(int cbr_no) throws Exception {
+		return dao.updateReplyCommunityBoard(cbr_no);
+	}
+	
+	//게시물 댓글 삭제
+	@Override
+	public int deleteReplyCommunityBoard(int cbr_no) throws Exception{
+		return dao.deleteReplyCommunityBoard(cbr_no);
+	}
+	
+	//게시물 작성
+	@Override
+	public int writeCommunityBoard(CommunityBoardDTO dto) throws Exception {
+		return dao.writeCommunityBoard(dto);
+	}
+	
+	//게시물 수정
+	@Override
+	public int updateCommunityBoard(CommunityBoardDTO dto) throws Exception {
+		return dao.updateCommunityBoard(dto);
+	}
+	
+	//게시물 삭제
+	@Override
+	public int deleteCommunityBoard(int cb_no) throws Exception {
+		return dao.deleteCommunityBoard(cb_no);
 	}
 }

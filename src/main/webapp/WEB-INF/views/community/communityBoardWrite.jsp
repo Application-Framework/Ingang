@@ -17,161 +17,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+<script src=" https://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.18/lang/summernote-ko-KR.min.js"></script>
+<script src="<c:url value='/resources/js/community/summernote.js'/>"></script>
 <!-- 태그 -->
-<link rel="stylesheet" type="text/css" href="/tag_create.css">
-<script type="module" src="/tag_create.js"></script>
-<!--코드미러 -->
-<script src="<c:url value="/resources/js/codemirror.js"/>"></script>
-<link href='<c:url value="/resources/css/codemirror.css"/>' rel='stylesheet' />
-<style type="text/css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 
-.containerTop {
-	display: flex;
-	justify-content: space-between;
-	align-items: flex-end
-}
-
-
-* {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-ul {
-  padding: 0px 0;
-}
-
-ul li {
-  display: inline-block;
-  margin: 0 0px;
-  font-size: 10px;
-  letter-spacing: -.5px;
-}
-
-form {
-  padding-top: 0px;
-}
-
-ul li.tag-item {
-  padding: 4px 4px;
-  background-color: #F2F2F2;
-  color: #000;
-}
-
-.tag-item:hover {
-  background-color: #262626;
-  color: #fff;
-}
-
-.del-btn {
-  font-size: 7px;
-  font-weight: bold;
-  cursor: pointer;
-  margin-left: 8px;
-}
-</style>
 <title>게시글 작성</title>
-<script type="text/javascript">
-$(document).ready(function () {
-
-  var tag = {};
-  var counter = 0;
-
-  // 태그를 추가한다.
-  function addTag(value) {
-    tag[counter] = value; // 태그를 Object 안에 추가
-    counter++; // counter 증가 삭제를 위한 del-btn 의 고유 id 가 된다.
-  }
-
-  // 최종적으로 서버에 넘길때 tag 안에 있는 값을 array type 으로 만들어서 넘긴다.
-  function marginTag() {
-    return Object.values(tag)
-      .filter(function (word) {
-        return word !== "";
-      });
-  }
-
-  $("#tag")
-    .on("keyup", function (e) {
-      var self = $(this);
-      console.log("keypress");
-
-      // input 에 focus 되있을 때 엔터 및 스페이스바 입력시 구동
-      if (e.key === "Enter" || e.keyCode == 32) {
-
-        var tagValue = self.val(); // 값 가져오기
-
-        // 값이 없으면 동작 안합니다.
-        if (tagValue !== "") {
-
-          // 같은 태그가 있는지 검사한다. 있다면 해당값이 array 로 return 된다.
-          var result = Object.values(tag)
-            .filter(function (word) {
-              return word === tagValue;
-            })
-
-          // 태그 중복 검사
-          if (result.length == 0) {
-            $("#tag-list")
-              .append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
-            addTag(tagValue);
-            self.val("");
-          } else {
-            alert("태그값이 중복됩니다.");
-          }
-        }
-        e.preventDefault(); // SpaceBar 시 빈공간이 생기지 않도록 방지
-      }
-    });
-
-  // 삭제 버튼
-  // 삭제 버튼은 비동기적 생성이므로 document 최초 생성시가 아닌 검색을 통해 이벤트를 구현시킨다.
-  $(document) .on("click", ".del-btn", function (e) {
-      var index = $(this)
-        .attr("idx");
-      tag[index] = "";
-      $(this)
-        .parent()
-        .remove();
-    });
-})
-
-
-$(function() {
-
-  $('.button-class1').click(function(){
-    if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
-    if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
-    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
-    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
-    if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
-    if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
-  });
-  
-  $('.button-class2').click(function(){
-	if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
-	if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
-	if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
-	if( !$('.button-class1').hasClass('btn btn-outline-danger') ) $('.button-class1').addClass('btn btn-outline-danger');
-	if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
-	if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
-  });
-  
-  $('.button-class3').click(function(){
-	if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
-	if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
-	if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
-	if( !$('.button-class1').hasClass('btn btn-outline-danger') ) $('.button-class1').addClass('btn btn-outline-danger');
-    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
-    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
-  });
-
-});
-</script>
 </head>
 
 <body>
@@ -189,10 +51,11 @@ $(function() {
 			<div class="d-flex flex-column">
 				<form>
 					<div class="form-group row">
+						<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
 						<div class="col-xs-12 col-md-12">
 							제목
 							<div class="input-group my-2 mb-1">
-								<input type="text" value="" class="form-control" placeholder="제목을 입력해 주세요.">
+								<input type="text" id="title" class="form-control" placeholder="제목을 입력해 주세요.">
 							</div>
 						</div><br><br>
 						
@@ -205,86 +68,122 @@ $(function() {
 						</div>
 					</div>
 					
-					<!-- 개요 -->
 					내용
 					<div class="form-group">
-						<textarea class="form-control" rows="15" id="content" name="content" placeholder="자유롭게 게시글을 작성해보세요">
-							자유롭게 게시글을 작성해보세요
-						</textarea>	
+						<textarea id="content" class="form-control" name="content">
+						</textarea>
 					</div>
-												
 					<div align="right">
-						<button type="button" class="btn btn-danger" onclick="">작성</button>
+						<button type="button" class="btn btn-danger" id="btnWrite">작성</button>
 						<button type="button" class="btn btn-outline-danger" onclick="self.close();">취소</button>
-			        </div>
+					</div>
 				</form>
 				
 				
 			</div>
 		</div>
 	</div>
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
+<script type="text/javascript">
 
+$(document).ready(function () {
+	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
+		sessionStorage.setItem("classifyActive", "1"); 
+	}
+	
+})
 
-	<script> 
-	  var editor = CodeMirror.fromTextArea(myTextarea, {
-	    lineNumbers: true
+$(function() {
+	$('.button-class1').click(function(){
+	    if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
+	    if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
+	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
+	    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
+	    if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
+	    if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
+	    sessionStorage.setItem("classifyActive", "1"); 
+	});
+	
+	$('.button-class2').click(function(){
+		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
+		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
+		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
+		if( !$('.button-class1').hasClass('btn btn-outline-danger') ) $('.button-class1').addClass('btn btn-outline-danger');
+		if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
+		if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
+		sessionStorage.setItem("classifyActive", "2"); 
+	});
+	
+	$('.button-class3').click(function(){
+		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
+		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
+		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
+		if( !$('.button-class1').hasClass('btn btn-outline-danger') ) $('.button-class1').addClass('btn btn-outline-danger');
+	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
+	    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
+	    sessionStorage.setItem("classifyActive", "5"); 
 	  });
 
-	  function scheduleDetailGo(sId) { 
-		  var popup = window.open('ScheduleDetailView?schedule_id='+sId , 'a', 'width=800px,height=840px,left=300,top=100');
-	  }
-
-	 
-	</script>
+});
 
 
-
-<!-- Modal -->
-<!--
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-	<div class="modal-dialog modal-lg" role="document">
-		<div class="modal-content">
-			
-			<div class="modal-body">
-			
-				<ul class="nav nav-pills" id="myTab" style="width: 100%;">
-					<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 자유주제</h6></a></li>
-					<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">질문</h6></a></li>
-					<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">스터디</h6></a></li>
-				</ul>
-				
-				<div class="tab-content">
-					<div class="tab-pane fade show active" id="qwe">
-						<article class="blog_item">
-							<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-							
-								<a class="d-inline-block" href="single-blog.html">
-								</a>
-							</div>
-						</article>
-					</div>
-					<div class="tab-pane fade" id="asd">
-						<div class="tab-pane fade show active" id="qwe">
-							<article class="blog_item">
-								<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-									<a class="d-inline-block" href="single-blog.html">
-									</a>
-								</div>
-							</article>
-						</div>
-					</div>
-				</div>
-			</div>
-			
-			<div class="modal-footer">
-				<button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
-				<button type="button" class="btn btn-default" data-dismiss="modal">작성</button>
-			</div>
-		</div>
-	</div>
-</div>
--->
-
-
+$('#btnWrite').click(function() {
+	var m_no = $("#m_no").val();
+	var title = $("#title").val();
+	var content = $("#content").val();
+	var goint = sessionStorage.getItem("classifyActive");
+	var classify = parseInt(goint); 
+	var param = {'m_no': m_no , 'title': title,'content': content, 'classify': classify};
+	
+	if(!title) {
+		swal({
+			title: "글작성",
+			text: "제목이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	if(!content) {
+		swal({
+			title: "글작성",
+			text: "내용이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	else {
+		$.ajax({
+			url: "doWriteCommunityBoard",
+			type: "POST",
+			data: param,
+			success: function(data) {
+				if (data != 1) {
+					swal({
+						title: "글작성",
+						text: "게시글 작성이 실패하였습니다.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+				else {
+					sessionStorage.setItem("classifyActive", "0"); 
+					opener.parent.location.reload();
+					window.close();
+				}
+			},
+			error: function() {
+				swal({
+					title: "인강인강",
+					text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+		});
+	}
+})
+</script>
 </body>
 </html>

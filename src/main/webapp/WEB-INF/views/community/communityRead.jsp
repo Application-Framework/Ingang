@@ -19,10 +19,9 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
-	<script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 
 </head>
 
@@ -53,16 +52,29 @@
 							<h2>${cbReadPage.title}</h2>
 							<ul class="blog-info-link mt-3 mb-4">
 								<li><a href="#"><i class="fa fa-user"></i> ${cbReadPage.m_id}</a></li>
-								<li><a href="#">조회수 ${cbReadPage.hit}</a></li>
+								<c:choose>
+									<c:when test="${hitReadPage eq 1}"> 
+										<li><a  href="#">조회수 ${cbReadPage.hit+1}</a></li>
+									</c:when>
+									<c:otherwise> 
+										<li><a  href="#">조회수 ${cbReadPage.hit}</a></li>
+									 </c:otherwise>
+								</c:choose>
+								
 								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
+								
+								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
+									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${classify})"><i class="far fa-edit"></i> 수정</a></li>
+									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
+								</c:if>
 							</ul>
 							<P>
 								${cbReadPage.content}
 							</P>
 						</div>
 					</div>
-					<div class="comments-area">
-						<h4>05 댓글</h4>
+					<div class="comments-area" style="padding: 20px 0px" id="replyList">
+						<h4><a name="target"><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.</a></h4>
 						<div class="comment-list">
 							<div >
 							<c:forEach var="cbrList" items="${cbrList}">
@@ -71,11 +83,15 @@
 										<img alt="" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
 									</div>
 									<div class="desc">
-										<div class="">
+										<div>
 											<div class="d-flex align-items-center">
-														<ul class="blog-info-link mt-3 mb-4">
+												<ul class="blog-info-link mt-3 mb-4">
 													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
 													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
+													<c:if test="${sessionScope.member.getM_no() eq cbrList.m_no}">
+														<li><a href="javascript:void(0)" onclick="replyEdit(${cbrList.cbr_no}, '${cbrList.content}')"><i class="far fa-edit"></i> 수정</a></li>
+														<li><a href="javascript:void(0)" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
+													</c:if>
 												</ul>
 											</div>
 										</div>
@@ -88,31 +104,53 @@
 							</div>
 						</div>
 					</div>
-					<div class="comment-form">
-						<h4>댓글</h4>
-						<form class="form-contact comment_form" action="#" id="commentForm">
-							<div class="row">
-								<div class="col-12">
-									<div class="form-group">
-										<textarea class="form-control w-100" name="comment" id="comment" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
+					<div class="comment-form" id="replyTop">
+						<c:choose>
+							<c:when test="${member ne null}"> 
+							<h4>댓글</h4>
+								<form class="form-contact comment_form" id="commentForm" method="POST">
+									<div class="row">
+										<div class="col-12">
+											<input type="hidden" id="cb_no" name="cb_no" value="${cbReadPage.cb_no}">
+											<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
+											<div class="form-group">
+												<textarea class="form-control w-100" name="content" id="content" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<div class="form-group" align="right">
-								<button type="submit" class="button button-contactForm btn_1 boxed-btn">작성</button>
-							</div>
-						</form>
+									<div class="form-group" align="right">
+										<button type="button"  id="btnReplyWrite" class="button button-contactForm btn_1 boxed-btn">작성</button>
+									</div>
+								</form>
+							</c:when>
+							<c:otherwise>
+								<div align="center"><a href="loginPageView">
+									<button type="button"  class="button button-contactForm btn_1 boxed-btn" style="width: 80%;">로그인 후, 댓글 작성이 가능합니다!</button>
+									</a>
+								</div><br>
+							</c:otherwise>
+						</c:choose>
 					</div>
 				</div>
-				<div class="col-lg-2">
-					<ul>
-						<li>
-							<button class="genric-btn danger-border radius"> <i class="fa fa-heart"></i> 6</button>
-						</li><br>
-						<li>
-							<button class="genric-btn danger-border radius"> 댓글</button>
-						</li>
-					</ul>
+				<div class="col-lg-2" id="sidebox">
+					<div id="heartDiv">
+						<ul>
+							<c:choose>
+								<c:when test="${member ne null && boardLikeCheck eq 1}"> 
+									<li><button class="genric-btn danger-border radius" id="subtractGood"> <i class="fas fa-heart"></i> ${cbReadPage.good}</button></li>
+								</c:when>
+								<c:when test="${member ne null && boardLikeCheck ne 1}">
+									<li><button class="genric-btn danger-border radius" id="addGood"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+								</c:when>
+								<c:otherwise> 
+									<li><button class="genric-btn danger-border radius" id="buttonNoLogin"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
+								 </c:otherwise>
+							</c:choose>
+							<li style="margin-top: 10px;">
+								<a href="javascript:pageReplyScroll();" target="_self"><button class="genric-btn danger-border radius">댓글</button></a>
+							</li>
+						</ul>
+					</div>
 				</div>
 			</div>
 		</div>
@@ -120,9 +158,255 @@
 			<!--================ Blog Area end =================-->
 	<%------------ footer section  ------------%>
 	<jsp:include page="../fix/footer.jsp" />
+	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+<%-- Jquery Plugins, main Jquery --%>
+<script src="<c:url value='/resources/js/plugins.js'/>"></script>
+<script src="<c:url value='/resources/js/main.js'/>"></script>
+<script>
+$('#addGood').click(function(){
+	console.log("asdsd");
+	$.ajax({
+		url: "addGoodCommunityBoard",
+		type: "GET",
+		data: {'cb_no':${cbReadPage.cb_no}},
+		success: function() {
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			//location.href = reLoadUrl;
+		}
+	});
+});
 
-	<%-- Jquery Plugins, main Jquery --%>
-	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-	<script src="<c:url value='/resources/js/main.js'/>"></script>
+$('#subtractGood').click(function(){
+	console.log("asdsdsdsd");
+	$.ajax({
+		url: "subtractGoodCommunityBoard",
+		type: "GET",
+		data: {'cb_no':${cbReadPage.cb_no}},
+		success: function() {
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+		}
+	});
+});
+
+$('#buttonNoLogin').click(function(){
+	swal({
+		title: "로그인",
+		text: "로그인이 되어야 좋아요가 가능합니다.",
+		icon: "warning",
+	});
+});
+
+$('#btnReplyWrite').click(function() {
+	var m_no = $("#m_no").val();
+	var content = $("#content").val();
+	var param = {'m_no': m_no , 'content': content, 'cb_no': $("#cb_no").val()};
+	
+	if(!content) {
+		swal({
+			title: "댓글작성",
+			text: "내용이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	else {
+		$.ajax({
+			url: "writeReplyCommunityBoard",
+			type: "POST",
+			data: param,
+			success: function(data) {
+				if (data != 1) {
+					swal({
+						title: "댓글작성",
+						text: "댓글 등록이 실패하였습니다.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+				else {
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+					location.href = reLoadUrl;
+				}
+			},
+			error: function() {
+				swal({
+					title: "인강인강",
+					text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+		});
+	}
+})
+
+// 게시글 댓글 삭제
+function replyDelete(cbr_no) {
+	$.ajax({
+		url: "deleteReplyCommunityBoard",
+		type: "POST",
+		data:  {'cbr_no': cbr_no},
+		success: function(data) {
+			if (data != 1) {
+				swal({
+					title: "댓글삭제",
+					text: "댓글 삭제가 실패하였습니다.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+			else {
+				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+				location.href = reLoadUrl;
+			}
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+}
+
+/* 여행 포토 댓글 수정 */
+function replyEdit(cbr_no, reply) {
+	var htmls = "";
+	
+	htmls += '<form action="travelreplyModify" method="POST" class="contact-one__form">';
+	htmls += '<div class="input-group">';
+	htmls += '<textarea id="replyEditContent" name="Content" placeholder="댓글을 입력하세요..." cols="100">'+reply+'</textarea>';
+	htmls += '<button id="btnReplyModify" name="btnReplyModify" class="thm-btn-psd2" type="button" onclick="replySave('+cbr_no+')">등록</button>';
+	htmls += '<button class="thm-btn-psd2" type="button" onclick="replyCancel(' + cbr_no + ', \'' + reply + '\')">취소</button>';
+	htmls += '</div>';
+	htmls += '</form>';
+	
+	$("#replyContentSection"+cbr_no).html(htmls);
+	$('#replyEditContent').focus();
+}
+
+/* 여행 포토 댓글 수정 취소 */
+function replyCancel(cbr_no, reply) {
+	var htmls = "";
+	
+	htmls += reply;
+	
+	$("#replyContentSection"+cbr_no).html(htmls);
+}
+
+/* 여행 포토 댓글 수정 등록 */
+function replySave(cbr_no) {
+	var Content = $("#replyEditContent").val();
+	var param = {'Content': Content, 'cbr_no': cbr_no};
+	
+	if(!Content) {
+		swal({
+			title: "여행포토",
+			text: "댓글이 입력되지 않았습니다.",
+			icon: "warning",
+			timer: 3000
+		});
+		return false;
+	}
+	else {
+		$.ajax({
+			url: "travelreplyModify",
+			type: "POST",
+			data: param,
+			success: function(data) {
+				if (data != 1) {
+					swal({
+						title: "댓글수정",
+						text: "댓글 수정이 실패하였습니다.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+				else {
+					swal({
+						title: "댓글수정",
+						text: "댓글이 성공적으로 수정되었습니다.",
+						icon: "success",
+						buttons : {
+							confirm : {
+								value : true
+							}
+						}
+					}).then((result) => {
+						if(result) {
+							location.reload();
+						}
+					});
+				}
+			},
+			error: function() {
+				swal({
+					title: "댓글수정",
+					text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+		});
+	}
+}
+
+//게시글 삭제
+function boardDelete(cb_no) {
+	$.ajax({
+		url: "deleteCommunityBoard",
+		type: "POST",
+		data:  {'cb_no': cb_no},
+		success: function(data) {
+			if (data != 1) {
+				swal({
+					title: "글삭제",
+					text: "글 삭제가 실패하였습니다.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+			else {
+				var reLoadUrl = "/communityChats";
+				location.href = reLoadUrl;
+			}
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+}
+
+//게시글 수정
+function buttonModify(cb_no, classify) {
+	var urlModify = "modfiyPageCommunityBoard?cb_no=" + cb_no+ "&classify=" + classify;
+	var popup = window.open(urlModify , '게시글수정' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+}
+
+/*우측 사이드바*/
+var target = document.getElementById("replyTop");
+var abTop =  target.getBoundingClientRect().top;
+//console.log(abTop);
+function pageReplyScroll() {
+	window.scrollTo( 0, abTop);
+}
+
+var currentPosition = parseInt($("#sidebox").css("top"));
+$(window).scroll(function(){
+	var position = $(window).scrollTop();
+	$("#sidebox").stop().animate({"top":position+currentPosition+"px"},1000);
+});
+</script>
 </body>
 </html>

@@ -5,9 +5,10 @@
 
 	<!-- 자유게시판 최신순 출력 -->
 	<select id="getCommunityBoardChatRegDateShowPage" resultType="hashMap">
-		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
+		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
+				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				m_id
 		FROM community_board cb, member m
 		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
 		GROUP BY cb_no 
@@ -16,20 +17,26 @@
 	
 	<!-- 자유게시판 좋아요순 출력 -->
 	<select id="getCommunityBoardChatGoodShowPage" resultType="hashMap">
-		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
+		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`
+				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				m_id
 		FROM community_board cb, member m
 		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
 		GROUP BY cb_no 
 		order by good DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
+	<!-- 게시판 총 갯수 -->
+	<select id="getCommunityBoardTotalCount" resultType="int">
+		SELECT COUNT(*) FROM community_board WHERE flag = 1 AND classify = 1;
+	</select>
+	
 	<!-- 게시판 상세페이지 출력 -->
 	<select id="getReadCommunityBoard" resultType="hashMap">
 		SELECT cb.*, 
-				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
 				m_id
 		FROM community_board cb, member m
 		WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify}
@@ -42,10 +49,69 @@
 		WHERE cb_no = #{cb_no} AND m.m_no = cbr.m_no
 	</select>
 	
-	<!-- 게시판 총 갯수 -->
-	<select id="getCommunityBoardTotalCount" resultType="int">
-		SELECT COUNT(*) FROM community_board WHERE flag = 1 AND classify = 1;
+	<!-- 조회수 증가 -->
+	<update id="addReadCommunityBoardHit">
+		UPDATE community_board
+		SET hit = hit + 1
+		WHERE cb_no = #{cb_no}; 
+	</update>
+	
+	<!-- 회원 좋아요 체크 -->
+	<select id="getGoodCheckReadCommunityBoard" resultType="int">
+		SELECT COUNT(*)
+		FROM community_board_good
+		WHERE cb_no = #{cb_no} AND  m_no = #{m_no};
 	</select>
+	
+	<!-- 좋아요 추가 -->
+	<insert id="addGoodReadCommunityBoard">
+		INSERT INTO community_board_good(cb_no, m_no)
+		VALUES(#{cb_no}, #{m_no})
+	</insert>
+	
+	<!-- 좋아요 삭제 -->
+	<delete id="subtractGoodReadCommunityBoard">
+		DELETE FROM community_board_good
+		WHERE cb_no = #{cb_no} AND m_no = #{m_no}
+	</delete>
+	
+	<!--게시글 댓글 작성  -->
+	<insert id="writeReplyCommunityBoard">
+		INSERT INTO community_board_reply(cb_no, m_no, content, reg_date)
+		VALUES(#{cb_no}, #{m_no}, #{content} ,NOW());
+	</insert>
+	
+	<!--게시글 댓글 수정  -->
+	<update id="updateReplyCommunityBoard">
+		UPDATE community_board_reply
+		SET content = #{content}
+		WHERE m_no = #{m_no}; 
+	</update>
+	
+	<!--게시글 댓글 삭제  -->	
+	<delete id="deleteReplyCommunityBoard">
+		DELETE FROM community_board_reply
+		WHERE cbr_no = #{cbr_no}
+	</delete>
+	
+	<!--게시글 작성-->
+	<insert id="writeCommunityBoard">
+		INSERT INTO community_board(oli_no, m_no, title, content, hit, reg_date, classify, flag)
+		VALUES(0, #{m_no}, #{title}, #{content}, 0, NOW(), #{classify}, 1);
+	</insert>
+	
+	<!--게시글 삭제  -->	
+	<delete id="deleteCommunityBoard">
+		DELETE FROM community_board
+		WHERE cb_no = #{cb_no}
+	</delete>
+	
+	<!--게시글 댓글 수정  -->
+	<update id="updateCommunityBoard">
+		UPDATE community_board
+		SET title = #{title}, content = #{content}, classify = #{classify}
+		WHERE cb_no = #{cb_no}; 
+	</update>
 	
 	<sql id="SearchChatBoard">
 		<choose>
@@ -75,10 +141,4 @@
 		<include refid="SearchChatBoard"></include> 
 	</select>
 	
-	<!-- 내가 쓴 글 -->
-	<select id="myPostList" resultType="com.spring.ex.dto.CommunityBoardDTO">
-		select *
-		from community_board
-		where m_no = #{m_no}
-	</select>
 </mapper>

@@ -47,12 +47,12 @@
                                                     <li><a href="/">개인노트</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/community/chats">커뮤니티</a>
+                                            <li><a href="/communityChats">커뮤니티</a>
                                                 <ul class="submenu">
-                                                    <li><a href="/community/chats">자유게시판</a></li>
-                                                    <li><a href="/community/questions">질문&답변</a></li>
-                                                    <li><a href="/community/reviews">수강후기</a></li>
-                                                    <li><a href="/community/studies">스터디</a></li>
+                                                    <li><a href="/communityChats">자유게시판</a></li>
+                                                    <li><a href="/communityQuestions">질문&답변</a></li>
+                                                    <li><a href="/communityReviews">수강후기</a></li>
+                                                    <li><a href="/communityStudies">스터디</a></li>
                                                 </ul>
                                             </li>
                                             <!-- 로그인을 수행해야 마이페이지 보임 -->
