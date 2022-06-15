@@ -116,5 +116,6 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
 		return sqlSession.selectList(namespace + ".getTagCommunityBoard", cb_no);
 	}
+	
 
 }

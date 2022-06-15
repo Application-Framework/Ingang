@@ -17,7 +17,7 @@ public interface CommunityBoardDAO {
 	//게시판 최신순 출력
 	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Object> map) throws Exception;
 	
-	//게시판 최신순 출력
+	//게시판 좋아요순 출력
 	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception;
 	
 	//게시판 목록 총 갯수 - 페이징
@@ -61,5 +61,5 @@ public interface CommunityBoardDAO {
 	
 	//태그 출력
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
-
+	
 }

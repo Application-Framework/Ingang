@@ -38,12 +38,11 @@ public class CommunityController {
 	
 	@RequestMapping(value = "/communityChats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
-		//String searchTag = request.getParameter("searchTag");
 		String searchKeyword = request.getParameter("searchKeyword");
 		String[] searchTag = request.getParameterValues("searchTag");
-		String resUrl;
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
 		
+		map.put("checkClass", "chat");
 		
 		if (searchKeyword == null ){
 			map.put("searchKeyword", "noContent");
@@ -95,93 +94,15 @@ public class CommunityController {
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
-		model.addAttribute("test", cbService.getCommunityBoardTotalCount(map));
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
 		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
-		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/communityChats";
-	}
-	
-	@RequestMapping(value = "/testDo", method = RequestMethod.GET)
-	@ResponseBody
-	public int chatsPost(Model model, HttpServletRequest request) throws Exception{
-		//String searchTag = request.getParameter("searchTag");
-		String searchKeyword = request.getParameter("searchKeyword");
-		String[] searchTag = request.getParameterValues("searchTag");
-		int resUrl = 0;
-		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		
-		if (searchKeyword == null ){
-			resUrl = 1;
-			map.put("searchKeyword", "noContent");
-			System.out.println("No1 키워드");
-		} else if( searchKeyword =="null") {
-			map.put("searchKeyword", "noContent");
-			System.out.println("No2 키워드");
-		}else if(searchKeyword ==""){
-			map.put("searchKeyword", "noContent");
-			System.out.println("No3 키워드");
-		}else {
-			map.put("searchKeyword", searchKeyword);
-			resUrl = 1;
-			System.out.println("o 키워드 : " + searchKeyword);
-		}
-		if (searchTag == null) {
-			resUrl = 1;
-			map.put("searchTag","noTag");
-			System.out.println("noTag case1");
-		}else if(searchTag.length == 0) {
-			map.put("searchTag","noTag");
-			System.out.println("noTag  case2, 길이 :" + searchTag.length);
-			
-		} else {
-			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag + " / "+searchTag.length);
-			map.put("searchTag", searchTag);
-		}
-		
-	
-	/*	
-		if (searchKeyword == null && searchTag==null){
-			map.put("searchKeyword", "noContent");
-			map.put("searchTag","noTag");
-			System.out.println("1");
-			resUrl = "communityChats";
-		} else if(searchKeyword != null && searchTag==null) {
-			map.put("searchKeyword", searchKeyword);
-			map.put("searchTag","noTag");
-			System.out.println("2");
-			resUrl = "communityChats?searchKeyword=" + searchKeyword;
-		}else if(searchKeyword == null && searchTag!=null) {
-			map.put("searchKeyword", "noContent");
-			map.put("searchTag",searchTag);
-			System.out.println("3");
-			resUrl = "communityChats?searchTag=" + searchTag;
-		}else {
-			map.put("searchKeyword", searchKeyword);
-			map.put("searchTag",searchTag);
-			System.out.println("4");
-			resUrl = "communityChats?searchKeyword="+searchKeyword + "&searchTag=" + searchTag;
-		}*/
-		
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
-		map.put("Page",  pagingService.getNowPage());
-		map.put("PageSize", 10);
-		model.addAttribute("test", cbService.getCommunityBoardTotalCount(map));
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
-		
-		model.addAttribute("cbTag", cbService);
-		model.addAttribute("cbRegDateList", cbRegDateList);
-		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
-		model.addAttribute("Paging", pagingService.getPaging());
-		
-		
-		return  resUrl;
 	}
 	
 	//게시글 상세 페이지
@@ -375,11 +296,50 @@ public class CommunityController {
 	}
 	
 	
-	@RequestMapping("/communityQuestions")
-	public String questions() throws Exception {
+	@RequestMapping(value = "/communityQuestions", method = RequestMethod.GET)
+	public String questions(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		String checkClass = request.getParameter("checkClassify");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
 		
+		if(checkClass == null) {
+			map.put("checkClass", "questionAll");
+		}else if(checkClass.equals("noSolution")){
+			map.put("checkClass", "noSolution");
+		}else if(checkClass.equals("yesSolution")) {
+			map.put("checkClass", "yesSolution");
+		}else {
+			map.put("checkClass", "questionAll");
+		}
 		
-		//System.out.println(cbService.getCommunityBoardTotalCount());
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		if (searchTag == null) {
+			map.put("searchTag","noTag");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+		} else {
+			map.put("searchTag", searchTag);
+		}
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		
+		model.addAttribute("cbTag", cbService);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
+		model.addAttribute("Paging", pagingService.getPaging());
 		return "community/communityQuestions";
 	}
 	

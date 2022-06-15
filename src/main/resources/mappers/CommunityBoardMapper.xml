@@ -3,7 +3,7 @@
 
 <mapper namespace="com.spring.ex.CommunityBoardMapper">
 
-	<!-- 자유게시판 최신순 출력 -->
+	<!-- 게시판 최신순 출력 -->
 	<select id="getCommunityBoardChatRegDateShowPage" resultType="hashMap">
 		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
@@ -12,12 +12,14 @@
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
 								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
 				,member m
-		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1 <include refid="searchBoard"></include>
+		WHERE m.m_no = cb.m_no AND flag = 1 
+		<include refid="classifyBoard"></include>
+		<include refid="searchBoard"></include>
 		GROUP BY cb_no 
 		order by cb.reg_date DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
-	<!-- 자유게시판 좋아요순 출력 -->
+	<!-- 게시판 좋아요순 출력 -->
 	<select id="getCommunityBoardChatGoodShowPage" resultType="hashMap">
 		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
@@ -26,9 +28,11 @@
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
 								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
 			,member m
-		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1 <include refid="searchBoard"></include>
+		WHERE m.m_no = cb.m_no AND flag = 1
+		<include refid="classifyBoard"></include>
+		<include refid="searchBoard"></include>
 		GROUP BY cb_no 
-		order by good DESC LIMIT #{Page}, #{PageSize};
+		order by good DESC  LIMIT #{Page}, #{PageSize};
 	</select>
 	
 	<!-- 태그 출력 -->
@@ -43,7 +47,7 @@
 		SELECT COUNT(*) 
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
 								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
-		WHERE flag = 1 AND classify = 1 <include refid="searchBoard"></include> 
+		WHERE flag = 1 <include refid="classifyBoard"></include><include refid="searchBoard"></include> 
 	</select>
 	
 	<!-- 게시판 상세페이지 출력 -->
@@ -150,5 +154,31 @@
 			</when>
 		</choose>
 	</sql>
+	<sql id="classifyBoard">
+		<choose>
+			<when test="checkClass == 'chat'">
+				AND classify = 1
+			</when>
+			<when test="checkClass == 'questionAll'">
+				AND (classify = 2 OR classify = 3)
+			</when>
+			<when test="checkClass == 'noSolution'">
+				AND classify = 2 
+			</when>
+			<when test="checkClass == 'yesSolution'">
+				AND classify = 3
+			</when>
+			<when test="checkClass == 'studieAll'">
+				AND (classify = 4 OR classify = 5)
+			</when>
+			<when test="checkClass == 'offerStudie'">
+				AND classify = 4 
+			</when>
+			<when test="checkClass == 'overOfferStudie'">
+				AND classify = 5
+			</when>
+		</choose>
+	</sql>
+	
 	
 </mapper>

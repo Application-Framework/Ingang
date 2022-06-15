@@ -114,4 +114,5 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
 		return dao.getTagCommunityBoard(cb_no);
 	}
+	
 }
