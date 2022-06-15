@@ -7,17 +7,19 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dao.CourseDAO;
-import com.spring.ex.dao.CourseLikeDAO;
-import com.spring.ex.dao.CourseReplyDAO;
-import com.spring.ex.dao.CourseTagDAO;
-import com.spring.ex.dao.CourseVideoDAO;
 import com.spring.ex.dao.TeacherDAO;
-import com.spring.ex.dto.CourseDTO;
-import com.spring.ex.dto.CourseReplyDTO;
-import com.spring.ex.dto.CourseTagDTO;
-import com.spring.ex.dto.CourseVideoDTO;
+import com.spring.ex.dao.course.CourseDAO;
+import com.spring.ex.dao.course.CourseLikeDAO;
+import com.spring.ex.dao.course.CourseReplyDAO;
+import com.spring.ex.dao.course.CourseTagDAO;
+import com.spring.ex.dao.course.CourseVideoDAO;
+import com.spring.ex.dao.course.HistoryOrderLectureDAO;
 import com.spring.ex.dto.TeacherDTO;
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
+import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -39,6 +41,9 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private CourseVideoDAO courseVideoDAO;
+	
+	@Inject
+	private HistoryOrderLectureDAO historyOrderLectureDAO;
 	
 	@Override
 	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map) {
@@ -124,4 +129,20 @@ public class CourseServiceImpl implements CourseService {
 	public CourseVideoDTO getCourseVideo(int olv_no) {
 		return courseVideoDAO.getCourseVideo(olv_no);
 	}
+
+	@Override
+	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto) {
+		return historyOrderLectureDAO.insertHistoryOrderLecture(dto);
+	}
+	
+	@Override
+	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no) {
+		return historyOrderLectureDAO.getHistoryOrderLectureByOli_noM_no(oli_no, m_no);
+	}
+	
+	@Override
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no) {
+		return historyOrderLectureDAO.getHistoryOrderLectureList(m_no);
+	}
+
 }

@@ -26,6 +26,11 @@
 			color: #635c5c;
 			text-decoration: none;
 		}
+		
+		a:hover {
+			color: #000000; 
+		}
+		
 	</style>
 </head>
 <body>
@@ -62,7 +67,7 @@
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">가격</label>
    				<div class="col-sm-2">
-    				<input type="text" class="form-control" name="price" required/>
+    				<input type="number" class="form-control" name="price" required/>
     			</div>
     		</div>
     		
@@ -77,21 +82,21 @@
     			<textarea class="form-control fs-5" name="content" placeholder="강의 소개 내용" rows="10"></textarea>
     		</div>
     		
-    		<div class="row mb-4">
+    		<div class="row mb-4" id="videoSection">
     			<div class="fs-4 mb-2">강의 동영상</div>
     			<div class="row ps-4 pb-2">
-    				<div class="col-2">
+    				<div class="col-2 d-flex align-items-center">
     					<label>동영상 제목</label>
     				</div>
-    				<div class="col-10">
+    				<div class="col-8 d-flex align-items-center">
     					<label>주소</label>
     				</div>
-    				<div class="col-2">
-   						<input type="text" class="form-control" name="video_titles" required/>
+    				<div class="col-1 fs-2">
+    					<a href="javascript:;" onclick="addVideoSlot()"><i class="bi bi-plus-circle"></i></a>
     				</div>
-    				<div class="col-10">
-    				 	<input type="text" class="form-control" name="video_paths" required/>
-    				 </div>
+    				<div class="col-1 fs-2">
+    					<a href="javascript:;" onclick="removeVideoSlot()"><i class="bi bi-dash-circle"></i></a>
+    				</div>
     			</div>
     			<div class="row ps-4 pb-2">
     				<div class="col-2">
@@ -246,6 +251,19 @@
 	            renderChoiceLimit:10
 	        }); 
 	    });
+	    
+	    var cnt = 0;
+	    
+	    function addVideoSlot() {
+	    	cnt = cnt + 1;
+	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' required/></div></div>");
+	    }
+	    
+	    function removeVideoSlot() {
+	    	$('#v_'+cnt).remove();
+	    	cnt = cnt - 1;
+	    }
+	    
     </script>
 </body>
 </html>

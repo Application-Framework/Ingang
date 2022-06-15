@@ -7,11 +7,11 @@
 	<!-- index 강의댓글  띄우기 start -->
 	<!-- 강의 댓글 -->
 	<!-- 등록 후 하루이내 작성된 댓글 출력 -->
-	<select id="live_replyList" resultType="com.spring.ex.dto.CourseReplyDTO">
-		select olr.oli_no, olr.m_no, olr.star_rating, olr.content, olr.reg_date, m.m_name, m.m_id
-		from online_lecture_reply olr, member m
-		where olr.reg_date >= DATE_ADD(NOW(),INTERVAL -1 DAY) and olr.m_no=m.m_no
-		order by olr.reg_date desc
+	<select id="live_replyList" resultType="CourseReplyDTO">
+		select oli_no, m_no, star_rating, content, reg_date
+		from online_lecture_reply
+		where reg_date >= DATE_ADD(NOW(),INTERVAL -1 DAY)
+		order by reg_date desc
 		limit 0,8
 	</select>
 	

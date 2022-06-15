@@ -2,7 +2,7 @@ package com.spring.ex.service;
 
 import java.util.List;
 
-import com.spring.ex.dto.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 public interface LiveCourseReplyService {
 	

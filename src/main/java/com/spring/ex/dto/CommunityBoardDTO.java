@@ -3,13 +3,14 @@ package com.spring.ex.dto;
 public class CommunityBoardDTO {
 	private int cb_no;
 	private int m_no;
+	private int oli_no;
 	private String title;
 	private String content;
 	private int hit;
 	private String img_path;
-	private String reg_date;
+	private Object reg_date;
 	private String classify;
-	private int enable;
+	private int flag;
 	
 	public int getCb_no() {
 		return cb_no;
@@ -47,7 +48,7 @@ public class CommunityBoardDTO {
 	public void setImg_path(String img_path) {
 		this.img_path = img_path;
 	}
-	public String getReg_date() {
+	public Object getReg_date() {
 		return reg_date;
 	}
 	public void setReg_date(String reg_date) {
@@ -59,17 +60,17 @@ public class CommunityBoardDTO {
 	public void setClassify(String classify) {
 		this.classify = classify;
 	}
-	public int getEnable() {
-		return enable;
+	public int getflag() {
+		return flag;
 	}
-	public void setEnable(int enable) {
-		this.enable = enable;
+	public void setflag(int flag) {
+		this.flag = flag;
 	}
-	@Override
-	public String toString() {
-		return "CommunityBoardDTO [cb_no=" + cb_no + ", m_no=" + m_no + ", title=" + title + ", content=" + content
-				+ ", hit=" + hit + ", img_path=" + img_path + ", reg_date=" + reg_date + ", classify=" + classify
-				+ ", enable=" + enable + "]";
+	public int getOli_no() {
+		return oli_no;
+	}
+	public void setOli_no(int oli_no) {
+		this.oli_no = oli_no;
 	}
 	
 	

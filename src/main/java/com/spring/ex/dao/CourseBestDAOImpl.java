@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.CourseDTO;
+import com.spring.ex.dto.course.CourseDTO;
 
 
 @Repository
@@ -22,7 +22,7 @@ public class CourseBestDAOImpl implements CourseBestDAO{
 	public List<CourseDTO> thisweek_bestCourseList() throws Exception {
 		return sqlSession.selectList(namespace + ".thisweek_bestCourseList");
 	}
-
+	
 	// 신규 강의
 	@Override
 	public List<CourseDTO> thisweek_newCourseList() throws Exception {

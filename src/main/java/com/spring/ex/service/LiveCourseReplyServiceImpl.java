@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.LiveCourseReplyDAO;
-import com.spring.ex.dto.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
 public class LiveCourseReplyServiceImpl implements LiveCourseReplyService {

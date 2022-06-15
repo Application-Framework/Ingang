@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dto.CourseDTO;
+import com.spring.ex.dto.course.CourseDTO;
 
 
 @Service

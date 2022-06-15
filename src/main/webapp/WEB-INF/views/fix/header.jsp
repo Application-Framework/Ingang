@@ -28,32 +28,31 @@
                                         <ul id="navigation">
                                             <li><a href="/courses">강의</a>
                                             	<ul class="submenu">
-                                                    <li><a href="/">강의전체</a></li>
-                                                    <li><a href="/">웹 개발</a></li>
-                                                    <li><a href="/">프론트엔드</a></li>
-                                                    <li><a href="/">백엔드</a></li>
-                                                    <li><a href="/">프로그래밍 언어</a></li>
-                                                    <li><a href="/">데이터베이스</a></li>
-                                                    <li><a href="/">알고리즘ㆍ자료구조</a></li>
-                                                    <li><a href="/">모바일 앱 개발</a></li>
-                                                    <li><a href="/">A.I</a></li>
-                                                    <li><a href="/">보안</a></li>
-                                                    <li><a href="/">기타</a></li>
+                                                    <li><a href="/courses">강의전체</a></li>
+                                                    <li><a href="/courses/web-dev">웹 개발</a></li>
+                                                    <li><a href="/courses/front-end">프론트엔드</a></li>
+                                                    <li><a href="/courses/back-end">백엔드</a></li>
+                                                    <li><a href="/courses/programming-lang">프로그래밍 언어</a></li>
+                                                    <li><a href="/courses/database-dev">데이터베이스</a></li>
+                                                    <li><a href="/courses/algorithm">알고리즘ㆍ자료구조</a></li>
+                                                    <li><a href="/courses/mobile-app">모바일 앱 개발</a></li>
+                                                    <li><a href="/courses/artificial-intelligence">A.I</a></li>
+                                                    <li><a href="/courses/security">보안</a></li>
                                                 </ul>
                                             </li>
                                             <li><a href="/notes">노트</a>
                                             	<ul class="submenu">
-                                                    <li><a href="/">노트전체</a></li>
+                                                    <li><a href="/notes">노트전체</a></li>
                                                     <li><a href="/">팀노트</a></li>
                                                     <li><a href="/">개인노트</a></li>
                                                 </ul>
                                             </li>
-                                            <li><a href="/community/chats">커뮤니티</a>
+                                            <li><a href="/communityChats">커뮤니티</a>
                                                 <ul class="submenu">
-                                                    <li><a href="/community/chats">자유게시판</a></li>
-                                                    <li><a href="/community/questions">질문&답변</a></li>
-                                                    <li><a href="/community/reviews">수강후기</a></li>
-                                                    <li><a href="/community/studies">스터디</a></li>
+                                                    <li><a href="/communityChats">자유게시판</a></li>
+                                                    <li><a href="/communityQuestions">질문&답변</a></li>
+                                                    <li><a href="/communityReviews">수강후기</a></li>
+                                                    <li><a href="/communityStudies">스터디</a></li>
                                                 </ul>
                                             </li>
                                             <!-- 로그인을 수행해야 마이페이지 보임 -->

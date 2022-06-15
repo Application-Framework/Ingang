@@ -7,7 +7,7 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.CourseBestDAO;
-import com.spring.ex.dto.CourseDTO;
+import com.spring.ex.dto.course.CourseDTO;
 
 @Service
 public class CourseBestServiceImpl implements CourseBestService {

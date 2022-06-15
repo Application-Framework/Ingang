@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Repository
 public interface LiveCourseReplyDAO {

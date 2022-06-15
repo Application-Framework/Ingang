@@ -5,11 +5,12 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dto.CourseDTO;
-import com.spring.ex.dto.CourseReplyDTO;
-import com.spring.ex.dto.CourseTagDTO;
-import com.spring.ex.dto.CourseVideoDTO;
 import com.spring.ex.dto.TeacherDTO;
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
+import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public interface CourseService {
@@ -62,4 +63,13 @@ public interface CourseService {
 	
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
+	
+	// 강의 구매 기록 등록
+	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto);
+
+	// 강의 구매 기록 가져오기
+	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no);
+	
+	// 강의 구매 기록 리스트 가져오기
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no);
 }

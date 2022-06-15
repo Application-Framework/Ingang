@@ -209,7 +209,7 @@ public class MyPageController {
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		list = cbService.myPostList(m_no);
+		//list = cbService.myPostList(m_no);
 		
 		model.addAttribute("cbList", list);
 		
