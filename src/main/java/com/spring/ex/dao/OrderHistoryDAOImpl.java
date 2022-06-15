@@ -40,4 +40,16 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
 		
 		return sqlSession.selectList(namespace + ".searchMyPurcaseCourses", data);
 	}
+
+	// 노트 구매 내역
+	@Override
+	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception {
+		return sqlSession.selectList(namespace + ".myPurchaseNoteList", m_no);
+	}
+	
+	// 노트 관심 내역
+	@Override
+	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception {
+		return sqlSession.selectList(namespace + ".myPurchaseNoteList", m_no);
+	}
 }

@@ -55,7 +55,7 @@ public class LoginController {
 		
 		service.signUp(dto);
 		
-		return "/";
+		return "redirect:/";
 	}	
 	
 	// 아이디 중복 체크

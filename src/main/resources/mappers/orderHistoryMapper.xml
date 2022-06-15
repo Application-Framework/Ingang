@@ -34,4 +34,23 @@
 		order by hol.payment_date desc
 	</select>
 	
+	<!-- 노트 구매 내역 -->
+	<!-- <select id="myPurcaseCourses" resultType="HashMap">
+		select hol.oli_no, hol.m_no, hol.payment, hol.payment_date,
+				oli.oli_no, oli.title, oli.img_path, oli.price, olt.name
+		from history_order_note hon, online_lecture_introduction oli, online_lecture_teacher olt
+		where hol.m_no = #{m_no} and hol.oli_no = oli.oli_no
+		group by hon.hon_no
+		order by hon.payment_date desc
+	</select> -->
+	
+	<!-- 노트 강의 내역 -->
+	<!-- <select id="myInterestCourses" resultType="HashMap">
+		select 	oli.oli_no, oli.title, oli.img_path, oli.price, olt.name, oll.reg_date
+		from history_order_note hon, online_lecture_teacher olt, online_lecture_like oll
+		where oll.m_no = #{m_no} and oll.oli_no = oli.oli_no
+		group by hon.oli_no
+		order by hon.reg_date desc
+	</select> -->
+	
 </mapper>

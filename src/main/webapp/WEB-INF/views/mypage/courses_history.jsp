@@ -158,8 +158,8 @@
 									data-bs-toggle="dropdown"> <i class="fa fa-laptop me-2"></i>회원정보
 								</a>
 								<div class="dropdown-menu bg-transparent border-0">
-									<a href="/mypage" class="dropdown-item">정보수정</a> 
-									<a href="/mypage" class="dropdown-item">회원탈퇴</a>
+									<a href="/my_update" class="dropdown-item">정보수정</a> 
+									<a href="/my_delete" class="dropdown-item">회원탈퇴</a>
 								</div>
 							</div>
 							<div class="nav-item dropdown">
@@ -270,15 +270,15 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 	
 	<script>
-	$(function(){
-		$('.tabcontent > div').hide();
-		$('.tabnav a').click(function () {
-			$('.tabcontent > div').hide().filter(this.hash).fadeIn();
-			$('.tabnav a').removeClass('active');
-			$(this).addClass('active');
-			return false;
-		}).filter(':eq(0)').click();
-	});
-</script>
+		$(function(){
+			$('.tabcontent > div').hide();
+			$('.tabnav a').click(function () {
+				$('.tabcontent > div').hide().filter(this.hash).fadeIn();
+				$('.tabnav a').removeClass('active');
+				$(this).addClass('active');
+				return false;
+			}).filter(':eq(0)').click();
+		});
+	</script>
 </body>
 </html>

@@ -32,4 +32,14 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 	public List<PurchaseCourseDTO> searchMyPurcaseCourses(Integer m_no, String keyword) throws Exception {
 		return dao.searchMyPurcaseCourses(m_no, keyword);
 	}
+
+	@Override
+	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception {
+		return dao.myPurchaseNoteList(m_no);
+	}
+
+	@Override
+	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception {
+		return dao.myPurchaseNoteList(m_no);
+	}
 }

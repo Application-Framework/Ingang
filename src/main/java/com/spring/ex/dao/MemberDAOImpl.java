@@ -4,7 +4,6 @@ import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.MemberDTO;
 
@@ -35,7 +34,37 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberDTO login(MemberDTO dto) throws Exception {
 		return sql.selectOne(namespcae + ".login", dto);
 	}
-
+	
+	// 회원 정보수정
+	@Override
+	public void update(MemberDTO memberDTO) throws Exception {
+		sql.update(namespcae + ".update", memberDTO);
+	}
+	
+	// 회원 탈퇴
+	@Override
+	public void delete(MemberDTO memberDTO) throws Exception {
+		sql.delete(namespcae + ".delete", memberDTO);
+	}
+	
+	// 강의 구매 건수
+	@Override
+	public Integer countMyCourse(Integer m_no) throws Exception {
+		return sql.selectOne(namespcae + ".countMyCourse", m_no);
+	}
+	
+	// 노트 구매 건수
+	@Override
+	public Integer countMyNote(Integer m_no) throws Exception {
+		return sql.selectOne(namespcae + ".countMyNote", m_no);
+	}
+	
+	// 게시글 작성 건수
+	@Override
+	public Integer countMyPost(Integer m_no) throws Exception {
+		return sql.selectOne(namespcae + ".countMyPost", m_no);
+	}
+	
 	@Override
 	public String getNameByM_no(int m_no) throws Exception {
 		return sql.selectOne(namespcae + ".getNameByM_no", m_no);

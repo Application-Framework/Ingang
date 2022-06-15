@@ -12,6 +12,7 @@ public class MemberDTO {
 	private String m_phone;
 	private int m_authority;
 	private Date reg_date;
+	private String img_path;
 	
 	public int getM_no() {
 		return m_no;
@@ -66,5 +67,11 @@ public class MemberDTO {
 	}
 	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
+	}
+	public String getImg_path() {
+		return img_path;
+	}
+	public void setImg_path(String img_path) {
+		this.img_path = img_path;
 	}
 }

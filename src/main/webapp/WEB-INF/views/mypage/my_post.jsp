@@ -48,8 +48,8 @@
 									data-bs-toggle="dropdown"> <i class="fa fa-laptop me-2"></i>회원정보
 								</a>
 								<div class="dropdown-menu bg-transparent border-0">
-									<a href="/mypage" class="dropdown-item">정보수정</a> 
-									<a href="/mypage" class="dropdown-item">회원탈퇴</a>
+									<a href="/my_update" class="dropdown-item">정보수정</a> 
+									<a href="/my_delete" class="dropdown-item">회원탈퇴</a>
 								</div>
 							</div>
 							<div class="nav-item dropdown">

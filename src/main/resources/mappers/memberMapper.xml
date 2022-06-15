@@ -23,9 +23,44 @@
 		where m_id = #{m_id} and m_pw = #{m_pw}
 	</select>
 	
+	<!-- 회원 정보수정 -->
+	<update id="update">
+		update member
+			set	img_path = #{img_path}, m_phone = #{m_phone}
+		where m_id = #{m_id} and m_pw = #{m_pw}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="delete">
+		delete from member
+		where m_id = #{m_id} and m_pw = #{m_pw}
+	</delete>
+	
+	<!-- 강의 구매 건수 -->
+	<select id="countMyCourse" resultType="int">
+		select count(hol.oli_no)
+		from history_order_lecture hol
+		where hol.m_no = #{m_no}
+	</select>
+	
+	<!-- 노트 구매 건수 -->
+	<select id="countMyNote" resultType="int">
+		select count(hon.hon_no)
+		from history_order_note hon
+		where hon.m_no = #{m_no}
+	</select>
+	
+	<!-- 게시글 작성 건수 -->
+	<select id="countMyPost" resultType="int">
+		select count(cb_no)
+		from community_board
+		where m_no = #{m_no}
+	</select>
+	
 	<select id="getNameByM_no" resultType="string">
 		SELECT m_name
 		FROM member
 		WHERE m_no = #{m_no}
 	</select>
+	
 </mapper>

@@ -17,4 +17,11 @@ public interface OrderHistoryDAO {
 	
 	// 내 강의 목록
 	public List<PurchaseCourseDTO> searchMyPurcaseCourses(Integer m_no, String keyword) throws Exception;
+	
+	// 노트 구매 내역
+	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception;
+		
+	// 노트 관심 내역
+	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception;
+	
 }
