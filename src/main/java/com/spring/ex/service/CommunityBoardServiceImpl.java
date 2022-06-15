@@ -33,8 +33,8 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//게시판 목록 총 갯수 - 페이징
 	@Override
-	public int getCommunityBoardTotalCount() throws Exception {
-		return dao.getCommunityBoardTotalCount();
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardTotalCount(map);
 	}
 
 	//게시글 상세페이지 출력 

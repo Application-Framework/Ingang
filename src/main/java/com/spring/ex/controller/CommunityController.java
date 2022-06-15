@@ -41,44 +41,61 @@ public class CommunityController {
 		//String searchTag = request.getParameter("searchTag");
 		String searchKeyword = request.getParameter("searchKeyword");
 		String[] searchTag = request.getParameterValues("searchTag");
-		
+		String resUrl;
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
-		map.put("Page",  pagingService.getNowPage());
-		map.put("PageSize", 10);
+		
 		
 		if (searchKeyword == null ){
 			map.put("searchKeyword", "noContent");
-			System.out.println("No 키워드");
-			System.out.println(searchKeyword);
+			System.out.println("No1 키워드");
 		} else if( searchKeyword =="null") {
 			map.put("searchKeyword", "noContent");
-			System.out.println("No 키워드");
-			System.out.println(searchKeyword);
+			System.out.println("No2 키워드");
 		}else if(searchKeyword ==""){
 			map.put("searchKeyword", "noContent");
-			System.out.println("No 키워드");
-			System.out.println(searchKeyword);
+			System.out.println("No3 키워드");
 		}else {
 			map.put("searchKeyword", searchKeyword);
-			System.out.println("o 키워드");
-			System.out.println(searchKeyword);
+			System.out.println("o 키워드 : " + searchKeyword);
 		}
-		if (searchTag != null) {
-			int size = searchTag.length;
-			
-			for (int i = 0; i < size; i++) {
-				System.out.println(" a =" + searchTag[i]);
-			}
-			map.put("searchTag", searchTag);
-			System.out.println("Tag : " + searchTag);
-		}else {
+		if (searchTag == null) {
 			map.put("searchTag","noTag");
-			System.out.println("noTag");
+			System.out.println("noTag case1");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+			System.out.println("noTag  case2, 길이 :" + searchTag.length);
+		} else {
+			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag + " / "+searchTag.length);
+			map.put("searchTag", searchTag);
 		}
-		
-		
-		model.addAttribute("test", cbService.getCommunityBoardTotalCount());
+	
+		/*
+		if (searchKeyword == null && searchTag==null){
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag","noTag");
+			System.out.println("1");
+			resUrl = "community/communityChats";
+		} else if(searchKeyword != null && searchTag==null) {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag","noTag");
+			System.out.println("2");
+			resUrl = "community/communityChats?searchKeyword=" + searchKeyword;
+		}else if(searchKeyword == null && searchTag!=null) {
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag",searchTag);
+			System.out.println("3");
+			resUrl = "community/communityChats?searchTag=" + searchTag;
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag",searchTag);
+			System.out.println("4");
+			resUrl = "community/communityChats?searchKeyword="+searchKeyword + "&searchTag=" + searchTag;
+		}
+		*/
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		model.addAttribute("test", cbService.getCommunityBoardTotalCount(map));
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
@@ -88,6 +105,83 @@ public class CommunityController {
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/communityChats";
+	}
+	
+	@RequestMapping(value = "/testDo", method = RequestMethod.GET)
+	@ResponseBody
+	public int chatsPost(Model model, HttpServletRequest request) throws Exception{
+		//String searchTag = request.getParameter("searchTag");
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		int resUrl = 0;
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		if (searchKeyword == null ){
+			resUrl = 1;
+			map.put("searchKeyword", "noContent");
+			System.out.println("No1 키워드");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+			System.out.println("No2 키워드");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+			System.out.println("No3 키워드");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			resUrl = 1;
+			System.out.println("o 키워드 : " + searchKeyword);
+		}
+		if (searchTag == null) {
+			resUrl = 1;
+			map.put("searchTag","noTag");
+			System.out.println("noTag case1");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+			System.out.println("noTag  case2, 길이 :" + searchTag.length);
+			
+		} else {
+			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag + " / "+searchTag.length);
+			map.put("searchTag", searchTag);
+		}
+		
+	
+	/*	
+		if (searchKeyword == null && searchTag==null){
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag","noTag");
+			System.out.println("1");
+			resUrl = "communityChats";
+		} else if(searchKeyword != null && searchTag==null) {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag","noTag");
+			System.out.println("2");
+			resUrl = "communityChats?searchKeyword=" + searchKeyword;
+		}else if(searchKeyword == null && searchTag!=null) {
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag",searchTag);
+			System.out.println("3");
+			resUrl = "communityChats?searchTag=" + searchTag;
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag",searchTag);
+			System.out.println("4");
+			resUrl = "communityChats?searchKeyword="+searchKeyword + "&searchTag=" + searchTag;
+		}*/
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		model.addAttribute("test", cbService.getCommunityBoardTotalCount(map));
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		
+		model.addAttribute("cbTag", cbService);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
+		
+		return  resUrl;
 	}
 	
 	//게시글 상세 페이지
@@ -285,7 +379,7 @@ public class CommunityController {
 	public String questions() throws Exception {
 		
 		
-		System.out.println(cbService.getCommunityBoardTotalCount());
+		//System.out.println(cbService.getCommunityBoardTotalCount());
 		return "community/communityQuestions";
 	}
 	

@@ -12,12 +12,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
     
-    <!-- CSS here -->
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+<!-- CSS here -->
+<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
@@ -36,7 +36,7 @@
     	<div class="container">
 	    	<div style="padding: 20px;">
 	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">이야기를 나눠요</font></h4>
-	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요 ${test}</font> 
+	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요</font> 
 	    	</div>
     	</div>
     </div><br>
@@ -50,15 +50,15 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form>
+						<form id="searchForm" action="communityChats">
 							<div class="row">
 								<div class="col-lg-10" >
-									<input type="text" class="form-control" id="searchKeyword" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
 									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 									<ul id="tag-list"> </ul>
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
-									<input type="button" class="genric-btn danger-border radius"  id="btnSearch" value="검색" style="width: 100%;" >
+									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
 								</div>
 							</div>
 						</form>
@@ -90,7 +90,7 @@
 									</c:choose>
 							</ul>
 							
-							<div class="tab-content" id="heartDiv">
+							<div class="tab-content" id="contentDiv">
 								<div class="tab-pane fade show active" id="qwe">
 									<c:forEach var="cbList" items="${cbRegDateList}">
 										<article class="blog_item">
@@ -152,7 +152,7 @@
 
 
 					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination">
+						<ul class="pagination" id="pagingDiv">
 							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 							<c:choose>
 								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
@@ -165,7 +165,7 @@
 							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
 								<c:choose>
 									<c:when test="${i eq Paging.pageNo }">
-										<li class="page-item  active"> <a href="chats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item  active"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
@@ -232,36 +232,8 @@ $('#buttonNoLogin').click(function(){
 	});
 });
 
-$('#btnSearch').click(function() {
-	var searchKeyword = $("#searchKeyword").val();
-	var param = {'searchTag': tagArray , 'searchKeyword': searchKeyword};
-	console.log(tagArray);
-	console.log(searchKeyword);
-	$.ajax({
-		url: "communityChats",
-		type: "GET",
-		traditional: true,
-		data: param,
-		success: function(data) {
-			/*
-			var reLoadUrl = "/communityChats?searchKeyword="+searchKeyword+"&searchTag="tagArray;
-			location.href = reLoadUrl;
-			
-			*/
-			//location.href= "/courses"
-			var reLoadUrl = "/communityChats?searchKeyword=" + searchKeyword + "&searchTag=" + tagArray;
-			$("#heartDiv").load(reLoadUrl + " #heartDiv");
-		},
-		error: function() {
-			swal({
-				title: "인강인강",
-				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
-				icon: "error",
-				timer: 3000
-			});
-		}
-	});
-	
+$('#btnBoardSearch').click(function(){
+	$("#searchForm").submit();
 })
 
 </script>

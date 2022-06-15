@@ -35,8 +35,8 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//게시판 총 갯수
 	@Override
-	public int getCommunityBoardTotalCount() throws Exception {
-		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount") ;
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount", map) ;
 	}
 
 	//게시글 상세페이지 출력 

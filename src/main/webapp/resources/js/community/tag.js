@@ -2,6 +2,7 @@
   var tag = {};
   var counter = 0;
 
+
   // 태그를 추가한다.
   function addTag(value) {
     tag[counter] = value; // 태그를 Object 안에 추가
@@ -38,10 +39,14 @@
           if (result.length == 0) {
             $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
             addTag(tagValue);
+			const testo = $("<input type='hidden' value=" + tagValue + " name='searchTag'>");
+			$("#searchForm").append(testo);
+			
             tagArray.push(tagValue);
             console.log(tag);
             console.log(tagArray);
             console.log(typeof(tagArray));
+            
             self.val("");
           } else {
             alert("태그값이 중복됩니다.");
@@ -55,6 +60,7 @@
   // 삭제 버튼은 비동기적 생성이므로 document 최초 생성시가 아닌 검색을 통해 이벤트를 구현시킨다.
 $(document) .on("click", ".del-btn", function (e) {
 	var index = $(this).attr("idx");
+	console.log(index);
  	tagArray = tagArray.filter(function(item) {
 		return item !== tag[index];
 	});

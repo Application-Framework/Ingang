@@ -40,7 +40,10 @@
 
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
-		SELECT COUNT(*) FROM community_board WHERE flag = 1 <include refid="searchBoard"></include>  AND classify = 1;
+		SELECT COUNT(*) 
+		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
+								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+		WHERE flag = 1 AND classify = 1 <include refid="searchBoard"></include> 
 	</select>
 	
 	<!-- 게시판 상세페이지 출력 -->
@@ -129,15 +132,21 @@
 			<when test="searchKeyword == 'noContent' and searchTag == 'noTag'">
 			</when>
 			<when test="searchKeyword == 'noContent' and searchTag != 'noTag'">
-				<foreach collection="searchTag" item="arr" open="OR tag_name LIKE CONCAT('%', " close=", '%')" separator=" ">
-				 	#{arr}
+				AND cb.cb_no = cbt.cb_no AND(
+				<foreach collection="searchTag" index="index" item="item" separator="or">
+					tag_name LIKE CONCAT('%', #{item} , '%')
 				</foreach>
+				)
 			</when>
 			<when test="searchKeyword != 'noContent' and searchTag == 'noTag'">
 				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
 			</when>
 			<when test="searchKeyword != 'noContent' and searchTag != 'noTag'">
 				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
+				OR
+				<foreach collection="searchTag" item="item" open="(" close=")" separator="or">
+					tag_name LIKE CONCAT('%', #{item} , '%')
+				</foreach>
 			</when>
 		</choose>
 	</sql>

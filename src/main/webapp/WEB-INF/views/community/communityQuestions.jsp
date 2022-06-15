@@ -11,13 +11,16 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
-    <!-- CSS here -->
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+<!-- CSS here -->
+<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 </head>
 
 <body>

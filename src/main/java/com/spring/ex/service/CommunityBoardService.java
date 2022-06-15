@@ -20,7 +20,7 @@ public interface CommunityBoardService {
 	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception;
 	
 	//게시판 목록 총 갯수 - 페이징
-	public int getCommunityBoardTotalCount() throws Exception;
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//게시글 상세페이지 출력 
 	public Map<String, Object> getReadCommunityBoard(HashMap<String, Object> map) throws Exception;
