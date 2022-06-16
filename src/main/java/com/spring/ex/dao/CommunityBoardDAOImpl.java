@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 
 @Repository
@@ -34,8 +36,8 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//게시판 총 갯수
 	@Override
-	public int getCommunityBoardTotalCount() throws Exception {
-		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount") ;
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getCommunityBoardTotalCount", map) ;
 	}
 
 	//게시글 상세페이지 출력 
@@ -108,6 +110,24 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	@Override
 	public int deleteCommunityBoard(int cb_no) throws Exception {
 		return sqlSession.delete(namespace + ".deleteCommunityBoard", cb_no);
+	}
+	
+	//태그 출력
+	@Override
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
+		return sqlSession.selectList(namespace + ".getTagCommunityBoard", cb_no);
+	}
+	
+	//수강후기 게시판 출력
+	@Override
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getReviewCommunityBoard", map);
+	}
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	@Override
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getReviewCommunityBoardTotalCount", map);
 	}
 
 }

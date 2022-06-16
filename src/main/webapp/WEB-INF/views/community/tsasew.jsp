@@ -2,7 +2,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 <!doctype html>
 <html>
 <head>
@@ -13,16 +12,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
     
-<!-- CSS here -->
-<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+    <!-- CSS here -->
+	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
+	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+	
 </head>
 
 <body>
@@ -32,39 +32,38 @@
     <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
-    <div class="container-flex">
-    	<img src='<c:url value="/resources/img/community/community_studies_banner.PNG" />' alt="" width="100%" height="100px" >
+    <div class="container-flex" style="background-color: #000a12; width: 100%; height: 100px;">
+    	<div class="container">
+	    	<div style="padding: 20px;">
+	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">이야기를 나눠요</font></h4>
+	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요</font> 
+	    	</div>
+    	</div>
     </div><br>
+   
+    <!--================Blog Area =================-->
     <div class="container">
     	<div class="row">
 			<jsp:include page="communityLeftSidebar.jsp" />
 			
-			<div class="col-lg-7 mb-5 mb-lg-0">
+			<div class="col-lg-7 mb-5 mb-lg-0" style="padding:0 0px;">
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<ul class="nav nav-tabs" id="classifyTabStudie">
-							<li class="nav-item" id="classifyTabActiveStudie1"><a class="nav-link active" data-toggle="tab" href="#cTab1"><h6 style="color: #5D5D5D;"> 전체</h6></a></li>
-							<li class="nav-item" id="classifyTabActiveStudie2"><a class="nav-link" data-toggle="tab" href="#cTab2"><h6 style="color: #5D5D5D;">모집중</h6></a></li>
-							<li class="nav-item" id="classifyTabActiveStudie3"><a class="nav-link"  data-toggle="tab" href="#cTab3"><h6 style="color: #5D5D5D;">모집종료</h6></a></li>
-						</ul>
-						<br>
-						<aside class="single_sidebar_widget search_widget">
-							<form id="searchForm" action="communityStudies">
-								<div class="row">
-									<div class="col-lg-10" >
-										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
-										<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
-										<ul id="tag-list"> </ul>
-									</div>
-									<div class="col-lg-2" style="padding:0 15px;">
-										<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
-									</div>
+						<form id="searchForm" action="communityChats">
+							<div class="row">
+								<div class="col-lg-10" >
+									<input type="text" class="form-control" id="searchKeyword" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<ul id="tag-list"> </ul>
 								</div>
-							</form>
-						</aside>
+								<div class="col-lg-2" style="padding:0 15px;">
+									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
+								</div>
+							</div>
+						</form>
 					</article>
-
+					
 					<div class="container">
 						<div class="row">
 						
@@ -97,7 +96,7 @@
 										<article class="blog_item">
 											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 											
-												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=${cbList.classify}">
+												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=1">
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
@@ -123,7 +122,7 @@
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=${cbGoodShowList.classify}">
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
@@ -144,11 +143,13 @@
 											</article>
 										</c:forEach>
 									</div>
+								
 								</div>
 
 							</div>
 						</div>
 					</div>
+
 
 					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
 						<ul class="pagination" id="pagingDiv">
@@ -157,17 +158,17 @@
 								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a href="communityQuestions?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+									<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 								</c:otherwise>
 							</c:choose>
 							<!-- 페이지 갯수만큼 버튼 생성 -->
 							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
 								<c:choose>
 									<c:when test="${i eq Paging.pageNo }">
-										<li class="page-item  active"> <a href="communityQuestions?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item  active"> <a href="chats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"> <a href="communityQuestions?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
@@ -176,7 +177,7 @@
 								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
 								</c:when>
 								<c:otherwise>
-									<li class="page-item"><a href="communityQuestions?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+									<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 								</c:otherwise>
 							</c:choose>
 						</ul>
@@ -189,53 +190,38 @@
     
     <%------------ footer section  ------------%>
     <jsp:include page="../fix/footer.jsp" />
-    <%-- Jquery, Popper, Bootstrap --%>
-   	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+    
+	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
-    <script src="<c:url value='/resources/js/community/tag.js'/>"></script>
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
-	console.log(sessionStorage.getItem("classifyTabActiveStudie") );
-	if(sessionStorage.getItem("classifyTabActiveStudie") == "classify1"){
-		$("#classifyTabStudie li:eq(0) a").tab("show");
-	} if(sessionStorage.getItem("classifyTabActiveStudie") == "classify2"){
-		$("#classifyTabStudie li:eq(1) a").tab("show");
-	} if(sessionStorage.getItem("classifyTabActiveStudie") == "classify3"){
-		$("#classifyTabStudie li:eq(2) a").tab("show");
-	}
 
-	$('#classifyTabActiveStudie1').click(function(){
-		sessionStorage.setItem("classifyTabActiveStudie", "classify1"); 
-		location.href = "/communityStudies?checkClassify=studieAll";
-	});
-	$('#classifyTabActiveStudie2').click(function(){
-		sessionStorage.setItem("classifyTabActiveStudie", "classify2"); 
-		location.href = "/communityStudies?checkClassify=offerStudie";
-	});
-	$('#classifyTabActiveStudie3').unbind("click").bind("click",function() {
-		sessionStorage.setItem("classifyTabActiveStudie", "classify3"); 
-		location.href = "/communityStudies?checkClassify=overOfferStudie";
-	});
+
+$(document).ready(function() {
+	console.log("tab1: " + sessionStorage.getItem("myTabActive1"));
+	console.log("tab2: " +sessionStorage.getItem("myTabActive2"));
 	
-	if(sessionStorage.getItem("sTabActive") == "a1"){
+	if(sessionStorage.getItem("myTabActive") == "a1"){
 		$("#myTab a[href='#qwe']").tab("show"); 
-	} if(sessionStorage.getItem("sTabActive") == "a2"){
+	} if(sessionStorage.getItem("myTabActive") == "a2"){
 		$("#myTab a[href='#asd']").tab("show"); 
 	}
 	$('#myTabActive1').click(function(){
-		sessionStorage.setItem("sTabActive", "a1"); 
+		sessionStorage.setItem("myTabActive", "a1"); 
 	});
 	$('#myTabActive2').click(function(){
-		sessionStorage.setItem("sTabActive", "a2"); 
+		sessionStorage.setItem("myTabActive", "a2"); 
 	});
-
+});
 
 $('#buttonWrite').click(function(){
 	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
+
 
 $('#buttonNoLogin').click(function(){
 	console.log("asd");
@@ -247,7 +233,51 @@ $('#buttonNoLogin').click(function(){
 });
 
 $('#btnBoardSearch').click(function(){
-	$("#searchForm").submit();
+	
+	var searchKeyword = $("#searchKeyword").val();
+	var param = {'searchTag': tagArray , 'searchKeyword': searchKeyword};
+	var reLoadUrl;
+	console.log(tagArray);
+	console.log(searchKeyword);
+	if(searchKeyword != null && tagArray.length != 0){
+		reLoadUrl = "/communityChats?searchKeyword=" + searchKeyword + "&searchTag=" + tagArray;
+	}else if(searchKeyword != null && tagArray.length == 0){
+		reLoadUrl = "/communityChats?searchKeyword=" + searchKeyword;
+	}else if(searchKeyword == null && tagArray.length != 0){
+		reLoadUrl = "/communityChats?&searchTag=" + tagArray;
+	}else{
+		reLoadUrl= "/communityChats";
+	}
+	$.ajax({
+		url: "testDo",
+		type: "Get",
+		traditional: true,
+		data: param,
+		async : false,
+		success: function() {
+			/*
+			var reLoadUrl = "/communityChats?searchKeyword="+searchKeyword+"&searchTag="tagArray;
+			location.href = reLoadUrl;
+			
+			*/
+			
+			location.href = reLoadUrl
+			console.log("ts");
+			//location.href = reLoadUrl;
+			//var reLoadUrl = "/communityChats?searchKeyword=" + searchKeyword + "&searchTag=" + tagArray;
+			//$("#contentDiv").load(reLoadUrl + " #contentDiv");
+			//$("#pagingDiv").load(reLoadUrl + " #pagingDiv");
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+	
 })
 
 </script>
