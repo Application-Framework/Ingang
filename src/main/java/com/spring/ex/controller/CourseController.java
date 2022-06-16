@@ -233,7 +233,10 @@ public class CourseController {
 	
 	@RequestMapping("/courses/{pageNo}/community")
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		// 임시로 map 만듦 수정해야함
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		map.put("checkClass", "chat");
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("Page", pagingService.getNowPage());
@@ -317,20 +320,23 @@ public class CourseController {
 	
 	@RequestMapping("/courses/writeCourse")
 	public String writeCourse(HttpServletRequest request, Model model) {
-		if(request.getParameter("update").equals("true")) {
-			int pageNo = Integer.parseInt(request.getParameter("pageNo"));
-			
-			CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-			List<CourseTagDTO> tagList = courseService.getCourseTags(pageNo);
-			List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
-			
-			System.out.println(videoList);
-			
-			model.addAttribute("course", courseDTO);
-			model.addAttribute("tagList", tagList);
-			model.addAttribute("videoList", videoList);
-			model.addAttribute("courseService", courseService);
+		if(request.getParameter("update") != null) {
+			if(request.getParameter("update").equals("true")) {
+				int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+				
+				CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+				List<CourseTagDTO> tagList = courseService.getCourseTags(pageNo);
+				List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
+				
+				System.out.println(videoList);
+				
+				model.addAttribute("course", courseDTO);
+				model.addAttribute("tagList", tagList);
+				model.addAttribute("videoList", videoList);
+				model.addAttribute("courseService", courseService);
+			}
 		}
+		
 		return "course/course_write";
 	}
 	
@@ -427,7 +433,7 @@ public class CourseController {
 			courseService.submitCourseVideo(courseVideoDTO);
 		}
 		
-		return "redirect:/";
+		return "redirect:/courses";
 	}
 	
 	@RequestMapping("/courses/submitReply")
