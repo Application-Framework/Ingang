@@ -190,4 +190,10 @@
 	.forget_pass{
 		color: blue;
 	}
+	
+	.idCheck {
+		background-color: red;
+		color: white;
+		padding: 5px;
+	}
 </style>

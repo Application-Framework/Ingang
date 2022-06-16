@@ -184,7 +184,7 @@
 												<div class="stars-outer">
 									                <div class="stars-inner" style="width:${list.star_rating*20}%"></div>
 									            </div>
-												<p>강의이름 : ${list.oli_no}</p>
+												<p>${list.title}</p>
 												<p>${list.reg_date}</p>
 											</div>
 										</div>
@@ -208,7 +208,7 @@
 					<div class="left-text">
 						<c:forEach var="tagList" items="${tagList}" varStatus="status">
 						<div class="list-group">
-							<a href="/tag/${tagList.t_name}" class="list-group-item list-group-item-action list-group-item-light">${status.count}. ${tagList.t_name}(${tagList.t_viewCnt})</a>
+							<a href="/course?tag=${tagList.t_name}" class="list-group-item list-group-item-action list-group-item-light">${status.count}. ${tagList.t_name}(${tagList.t_viewCnt})</a>
 						</div>
 					</c:forEach>
 					</div>
@@ -473,7 +473,7 @@
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="#"><img src="${list.img_path}" alt=""></a>
+                                    <a href="/notes/${list.n_no}"><img src="<c:url value='${courseService.getCourseDetail(list.oli_no).img_path}'/>" style="height:150px"/></a>
                                 </div>
                                 <div class="job-tittle">
                                     <a href="/notes/${list.n_no}"><h4>${list.title}</h4></a>
