@@ -348,8 +348,51 @@ public class CommunityController {
 		return "community/communityReviews";
 	}
 	
-	@RequestMapping("/communityStudies")
-	public String studies() {
+	@RequestMapping(value = "/communityStudies", method = RequestMethod.GET)
+	public String studies(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		String checkClass = request.getParameter("checkClassify");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		if(checkClass == null) {
+			map.put("checkClass", "studieAll");
+		}else if(checkClass.equals("offerStudie")){
+			map.put("checkClass", "offerStudie");
+		}else if(checkClass.equals("overOfferStudie")) {
+			map.put("checkClass", "overOfferStudie");
+		}else {
+			map.put("checkClass", "studieAll");
+		}
+		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		if (searchTag == null) {
+			map.put("searchTag","noTag");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+		} else {
+			map.put("searchTag", searchTag);
+		}
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		
+		model.addAttribute("cbTag", cbService);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
 		return "community/communityStudies";
 	}
 }

@@ -1,6 +1,7 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <!doctype html>
 <html>
@@ -12,13 +13,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
     
-    <!-- CSS here -->
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+<!-- CSS here -->
+<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 </head>
 
 <body>
@@ -38,22 +42,23 @@
 			<div class="col-lg-7 mb-5 mb-lg-0">
 			<br>
 				<div class="blog_left_sidebar">
-					<ul class="nav nav-tabs">
-						<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#"><h6 style="color: #5D5D5D;"> 전체</h6></a></li>
-						<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#"><h6 style="color: #5D5D5D;">모집중</h6></a></li>
-						<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#"><h6 style="color: #5D5D5D;">모집완료</h6></a></li>
-					</ul><br>
 					<article class="blog_item">
+						<ul class="nav nav-tabs" id="classifyTabStudie">
+							<li class="nav-item" id="classifyTabActiveStudie1"><a class="nav-link active" data-toggle="tab" href="#cTab1"><h6 style="color: #5D5D5D;"> 전체</h6></a></li>
+							<li class="nav-item" id="classifyTabActiveStudie2"><a class="nav-link" data-toggle="tab" href="#cTab2"><h6 style="color: #5D5D5D;">모집중</h6></a></li>
+							<li class="nav-item" id="classifyTabActiveStudie3"><a class="nav-link"  data-toggle="tab" href="#cTab3"><h6 style="color: #5D5D5D;">모집종료</h6></a></li>
+						</ul>
+						<br>
 						<aside class="single_sidebar_widget search_widget">
-							<form action="#">
+							<form id="searchForm" action="communityQuestions">
 								<div class="row">
-									<div class="col-lg-10" align="left">
-										<input type="text" class="form-control" placeholder='내용을 검색해보세요!'>
-										<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<div class="col-lg-10" >
+										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
+										<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+										<ul id="tag-list"> </ul>
 									</div>
-									<div class="col-lg-2" align="left" style="padding-left: 7px;">
-									
-									<input type="button" class="genric-btn danger-border radius" value="검색" style="width: 100%;">
+									<div class="col-lg-2" style="padding:0 15px;">
+										<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
 									</div>
 								</div>
 							</form>
@@ -62,108 +67,121 @@
 
 					<div class="container">
 						<div class="row">
-							<ul class="nav nav-tabs">
-								<li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;"> 최신순</h6></a></li>
-								<li class="nav-item"><a class="nav-link" data-toggle="tab" href="#asd"><h6 style="color: #5D5D5D;">좋아요순</h6></a></li>
-									&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
-									&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&nbsp;&nbsp;
-								<li class="nav-item">
-									<button type="button" onclick="location.href='/'"
-										class="genric-btn danger radius">
-										<font size="1px;">글쓰기</font>
-									</button>
-								</li>
+						
+							<ul class="nav nav-tabs" id="myTab" style="width: 100%;">
+								<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 최신순</h6></a></li>
+								<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">좋아요순</h6></a></li>
+								<li class="nav-item" id="myTabActive3" style="width: 58%; " ><a class="nav-link" data-toggle="tab" href="#asdff" style="display: none;" ></a></li>
+
+									<c:choose>
+										<c:when test="${sessionScope.member.getM_id() ne null }"> 
+										<li class="nav-item" id="myTabActive6" style="width: 12%;">
+											<button type="button" id="buttonWrite" class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
+												<font size="1px;">글작성</font>
+											</button>
+											</li>
+										</c:when>
+										<c:otherwise> 
+										<li class="nav-item" id="myTabActive6" style="width: 12%;">
+											<button type="button" id="buttonNoLogin" class="genric-btn danger radius" style="padding:0px 20px; width: 100%;">
+												<font size="1px;">글작성</font>
+											</button>
+											</li>
+										 </c:otherwise>
+									</c:choose>
 							</ul>
-
-							<div class="tab-content">
+							
+							<div class="tab-content" id="contentDiv">
 								<div class="tab-pane fade show active" id="qwe">
-									<article class="blog_item">
-										<div class="blog_details">
-											<a class="d-inline-block" href="single-blog.html">
-												<h2>제대로 이해한것인지 궁금합니다.</h2>
-											</a>
-											<p>5분대부터 헷갈리고 있습니다. 59번째 줄에 killKnight(knight); 가 남아있어서
-												그런가? 싶은 생각이 듭니다. 1. 59번째 줄 이후로 knight.hp값이 0...</p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> choum97</a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> 12 </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> 3</a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">2022-04-12 09:30</font></li>
-											</ul>
-										</div>
-									</article>
-
-									<article class="blog_item">
-										<div class="blog_details">
-											<a class="d-inline-block" href="single-blog.html">
-												<h2>이미지 출력 에러가 발생합니다</h2>
-											</a>
-											<p>이미지 출력하는 부분에서 에러가 발생합니다. 에러 내용은 이러합니다. 파일 경로에 이미지가
-												uuid형식으로 저장되는 것은 확인 하였습니다. 어떻게 해결해야...</p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> choum97</a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> 12 </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> 3</a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">2022-04-12 09:30</font></li>
-											</ul>
-										</div>
-									</article>
+									<c:forEach var="cbList" items="${cbRegDateList}">
+										<article class="blog_item">
+											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+											
+												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=${cbList.classify}">
+													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
+													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
+												</a>
+												<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+												<ul id="tag-list" style=""> 
+													<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
+														<li class="tag-item">#${cbTag.tag_name}</li>
+													</c:forEach>
+												</ul>
+												<ul class="blog-info-link">
+													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
+													<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
+													<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
+													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+													<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbList.reg_date}" /></font></li>
+												</ul>
+											</div>
+										</article>
+									</c:forEach>
 								</div>
 								<div class="tab-pane fade" id="asd">
-									<article class="blog_item">
-										<div class="blog_details">
-											<a class="d-inline-block" href="single-blog.html">
-												<h2>터미널에 명령어</h2>
-											</a>
-											<p>5분대부터 헷갈리고 있습니다. 59번째 줄에 killKnight(knight); 가 남아있어서
-												그런가? 싶은 생각이 듭니다. 1. 59번째 줄 이후로 knight.hp값이 0...</p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> choum97</a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> 12 </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> 3</a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">2022-04-12 09:30</font></li>
-											</ul>
-										</div>
-									</article>
-
-									<article class="blog_item">
-										<div class="blog_details">
-											<a class="d-inline-block" href="single-blog.html">
-												<h2>spring boot 2.5 버전 이상일 경우 오류</h2>
-											</a>
-											<p>이미지 출력하는 부분에서 에러가 발생합니다. 에러 내용은 이러합니다. 파일 경로에 이미지가
-												uuid형식으로 저장되는 것은 확인 하였습니다. 어떻게 해결해야...</p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> choum97</a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> 12 </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> 3</a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">2022-04-12 09:30</font></li>
-											</ul>
-										</div>
-									</article>
+									<div class="tab-pane fade show active" id="qwe">
+										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
+											<article class="blog_item">
+												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=${cbGoodShowList.classify}">
+														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
+														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
+													</a>
+													<p style="margin: 0 0px;"><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<ul id="tag-list" style=""> 
+														<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbGoodShowList.cb_no)}">
+															<li class="tag-item">#${cbTag.tag_name}</li>
+														</c:forEach>
+													</ul>
+													<ul class="blog-info-link">
+														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
+														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
+														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
+														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+														<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbGoodShowList.reg_date}" /></font></li>
+													</ul>
+												</div>
+											</article>
+										</c:forEach>
+									</div>
+								
 								</div>
 
 							</div>
 						</div>
 					</div>
 
-
-				<nav class="blog-pagination justify-content-center d-flex">
-					<ul class="pagination">
-						<li class="page-item">
-							<a href="#" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a>
-						</li>
-						<li class="page-item">
-							<a href="#" class="page-link">1</a>
-						</li>
-						<li class="page-item active">
-							<a href="#" class="page-link">2</a>
-						</li>
-						<li class="page-item">
-							<a href="#" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a>
-						</li>
-					</ul>
-				</nav>
+					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
+						<ul class="pagination" id="pagingDiv">
+							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
+							<c:choose>
+								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a href="communityQuestions?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+								</c:otherwise>
+							</c:choose>
+							<!-- 페이지 갯수만큼 버튼 생성 -->
+							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+								<c:choose>
+									<c:when test="${i eq Paging.pageNo }">
+										<li class="page-item  active"> <a href="communityQuestions?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									</c:when>
+									<c:otherwise>
+										<li class="page-item"> <a href="communityQuestions?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+							<c:choose>
+								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"><a href="communityQuestions?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+								</c:otherwise>
+							</c:choose>
+						</ul>
+					</nav>
 				</div><br>
 			</div>
 			<jsp:include page="communityTagSidebar.jsp" />
@@ -179,5 +197,60 @@
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
+    <script src="<c:url value='/resources/js/community/tag.js'/>"></script>
+<script type="text/javascript">
+	console.log(sessionStorage.getItem("classifyTabActiveStudie") );
+	if(sessionStorage.getItem("classifyTabActiveStudie") == "classify1"){
+		$("#classifyTabStudie li:eq(0) a").tab("show");
+	} if(sessionStorage.getItem("classifyTabActiveStudie") == "classify2"){
+		$("#classifyTabStudie li:eq(1) a").tab("show");
+	} if(sessionStorage.getItem("classifyTabActiveStudie") == "classify3"){
+		$("#classifyTabStudie li:eq(2) a").tab("show");
+	}
+
+	$('#classifyTabActiveStudie1').click(function(){
+		sessionStorage.setItem("classifyTabActiveStudie", "classify1"); 
+		location.href = "/communityStudies?checkClassify=studieAll";
+	});
+	$('#classifyTabActiveStudie2').click(function(){
+		sessionStorage.setItem("classifyTabActiveStudie", "classify2"); 
+		location.href = "/communityStudies?checkClassify=offerStudie";
+	});
+	$('#classifyTabActiveStudie3').unbind("click").bind("click",function() {
+		sessionStorage.setItem("classifyTabActiveStudie", "classify3"); 
+		location.href = "/communityStudies?checkClassify=overOfferStudie";
+	});
+	
+	if(sessionStorage.getItem("sTabActive") == "a1"){
+		$("#myTab a[href='#qwe']").tab("show"); 
+	} if(sessionStorage.getItem("sTabActive") == "a2"){
+		$("#myTab a[href='#asd']").tab("show"); 
+	}
+	$('#myTabActive1').click(function(){
+		sessionStorage.setItem("sTabActive", "a1"); 
+	});
+	$('#myTabActive2').click(function(){
+		sessionStorage.setItem("sTabActive", "a2"); 
+	});
+
+
+$('#buttonWrite').click(function(){
+	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+});
+
+$('#buttonNoLogin').click(function(){
+	console.log("asd");
+	swal({
+		title: "로그인",
+		text: "로그인이 되어야 게시글 작성이 가능합니다.",
+		icon: "warning",
+	});
+});
+
+$('#btnBoardSearch').click(function(){
+	$("#searchForm").submit();
+})
+
+</script>
 </body>
 </html>
