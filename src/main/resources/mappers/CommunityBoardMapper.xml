@@ -136,7 +136,7 @@
 		SELECT olr.*, m_id, title, oli.img_path
 		FROM online_lecture_reply olr, online_lecture_introduction oli, member m
 		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
-		ORDER BY reg_date DESC
+		ORDER BY reg_date DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
 	<!-- 수강후기 게시판 총 갯수 -->
