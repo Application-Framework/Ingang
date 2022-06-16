@@ -28,21 +28,25 @@ public class LoginController {
 	
 	// 로그인
 	@RequestMapping(value = "/loginPageView", method = RequestMethod.POST)
-	public String postLogin(MemberDTO dto, HttpServletRequest req, RedirectAttributes rttr) throws Exception {
+	public String postLogin(MemberDTO dto, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
 
-		HttpSession session = req.getSession();
+		HttpSession session = request.getSession();
 
 		MemberDTO login = service.login(dto);
 		
 		if (login == null) {
 			session.setAttribute("member", null);
 			rttr.addFlashAttribute("msg", false);
+			
+			return "redirect:/loginPageView";
 		} else {
 			session.setAttribute("member", login);
 			session.setAttribute("m_no", login.getM_no());
+			
+			return "redirect:/";
 		}
 
-		return "redirect:/";
+		
 	}
 	
 	@RequestMapping(value="/signUp", method = RequestMethod.GET)

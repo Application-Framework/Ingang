@@ -9,6 +9,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.PurchaseCourseDTO;
+import com.spring.ex.dto.PurchaseNoteDTO;
 
 @Repository
 public class OrderHistoryDAOImpl implements OrderHistoryDAO {
@@ -43,13 +44,13 @@ public class OrderHistoryDAOImpl implements OrderHistoryDAO {
 
 	// 노트 구매 내역
 	@Override
-	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception {
-		return sqlSession.selectList(namespace + ".myPurchaseNoteList", m_no);
+	public List<PurchaseNoteDTO> myPurchaseNoteList(Integer m_no) throws Exception {
+		return sqlSession.selectList(namespace + ".myPurcaseNotes", m_no);
 	}
 	
 	// 노트 관심 내역
 	@Override
-	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception {
-		return sqlSession.selectList(namespace + ".myPurchaseNoteList", m_no);
+	public List<PurchaseNoteDTO> myInterestNoteList(Integer m_no) throws Exception {
+		return sqlSession.selectList(namespace + ".myInterestNotes", m_no);
 	}
 }

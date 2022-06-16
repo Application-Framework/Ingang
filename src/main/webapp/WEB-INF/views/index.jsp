@@ -466,86 +466,31 @@
                         </div>
                     </div>
                 </div>
+                <c:forEach var="list" items="${ntbList}">
                 <div class="row justify-content-center">
                     <div class="col-xl-10">
                         <!-- single-job-content -->
                         <div class="single-job-items mb-30">
                             <div class="job-items">
                                 <div class="company-img">
-                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list1.png'/>" alt=""></a>
+                                    <a href="#"><img src="${list.img_path}" alt=""></a>
                                 </div>
                                 <div class="job-tittle">
-                                    <a href="#"><h4>Digital Marketer</h4></a>
+                                    <a href="/notes/${list.n_no}"><h4>${list.title}</h4></a>
                                     <ul>
-                                        <li>Creative Agency</li>
-                                        <li>$3500 - $4000</li>
+                                        <li>${list.m_name}</li>
+                                        <li>${list.price} 원</li>
                                     </ul>
                                 </div>
                             </div>
                             <div class="items-link f-right">
-                                <a href="#">Full Time</a>
-                                <span>7 hours ago</span>
-                            </div>
-                        </div>
-                        <!-- single-job-content -->
-                        <div class="single-job-items mb-30">
-                            <div class="job-items">
-                                <div class="company-img">
-                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list2.png'/>" alt=""></a>
-                                </div>
-                                <div class="job-tittle">
-                                    <a href="#"><h4>Digital Marketer</h4></a>
-                                    <ul>
-                                        <li>Creative Agency</li>
-                                        <li>$3500 - $4000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="items-link f-right">
-                                <a href="#">Full Time</a>
-                                <span>7 hours ago</span>
-                            </div>
-                        </div>
-                         <!-- single-job-content -->
-                        <div class="single-job-items mb-30">
-                            <div class="job-items">
-                                <div class="company-img">
-                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list3.png'/>" alt=""></a>
-                                </div>
-                                <div class="job-tittle">
-                                    <a href="#"><h4>Digital Marketer</h4></a>
-                                    <ul>
-                                        <li>Creative Agency</li>
-                                        <li>$3500 - $4000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="items-link f-right">
-                                <a href="#">Full Time</a>
-                                <span>7 hours ago</span>
-                            </div>
-                        </div>
-                         <!-- single-job-content -->
-                        <div class="single-job-items mb-30">
-                            <div class="job-items">
-                                <div class="company-img">
-                                    <a href="#"><img src="<c:url value='/resources/img/icon/job-list4.png'/>" alt=""></a>
-                                </div>
-                                <div class="job-tittle">
-                                    <a href="#"><h4>Digital Marketer</h4></a>
-                                    <ul>
-                                        <li>Creative Agency</li>
-                                        <li>$3500 - $4000</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="items-link f-right">
-                                <a href="#">Full Time</a>
-                                <span>7 hours ago</span>
+                                <a href="/notes/${list.n_no}">상세보기</a>
+                                <span>${list.reg_date}</span>
                             </div>
                         </div>
                     </div>
                 </div>
+                </c:forEach>
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="browse-btn2 text-center mt-50">
@@ -633,40 +578,40 @@
 		<%-- Jquery Plugins, main Jquery --%>
         <script src="<c:url value='/resources/js/plugins.js'/>"></script>
         <script src="<c:url value='/resources/js/main.js'/>"></script>
-        
-    </body>
-</html>
-<script>
-	var target = document.getElementById("select1");
-	target.options[target.selectedIndex].text
-	
-	$('#searchBtn').click(function() {
-		var select1 = $('#select1').val();
-		var urlSelect = "";
-		
-		if(select1 == "courses") {
-			urlSelect : "/courses";
-		} else {
-			urlSelect : "/notes";
-		}
-		
-		$.ajax({
-			url : urlSelect,
-			type : "get",
-			data : select1,
-			success : function(data) {
-				if (data != 1) {
-					swal({
-						title : "오류",
-						text : "오류",
-						icon : "error" ,
-						timer : 3000
-					})
+       
+        <script>
+			var target = document.getElementById("select1");
+			target.options[target.selectedIndex].text
+			
+			$('#searchBtn').click(function() {
+				var select1 = $('#select1').val();
+				var urlSelect = "";
+				
+				if(select1 == "courses") {
+					urlSelect : "/courses";
 				} else {
-					window.location.href=urlSelect+"?keyword";
+					urlSelect : "/notes";
 				}
 				
-			}
-		}); // ajax 끝
-	});
-</script>
+				$.ajax({
+					url : urlSelect,
+					type : "get",
+					data : select1,
+					success : function(data) {
+						if (data != 1) {
+							swal({
+								title : "오류",
+								text : "오류",
+								icon : "error" ,
+								timer : 3000
+							})
+						} else {
+							window.location.href=urlSelect+"?keyword";
+						}
+						
+					}
+				}); // ajax 끝
+			});
+		</script>
+    </body>
+</html>

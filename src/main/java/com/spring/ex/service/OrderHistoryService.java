@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.PurchaseCourseDTO;
+import com.spring.ex.dto.PurchaseNoteDTO;
 
 @Service
 public interface OrderHistoryService {
@@ -19,9 +20,9 @@ public interface OrderHistoryService {
 	public List<PurchaseCourseDTO> searchMyPurcaseCourses(Integer m_no, String keyword) throws Exception;
 	
 	// 노트 구매 내역
-	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception;
+	public List<PurchaseNoteDTO> myPurchaseNoteList(Integer m_no) throws Exception;
 			
 	// 노트 관심 내역
-	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception;
+	public List<PurchaseNoteDTO> myInterestNoteList(Integer m_no) throws Exception;
 	
 }

@@ -193,10 +193,10 @@
 				    </ul>
 				    <div class="tabcontent">
 					    <div class="text-align" id="tab01">
-						    <table class="table-text-align">
+						    <table class="table table-hover text-align" style="border: 1px solid #dddddd">
 								<tr>
-									<th style="font-size: 20px;">강의명</th>
-									<th style="font-size: 20px;">구매일자</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">강의명</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">구매일자</th>
 								</tr>
 						    	<c:forEach var="ocList" items="${ocList}">
 						    		<tr>
@@ -207,10 +207,10 @@
 						    </table>
 					    </div>
 					    <div class="text-align" id="tab02">
-					    	<table class="table-text-align">
+					    	<table class="table table-hover text-align" style="border: 1px solid #dddddd">
 								<tr>
-									<th style="font-size: 20px;">강의명</th>
-									<th style="font-size: 20px;">관심일자</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">강의명</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">관심일자</th>
 								</tr>
 							    <c:forEach var="itList" items="${itList}">
 							    	<tr>

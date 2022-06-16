@@ -29,6 +29,127 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 </head>
+<style>
+	a {
+		color: orange;
+	}
+	
+	.sidebar {
+	    width: 400px;
+	    height: 500px;
+	    overflow-y: auto;
+	    background: var(--light);
+	    transition: 0.5s;
+	    z-index: 999;
+	}
+	
+	@media (min-width: 992px) {
+	    .sidebar {
+	        margin-left: 0;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: -250px;
+	    }
+	
+	    .content {
+	        width: calc(100% - 250px);
+	    }
+	}
+	
+	@media (max-width: 991.98px) {
+	    .sidebar {
+	        margin-left: -250px;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: 0;
+	    }
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link {
+	    padding: 7px 10px;
+	    color: var(--dark);
+	    font-weight: 500;
+	    border-left: 3px solid var(--light);
+	    border-radius: 0 30px 30px 0;
+	    outline: none;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover,
+	.sidebar .navbar .navbar-nav .nav-link.active {
+	    color: var(--primary);
+	    background: #FFFFFF;
+	    border-color: var(--primary);
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link i {
+	    width: 40px;
+	    height: 40px;
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    background: #FFFFFF;
+	    border-radius: 40px;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover i,
+	.sidebar .navbar .navbar-nav .nav-link.active i {
+	    background: var(--light);
+	}
+	
+	.sidebar .navbar .dropdown-toggle::after {
+	    position: absolute;
+	    top: 15px;
+	    right: 15px;
+	    border: none;
+	    content: "\f107";
+	    font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    transition: .5s;
+	}
+	
+	.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+	    transform: rotate(-180deg);
+	}
+	
+	.sidebar .navbar .dropdown-item {
+	    padding-left: 25px;
+	    border-radius: 0 30px 30px 0;
+	} 
+	
+	.stars-outer {
+        position: relative;
+        display: inline-block;
+    }
+
+    .stars-inner {
+	    position: absolute;
+	    top: 0;
+	    left: 0;
+	    white-space: nowrap;
+	    overflow: hidden;
+	    width: 0;
+    }
+
+    .stars-outer::before {
+	    content: "\f005 \f005 \f005 \f005 \f005";
+	    font-family: "Font Awesome 5 Free";
+		font-weight: 900;
+	    color: #ccc;
+    }
+
+    .stars-inner::before {
+	    content: "\f005 \f005 \f005 \f005 \f005";
+	    font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    color: #f8ce0b;
+    }
+            
+    .text-align {
+    	text-align: center;
+    }
+</style>
 <body>
 	<%-- Preloader --%>
 	<jsp:include page="../fix/preloader.jsp" />
@@ -78,7 +199,7 @@
 			<div class="col-lg-9">
 				<section class="featured-job-area">
 					<div class="container">
-						<%-- 강의 검색 입력 폼 --%>
+						<%-- 노트 검색 입력 폼 --%>
 						<form action="${nowURL}" class="search-box mb-5">
 							<div class="input-form item">
 								<input type="text" name="keyword" value="${keyword}" placeholder="노트 제목 검색" tabindex="0">
@@ -88,7 +209,7 @@
 							</div>
 						</form>
 
-						<%-- 강의 리스트 출력 부분 --%>
+						<%-- 노트 리스트 출력 부분 --%>
 						<div class="row d-flex justify-contnet-center">
 							<c:forEach var="list" items="${ocList}">
 							<div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
@@ -96,13 +217,13 @@
 							        <img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
 							        <div class="card-body">
 									    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
-									    <div style="font-size: 10px;">${list.reg_date}</div>
-									    <div id="teacher-name" class="card-text">${list.name}</div>
+									    <div style="font-size: 10px;">${list.payment_date}</div>
+									    <div id="teacher-name" class="card-text">${list.m_name}</div>
 									    <div class="stars-outer">
 									    		<div class="stars-inner" style="width:${list.star_avg*20}%"></div>
 									    </div>
 									    <span class="number-rating">(${list.star_avg})</span>
-									    <div id="course-price" class="card-text">₩${list.price}</div>
+									    <div id="course-price" class="card-text">₩${list.payment}</div>
 							        </div>
 						        </div>
 						    </div>
@@ -173,95 +294,6 @@
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
 </body>
 </html>
-<style>
-a {
-	color: orange;
-}
-
-.sidebar {
-    width: 400px;
-    height: 500px;
-    overflow-y: auto;
-    background: var(--light);
-    transition: 0.5s;
-    z-index: 999;
-}
-
-@media (min-width: 992px) {
-    .sidebar {
-        margin-left: 0;
-    }
-
-    .sidebar.open {
-        margin-left: -250px;
-    }
-
-    .content {
-        width: calc(100% - 250px);
-    }
-}
-
-@media (max-width: 991.98px) {
-    .sidebar {
-        margin-left: -250px;
-    }
-
-    .sidebar.open {
-        margin-left: 0;
-    }
-}
-
-.sidebar .navbar .navbar-nav .nav-link {
-    padding: 7px 10px;
-    color: var(--dark);
-    font-weight: 500;
-    border-left: 3px solid var(--light);
-    border-radius: 0 30px 30px 0;
-    outline: none;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover,
-.sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
-    background: #FFFFFF;
-    border-color: var(--primary);
-}
-
-.sidebar .navbar .navbar-nav .nav-link i {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFFFFF;
-    border-radius: 40px;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover i,
-.sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--light);
-}
-
-.sidebar .navbar .dropdown-toggle::after {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    transition: .5s;
-}
-
-.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
-    transform: rotate(-180deg);
-}
-
-.sidebar .navbar .dropdown-item {
-    padding-left: 25px;
-    border-radius: 0 30px 30px 0;
-} 
-</style>
 
 <!-- 드롭박스 기능 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

@@ -14,8 +14,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.spring.ex.dto.TagDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CourseBestService;
 import com.spring.ex.service.LiveCourseReplyService;
+import com.spring.ex.service.MemberService;
+import com.spring.ex.service.NoteBestService;
 import com.spring.ex.service.TagService;
 
 @Controller
@@ -25,10 +28,16 @@ public class MainPageController {
 	private CourseBestService courseBestService; 
 	
 	@Inject
+	private NoteBestService noteBestService; 
+	
+	@Inject
 	TagService tagService;
 	
 	@Inject
 	LiveCourseReplyService liveReplyService;
+	
+	@Inject
+	MemberService memberService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String mainPage(HttpServletRequest request, Model model, String tag, String courses, String notes) throws Exception {
@@ -47,6 +56,10 @@ public class MainPageController {
 		// 신규 강의 목록
 		List<CourseDTO> newlist = null;
 		newlist = courseBestService.thisweek_newCourseList();
+		
+		// 이 주의 강의 목록
+		List<NoteDTO> ntblist = null;
+		ntblist = noteBestService.thisweek_bestNoteList();
 				
 		HttpSession session = request.getSession();
 		TagDTO tagDTO = (TagDTO)session.getAttribute("tag");
@@ -61,6 +74,7 @@ public class MainPageController {
 		model.addAttribute("tagList", taglist);
 		model.addAttribute("crbList", crblist);
 		model.addAttribute("newList", newlist);
+		model.addAttribute("ntbList", ntblist);
 		
 		return "index";
 	}

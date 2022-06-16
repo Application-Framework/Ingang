@@ -29,6 +29,100 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 </head>
+<style>
+	a {
+		color: #ff9100;
+		font-weight: bold;
+	}
+	
+	a:hover {
+		color : #b17322;
+	}
+		
+	.sidebar {
+	    width: 400px;
+	    height: 500px;
+	    overflow-y: auto;
+	    background: var(--light);
+	    transition: 0.5s;
+	    z-index: 999;
+	}
+	
+	@media (min-width: 992px) {
+	    .sidebar {
+	        margin-left: 0;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: -250px;
+	    }
+	
+	    .content {
+	        width: calc(100% - 250px);
+	    }
+	}
+	
+	@media (max-width: 991.98px) {
+	    .sidebar {
+	        margin-left: -250px;
+	    }
+	
+	    .sidebar.open {
+	        margin-left: 0;
+	    }
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link {
+	    padding: 7px 10px;
+	    color: var(--dark);
+	    font-weight: 500;
+	    border-left: 3px solid var(--light);
+	    border-radius: 0 30px 30px 0;
+	    outline: none;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover,
+	.sidebar .navbar .navbar-nav .nav-link.active {
+	    color: var(--primary);
+	    background: #FFFFFF;
+	    border-color: var(--primary);
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link i {
+	    width: 40px;
+	    height: 40px;
+	    display: inline-flex;
+	    align-items: center;
+	    justify-content: center;
+	    background: #FFFFFF;
+	    border-radius: 40px;
+	}
+	
+	.sidebar .navbar .navbar-nav .nav-link:hover i,
+	.sidebar .navbar .navbar-nav .nav-link.active i {
+	    background: var(--light);
+	}
+	
+	.sidebar .navbar .dropdown-toggle::after {
+	    position: absolute;
+	    top: 15px;
+	    right: 15px;
+	    border: none;
+	    content: "\f107";
+	    font-family: "Font Awesome 5 Free";
+	    font-weight: 900;
+	    transition: .5s;
+	}
+	
+	.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
+	    transform: rotate(-180deg);
+	}
+	
+	.sidebar .navbar .dropdown-item {
+	    padding-left: 25px;
+	    border-radius: 0 30px 30px 0;
+	} 
+</style>
 <body>
 	<%-- Preloader --%>
 	<jsp:include page="../fix/preloader.jsp" />
@@ -76,19 +170,25 @@
 				</aside>
 			</div>
 			<div class="col-lg-9">
-				<h3>내가 쓴 글</h3>
-				
-				<c:forEach var="cbList" items="${cbList}">
-					<a class="d-inline-block" href="single-blog.html">
-						<h2><c:url value="${cbList.title}"/></h2>
-					</a>
-					<p><c:url value="${cbList.content}"/></p>
-					<ul class="blog-info-link">
-						<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.cb_no}"/></a></li>
-						<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.hit}"/></a></li>
-						<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
-					</ul>
-				</c:forEach>
+				<table class="table table-hover" style="text-align: center; border: 1px solid #dddddd">
+					<tr>
+						<th style="background-color: #eeeeee; font-size: 20px;" colspan="2">내가 작성한 게시글</th>
+					</tr>
+					<tr>
+						<th style="font-size: 18px;">제목</th>
+						<th style="font-size: 18px;">작성일자</th>
+					</tr>
+					<c:forEach var="cbList" items="${cbList}">
+					<tr>
+						<td>
+							<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=${cbList.classify}">
+								${cbList.title}
+							</a>
+						</td>
+						<td><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></td>
+					</tr>
+					</c:forEach>
+				</table>
 			</div>
 		</div>
 	</div>
@@ -134,95 +234,6 @@
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
 </body>
 </html>
-<style>
-a {
-	color: orange;
-}
-
-.sidebar {
-    width: 400px;
-    height: 500px;
-    overflow-y: auto;
-    background: var(--light);
-    transition: 0.5s;
-    z-index: 999;
-}
-
-@media (min-width: 992px) {
-    .sidebar {
-        margin-left: 0;
-    }
-
-    .sidebar.open {
-        margin-left: -250px;
-    }
-
-    .content {
-        width: calc(100% - 250px);
-    }
-}
-
-@media (max-width: 991.98px) {
-    .sidebar {
-        margin-left: -250px;
-    }
-
-    .sidebar.open {
-        margin-left: 0;
-    }
-}
-
-.sidebar .navbar .navbar-nav .nav-link {
-    padding: 7px 10px;
-    color: var(--dark);
-    font-weight: 500;
-    border-left: 3px solid var(--light);
-    border-radius: 0 30px 30px 0;
-    outline: none;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover,
-.sidebar .navbar .navbar-nav .nav-link.active {
-    color: var(--primary);
-    background: #FFFFFF;
-    border-color: var(--primary);
-}
-
-.sidebar .navbar .navbar-nav .nav-link i {
-    width: 40px;
-    height: 40px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background: #FFFFFF;
-    border-radius: 40px;
-}
-
-.sidebar .navbar .navbar-nav .nav-link:hover i,
-.sidebar .navbar .navbar-nav .nav-link.active i {
-    background: var(--light);
-}
-
-.sidebar .navbar .dropdown-toggle::after {
-    position: absolute;
-    top: 15px;
-    right: 15px;
-    border: none;
-    content: "\f107";
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    transition: .5s;
-}
-
-.sidebar .navbar .dropdown-toggle[aria-expanded=true]::after {
-    transform: rotate(-180deg);
-}
-
-.sidebar .navbar .dropdown-item {
-    padding-left: 25px;
-    border-radius: 0 30px 30px 0;
-} 
-</style>
 
 <!-- 드롭박스 기능 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>

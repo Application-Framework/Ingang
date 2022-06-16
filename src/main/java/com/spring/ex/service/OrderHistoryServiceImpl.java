@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.OrderHistoryDAO;
 import com.spring.ex.dto.PurchaseCourseDTO;
+import com.spring.ex.dto.PurchaseNoteDTO;
 
 @Service
 public class OrderHistoryServiceImpl implements OrderHistoryService {
@@ -33,13 +34,15 @@ public class OrderHistoryServiceImpl implements OrderHistoryService {
 		return dao.searchMyPurcaseCourses(m_no, keyword);
 	}
 
+	// 노트 구매 내역
 	@Override
-	public List<PurchaseCourseDTO> myPurchaseNoteList(Integer m_no) throws Exception {
+	public List<PurchaseNoteDTO> myPurchaseNoteList(Integer m_no) throws Exception {
 		return dao.myPurchaseNoteList(m_no);
 	}
-
+	
+	// 노트 관심 내역
 	@Override
-	public List<PurchaseCourseDTO> myInterestNoteList(Integer m_no) throws Exception {
-		return dao.myPurchaseNoteList(m_no);
+	public List<PurchaseNoteDTO> myInterestNoteList(Integer m_no) throws Exception {
+		return dao.myInterestNoteList(m_no);
 	}
 }

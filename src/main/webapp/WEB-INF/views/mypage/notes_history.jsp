@@ -188,33 +188,33 @@
 			<div class="col-lg-9">
 				<div class="tab">
 				 	<ul class="tabnav">
-					    <li><a href="#tab01">내 강의</a></li>
-					    <li><a href="#tab02">관심 강의</a></li>
+					    <li><a href="#tab01">내 노트</a></li>
+					    <li><a href="#tab02">관심 노트</a></li>
 				    </ul>
 				    <div class="tabcontent">
 					    <div class="text-align" id="tab01">
-						    <table class="table-text-align">
+						    <table class="table table-hover text-align" style="border: 1px solid #dddddd">
 								<tr>
-									<th style="font-size: 20px;">노트명</th>
-									<th style="font-size: 20px;">구매일자</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">노트명</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">구매일자</th>
 								</tr>
 						    	<c:forEach var="ocList" items="${ocList}">
 						    		<tr>
-										<td width="70%;"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></td>
+										<td width="70%;"><a href="/notes/${ocList.n_no}">${ocList.title}</a></td>
 										<td width="30%;">${ocList.payment_date}</td>
 									</tr>
 						    	</c:forEach>
 						    </table>
 					    </div>
 					    <div class="text-align" id="tab02">
-					    	<table class="table-text-align">
+					    	<table class="table table-hover text-align" style="border: 1px solid #dddddd">
 								<tr>
-									<th style="font-size: 20px;">노트명</th>
-									<th style="font-size: 20px;">관심일자</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">노트명</th>
+									<th style="background-color: #eeeeee; font-size: 20px;">관심일자</th>
 								</tr>
 							    <c:forEach var="itList" items="${itList}">
 							    	<tr>
-										<td width="70%;"><a href="/courses/${itList.oli_no}">${itList.title}</a></td>
+										<td width="70%;"><a href="/notes/${itList.n_no}">${itList.title}</a></td>
 										<td width="30%;">${itList.reg_date}</td>
 									</tr>
 							    </c:forEach>

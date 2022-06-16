@@ -35,22 +35,23 @@
 	</select>
 	
 	<!-- 노트 구매 내역 -->
-	<!-- <select id="myPurcaseCourses" resultType="HashMap">
-		select hol.oli_no, hol.m_no, hol.payment, hol.payment_date,
-				oli.oli_no, oli.title, oli.img_path, oli.price, olt.name
-		from history_order_note hon, online_lecture_introduction oli, online_lecture_teacher olt
-		where hol.m_no = #{m_no} and hol.oli_no = oli.oli_no
+	<select id="myPurcaseNotes" resultType="HashMap">
+		select hon.hon_no, hon.n_no, hon.m_no, hon.payment, hon.payment_date,
+				n.m_no, n.title,
+				TRUNCATE((SELECT AVG(star_rating) FROM note_reply nr WHERE nr.n_no = n.n_no),0) star_avg,
+				(SELECT m.m_name FROM member m WHERE n.m_no = m.m_no) m_name
+		from history_order_note hon, note n, member m
+		where hon.m_no = #{m_no} and hon.n_no = n.n_no
 		group by hon.hon_no
 		order by hon.payment_date desc
-	</select> -->
+	</select>
 	
 	<!-- 노트 강의 내역 -->
-	<!-- <select id="myInterestCourses" resultType="HashMap">
-		select 	oli.oli_no, oli.title, oli.img_path, oli.price, olt.name, oll.reg_date
-		from history_order_note hon, online_lecture_teacher olt, online_lecture_like oll
-		where oll.m_no = #{m_no} and oll.oli_no = oli.oli_no
-		group by hon.oli_no
-		order by hon.reg_date desc
-	</select> -->
+	<select id="myInterestNotes" resultType="HashMap">
+		select 	n.n_no, n.m_no, n.title, nl.n_no, nl.m_no, nl.reg_date
+		from note n, note_like nl
+		where nl.m_no = #{m_no} and n.n_no = nl.n_no
+		group by n.n_no
+	</select>
 	
 </mapper>
