@@ -40,6 +40,7 @@ public class NoteController {
 	void showNotes(HttpServletRequest request, Model model, String tag) {
 		String keyword = request.getParameter("keyword");
 		String order = request.getParameter("order");
+		String tagParam = request.getParameter("tag");
 				
 		keyword = (keyword == null) ? "" : keyword;
 		order = (order == null) ? "" : order;
@@ -51,14 +52,14 @@ public class NoteController {
 		
 		System.out.println("keyword : " + keyword + ", tag : " + tag);
 		
-		int totalCount = noteService.getNoteTotalCount(keyword, tag);
+		int totalCount = noteService.getNoteTotalCount(keyword, tag, tagParam);
 		
 		pagingService = new PagingService(request, totalCount, pageSize);
 		
 		System.out.println("pagingDTO : " + pagingService.getPaging());
 		
 		model.addAttribute("paging", pagingService.getPaging()); 
-		model.addAttribute("nlist", noteService.getNoteList(keyword, tag, order, pagingService.getNowPage(), pageSize));
+		model.addAttribute("nlist", noteService.getNoteList(keyword, tag, tagParam, order, pagingService.getNowPage(), pageSize));
 		model.addAttribute("nowURL", request.getServletPath());
 		model.addAttribute("keyword", keyword);
 		model.addAttribute("order", order);

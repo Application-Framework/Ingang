@@ -16,4 +16,7 @@ public interface CourseVideoDAO {
 	
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
+	
+	// 강의 비디오 삭제
+	public int deleteCourseVideo(int oli_no);
 }

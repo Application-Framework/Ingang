@@ -71,11 +71,6 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public TeacherDTO getTeacherInfo(int olt_no) {
-		return teacherDAO.getTeacherInfo(olt_no);
-	}
-
-	@Override
 	public int getCourseLikeCount(int oli_no) {
 		return courseLikeDAO.getCourseLikeCount(oli_no);
 	}
@@ -101,25 +96,62 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList) {
+		courseDAO.updateCourse(courseDTO);
+		courseTagDAO.deleteCourseTag(courseDTO.getOli_no());
+		courseVideoDAO.deleteCourseVideo(courseDTO.getOli_no());
+		
+		for(CourseTagDTO courseTag : courseTagList) {
+			courseTagDAO.submitCourseTag(courseTag);
+		}
+		
+		for(CourseVideoDTO courseVideo : courseVideoList) {
+			courseVideoDAO.submitCourseVideo(courseVideo);
+		}
+		
+		return 1;
+	}
+	
+	@Override
 	public int submitReply(CourseReplyDTO dto) {
 		return courseReplyDAO.submitReply(dto);
 	}
 
 	@Override
-	public int submitTag(CourseTagDTO dto) {
-		return courseTagDAO.submitTag(dto);
+	public int submitCourseTag(CourseTagDTO dto) {
+		return courseTagDAO.submitCourseTag(dto);
 	}
 
 	@Override
 	public int submitCourseVideo(CourseVideoDTO dto) {
 		return courseVideoDAO.submitCourseVideo(dto);
 	}
-
+	
 	@Override
-	public int getOlt_noByM_no(int m_no) {
-		return teacherDAO.getOlt_noByM_no(m_no);
+	public TeacherDTO getTeacherInfo(int olt_no) {
+		return teacherDAO.getTeacherInfo(olt_no);
+	}
+	
+	@Override
+	public TeacherDTO getTeacherInfoByM_no(int m_no) {
+		return teacherDAO.getTeacherInfoByM_no(m_no);
+	}
+	
+	@Override
+	public int insertCourseTeacher(TeacherDTO dto) {
+		return teacherDAO.insertCourseTeacher(dto);
 	}
 
+	@Override
+	public int deleteCourseTeacher(int olt_no) {
+		return teacherDAO.deleteCourseTeacher(olt_no);
+	}
+
+	@Override
+	public int checkTeacherByM_no(int m_no) {
+		return teacherDAO.checkTeacherByM_no(m_no);
+	}
+	
 	@Override
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
 		return courseVideoDAO.getCourseVideoList(oli_no);
@@ -145,4 +177,12 @@ public class CourseServiceImpl implements CourseService {
 		return historyOrderLectureDAO.getHistoryOrderLectureList(m_no);
 	}
 
+	@Override
+	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName) {
+		for(CourseTagDTO tag : tagList) {
+			if(tag.getTag().equals(tagName))
+				return true;
+		}
+		return false;
+	}
 }

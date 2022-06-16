@@ -132,13 +132,13 @@
         <main>
             <%-- 본문의 상단 --%>
             <div class="container">
-            	<c:if test="${member.m_authority == 1}">
+            	<c:if test="${isTeacher == true}">
 	            	<div class="d-flex flex-row-reverse pt-10">
 	            		<a class="btn head-btn2" href="/courses/writeCourse">강의 생성</a>
 	            	</div>
 	            	<div class="job-listing-area pt-40 pb-120">
 	            </c:if>
-            	<c:if test="${member == null || member.m_authority == 0}">
+            	<c:if test="${isTeacher == false}">
             		<div class="job-listing-area pt-120 pb-120">
             	</c:if>
                     <div class="row">

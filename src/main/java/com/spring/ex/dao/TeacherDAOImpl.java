@@ -20,8 +20,23 @@ public class TeacherDAOImpl implements TeacherDAO{
 	}
 
 	@Override
-	public int getOlt_noByM_no(int m_no) {
-		return sqlSession.selectOne(namespace + ".getOlt_noByM_no", m_no);
+	public TeacherDTO getTeacherInfoByM_no(int m_no) {
+		return sqlSession.selectOne(namespace + ".getTeacherInfoByM_no", m_no);
+	}
+	
+	@Override
+	public int insertCourseTeacher(TeacherDTO dto) {
+		return sqlSession.insert(namespace + ".insertCourseTeacher", dto);
+	}
+
+	@Override
+	public int deleteCourseTeacher(int olt_no) {
+		return sqlSession.delete(namespace + ".deleteCourseTeacher", olt_no);
+	}
+
+	@Override
+	public int checkTeacherByM_no(int m_no) {
+		return sqlSession.selectOne(namespace + ".checkTeacherByM_no", m_no);
 	}
 	
 }

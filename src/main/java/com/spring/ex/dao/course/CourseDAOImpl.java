@@ -37,4 +37,9 @@ public class CourseDAOImpl implements CourseDAO {
 	public int submitCourse(CourseDTO dto) {
 		return sqlSession.insert(namespace + ".submitCourse", dto);
 	}
+
+	@Override
+	public int updateCourse(CourseDTO dto) {
+		return sqlSession.update(namespace + ".updateCourse", dto);
+	}
 }

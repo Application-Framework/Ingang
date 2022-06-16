@@ -24,4 +24,6 @@ public interface CourseDAO {
 	// 강의 등록
 	public int submitCourse(CourseDTO dto);
 	
+	// 강의 수정
+	public int updateCourse(CourseDTO dto);
 }

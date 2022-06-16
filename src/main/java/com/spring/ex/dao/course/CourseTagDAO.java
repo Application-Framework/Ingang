@@ -14,5 +14,8 @@ public interface CourseTagDAO {
 	public List<CourseTagDTO> getCourseTags(int oli_no);
 	
 	// 강의에 태그 등록
-	public int submitTag(CourseTagDTO dto);
+	public int submitCourseTag(CourseTagDTO dto);
+	
+	// 강의 태그 삭제
+	public int deleteCourseTag(int oli_no);
 }

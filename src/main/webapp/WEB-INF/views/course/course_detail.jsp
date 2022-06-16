@@ -158,7 +158,7 @@ ${course.content}
 					<div class="mb-4">
 						<c:forEach var="video" items="${videos}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true}">href="/courses/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
+								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/courses/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
 							</div>
 						</c:forEach>
 					</div>
@@ -186,7 +186,7 @@ ${course.content}
 			                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
 			            </div>
 			            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
-			    		<span class="fw-bold">${memberSerivce.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
+			    		<span class="fw-bold">${memberService.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
 			    		<p>${reply.content}</p>
 				    	<hr>
 					</c:forEach>
@@ -302,12 +302,21 @@ ${course.content}
 			      <div class="card-body p-4">
 			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
 			        <c:if test="${member != null}">
-			        	<c:if test="${purchased == true}">
-			        		<a class="btn head-btn2 mb-3" style="min-width:100%;">수강신청 중</a>
-			        	</c:if>
-			        	<c:if test="${purchased == false}">
-					        <a href="javascript:;" onclick="openRegCoursesModal()" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
-			        	</c:if>
+			        	<c:choose>
+			        		<c:when test="${isCurrentCourseTeacher == true}">
+			        			<form action="/courses/writeCourse" method="post">
+			        				<input type="hidden" name="pageNo" value="${pageNo}"/>
+			        				<input type="hidden" name="update" value="true"/>
+			        				<button type="submit" class="btn head-btn1 mb-3" style="min-width:100%;">강의 수정</button>
+			        			</form>
+			        		</c:when>
+			        		<c:when test="${purchased == true}">
+			        			<a class="btn head-btn2 mb-3" style="min-width:100%;">수강신청 중</a>
+			        		</c:when>
+			        		<c:when test="${purchased == false}">
+			        			<a href="javascript:;" onclick="openRegCoursesModal()" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
+			        		</c:when>
+			        	</c:choose>
 			        </c:if>
 			        <c:if test="${member == null}">
 			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
@@ -421,6 +430,16 @@ ${course.content}
 				},
 				success: function() {
 					location.reload();
+				}
+			});
+		}
+		
+		function updateCourse() {
+			$.ajax({
+				url: '/courses/updateCourse',
+				type: 'post',
+				data: {
+					pageNo: ${pageNo}
 				}
 			});
 		}

@@ -32,4 +32,9 @@ public class CourseVideoDAOImpl implements CourseVideoDAO {
 		return sqlSession.selectOne(namespace + ".getCourseVideo", olv_no);
 	}
 
+	@Override
+	public int deleteCourseVideo(int oli_no) {
+		return sqlSession.delete(namespace + ".deleteCourseVideo", oli_no);
+	}
+
 }

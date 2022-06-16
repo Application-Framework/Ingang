@@ -50,8 +50,8 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
-	public List<NoteDTO> getNoteList(String keyword, String tag, String order, int page, int pageSize) {
-		return noteDAO.getNoteList(keyword, tag, order, page, pageSize);
+	public List<NoteDTO> getNoteList(String keyword, String tag, String tagParam, String order, int page, int pageSize) {
+		return noteDAO.getNoteList(keyword, tag, tagParam, order, page, pageSize);
 	}
 
 	@Override
@@ -70,8 +70,8 @@ public class NoteServiceImpl implements NoteService{
 	}
 	
 	@Override
-	public int getNoteTotalCount(String keyword, String tag) {
-		return noteDAO.getNoteTotalCount(keyword, tag);
+	public int getNoteTotalCount(String keyword, String tag, String tagParam) {
+		return noteDAO.getNoteTotalCount(keyword, tag, tagParam);
 	}
 
 	@Override

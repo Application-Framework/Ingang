@@ -15,11 +15,11 @@ public interface NoteService {
 	public int insertNote(NoteDTO dto);
 	public int deleteNote(int n_no);
 	public int updateNote(NoteDTO dto);
-	public List<NoteDTO> getNoteList(String keyword, String tag, String order, int page, int pageSize);
+	public List<NoteDTO> getNoteList(String keyword, String tag, String tagParam, String order, int page, int pageSize);
 	public List<NoteDTO> getNoteListByOli_no(int oli_no);
 	public NoteDTO getNote(int n_no);
 	public NoteDTO getNoteByOli_noM_no(int oli_no, int m_no);
-	public int getNoteTotalCount(String keyword, String tag);
+	public int getNoteTotalCount(String keyword, String tag, String tagParam);
 	
 	// 노트 글
 	public int insertNoteArticle(NoteArticleDTO dto);

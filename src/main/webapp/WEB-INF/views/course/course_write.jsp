@@ -32,17 +32,51 @@
 		}
 		
 	</style>
+	
+	<script>
+	    $(document).ready(function(){
+	        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+	            removeItemButton: true,
+	            maxItemCount:5,
+	            searchResultLimit:10,
+	            //renderChoiceLimit:10
+	        }); 
+	    });
+	    
+	    var cnt;
+	    <c:if test="${videoList == null}">
+		    cnt = 1;
+	    </c:if>
+	    <c:if test="${videoList != null}">
+		    cnt = 0;
+	    </c:if>
+	    
+	    
+	    function addVideoSlot(title, file_name) {
+	    	cnt = cnt + 1;
+	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
+	    }
+	    
+	    function removeVideoSlot() {
+	    	if(cnt == 1) return;
+	    	$('#v_'+cnt).remove();
+	    	cnt = cnt - 1;
+	    }
+	    
+    </script>
 </head>
 <body>
 	 <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
     <div class="container">
-    	<form action="/courses/submitCourse" method="post" enctype="multipart/form-data">
+    	<form <c:if test="${course == null}">action="/courses/submitCourse"</c:if>
+    		  <c:if test="${course != null}">action="/courses/updateCourse"</c:if> method="post" enctype="multipart/form-data">
+    		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
    				<div class="col-sm-10">
-    				<input type="text" class="form-control" name="title" required/>
+    				<input type="text" class="form-control" name="title" value="${course.title}" equired/>
     			</div>
     		</div>
     		
@@ -50,16 +84,24 @@
    				<label class="col-sm-2 col-form-label fs-5">강의 분야</label>
    				<div class="col-sm-10">
 					<select name="tags" id="choices-multiple-remove-button" multiple>
-					  <option value="웹 개발">웹 개발</option>
-					  <option value="프론트엔드">프론트엔드</option>
-					  <option value="백엔드">백엔드</option>
-					  <option value="프로그래밍 언어">프로그래밍 언어</option>
-					  <option value="데이터베이스">데이터베이스</option>
-					  <option value="알고리즘">알고리즘</option>
-					  <option value="모바일 앱 개발">모바일 앱 개발</option>
-					  <option value="AI">AI</option>
-					  <option value="보안">보안</option>
-					  <option value="기타">기타</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'웹 개발') == true}">selected</c:if> value="웹 개발">웹 개발</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'프론트엔드') == true}">selected</c:if> value="프론트엔드">프론트엔드</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'백엔드') == true}">selected</c:if> value="백엔드">백엔드</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'C') == true}">selected</c:if> value="C">C</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'C++') == true}">selected</c:if> value="C++">C++</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'C#') == true}">selected</c:if> value="C#">C#</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'HTML') == true}">selected</c:if> value="HTML">HTML</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'Javascript') == true}">selected</c:if> value="Javascript">Javascript</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'Python') == true}">selected</c:if> value="Python">Python</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'CSS') == true}">selected</c:if> value="CSS">CSS</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'PHP') == true}">selected</c:if> value="PHP">PHP</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'Ruby') == true}">selected</c:if> value="Ruby">Ruby</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'데이터베이스') == true}">selected</c:if> value="데이터베이스">데이터베이스</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'알고리즘') == true}">selected</c:if> value="알고리즘">알고리즘</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'모바일 앱 개발') == true}">selected</c:if> value="모바일 앱 개발">모바일 앱 개발</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'AI') == true}">selected</c:if> value="AI">AI</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'보안') == true}">selected</c:if> value="보안">보안</option>
+					  <option <c:if test="${courseService.containsInTagList(tagList,'기타') == true}">selected</c:if> value="기타">기타</option>
 					</select>
     			</div>
     		</div>
@@ -67,19 +109,20 @@
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">가격</label>
    				<div class="col-sm-2">
-    				<input type="number" class="form-control" name="price" required/>
+    				<input type="number" class="form-control" name="price" value="${course.price}" required/>
     			</div>
     		</div>
     		
-    		<div class="row mb-1">
-   				<label class="col-sm-2 col-form-label fs-5">표지</label>
-   				<div class="col-sm-10">
-		    		<input type="file" class="form-control" name="thumbnail" required/>
-    			</div>
-    		</div>
-    		
+    		<c:if test="${course == null}">
+	    		<div class="row mb-1">
+	   				<label class="col-sm-2 col-form-label fs-5">표지</label>
+	   				<div class="col-sm-10">
+			    		<input type="file" class="form-control" name="thumbnail" value="${course.img_path}" required/>
+	    			</div>
+	    		</div>
+    		</c:if>
     		<div class="row mb-4">
-    			<textarea class="form-control fs-5" name="content" placeholder="강의 소개 내용" rows="10"></textarea>
+    			<textarea class="form-control fs-5" name="content" placeholder="강의 소개 내용" rows="10">${course.content}</textarea>
     		</div>
     		
     		<div class="row mb-4" id="videoSection">
@@ -92,20 +135,31 @@
     					<label>주소</label>
     				</div>
     				<div class="col-1 fs-2">
-    					<a href="javascript:;" onclick="addVideoSlot()"><i class="bi bi-plus-circle"></i></a>
+    					<a href="javascript:;" onclick="addVideoSlot('', '')"><i class="bi bi-plus-circle"></i></a>
     				</div>
     				<div class="col-1 fs-2">
     					<a href="javascript:;" onclick="removeVideoSlot()"><i class="bi bi-dash-circle"></i></a>
     				</div>
     			</div>
-    			<div class="row ps-4 pb-2">
-    				<div class="col-2">
-    					<input type="text" class="form-control" name="video_titles" required/>
-    				</div>
-    				<div class="col-10">
-    				 	<input type="text" class="form-control" name="video_paths" required/>
-    				 </div>
-    			</div>
+    			
+    			<c:if test="${videoList == null}">
+	    			<div class="row ps-4 pb-2">
+	    				<div class="col-2">
+	    					<input type="text" class="form-control" name="video_titles" required/>
+	    				</div>
+	    				<div class="col-10">
+	    				 	<input type="text" class="form-control" name="video_paths" required/>
+	    				 </div>
+	    			</div>
+    			</c:if>
+    			
+    			<c:if test="${videoList != null}">
+    				<script>
+	    				<c:forEach var="video" items="${videoList}">
+		    					addVideoSlot('${video.title}', '${video.s_file_name}');
+    					</c:forEach>
+    				</script>
+    			</c:if>
     		</div>
     		
     		<div class="row mb-3 d-flex flex-row-reverse">
@@ -242,28 +296,6 @@
         <!-- Footer End-->
     </footer>
     
-    <script>
-	    $(document).ready(function(){
-	        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-	            removeItemButton: true,
-	            //maxItemCount:5,
-	            searchResultLimit:10,
-	            renderChoiceLimit:10
-	        }); 
-	    });
-	    
-	    var cnt = 0;
-	    
-	    function addVideoSlot() {
-	    	cnt = cnt + 1;
-	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' required/></div></div>");
-	    }
-	    
-	    function removeVideoSlot() {
-	    	$('#v_'+cnt).remove();
-	    	cnt = cnt - 1;
-	    }
-	    
-    </script>
+    
 </body>
 </html>

@@ -1,6 +1,7 @@
 package com.spring.ex.controller;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -51,9 +52,14 @@ public class CourseController {
 	private NoteService noteService;
 	
 	void showCourses(HttpServletRequest request, Model model, String tag) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		boolean isTeacher = false;
+		if(memberDTO != null) 
+			isTeacher = (courseService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
+		
 		String keyword = request.getParameter("keyword");
 		String order = request.getParameter("order");
-				
+		String tagParam = request.getParameter("tag");
 		keyword = (keyword == null) ? "" : keyword;
 		order = (order == null) ? "" : order;
 		
@@ -65,6 +71,7 @@ public class CourseController {
 		HashMap<String, Object> countMap = new HashMap<String, Object>();
 		countMap.put("keyword", keyword);
 		countMap.put("tag", tag);
+		countMap.put("tagParam", tagParam);
 		
 		int totalCount = courseService.getCourseTotalCount(countMap);
 		
@@ -76,9 +83,7 @@ public class CourseController {
 		pageMap.put("order", order);
 		pageMap.put("keyword", keyword);
 		pageMap.put("tag", tag);
-		
-		
-		System.out.println("pagingDTO : " + pagingService.getPaging());
+		pageMap.put("tagParam", tagParam);
 		
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
@@ -88,6 +93,7 @@ public class CourseController {
 		model.addAttribute("keywordParam", keywordParam);
 		model.addAttribute("orderParam", orderParam);
 		model.addAttribute("totalCount", totalCount);
+		model.addAttribute("isTeacher", isTeacher);
 	}
 	
 	@RequestMapping("/courses")
@@ -155,12 +161,23 @@ public class CourseController {
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO courseTeacherDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		
+		// 접속한 회원이 현재 강의의 강사인지 확인
+		boolean isCurrentCourseTeacher = false;
+		if(memberDTO != null) {
+			TeacherDTO currentTeacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+			if(currentTeacherDTO != null) {
+				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
+			}
+		}
+		
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videos = courseService.getCourseVideoList(pageNo);
 		List<NoteDTO> notes = noteService.getNoteListByOli_no(pageNo);
 		
+		// 회원이 강의를 구매했는지 확인
 		if(memberDTO != null) {
 			HistoryOrderLectureDTO historyOrderLectureDTO = courseService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
@@ -183,14 +200,14 @@ public class CourseController {
 		
 		System.out.println("강의 상세 페이지 정보 출력");
 		System.out.println(courseDTO);
-		System.out.println(teachertDTO);
+		System.out.println(courseTeacherDTO);
 		System.out.println(replys);
 		System.out.println(tags);
 		System.out.println(likeCnt);
 		System.out.println(videos);
 		
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("teacher", teachertDTO);
+		model.addAttribute("teacher", courseTeacherDTO);
 		model.addAttribute("replys", replys);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
@@ -202,6 +219,7 @@ public class CourseController {
 		model.addAttribute("videos", videos);
 		model.addAttribute("contentType", "main");
 		model.addAttribute("notes", notes);
+		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
 		
 		return "course/course_detail";
 	}
@@ -217,7 +235,7 @@ public class CourseController {
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
 		
-		HashMap<String, Integer> pageMap = new HashMap<String, Integer>();
+		HashMap<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("Page", pagingService.getNowPage());
 		pageMap.put("PageSize", 10);
 		
@@ -246,7 +264,7 @@ public class CourseController {
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberSerivce", memberService);
+		model.addAttribute("memberService", memberService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("cbRegDateList", cbRegDateList);
@@ -298,16 +316,66 @@ public class CourseController {
 	}
 	
 	@RequestMapping("/courses/writeCourse")
-	public String writeCourse(HttpServletRequest request) {
-		
+	public String writeCourse(HttpServletRequest request, Model model) {
+		if(request.getParameter("update").equals("true")) {
+			int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+			
+			CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+			List<CourseTagDTO> tagList = courseService.getCourseTags(pageNo);
+			List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
+			
+			System.out.println(videoList);
+			
+			model.addAttribute("course", courseDTO);
+			model.addAttribute("tagList", tagList);
+			model.addAttribute("videoList", videoList);
+			model.addAttribute("courseService", courseService);
+		}
 		return "course/course_write";
+	}
+	
+	@RequestMapping("/courses/updateCourse")
+	public String updateCourse(HttpServletRequest request, Model model) {
+		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		int price = Integer.parseInt(request.getParameter("price"));
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
+		
+		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		courseDTO.setTitle(title);
+		courseDTO.setContent(content);
+		courseDTO.setPrice(price);
+		
+		List<CourseTagDTO> tagList = new ArrayList<CourseTagDTO>();
+		for(int i = 0; i < tags.length; i++) {
+			CourseTagDTO courseTagDTO = new CourseTagDTO();
+			courseTagDTO.setOli_no(pageNo);
+			courseTagDTO.setTag(tags[i]);
+			tagList.add(courseTagDTO);
+		}
+		
+		List<CourseVideoDTO> videoList = new ArrayList<CourseVideoDTO>();
+		for(int i = 0; i < videoTitles.length; i++) {
+			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+			courseVideoDTO.setOli_no(pageNo);
+			courseVideoDTO.setTitle(videoTitles[i]);
+			courseVideoDTO.setS_file_name(videoPaths[i]);
+			videoList.add(courseVideoDTO);
+		}
+		
+		courseService.updateCourse(courseDTO, tagList, videoList);
+		
+		return "redirect:/courses/"+pageNo;
 	}
 	
 	@RequestMapping("/courses/submitCourse")
 	public String submitCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
 		System.out.println("등록 시작");
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		String pageNo = request.getParameter("pageNo");
+		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
@@ -326,11 +394,10 @@ public class CourseController {
 			return "error";
 		}
 		
-		System.out.println("t_no :"+ courseService.getOlt_noByM_no(memberDTO.getM_no()));
 		
 		// 강의 등록
 		CourseDTO courseDTO = new CourseDTO();
-		courseDTO.setOlt_no(courseService.getOlt_noByM_no(memberDTO.getM_no()));
+		courseDTO.setOlt_no(teacherDTO.getOlt_no());
 		courseDTO.setTitle(title);
 		courseDTO.setContent(content);
 		courseDTO.setImg_path(img_path);
@@ -344,7 +411,7 @@ public class CourseController {
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
 			courseTagDTO.setTag(t);
 			
-			courseService.submitTag(courseTagDTO);
+			courseService.submitCourseTag(courseTagDTO);
 		}
 		
 		

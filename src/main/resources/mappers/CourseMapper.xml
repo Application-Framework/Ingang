@@ -50,7 +50,24 @@
 		WHERE oli.olt_no = olt.olt_no AND oli.oli_no = oltag.oli_no AND enable = 1 AND 
 		title LIKE '%${keyword}%'
 		<if test="tag != null">
-			AND oltag.tag = #{tag}
+			<if test="tag.equals('프로그래밍 언어')">
+				AND (oltag.tag = 'JAVA'
+				OR oltag.tag = 'C'
+				OR oltag.tag = 'HTML'
+				OR oltag.tag = 'C#'
+				OR oltag.tag = 'Javascript'
+				OR oltag.tag = 'Python'
+				OR oltag.tag = 'CSS'
+				OR oltag.tag = 'PHP'
+				OR oltag.tag = 'Ruby'
+				OR oltag.tag = 'C++')
+			</if>
+			<if test="!tag.equals('프로그래밍 언어')">
+				AND oltag.tag = #{tag}
+			</if>
+		</if>
+		<if test="tagParam != null">
+			AND oltag.tag = #{tagParam}
 		</if>
 	</sql>
 	
@@ -67,17 +84,24 @@
 		WHERE oli_no = #{oli_no}
 	</select>
 	
+	<!-- 태그 부분 -->
+	
 	<select id="getCourseTags" resultType="CourseTagDTO">
 		SELECT *
 		FROM online_lecture_tag
 		WHERE oli_no = #{oli_no}
 	</select>
 	
-	<select id="getTeacherInfo" resultType="TeacherDTO">
-		SELECT *
-		FROM online_lecture_teacher
-		WHERE olt_no = #{olt_no}
-	</select>
+	<insert id="submitCourseTag">
+		INSERT INTO online_lecture_tag (oli_no, tag)
+		VALUES(#{oli_no}, #{tag})
+	</insert>
+	
+	<delete id="deleteCourseTag">
+		DELETE FROM online_lecture_tag
+		WHERE oli_no = #{oli_no}
+	</delete>
+	
 	
 	<select id="getCourseLikeCount" resultType="int">
 		SELECT COUNT(*)
@@ -105,26 +129,26 @@
 		VALUES(#{olt_no}, #{title}, #{content}, #{img_path}, #{price}, #{reg_date}, 1)
 	</insert>
 	
-	<insert id="submitTag">
-		INSERT INTO online_lecture_tag (oli_no, tag)
-		VALUES(#{oli_no}, #{tag})
-	</insert>
+	<update id="updateCourse">
+		UPDATE online_lecture_introduction
+		SET 
+			title = #{title},
+			content = #{content},
+			price = #{price}
+		WHERE oli_no = #{oli_no}
+	</update>
 	
 	<insert id="submitReply">
 		INSERT INTO online_lecture_reply (oli_no, m_no, star_rating, content, reg_date)
 		VALUES(#{oli_no}, #{m_no}, #{star_rating}, #{content}, #{reg_date})
 	</insert>
 	
+	<!-- 강의 영상 부분 -->
+	
 	<insert id="submitCourseVideo">
 		INSERT INTO online_lecture_video (oli_no, title, s_file_name)
 		VALUES(#{oli_no}, #{title}, #{s_file_name})
 	</insert>
-	
-	<select id="getOlt_noByM_no" resultType="int">
-		SELECT * FROM online_lecture_teacher
-		WHERE m_no = #{m_no}
-		LIMIT 1
-	</select>
 	
 	<select id="getCourseVideoList" resultType="CourseVideoDTO">
 		SELECT *
@@ -137,6 +161,39 @@
 		SELECT *
 		FROM online_lecture_video
 		WHERE olv_no = #{olv_no}
+	</select>
+	
+	<delete id="deleteCourseVideo">
+		DELETE FROM online_lecture_video
+		WHERE oli_no = #{oli_no}
+	</delete>
+	
+	<!-- 강사 부분 -->
+	
+	<select id="getTeacherInfo" resultType="TeacherDTO">
+		SELECT *
+		FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
+	</select>
+	
+	<select id="getTeacherInfoByM_no" resultType="TeacherDTO">
+		SELECT * 
+		FROM online_lecture_teacher
+		WHERE m_no = #{m_no}
+	</select>
+	
+	<insert id="insertCourseTeacher"> 
+		INSERT INTO online_lecture_teacher(m_no, email, phone, name, field, introduction, link, grade, reg_date)
+		VALUES(#{m_no}, #{email}, #{phone}, #{name}, #{field}, #{introduction}, #{link}, 1, #{reg_date})
+	</insert>
+	
+	<delete id="deleteCourseTeacher">
+		DELETE FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
+	</delete>
+	
+	<select id="checkTeacherByM_no" resultType="int">
+		SELECT EXISTS(SELECT * FROM online_lecture_teacher WHERE m_no = #{m_no})
 	</select>
 	
 	<!-- 구매 기록에 추가 -->

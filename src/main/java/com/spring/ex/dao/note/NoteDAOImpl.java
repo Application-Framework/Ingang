@@ -34,10 +34,11 @@ public class NoteDAOImpl implements NoteDAO {
 	}
 
 	@Override
-	public List<NoteDTO> getNoteList(String keyword, String tag, String order, int page, int pageSize) {
+	public List<NoteDTO> getNoteList(String keyword, String tag, String tagParam, String order, int page, int pageSize) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("keyword", keyword);
 		map.put("tag", tag);
+		map.put("tagParam", tagParam);
 		map.put("order", order);
 		map.put("page", page);
 		map.put("pageSize", pageSize);
@@ -58,10 +59,11 @@ public class NoteDAOImpl implements NoteDAO {
 	}
 
 	@Override
-	public int getNoteTotalCount(String keyword, String tag) {
+	public int getNoteTotalCount(String keyword, String tag, String tagParam) {
 		HashMap<String, String> map = new HashMap<String, String>();
 		map.put("keyword", keyword);
 		map.put("tag", tag);
+		map.put("tagParam", tagParam);
 		return sqlSession.selectOne(namespace + ".getNoteTotalCount", map);
 	}
 

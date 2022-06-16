@@ -91,7 +91,25 @@
 		</choose>
 	
 		<if test="tag != null">
-			AND olt.tag = #{tag}
+			<if test="tag.equals('프로그래밍 언어')">
+				AND (olt.tag = 'JAVA'
+				OR olt.tag = 'C'
+				OR olt.tag = 'HTML'
+				OR olt.tag = 'C#'
+				OR olt.tag = 'Javascript'
+				OR olt.tag = 'Python'
+				OR olt.tag = 'CSS'
+				OR olt.tag = 'PHP'
+				OR olt.tag = 'Ruby'
+				OR olt.tag = 'C++')
+			</if>
+			<if test="!tag.equals('프로그래밍 언어')">
+				AND olt.tag = #{tag}
+			</if>
+		</if>
+		
+		<if test="tagParam != null">
+			AND olt.tag = #{tagParam}
 		</if>
 	</sql>
 	

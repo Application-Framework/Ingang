@@ -29,9 +29,6 @@ public interface CourseService {
 	// 강좌의 태그 가져오기
 	public List<CourseTagDTO> getCourseTags(int oli_no);
 	
-	// 강사 정보 가져오기
-	public TeacherDTO getTeacherInfo(int olt_no);
-	
 	// 좋아요 개수 가져오기
 	public int getCourseLikeCount(int oli_no);
 	
@@ -47,16 +44,24 @@ public interface CourseService {
 	// 강의 등록
 	public int submitCourse(CourseDTO dto);
 	
+	// 강의 수정
+	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList);
+	
 	// 강의에 리뷰 등록
 	public int submitReply(CourseReplyDTO dto);
 	
 	// 강의에 태그 등록
-	public int submitTag(CourseTagDTO dto);
+	public int submitCourseTag(CourseTagDTO dto);
 	
 	// 강의 비디오 등록
 	public int submitCourseVideo(CourseVideoDTO dto);
 	
-	public int getOlt_noByM_no(int m_no);
+	// 강사
+	public TeacherDTO getTeacherInfo(int olt_no);
+	public TeacherDTO getTeacherInfoByM_no(int m_no);
+	public int insertCourseTeacher(TeacherDTO dto);
+	public int deleteCourseTeacher(int olt_no);
+	public int checkTeacherByM_no(int m_no);
 	
 	// 강의 비디오 리스트 가져오기
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no);
@@ -72,4 +77,7 @@ public interface CourseService {
 	
 	// 강의 구매 기록 리스트 가져오기
 	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no);
+	
+	// 태그 리스트에 태그가 있는지 확인
+	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName);
 }
