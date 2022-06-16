@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
 public interface CommunityBoardService {
@@ -15,11 +17,11 @@ public interface CommunityBoardService {
 	//게시판 최신순 출력
 	public List<CommunityBoardDTO> getCommunityBoardChatRegDateShowPage(HashMap<String, Object> map) throws Exception;
 	
-	//게시판 최신순 출력
+	//게시판 좋아요순 출력
 	public List<CommunityBoardDTO> getCommunityBoardChatGoodShowPage(HashMap<String, Object> map) throws Exception;
 	
 	//게시판 목록 총 갯수 - 페이징
-	public int getCommunityBoardTotalCount() throws Exception;
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//게시글 상세페이지 출력 
 	public Map<String, Object> getReadCommunityBoard(HashMap<String, Object> map) throws Exception;
@@ -56,4 +58,14 @@ public interface CommunityBoardService {
 	
 	//게시물 삭제
 	public int deleteCommunityBoard(int cb_no) throws Exception;
+	
+	//태그 출력
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
+	
+	//수강후기 게시판 출력
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception;
+	
 }

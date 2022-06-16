@@ -12,14 +12,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
     
-    <!-- CSS here -->
-	<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+<!-- CSS here -->
+<link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
+<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
-
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 	
@@ -50,14 +50,15 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form action="#">
+						<form id="searchForm" action="communityChats">
 							<div class="row">
 								<div class="col-lg-10" >
-									<input type="text" class="form-control" name='tags' placeholder='내용을 검색해보세요!'>
-									<input type="text" class="form-control" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
+									<ul id="tag-list"> </ul>
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
-									<input type="button" class="genric-btn danger-border radius" value="검색" style="width: 100%;" >
+									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
 								</div>
 							</div>
 						</form>
@@ -89,7 +90,7 @@
 									</c:choose>
 							</ul>
 							
-							<div class="tab-content">
+							<div class="tab-content" id="contentDiv">
 								<div class="tab-pane fade show active" id="qwe">
 									<c:forEach var="cbList" items="${cbRegDateList}">
 										<article class="blog_item">
@@ -99,12 +100,18 @@
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
-												<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+												<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+												<ul id="tag-list" style=""> 
+													<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
+														<li class="tag-item">#${cbTag.tag_name}</li>
+													</c:forEach>
+												</ul>
 												<ul class="blog-info-link">
 													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
 													<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
 													<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+													<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbList.reg_date}" /></font></li>
 												</ul>
 											</div>
 										</article>
@@ -119,12 +126,18 @@
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
-													<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<p style="margin: 0 0px;"><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<ul id="tag-list" style=""> 
+														<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbGoodShowList.cb_no)}">
+															<li class="tag-item">#${cbTag.tag_name}</li>
+														</c:forEach>
+													</ul>
 													<ul class="blog-info-link">
 														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
 														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
 														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
-														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
+														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+														<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbGoodShowList.reg_date}" /></font></li>
 													</ul>
 												</div>
 											</article>
@@ -139,7 +152,7 @@
 
 
 					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination">
+						<ul class="pagination" id="pagingDiv">
 							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 							<c:choose>
 								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
@@ -152,7 +165,7 @@
 							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
 								<c:choose>
 									<c:when test="${i eq Paging.pageNo }">
-										<li class="page-item  active"> <a href="chats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item  active"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
@@ -184,7 +197,7 @@
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
-    
+<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
 
 
@@ -209,6 +222,7 @@ $('#buttonWrite').click(function(){
 	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
+
 $('#buttonNoLogin').click(function(){
 	console.log("asd");
 	swal({
@@ -217,6 +231,10 @@ $('#buttonNoLogin').click(function(){
 		icon: "warning",
 	});
 });
+
+$('#btnBoardSearch').click(function(){
+	$("#searchForm").submit();
+})
 
 </script>
 </body>

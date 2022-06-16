@@ -3,33 +3,51 @@
 
 <mapper namespace="com.spring.ex.CommunityBoardMapper">
 
-	<!-- 자유게시판 최신순 출력 -->
+	<!-- 게시판 최신순 출력 -->
 	<select id="getCommunityBoardChatRegDateShowPage" resultType="hashMap">
 		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
-		FROM community_board cb, member m
-		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
+		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
+								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+				,member m
+		WHERE m.m_no = cb.m_no AND flag = 1 
+		<include refid="classifyBoard"></include>
+		<include refid="searchBoard"></include>
 		GROUP BY cb_no 
 		order by cb.reg_date DESC LIMIT #{Page}, #{PageSize};
 	</select>
 	
-	<!-- 자유게시판 좋아요순 출력 -->
+	<!-- 게시판 좋아요순 출력 -->
 	<select id="getCommunityBoardChatGoodShowPage" resultType="hashMap">
 		SELECT cb.*,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
-		FROM community_board cb, member m
-		WHERE m.m_no = cb.m_no AND flag = 1 AND classify = 1
+		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
+								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+			,member m
+		WHERE m.m_no = cb.m_no AND flag = 1
+		<include refid="classifyBoard"></include>
+		<include refid="searchBoard"></include>
 		GROUP BY cb_no 
-		order by good DESC LIMIT #{Page}, #{PageSize};
+		order by good DESC  LIMIT #{Page}, #{PageSize};
 	</select>
 	
+	<!-- 태그 출력 -->
+	<select id="getTagCommunityBoard" resultType="hashMap">
+		SELECT cbt.cb_no, t.tag_name
+		FROM community_board cb, community_board_tag cbt, tag t
+		WHERE cb.cb_no = cbt.cb_no AND t.tag_no = cbt.tag_no AND cb.cb_no = #{cb_no}
+	</select>
+
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
-		SELECT COUNT(*) FROM community_board WHERE flag = 1 AND classify = 1;
+		SELECT COUNT(*) 
+		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
+								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+		WHERE flag = 1 <include refid="classifyBoard"></include><include refid="searchBoard"></include> 
 	</select>
 	
 	<!-- 게시판 상세페이지 출력 -->
@@ -113,32 +131,77 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
-	<sql id="SearchChatBoard">
+	<!-- 수강후기 게시판 출력-->
+	<select id="getReviewCommunityBoard" resultType="hashMap">
+		SELECT olr.*, m_id, title, oli.img_path
+		FROM online_lecture_reply olr, online_lecture_introduction oli, member m
+		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
+		ORDER BY reg_date DESC LIMIT #{Page}, #{PageSize};
+	</select>
+	
+	<!-- 수강후기 게시판 총 갯수 -->
+	<select id="getReviewCommunityBoardTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM online_lecture_reply olr, online_lecture_introduction oli, member m
+		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
+	</select>
+	
+	<sql id="searchBoard">
 		<choose>
-			<when test="searchContent == 'allTheme' and searchTag != 'allArea'">
-
+			<when test="searchKeyword == 'noContent' and searchTag == 'noTag'">
+			</when>
+			<when test="searchKeyword == 'noContent' and searchTag != 'noTag'">
+				AND cb.cb_no = cbt.cb_no AND(
+				<foreach collection="searchTag" index="index" item="item" separator="or">
+					tag_name LIKE CONCAT('%', #{item} , '%')
+				</foreach>
+				)
+			</when>
+			<when test="searchKeyword != 'noContent' and searchTag == 'noTag'">
+				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
+			</when>
+			<when test="searchKeyword != 'noContent' and searchTag != 'noTag'">
+				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
+				OR
+				<foreach collection="searchTag" item="item" open="(" close=")" separator="or">
+					tag_name LIKE CONCAT('%', #{item} , '%')
+				</foreach>
 			</when>
 		</choose>
 	</sql>
-	<!-- 자유게시판 검색 최신순 출력 -->
-	<select id="getSearchChatBoardPage" resultType="hashMap">
-		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
-				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
-				(SELECT COUNT(*) FROM community_board_tag cbt WHERE cb.cb_no=cbt.cb_no AND tag LIKE CONCAT('%', #{searchTag}, '%') AS tname
-		FROM community_board cb, member m
-		<include refid="SearchChatBoard"></include>
-		LIMIT #{Page}, #{PageSize};
-	</select>
-	
-	<!-- 분양센터 게시글 총 갯수 -->
-	<select id="getSearchChatBoardTotalCount" resultType="int">
-		SELECT cb.`cb_no`, m.`m_id`, cb.`title`, cb.`content`, cb.`hit`, cb.`reg_date`, cb.`flag`, cb.`classify`, 
-				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `reply`,
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
-				(SELECT COUNT(*) FROM community_board_tag cbt WHERE cb.cb_no=cbt.cb_no AND tag LIKE CONCAT('%', #{searchTag}, '%') AS tname
-		FROM community_board cb, member m
-		<include refid="SearchChatBoard"></include> 
-	</select>
+	<sql id="classifyBoard">
+		<choose>
+			<when test="checkClass == 'chat'">
+				AND classify = 1
+			</when>
+			<when test="checkClass == 'questionAll'">
+				AND (classify = 2 OR classify = 3)
+			</when>
+			<when test="checkClass == 'noSolution'">
+				AND classify = 2 
+			</when>
+			<when test="checkClass == 'yesSolution'">
+				AND classify = 3
+			</when>
+			<when test="checkClass == 'studieAll'">
+				AND (classify = 4 OR classify = 5)
+			</when>
+			<when test="checkClass == 'offerStudie'">
+				AND classify = 4 
+			</when>
+			<when test="checkClass == 'overOfferStudie'">
+				AND classify = 5
+			</when>
+		</choose>
+	</sql>
+	<sql id="searchReview">
+		<choose>
+			<when test="searchKeyword == 'noContent'">
+			</when>
+			<when test="searchKeyword != 'noContent'">
+				AND olr.content LIKE  CONCAT('%', #{searchKeyword}, '%')
+			</when>
+		</choose>
+	</sql>
 	
 </mapper>

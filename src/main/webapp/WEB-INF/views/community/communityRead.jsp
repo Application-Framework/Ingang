@@ -19,7 +19,7 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
-
+<link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 
@@ -71,6 +71,11 @@
 							<P>
 								${cbReadPage.content}
 							</P>
+							<ul id="tag-list" style=""> 
+								<c:forEach var="cbTag" items="${cbTag}">
+									<li class="tag-item">#${cbTag.tag_name}</li>
+								</c:forEach>
+							</ul>
 						</div>
 					</div>
 					<div class="comments-area" style="padding: 20px 0px" id="replyList">
@@ -136,7 +141,7 @@
 					<div id="heartDiv">
 						<ul>
 							<c:choose>
-								<c:when test="${member ne null && boardLikeCheck eq 1}"> 
+								<c:when test="${member ne null && boardLikeCheck eq 1}">
 									<li><button class="genric-btn danger-border radius" id="subtractGood"> <i class="fas fa-heart"></i> ${cbReadPage.good}</button></li>
 								</c:when>
 								<c:when test="${member ne null && boardLikeCheck ne 1}">
@@ -146,6 +151,7 @@
 									<li><button class="genric-btn danger-border radius" id="buttonNoLogin"> <i class="far fa-heart"></i> ${cbReadPage.good}</button></li>
 								 </c:otherwise>
 							</c:choose>
+							<br>
 							<li style="margin-top: 10px;">
 								<a href="javascript:pageReplyScroll();" target="_self"><button class="genric-btn danger-border radius">댓글</button></a>
 							</li>

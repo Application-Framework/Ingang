@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.PagingService;
 
@@ -38,16 +39,68 @@ public class CommunityController {
 	
 	@RequestMapping(value = "/communityChats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(), 10);
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		map.put("checkClass", "chat");
+		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+			System.out.println("No1 키워드");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+			System.out.println("No2 키워드");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+			System.out.println("No3 키워드");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			System.out.println("o 키워드 : " + searchKeyword);
+		}
+		if (searchTag == null) {
+			map.put("searchTag","noTag");
+			System.out.println("noTag case1");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+			System.out.println("noTag  case2, 길이 :" + searchTag.length);
+		} else {
+			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag + " / "+searchTag.length);
+			map.put("searchTag", searchTag);
+		}
+	
+		/*
+		if (searchKeyword == null && searchTag==null){
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag","noTag");
+			System.out.println("1");
+			resUrl = "community/communityChats";
+		} else if(searchKeyword != null && searchTag==null) {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag","noTag");
+			System.out.println("2");
+			resUrl = "community/communityChats?searchKeyword=" + searchKeyword;
+		}else if(searchKeyword == null && searchTag!=null) {
+			map.put("searchKeyword", "noContent");
+			map.put("searchTag",searchTag);
+			System.out.println("3");
+			resUrl = "community/communityChats?searchTag=" + searchTag;
+		}else {
+			map.put("searchKeyword", searchKeyword);
+			map.put("searchTag",searchTag);
+			System.out.println("4");
+			resUrl = "community/communityChats?searchKeyword="+searchKeyword + "&searchTag=" + searchTag;
+		}
+		*/
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
-		
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
-		List<CommunityBoardDTO> communityBoardChatGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
+		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
-		model.addAttribute("cbGoodShowList", communityBoardChatGoodShow);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "community/communityChats";
@@ -101,6 +154,7 @@ public class CommunityController {
 			System.out.println("viewCookie 확인 로직 : 쿠키 있당");			//만들어진 쿠키가 있으면 증가로직 진행하지 않음
 		} 																	// 쿠키 조회수 종료
 		
+		model.addAttribute("cbTag", cbService.getTagCommunityBoard(cb_no));
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
 		model.addAttribute("cbrList", cbService.getReplyCommunityBoard(cb_no));
 		model.addAttribute("classify", classify);
@@ -242,22 +296,128 @@ public class CommunityController {
 		return "community/community_test";
 	}
 	
-	
-	@RequestMapping("/communityQuestions")
-	public String questions() throws Exception {
+	// 질문 답변 게시판
+	@RequestMapping(value = "/communityQuestions", method = RequestMethod.GET)
+	public String questions(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		String checkClass = request.getParameter("checkClassify");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
 		
+		if(checkClass == null) {
+			map.put("checkClass", "questionAll");
+		}else if(checkClass.equals("noSolution")){
+			map.put("checkClass", "noSolution");
+		}else if(checkClass.equals("yesSolution")) {
+			map.put("checkClass", "yesSolution");
+		}else {
+			map.put("checkClass", "questionAll");
+		}
 		
-		System.out.println(cbService.getCommunityBoardTotalCount());
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		if (searchTag == null) {
+			map.put("searchTag","noTag");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+		} else {
+			map.put("searchTag", searchTag);
+		}
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		
+		model.addAttribute("cbTag", cbService);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
+		model.addAttribute("Paging", pagingService.getPaging());
 		return "community/communityQuestions";
 	}
 	
-	@RequestMapping("/communityReviews")
-	public String reviews() {
+	
+	//수강후기 게시판
+	@RequestMapping(value = "/communityReviews", method = RequestMethod.GET)
+	public String reviews(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		
+		pagingService = new PagingService(request, cbService.getReviewCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CourseReplyDTO> cbReviewList = cbService.getReviewCommunityBoard(map);
+		
+		model.addAttribute("cbReviewList", cbReviewList);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
 		return "community/communityReviews";
 	}
 	
-	@RequestMapping("/communityStudies")
-	public String studies() {
+	//스터디 게시판
+	@RequestMapping(value = "/communityStudies", method = RequestMethod.GET)
+	public String studies(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		String[] searchTag = request.getParameterValues("searchTag");
+		String checkClass = request.getParameter("checkClassify");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		if(checkClass == null) {
+			map.put("checkClass", "studieAll");
+		}else if(checkClass.equals("offerStudie")){
+			map.put("checkClass", "offerStudie");
+		}else if(checkClass.equals("overOfferStudie")) {
+			map.put("checkClass", "overOfferStudie");
+		}else {
+			map.put("checkClass", "studieAll");
+		}
+		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		if (searchTag == null) {
+			map.put("searchTag","noTag");
+		}else if(searchTag.length == 0) {
+			map.put("searchTag","noTag");
+		} else {
+			map.put("searchTag", searchTag);
+		}
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
+		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
+		
+		model.addAttribute("cbTag", cbService);
+		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbGoodShowList", cbGoodShow);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
 		return "community/communityStudies";
 	}
 }

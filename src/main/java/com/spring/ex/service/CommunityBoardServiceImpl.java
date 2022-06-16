@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
 public class CommunityBoardServiceImpl implements CommunityBoardService{
@@ -32,8 +34,8 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//게시판 목록 총 갯수 - 페이징
 	@Override
-	public int getCommunityBoardTotalCount() throws Exception {
-		return dao.getCommunityBoardTotalCount();
+	public int getCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardTotalCount(map);
 	}
 
 	//게시글 상세페이지 출력 
@@ -106,5 +108,23 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	@Override
 	public int deleteCommunityBoard(int cb_no) throws Exception {
 		return dao.deleteCommunityBoard(cb_no);
+	}
+	
+	//태그 출력
+	@Override
+	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
+		return dao.getTagCommunityBoard(cb_no);
+	}
+	
+	//수강후기 게시판 출력
+	@Override
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.getReviewCommunityBoard(map);
+	}
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	@Override
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getReviewCommunityBoardTotalCount(map);
 	}
 }
