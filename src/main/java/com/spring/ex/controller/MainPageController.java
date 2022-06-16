@@ -16,6 +16,7 @@ import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CourseBestService;
+import com.spring.ex.service.CourseService;
 import com.spring.ex.service.LiveCourseReplyService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteBestService;
@@ -23,6 +24,9 @@ import com.spring.ex.service.TagService;
 
 @Controller
 public class MainPageController {
+	
+	@Inject
+	private CourseService courseService;
 	
 	@Inject
 	private CourseBestService courseBestService; 
@@ -75,6 +79,7 @@ public class MainPageController {
 		model.addAttribute("crbList", crblist);
 		model.addAttribute("newList", newlist);
 		model.addAttribute("ntbList", ntblist);
+		model.addAttribute("courseService", courseService);
 		
 		return "index";
 	}
