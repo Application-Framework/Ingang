@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CourseReplyDTO;
 
 
 @Repository
@@ -117,5 +118,16 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		return sqlSession.selectList(namespace + ".getTagCommunityBoard", cb_no);
 	}
 	
+	//수강후기 게시판 출력
+	@Override
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getReviewCommunityBoard", map);
+	}
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	@Override
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getReviewCommunityBoardTotalCount", map);
+	}
 
 }

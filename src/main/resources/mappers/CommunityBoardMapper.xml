@@ -131,6 +131,21 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
+	<!-- 수강후기 게시판 출력-->
+	<select id="getReviewCommunityBoard" resultType="hashMap">
+		SELECT olr.*, m_id, title, oli.img_path
+		FROM online_lecture_reply olr, online_lecture_introduction oli, member m
+		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
+		ORDER BY reg_date DESC
+	</select>
+	
+	<!-- 수강후기 게시판 총 갯수 -->
+	<select id="getReviewCommunityBoardTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM online_lecture_reply olr, online_lecture_introduction oli, member m
+		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
+	</select>
+	
 	<sql id="searchBoard">
 		<choose>
 			<when test="searchKeyword == 'noContent' and searchTag == 'noTag'">
@@ -179,6 +194,14 @@
 			</when>
 		</choose>
 	</sql>
-	
+	<sql id="searchReview">
+		<choose>
+			<when test="searchKeyword == 'noContent'">
+			</when>
+			<when test="searchKeyword != 'noContent'">
+				AND olr.content LIKE  CONCAT('%', #{searchKeyword}, '%')
+			</when>
+		</choose>
+	</sql>
 	
 </mapper>

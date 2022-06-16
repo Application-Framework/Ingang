@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CourseReplyDTO;
 
 
 @Repository
@@ -61,5 +62,11 @@ public interface CommunityBoardDAO {
 	
 	//태그 출력
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
+	
+	//수강후기 게시판 출력
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception;
 	
 }

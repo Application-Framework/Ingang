@@ -50,7 +50,7 @@
 						</ul>
 						<br>
 						<aside class="single_sidebar_widget search_widget">
-							<form id="searchForm" action="communityQuestions">
+							<form id="searchForm" action="communityStudies">
 								<div class="row">
 									<div class="col-lg-10" >
 										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
@@ -144,7 +144,6 @@
 											</article>
 										</c:forEach>
 									</div>
-								
 								</div>
 
 							</div>

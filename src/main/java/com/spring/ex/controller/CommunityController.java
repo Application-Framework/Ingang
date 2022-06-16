@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CourseReplyDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.PagingService;
@@ -295,7 +296,7 @@ public class CommunityController {
 		return "community/community_test";
 	}
 	
-	
+	// 질문 답변 게시판
 	@RequestMapping(value = "/communityQuestions", method = RequestMethod.GET)
 	public String questions(Model model, HttpServletRequest request) throws Exception {
 		String searchKeyword = request.getParameter("searchKeyword");
@@ -343,11 +344,35 @@ public class CommunityController {
 		return "community/communityQuestions";
 	}
 	
-	@RequestMapping("/communityReviews")
-	public String reviews() {
+	
+	//수강후기 게시판
+	@RequestMapping(value = "/communityReviews", method = RequestMethod.GET)
+	public String reviews(Model model, HttpServletRequest request) throws Exception {
+		String searchKeyword = request.getParameter("searchKeyword");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		
+		if (searchKeyword == null ){
+			map.put("searchKeyword", "noContent");
+		} else if( searchKeyword =="null") {
+			map.put("searchKeyword", "noContent");
+		}else if(searchKeyword ==""){
+			map.put("searchKeyword", "noContent");
+		}else {
+			map.put("searchKeyword", searchKeyword);
+		}
+		
+		pagingService = new PagingService(request, cbService.getReviewCommunityBoardTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<CourseReplyDTO> cbReviewList = cbService.getReviewCommunityBoard(map);
+		
+		model.addAttribute("cbReviewList", cbReviewList);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
 		return "community/communityReviews";
 	}
 	
+	//스터디 게시판
 	@RequestMapping(value = "/communityStudies", method = RequestMethod.GET)
 	public String studies(Model model, HttpServletRequest request) throws Exception {
 		String searchKeyword = request.getParameter("searchKeyword");

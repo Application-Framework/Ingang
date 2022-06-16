@@ -12,6 +12,7 @@ import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CourseReplyDTO;
 
 @Service
 public class CommunityBoardServiceImpl implements CommunityBoardService{
@@ -115,4 +116,15 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 		return dao.getTagCommunityBoard(cb_no);
 	}
 	
+	//수강후기 게시판 출력
+	@Override
+	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return dao.getReviewCommunityBoard(map);
+	}
+	
+	//수강후기 게시판 목록 총 갯수 - 페이징
+	@Override
+	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getReviewCommunityBoardTotalCount(map);
+	}
 }
