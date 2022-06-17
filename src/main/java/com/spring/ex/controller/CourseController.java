@@ -499,7 +499,7 @@ public class CourseController {
 		noteDTO.setM_no(memberDTO.getM_no());
 		noteDTO.setTitle(title);
 		noteDTO.setContent(content);
-		noteDTO.setPrice(oli_no);
+		noteDTO.setPrice(price);
 		noteDTO.setClassify(0);
 		
 		noteService.insertNote(noteDTO);

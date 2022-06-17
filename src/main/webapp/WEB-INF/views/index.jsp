@@ -208,7 +208,7 @@
 					<div class="left-text">
 						<c:forEach var="tagList" items="${tagList}" varStatus="status">
 						<div class="list-group">
-							<a href="/course?tag=${tagList.t_name}" class="list-group-item list-group-item-action list-group-item-light">${status.count}. ${tagList.t_name}(${tagList.t_viewCnt})</a>
+							<a href="/courses?tag=${tagList.t_name}" class="list-group-item list-group-item-action list-group-item-light">${status.count}. ${tagList.t_name}(${tagList.t_viewCnt})</a>
 						</div>
 					</c:forEach>
 					</div>
