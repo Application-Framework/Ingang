@@ -161,7 +161,7 @@ ${note.content}
 					<div class="mb-4">
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
-								<a href="javascript:;" <c:if test="${purchased == true}">onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
+								<a href="javascript:;" <c:if test="${purchased == true || note.m_no == member.m_no}">onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
 							</div>
 							
 							<%-- 노트 글 모달 --%>
