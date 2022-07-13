@@ -152,6 +152,22 @@
 								 </c:otherwise>
 							</c:choose>
 							<br>
+							<c:choose>
+								<c:when test="${classify eq 2}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="addGood" style="padding: 0 20px; width: 82px;"> 미해결</button></li><br>
+								</c:when>
+								<c:when test="${classify eq 3}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="addGood" style="padding: 0 20px; width: 82px;"> 해결됨</button></li><br>
+								</c:when>
+								<c:when test="${classify eq 4}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="subtractGood" style="padding: 0 20px; width: 82px;"> 모집중</button></li><br>
+								</c:when>
+								<c:when test="${classify eq 5}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="subtractGood" style="padding: 0 20px; width: 82px;">모집종료</button></li><br>
+								</c:when>
+								<c:otherwise> 
+								</c:otherwise>
+							</c:choose>
 							<li style="margin-top: 10px;">
 								<a href="javascript:pageReplyScroll();" target="_self"><button class="genric-btn danger-border radius">댓글</button></a>
 							</li>
