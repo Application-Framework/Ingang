@@ -153,17 +153,23 @@
 							</c:choose>
 							<br>
 							<c:choose>
-								<c:when test="${classify eq 2}">
-									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="addGood" style="padding: 0 20px; width: 82px;"> 미해결</button></li><br>
+								<c:when test="${classify eq 2 && sessionScope.member.getM_no() eq cbReadPage.m_no}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="btnQuestionsCompleted" style="padding: 0 20px; width: 82px;"> 미해결</button></li><br>
+								</c:when>
+								<c:when test="${classify eq 2 && sessionScope.member.getM_no() ne cbReadPage.m_no}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="btnNoWriter" style="padding: 0 20px; width: 82px;"> 미해결</button></li><br>
 								</c:when>
 								<c:when test="${classify eq 3}">
-									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="addGood" style="padding: 0 20px; width: 82px;"> 해결됨</button></li><br>
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="" style="padding: 0 20px; width: 82px;"> 해결됨</button></li><br>
 								</c:when>
-								<c:when test="${classify eq 4}">
-									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="subtractGood" style="padding: 0 20px; width: 82px;"> 모집중</button></li><br>
+								<c:when test="${classify eq 4 && sessionScope.member.getM_no() eq cbReadPage.m_no}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="btnStudyCompleted" style="padding: 0 20px; width: 82px;"> 모집중</button></li><br>
+								</c:when>
+								<c:when test="${classify eq 4 && sessionScope.member.getM_no() ne cbReadPage.m_no}">
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="btnNoWriter" style="padding: 0 20px; width: 82px;"> 모집중</button></li><br>
 								</c:when>
 								<c:when test="${classify eq 5}">
-									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="subtractGood" style="padding: 0 20px; width: 82px;">모집종료</button></li><br>
+									<li style="margin-top: 10px;"><button class="genric-btn danger-border radius" id="" style="padding: 0 20px; width: 82px;">모집종료</button></li><br>
 								</c:when>
 								<c:otherwise> 
 								</c:otherwise>
@@ -297,7 +303,7 @@ function replyDelete(cbr_no) {
 	});
 }
 
-/* 여행 포토 댓글 수정 */
+/* 댓글 수정 */
 function replyEdit(cbr_no, reply) {
 	var htmls = "";
 	
@@ -313,7 +319,7 @@ function replyEdit(cbr_no, reply) {
 	$('#replyEditContent').focus();
 }
 
-/* 여행 포토 댓글 수정 취소 */
+/* 댓글 수정 취소 */
 function replyCancel(cbr_no, reply) {
 	var htmls = "";
 	
@@ -322,7 +328,7 @@ function replyCancel(cbr_no, reply) {
 	$("#replyContentSection"+cbr_no).html(htmls);
 }
 
-/* 여행 포토 댓글 수정 등록 */
+/* 댓글 수정 등록 */
 function replySave(cbr_no) {
 	var Content = $("#replyEditContent").val();
 	var param = {'Content': Content, 'cbr_no': cbr_no};
@@ -428,6 +434,39 @@ var currentPosition = parseInt($("#sidebox").css("top"));
 $(window).scroll(function(){
 	var position = $(window).scrollTop();
 	$("#sidebox").stop().animate({"top":position+currentPosition+"px"},1000);
+});
+
+//미해결->해결됨
+$('#btnQuestionsCompleted').click(function(){
+	swal({
+		title: '미해결',
+		text: "해결됨으로 변경하게 되면 미해결로 변경이 불가합니다.",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: '확인',
+		cancelButtonText: '취소'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			
+		}
+		
+	})
+	
+});
+
+//모집중 -> 모집종료
+$('#btnStudyCompleted').click(function(){
+	$.ajax({
+		url: "",
+		type: "GET",
+		data: {'cb_no':${cbReadPage.cb_no}},
+		success: function() {
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+		}
+	});
 });
 </script>
 </body>
