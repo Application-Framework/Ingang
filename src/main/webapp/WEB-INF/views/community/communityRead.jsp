@@ -449,9 +449,16 @@ $('#btnQuestionsCompleted').click(function(){
 		cancelButtonText: '취소'
 	}).then((result) => {
 		if (result.isConfirmed) {
-			
+			$.ajax({
+				url: "",
+				type: "GET",
+				data: {'cb_no':${cbReadPage.cb_no}},
+				success: function() {
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+					$("#heartDiv").load(reLoadUrl + " #heartDiv");
+				}
+			});
 		}
-		
 	})
 	
 });
