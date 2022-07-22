@@ -204,4 +204,10 @@
 		</choose>
 	</sql>
 	
+	<!--  게시판 해결됨, 모집종료로 변경 -->
+	<update id="updateCompletedCommunityBoard">
+		UPDATE community_board
+		SET classify = #{classify}
+		WHERE cb_no = #{cb_no}; 
+	</update>
 </mapper>

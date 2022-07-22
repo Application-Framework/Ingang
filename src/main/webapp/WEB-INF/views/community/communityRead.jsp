@@ -450,9 +450,9 @@ $('#btnQuestionsCompleted').click(function(){
 	}).then((result) => {
 		if (result.isConfirmed) {
 			$.ajax({
-				url: "",
+				url: "updateCompletedCommunityBoard",
 				type: "GET",
-				data: {'cb_no':${cbReadPage.cb_no}},
+				data: {'cb_no':${cbReadPage.cb_no}, 'classify':${classify}},
 				success: function() {
 					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
 					$("#heartDiv").load(reLoadUrl + " #heartDiv");
@@ -466,9 +466,9 @@ $('#btnQuestionsCompleted').click(function(){
 //모집중 -> 모집종료
 $('#btnStudyCompleted').click(function(){
 	$.ajax({
-		url: "",
+		url: "updateCompletedCommunityBoard",
 		type: "GET",
-		data: {'cb_no':${cbReadPage.cb_no}},
+		data: {'cb_no':${cbReadPage.cb_no}, 'classify':${classify}},
 		success: function() {
 			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
 			$("#heartDiv").load(reLoadUrl + " #heartDiv");

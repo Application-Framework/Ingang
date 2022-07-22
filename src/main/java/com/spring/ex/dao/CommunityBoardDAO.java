@@ -69,4 +69,7 @@ public interface CommunityBoardDAO {
 	//수강후기 게시판 목록 총 갯수 - 페이징
 	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception;
 	
+	//게시판 해결됨, 모집종료로 변경
+	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
 }

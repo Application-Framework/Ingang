@@ -420,4 +420,27 @@ public class CommunityController {
 		
 		return "community/communityStudies";
 	}
+	
+	//게시판 해결됨, 모집종료로 변경
+	@RequestMapping(value = "/updateCompletedCommunityBoard" , method = RequestMethod.GET)
+	public String updateCompletedCommunityBoard(Model model, HttpServletRequest request) throws Exception{
+		int checkNum = Integer.parseInt(request.getParameter("classify"));
+		int classify = checkNum;
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		
+		if(checkNum == 2) {
+			classify = 3;
+		}else if(checkNum == 3) {
+			classify = 4;
+		}else {
+			classify = 0;
+		}
+		
+		if(classify != 0) {
+			map.put("classify", classify);
+			map.put("cb_no", Integer.parseInt(request.getParameter("cb_no")));
+			cbService.updateCompletedCommunityBoard(map);
+		}
+		return "community/communityRead";
+	}
 }

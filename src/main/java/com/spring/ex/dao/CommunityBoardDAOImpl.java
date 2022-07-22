@@ -129,5 +129,10 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int getReviewCommunityBoardTotalCount(HashMap<String, Object> map) throws Exception {
 		return sqlSession.selectOne(namespace + ".getReviewCommunityBoardTotalCount", map);
 	}
+	
+	//게시판 해결됨, 모집종료로 변경
+	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception {
+		return sqlSession.update(namespace + ".updateCompletedCommunityBoard", map);
+	}
 
 }
