@@ -430,8 +430,8 @@ public class CommunityController {
 		
 		if(checkNum == 2) {
 			classify = 3;
-		}else if(checkNum == 3) {
-			classify = 4;
+		}else if(checkNum == 4) {
+			classify = 5;
 		}else {
 			classify = 0;
 		}

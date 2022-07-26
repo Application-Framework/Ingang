@@ -20,8 +20,8 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
-<link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
 
 </head>
 
@@ -438,7 +438,8 @@ $(window).scroll(function(){
 
 //미해결->해결됨
 $('#btnQuestionsCompleted').click(function(){
-	swal({
+	
+	Swal.fire({
 		title: '미해결',
 		text: "해결됨으로 변경하게 되면 미해결로 변경이 불가합니다.",
 		icon: 'warning',
@@ -452,10 +453,10 @@ $('#btnQuestionsCompleted').click(function(){
 			$.ajax({
 				url: "updateCompletedCommunityBoard",
 				type: "GET",
-				data: {'cb_no':${cbReadPage.cb_no}, 'classify':${classify}},
+				data: {'cb_no':${cbReadPage.cb_no}, 'classify':2},
 				success: function() {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
-					$("#heartDiv").load(reLoadUrl + " #heartDiv");
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=3";
+					location.href = reLoadUrl;
 				}
 			});
 		}
@@ -465,15 +466,29 @@ $('#btnQuestionsCompleted').click(function(){
 
 //모집중 -> 모집종료
 $('#btnStudyCompleted').click(function(){
-	$.ajax({
-		url: "updateCompletedCommunityBoard",
-		type: "GET",
-		data: {'cb_no':${cbReadPage.cb_no}, 'classify':${classify}},
-		success: function() {
-			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
-			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+	Swal.fire({
+		title: '모집중',
+		text: "모집완료로 변경시 모집중으로 변경이 불가합니다.",
+		icon: 'warning',
+		showCancelButton: true,
+		confirmButtonColor: '#3085d6',
+		cancelButtonColor: '#d33',
+		confirmButtonText: '확인',
+		cancelButtonText: '취소'
+	}).then((result) => {
+		if (result.isConfirmed) {
+			$.ajax({
+				url: "updateCompletedCommunityBoard",
+				type: "GET",
+				data: {'cb_no':${cbReadPage.cb_no}, 'classify':4},
+				success: function() {
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=5";
+					location.href = reLoadUrl;
+				}
+			});
 		}
-	});
+	})
+	
 });
 </script>
 </body>
