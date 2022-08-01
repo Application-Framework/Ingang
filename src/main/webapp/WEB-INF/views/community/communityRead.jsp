@@ -76,8 +76,34 @@
 									<li class="tag-item">#${cbTag.tag_name}</li>
 								</c:forEach>
 							</ul>
+							
+							<div >
+							<hr>
+							관련강의
+							<c:forEach var="cbrList" items="${cbrList}">
+								<div class="user justify-content-start d-flex">
+									<div class="thumb">
+										<img alt="" width="100px;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
+									</div>
+									<div class="desc">
+										<div>
+											<div class="d-flex align-items-center">
+												<ul class="blog-info-link mt-3 mb-4">
+													<li><a href="#"><i class="fa fa-user"></i> 강의명</a></li>
+													<li><a href="#"><i class="fa fa-user"></i> 강사명</a></li>
+												</ul>
+											</div>
+										</div>
+										<p class="comment">
+											강의 설명 공간<c:out value="${cbrList.content}"/>
+										</p>
+									</div>
+								</div>
+							</c:forEach>
+							</div>
 						</div>
 					</div>
+					
 					<div class="comments-area" style="padding: 20px 0px" id="replyList">
 						<h4><a name="target"><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.</a></h4>
 						<div class="comment-list">
