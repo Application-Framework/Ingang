@@ -52,12 +52,24 @@
 	
 	<!-- 게시판 상세페이지 출력 -->
 	<select id="getReadCommunityBoard" resultType="hashMap">
-		SELECT cb.*, 
-				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
-				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
-				m_id
-		FROM community_board cb, member m
-		WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify}
+		<choose>
+			<when test="isOnlineLecture == 'yesExists'">
+				SELECT cb.*, 
+						(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+						(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
+						m_id
+				FROM community_board cb, member m
+				WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify}
+			</when>
+			<when test="isOnlineLecture != 'noExists'">
+				SELECT cb.*, 
+						(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
+						(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
+						m_id
+				FROM community_board cb, member m
+				WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify}
+			</when>
+		</choose>
 	</select>
 	
 	<!-- 게시판 상세페이지 댓글 출력 -->
@@ -210,4 +222,5 @@
 		SET classify = #{classify}
 		WHERE cb_no = #{cb_no}; 
 	</update>
+	
 </mapper>
