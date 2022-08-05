@@ -111,9 +111,17 @@ public class CommunityController {
 	public String communityBoardRead(Model model, HttpServletRequest request, HttpServletResponse response) throws Exception{
 		int cb_no = Integer.parseInt(request.getParameter("cb_no"));
 		int classify = Integer.parseInt(request.getParameter("classify"));
+		int isOnlineLecture = Integer.parseInt(request.getParameter("isOnlineLecture"));
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("cb_no", cb_no);
 		map.put("classify", classify);
+		if(isOnlineLecture != 0) {
+			map.put("isOnlineLecture", "yesExists");
+		}else if(isOnlineLecture == 0){
+			map.put("isOnlineLecture", "noExists");
+		}else {
+			map.put("isOnlineLecture", "noExists");
+		}
 		
 		if(request.getSession().getAttribute("member") != null) {
 			MemberDTO memberDto = (MemberDTO) request.getSession().getAttribute("member");

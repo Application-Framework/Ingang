@@ -97,7 +97,7 @@
 										<article class="blog_item">
 											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 											
-												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=${cbList.classify}">
+												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=${cbList.classify}&isOnlineLecture=${cbList.oli_no}">
 													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
 													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 												</a>
@@ -123,7 +123,7 @@
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=${cbGoodShowList.classify}">
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=${cbGoodShowList.classify}&isOnlineLecture=${cbcbGoodShowList.oli_no}">
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>
