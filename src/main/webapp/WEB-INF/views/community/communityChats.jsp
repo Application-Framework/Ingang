@@ -122,7 +122,7 @@
 										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1&isOnlineLecture=${cbcbGoodShowList.oli_no}">
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1&isOnlineLecture=${cbGoodShowList.oli_no}">
 														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
 														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
 													</a>

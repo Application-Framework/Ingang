@@ -79,27 +79,32 @@
 							
 							<div >
 							<hr>
-							관련강의
-							<c:forEach var="cbrList" items="${cbrList}">
+							<c:if test="${cbReadPage.oli_no ne 0}">
+								관련강의
 								<div class="user justify-content-start d-flex">
 									<div class="thumb">
-										<img alt="" width="100px;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
+										<c:if test="${cbReadPage.oli_img_path ne null}">
+											<img alt="" width="100px;" src="${cbReadPage.oli_img_path}">
+										</c:if>
+										<c:if test="${cbReadPage.oli_img_path eq null}">
+											<img alt="" width="100px;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
+										</c:if>
 									</div>
 									<div class="desc">
 										<div>
 											<div class="d-flex align-items-center">
 												<ul class="blog-info-link mt-3 mb-4">
-													<li><a href="#"><i class="fa fa-user"></i> 강의명</a></li>
-													<li><a href="#"><i class="fa fa-user"></i> 강사명</a></li>
+													<li><a href="#"><i class="fa fa-tablet"></i> <c:out value="${cbReadPage.oli_title}"/></a></li>
+													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbReadPage.olt_name}"/></a> </li>
 												</ul>
 											</div>
 										</div>
 										<p class="comment">
-											강의 설명 공간<c:out value="${cbrList.content}"/>
+											<c:out value="${cbReadPage.oli_content}"/>
 										</p>
 									</div>
 								</div>
-							</c:forEach>
+							</c:if>
 							</div>
 						</div>
 					</div>

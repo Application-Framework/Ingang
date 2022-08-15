@@ -57,8 +57,10 @@
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
 				m_id,
-				oli.*,
-				olt.name
+				oli.title AS oli_title,
+				oli.content AS oli_content,
+				oli.img_path AS oli_img_path,
+				olt.name AS olt_name
 			FROM community_board cb, member m, online_lecture_introduction oli, online_lecture_teacher olt
 			WHERE m.m_no = cb.m_no AND cb_no = #{cb_no} AND flag = 1 AND classify = #{classify} AND cb.oli_no = oli.oli_no AND oli.olt_no = olt.olt_no
 		</if>
