@@ -132,4 +132,16 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return dao.updateCompletedCommunityBoard(map);
 	}
+
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
+	@Override
+	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception {
+		return dao.selectCommunityBoardByOli_no(map);
+	}
+
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 개수
+	@Override
+	public int selectCommunityBoardTotalCountByOli_no(HashMap<String, Object> map) throws Exception {
+		return dao.selectCommunityBoardTotalCountByOli_no(map);
+	}
 }

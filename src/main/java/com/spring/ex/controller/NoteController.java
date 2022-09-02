@@ -154,11 +154,7 @@ public class NoteController {
 			starAvg /= replys.size();
 		}
 		int stdCnt = 0;
-		boolean existLike; 
-		if(noteService.existNoteLike(pageNo, 2) == 1) // m_no 임시
-			existLike = true;
-		else existLike= false;
-		
+		boolean existLike = (noteService.existNoteLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
 		
 		System.out.println("노트 상세 페이지 정보 출력");
 		System.out.println(noteDTO);

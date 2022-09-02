@@ -66,6 +66,18 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public float getCourseStarAvg(int oli_no) {
+		List<CourseReplyDTO> replys = getCourseReplys(oli_no);
+		float starAvg = 0;
+		if(replys.size() != 0) {
+			for(CourseReplyDTO reply : replys)
+				 starAvg += reply.getStar_rating();
+			starAvg /= replys.size();
+		}
+		return starAvg;
+	}
+	
+	@Override
 	public List<CourseTagDTO> getCourseTags(int oli_no) {
 		return courseTagDAO.getCourseTags(oli_no);
 	}

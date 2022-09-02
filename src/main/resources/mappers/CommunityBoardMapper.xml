@@ -225,4 +225,21 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
+	<!-- 2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 -->
+	<select id="selectCommunityBoardByOli_no" resultType="CommunityBoardDTO">
+		SELECT * FROM community_board
+		WHERE oli_no = #{oli_no} AND classify = #{classify} AND 
+			(title LIKE '%${search}%' OR 
+			content LIKE '%${search}%')
+		ORDER BY reg_date DESC
+		LIMIT #{page}, #{pageSize}
+	</select>
+	
+	<!-- 2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 개수 -->
+	<select id="selectCommunityBoardTotalCountByOli_no" resultType="int">
+		SELECT * FROM community_board
+		WHERE oli_no = #{oli_no} AND classify = #{classify} AND 
+			(title LIKE '%${search}%' OR 
+			content LIKE '%${search}%')
+	</select>
 </mapper>

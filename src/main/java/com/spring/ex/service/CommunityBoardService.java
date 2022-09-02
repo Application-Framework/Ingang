@@ -71,4 +71,9 @@ public interface CommunityBoardService {
 	//게시판 해결됨, 모집종료로 변경
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception;
 	
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
+	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception;
+	
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 개수
+	public int selectCommunityBoardTotalCountByOli_no(HashMap<String, Object> map) throws Exception;
 }

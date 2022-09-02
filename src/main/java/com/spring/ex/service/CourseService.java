@@ -26,6 +26,9 @@ public interface CourseService {
 	// 리뷰 가져오기
 	public List<CourseReplyDTO> getCourseReplys(int oli_no);
 	
+	// 리뷰 평균 구하기
+	public float getCourseStarAvg(int oli_no);
+	
 	// 강좌의 태그 가져오기
 	public List<CourseTagDTO> getCourseTags(int oli_no);
 	

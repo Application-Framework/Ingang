@@ -214,48 +214,30 @@ ${course.content}
 				</c:if>
 				
 				<c:if test="${contentType == 'community'}">
+					<%-- 질문, 자유주제, 스터디 버튼 생성해야 함 --%>
+					<%-- search input 요소 생성해야 함 --%>
+					
 					<%-- 게시물 영역 --%>
 					<div class="tab-content">
 						<div class="tab-pane fade show active" id="qwe">
-							<c:forEach var="cbList" items="${cbRegDateList}">
+							<c:forEach var="list" items="${cbList}">
 								<article class="blog_item">
 									<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 									
-										<a class="d-inline-block" href="boardRead?cb_no=${cbList.cb_no}&classify=1">
-											<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
-											<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
+										<a class="d-inline-block" href="boardRead?cb_no=${list.cb_no}&classify=1">
+											<font size="1px;">NO. <c:url value="${list.cb_no}"/></font>
+											<h2><c:url value="${fn:substring(list.title, 0, 35)}"/></h2>
 										</a>
-										<p><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
+										<p><c:url value="${fn:substring(list.content,0,200)}"/></p>
 										<ul class="blog-info-link">
-											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
-											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
-											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-											<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbList.reg_date}"/></font></li>
+											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${list.m_id}"/></a> </li>
+											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${list.reply}"/> </a></li>
+											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${list.good}"/></a></li>
+											<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${list.reg_date}"/></font></li>
 										</ul>
 									</div>
 								</article>
 							</c:forEach>
-						</div>
-						<div class="tab-pane fade" id="asd">
-							<div class="tab-pane fade show active" id="qwe">
-								<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
-									<article class="blog_item">
-										<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-											<a class="d-inline-block" href="boardRead?cb_no=${cbGoodShowList.cb_no}&classify=1">
-												<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
-												<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
-											</a>
-											<p><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
-											<ul class="blog-info-link">
-												<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
-												<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
-												<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
-												<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${cbGoodShowList.reg_date}"/></font></li>
-											</ul>
-										</div>
-									</article>
-								</c:forEach>
-							</div>
 						</div>
 					</div>
 					<%-- 게시물 영역 끝 --%>

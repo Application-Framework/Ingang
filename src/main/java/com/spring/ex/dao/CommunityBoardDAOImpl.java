@@ -135,4 +135,15 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		return sqlSession.update(namespace + ".updateCompletedCommunityBoard", map);
 	}
 
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
+	@Override
+	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespace + ".selectCommunityBoardByOli_no", map);
+	}
+
+	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 개수
+	@Override
+	public int selectCommunityBoardTotalCountByOli_no(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".selectCommunityBoardTotalCountByOli_no", map);
+	}
 }

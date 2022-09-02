@@ -185,18 +185,10 @@ public class CourseController {
 		}
 		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
-		int starAvg = 0;
-		if(replys.size() != 0) {
-			for(CourseReplyDTO reply : replys)
-				 starAvg += reply.getStar_rating();
-			starAvg /= replys.size();
-		}
-		int stdCnt = 0;
-		boolean existLike; 
-		if(courseService.existCourseLike(pageNo, 2) == 1) // m_no 임시
-			existLike = true;
-		else existLike= false;
+		float starAvg = courseService.getCourseStarAvg(pageNo);
 		
+		boolean existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+		int stdCnt = 0;
 		
 		System.out.println("강의 상세 페이지 정보 출력");
 		System.out.println(courseDTO);
@@ -233,33 +225,29 @@ public class CourseController {
 	
 	@RequestMapping("/courses/{pageNo}/community")
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
-		// 임시로 map 만듦 수정해야함
-		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		map.put("checkClass", "chat");
-		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
-		
-		HashMap<String, Object> pageMap = new HashMap<String, Object>();
-		pageMap.put("Page", pagingService.getNowPage());
-		pageMap.put("PageSize", 10);
-		
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
-		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
-		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(pageMap);
-		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
-		int starAvg = 0;
-		if(replys.size() != 0) {
-			for(CourseReplyDTO reply : replys)
-				 starAvg += reply.getStar_rating();
-			starAvg /= replys.size();
-		}
+		float starAvg = courseService.getCourseStarAvg(pageNo);
+		boolean existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
 		int stdCnt = 0;
-		boolean existLike; 
-		if(courseService.existCourseLike(pageNo, 2) == 1) // m_no 임시
-			existLike = true;
-		else existLike= false;
+		
+		String search = request.getParameter("search");
+		if(search == null) search = "";
+		
+		String classify = request.getParameter("classify");
+		if(classify == null) classify = "2"; // default로 질문 게시판 설정
+		
+		HashMap<String, Object> cbMap = new HashMap<String, Object>();
+		cbMap.put("oli_no", pageNo);
+		cbMap.put("search", search);
+		cbMap.put("classify", Integer.parseInt(classify));
+		pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		cbMap.put("page", pagingService.getNowPage());
+		cbMap.put("pageSize", 10);
+		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
 		
 		model.addAttribute("course", courseDTO);
 		model.addAttribute("teacher", teachertDTO);
@@ -270,9 +258,10 @@ public class CourseController {
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
-		model.addAttribute("cbRegDateList", cbRegDateList);
+		model.addAttribute("cbList", cbList);
 		model.addAttribute("contentType", "community");
 		model.addAttribute("paging", pagingService.getPaging());
+		model.addAttribute("classify", Integer.parseInt(classify));
 		
 		return "course/course_detail";
 	}
@@ -290,7 +279,6 @@ public class CourseController {
 			System.out.println(noteArticleDTO);
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
-		
 		
 		model.addAttribute("videoPath", courseVideoDTO.getS_file_name());
 		model.addAttribute("pageNo", pageNo);
