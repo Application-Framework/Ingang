@@ -140,7 +140,9 @@ public class NoteController {
 		List<NoteReplyDTO> replys = noteService.getNoteReplyList(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(noteDTO.getOli_no());
 		List<NoteArticleDTO> articles = noteService.getNoteArticleList(pageNo);
+		boolean existLike = false;
 		if(memberDTO != null) {
+			existLike = (noteService.existNoteLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
 			HistoryOrderNoteDTO historyOrderNoteDTO = noteService.getHistoryOrderNoteByN_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderNoteDTO != null) ? true : false;
 			model.addAttribute("purchased", purchased);
@@ -154,7 +156,7 @@ public class NoteController {
 			starAvg /= replys.size();
 		}
 		int stdCnt = 0;
-		boolean existLike = (noteService.existNoteLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+		
 		
 		System.out.println("노트 상세 페이지 정보 출력");
 		System.out.println(noteDTO);

@@ -146,4 +146,16 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int selectCommunityBoardTotalCountByOli_no(HashMap<String, Object> map) throws Exception {
 		return sqlSession.selectOne(namespace + ".selectCommunityBoardTotalCountByOli_no", map);
 	}
+
+	//2022-09-03 김홍일 / 게시물의 댓글 개수 가져오기
+	@Override
+	public int selectCommunityBoardReplyCount(int cb_no) throws Exception {
+		return sqlSession.selectOne(namespace + ".selectCommunityBoardReplyCount", cb_no);
+	}
+
+	//2022-09-03 김홍일 / 게시물의 좋아요 개수 가져오기
+	@Override
+	public int selectCommunityBoardGoodCount(int cb_no) throws Exception {
+		return sqlSession.selectOne(namespace + ".selectCommunityBoardGoodCount", cb_no);
+	}
 }

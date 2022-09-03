@@ -144,4 +144,14 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	public int selectCommunityBoardTotalCountByOli_no(HashMap<String, Object> map) throws Exception {
 		return dao.selectCommunityBoardTotalCountByOli_no(map);
 	}
+
+	@Override
+	public int selectCommunityBoardReplyCount(int cb_no) throws Exception {
+		return dao.selectCommunityBoardReplyCount(cb_no);
+	}
+
+	@Override
+	public int selectCommunityBoardGoodCount(int cb_no) throws Exception {
+		return dao.selectCommunityBoardGoodCount(cb_no);
+	}
 }

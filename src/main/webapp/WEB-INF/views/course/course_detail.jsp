@@ -215,10 +215,21 @@ ${course.content}
 				
 				<c:if test="${contentType == 'community'}">
 					<%-- 질문, 자유주제, 스터디 버튼 생성해야 함 --%>
+					<div id="classify">
+						<a onclick="changeClassify(2)" class="btn head-btn<c:choose><c:when test="${classify == 2}">1</c:when><c:otherwise>2</c:otherwise></c:choose>" onclick="">질문</a>
+						<a onclick="changeClassify(1)" class="btn head-btn<c:choose><c:when test="${classify == 1}">1</c:when><c:otherwise>2</c:otherwise></c:choose>" onclick="">자유주제</a>
+						<a onclick="changeClassify(4)" class="btn head-btn<c:choose><c:when test="${classify == 4 || classify == 5}">1</c:when><c:otherwise>2</c:otherwise></c:choose>" onclick="">스터디</a>
+					</div>
 					<%-- search input 요소 생성해야 함 --%>
+					<div class="input-group py-3">
+					  <input id="search" type="text" class="form-control">
+					  <div class="input-group-append">
+					    <button onclick="searchCommunityBoard()" class="btn btn-outline-secondary" type="button"><i class="bi bi-search"></i></button>
+					  </div>
+					</div>
 					
 					<%-- 게시물 영역 --%>
-					<div class="tab-content">
+					<div id="content" class="tab-content">
 						<div class="tab-pane fade show active" id="qwe">
 							<c:forEach var="list" items="${cbList}">
 								<article class="blog_item">
@@ -230,9 +241,9 @@ ${course.content}
 										</a>
 										<p><c:url value="${fn:substring(list.content,0,200)}"/></p>
 										<ul class="blog-info-link">
-											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${list.m_id}"/></a> </li>
-											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${list.reply}"/> </a></li>
-											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${list.good}"/></a></li>
+											<li><a href="#"><i class="fa fa-user"></i> <c:url value="${list.m_no}"/></a> </li>
+											<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbService.selectCommunityBoardReplyCount(list.cb_no)}"/> </a></li>
+											<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbService.selectCommunityBoardGoodCount(list.cb_no)}"/></a></li>
 											<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${list.reg_date}"/></font></li>
 										</ul>
 									</div>
@@ -243,37 +254,39 @@ ${course.content}
 					<%-- 게시물 영역 끝 --%>
 					
 					<%-- Pagination 영역 --%>
-					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination">
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.firstPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+					<c:if test="${paging.totalCount != 0}">
+						<nav id="pagination" class="pagination-area justify-content-center d-flex" style="margin: 0px;">
+							<ul class="pagination">
+								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
-									<c:when test="${i eq paging.pageNo }">
-										<li class="page-item  active"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									<c:when test="${paging.pageNo eq paging.firstPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"> <a href="/courses/${pageNo}/community?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.prevPageNo}&classify=${classify}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
 								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.finalPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
+								<!-- 페이지 갯수만큼 버튼 생성 -->
+								<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+									<c:choose>
+										<c:when test="${i eq paging.pageNo}">
+											<li class="page-item active"> <a href="" class="page-link" style="pointer-events: none;"><c:out value="${i }"/></a> </li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"> <a href="/courses/${pageNo}/community?page=${i}&classify=${classify}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+								<c:choose>
+									<c:when test="${paging.pageNo eq paging.finalPageNo }">
+									</c:when>
+									<c:otherwise>
+										<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.nextPageNo}&classify=${classify}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+									</c:otherwise>
+								</c:choose>
+							</ul>
+						</nav>
+					</c:if>
 					<%-- Pagination 영역 끝 --%>
 				</c:if>
 			</div>
@@ -337,12 +350,22 @@ ${course.content}
     <%------------ footer section  ------------%>
     
     <script>
+    	var classify = ${classify};
+    	
     	// textarea 자동 늘리기
 	    $(function() {
 		    $('textarea').each(function() {
 		        $(this).height($(this).prop('scrollHeight'));
 		        console.log("늘리기");
 		    });
+		    
+		 	// 외부영역 클릭 시 팝업 닫기
+			$(document).mouseup(function (e){
+				var modal_content = $(".modal_content");
+				if(modal_content.has(e.target).length === 0){
+					closeRegCoursesModal();
+				}
+			});
 		});
     	
 		// 좋아요를 이미 클릭했다면 채우기
@@ -393,16 +416,6 @@ ${course.content}
 			$(".modal").fadeOut();
 		}
 		
-		$(function(){ 
-			// 외부영역 클릭 시 팝업 닫기
-			$(document).mouseup(function (e){
-				var modal_content = $(".modal_content");
-				if(modal_content.has(e.target).length === 0){
-					closeRegCoursesModal();
-				}
-			});
-		});
-		
 		function purchaseCourse() {
 			$.ajax({
 				url: '/courses/purchaseCourse',
@@ -422,6 +435,48 @@ ${course.content}
 				type: 'post',
 				data: {
 					pageNo: ${pageNo}
+				}
+			});
+		}
+		
+		function changeClassify(classify) {
+			this.classify = classify;
+			$.ajax({
+				url: '/courses/${pageNo}/community',
+				type: 'post',
+				data: {
+					classify: classify
+				},
+				dataType: 'html',
+				success : function(data) {
+					var type = $(data).find("#classify");
+					var content = $(data).find("#content");
+					var pagination = $(data).find("#pagination");
+					
+					$("#classify").html(type);
+					$("#content").html(content);
+					$("#pagination").html(pagination);
+					
+					$("#search").val("");
+				}
+			});
+		}
+		
+		function searchCommunityBoard() {
+			$.ajax({
+				url: '/courses/${pageNo}/community',
+				type: 'post',
+				data: {
+					classify: classify,
+					search: $("#search").val()
+				},
+				dataType: 'html',
+				success : function(data) {
+					var content = $(data).find("#content");
+					var pagination = $(data).find("#pagination");
+					
+					$("#content").html(content);
+					$("#pagination").html(pagination);
 				}
 			});
 		}

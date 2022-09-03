@@ -76,7 +76,7 @@ public class CourseController {
 		int totalCount = courseService.getCourseTotalCount(countMap);
 		
 		pagingService = new PagingService(request, totalCount, pageSize);
-		
+		System.out.println("NowPage : " + pagingService.getNowPage());
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();
 		pageMap.put("page", pagingService.getNowPage());
 		pageMap.put("pageSize", pageSize);
@@ -162,11 +162,12 @@ public class CourseController {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		TeacherDTO courseTeacherDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
-		
+		boolean existLike = false;
 		// 접속한 회원이 현재 강의의 강사인지 확인
 		boolean isCurrentCourseTeacher = false;
 		if(memberDTO != null) {
 			TeacherDTO currentTeacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
 			if(currentTeacherDTO != null) {
 				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
 			}
@@ -186,8 +187,6 @@ public class CourseController {
 		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
-		
-		boolean existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
 		int stdCnt = 0;
 		
 		System.out.println("강의 상세 페이지 정보 출력");
@@ -231,11 +230,14 @@ public class CourseController {
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
-		boolean existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+		boolean existLike = false;
+		if(memberDTO != null) existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
 		int stdCnt = 0;
 		
 		String search = request.getParameter("search");
 		if(search == null) search = "";
+		
+		System.out.println("search : " + search);
 		
 		String classify = request.getParameter("classify");
 		if(classify == null) classify = "2"; // default로 질문 게시판 설정
@@ -256,6 +258,7 @@ public class CourseController {
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
 		model.addAttribute("memberService", memberService);
+		model.addAttribute("cbService", cbService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("cbList", cbList);

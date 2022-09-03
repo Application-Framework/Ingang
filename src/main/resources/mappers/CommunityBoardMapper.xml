@@ -225,21 +225,40 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
+	<!-- 2022-09-03 김홍일 / 강의 상세 페이지의 커뮤니티 탭 조건 -->
+	<sql id="selectCommunityBoardByOli_noCondition">
+		WHERE oli_no = #{oli_no} AND 
+		<choose>
+			<when test="classify == 2">classify IN (2, 3)</when>
+			<when test="classify == 4">classify IN (4, 5)</when>
+			<otherwise>classify = #{classify}</otherwise>
+		</choose> AND
+			(title LIKE '%${search}%' OR 
+			content LIKE '%${search}%')
+	</sql>
 	<!-- 2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 -->
 	<select id="selectCommunityBoardByOli_no" resultType="CommunityBoardDTO">
 		SELECT * FROM community_board
-		WHERE oli_no = #{oli_no} AND classify = #{classify} AND 
-			(title LIKE '%${search}%' OR 
-			content LIKE '%${search}%')
+		<include refid="selectCommunityBoardByOli_noCondition"/>
 		ORDER BY reg_date DESC
 		LIMIT #{page}, #{pageSize}
 	</select>
 	
 	<!-- 2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 개수 -->
 	<select id="selectCommunityBoardTotalCountByOli_no" resultType="int">
-		SELECT * FROM community_board
-		WHERE oli_no = #{oli_no} AND classify = #{classify} AND 
-			(title LIKE '%${search}%' OR 
-			content LIKE '%${search}%')
+		SELECT COUNT(*) FROM community_board
+		<include refid="selectCommunityBoardByOli_noCondition"/>
+	</select>
+	
+	<!-- 2022-09-03 김홍일 / 게시물의 댓글 개수 가져오기 -->
+	<select id="selectCommunityBoardReplyCount" resultType="int">
+		SELECT COUNT(*) FROM community_board_reply
+		WHERE cb_no = #{cb_no}
+	</select>
+	
+	<!-- 2022-09-03 김홍일 / 게시물의 좋아요 개수 가져오기 -->
+	<select id="selectCommunityBoardGoodCount" resultType="int">
+		SELECT COUNT(*) FROM community_board_good
+		WHERE cb_no = #{cb_no}
 	</select>
 </mapper>
