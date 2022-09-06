@@ -1,20 +1,27 @@
 package com.spring.ex.controller;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.sql.Date;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
@@ -309,8 +316,9 @@ public class CourseController {
 		return "redirect:" + request.getHeader("referer");
 	}
 	
-	@RequestMapping("/courses/writeCourse")
-	public String writeCourse(HttpServletRequest request, Model model) {
+	// 빈 강의 생성
+	@RequestMapping("/courses/insertCourse")
+	public String insertCourse(HttpServletRequest request, Model model) {
 		if(request.getParameter("update") != null) {
 			if(request.getParameter("update").equals("true")) {
 				int pageNo = Integer.parseInt(request.getParameter("pageNo"));
@@ -331,6 +339,30 @@ public class CourseController {
 		return "course/course_write";
 	}
 	
+	// 수정 링크로 들어왔을 때
+	@RequestMapping("/courses/updateCourse")
+	public String updateCourse(HttpServletRequest request, Model model) {
+		if(request.getParameter("update") != null) {
+			if(request.getParameter("update").equals("true")) {
+				int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+				
+				CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+				List<CourseTagDTO> tagList = courseService.getCourseTags(pageNo);
+				List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
+				
+				System.out.println(videoList);
+				
+				model.addAttribute("course", courseDTO);
+				model.addAttribute("tagList", tagList);
+				model.addAttribute("videoList", videoList);
+				model.addAttribute("courseService", courseService);
+			}
+		}
+		
+		return "course/course_write";
+	}
+	
+	/*
 	@RequestMapping("/courses/updateCourse")
 	public String updateCourse(HttpServletRequest request, Model model) {
 		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
@@ -367,9 +399,11 @@ public class CourseController {
 		
 		return "redirect:/courses/"+pageNo;
 	}
+	*/
 	
-	@RequestMapping("/courses/submitCourse")
-	public String submitCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
+	
+	@RequestMapping("/courses/saveCourse")
+	public String saveCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
 		System.out.println("등록 시작");
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
@@ -401,7 +435,7 @@ public class CourseController {
 		courseDTO.setPrice(Integer.parseInt(price));
 		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		
-		courseService.submitCourse(courseDTO);
+		courseService.updateCourse(courseDTO);
 		
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
@@ -425,6 +459,92 @@ public class CourseController {
 		}
 		
 		return "redirect:/courses";
+	}
+	
+	// cancelCourse
+	@ResponseBody
+	@RequestMapping("/cancelCourse")
+	public void cancelCourse(HttpServletRequest request) throws Exception {
+		System.out.println("게시물 수정 취소");
+		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		
+		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		// html의 src값을 추출
+		List<String> srcList = courseService.convertHtmlToSrcList(courseDTO.getContent()); 
+		
+		// 해당 게시물의 모든 파일의 url 가져오기
+		List<String> uploadedUrlList = courseService.selectUrlListByCb_id(pageNo);
+		
+		// 임시로 저장된 파일 삭제
+		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
+	}
+	
+	// deleteCourse
+	// 게시물 삭제
+	@ResponseBody
+	@RequestMapping("/deleteCourse")
+	public String deleteCourse(HttpServletRequest request) throws Exception {
+		System.out.println("게시물 삭제");
+		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		if(member == null) {
+			System.out.println("삭제할 권한이 없습니다.");
+			return "error";
+		}
+		
+		if(courseService.getTeacherInfo(member.getM_no()).getOlt_no() == courseDTO.getOlt_no() || member.getM_authority() == 1) {
+			String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+			// 데이터베이스에서 게시물의 모든 파일 정보 불러오고 삭제하기
+			List<FileUploadDTO> fileUploadDTOList = courseService.selectFileListByCb_id(pageNo);
+			for(int i = 0; i < fileUploadDTOList.size(); i++) {
+				courseService.deleteFileEveryWhere(fileUploadDTOList.get(i).getUrl(), contextRoot);
+			}
+			courseService.deletePost(pageNo);
+			System.out.println("게시물 삭제 성공");
+	 	}
+		else {
+			System.out.println("삭제할 권한이 없습니다.");
+			return "error";
+		}
+		
+		return "redirect:/courses";
+	}
+	
+	
+	// 서버에만 이미지 임시로 저장
+	@ResponseBody
+	@RequestMapping(value="/uploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	public String uploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
+		int cb_id = Integer.parseInt(request.getParameter("cb_id"));
+		JsonObject jsonObject = new JsonObject();
+		// 내부경로로 저장
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		String fileRoot = contextRoot+"/resources/images/uploaded_images/";
+		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
+		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
+		File serverFile = new File(fileRoot + savedFileName);
+		try {
+			InputStream fileStream = multipartFile.getInputStream();
+			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
+			jsonObject.addProperty("url", "/resources/images/uploaded_images/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("responseCode", "success");
+			
+			// 데이터베이스에 게시판 id와 경로 저장
+			FileUploadDTO fileUploadDTO = new FileUploadDTO();
+			fileUploadDTO.setCb_id(cb_id);
+			fileUploadDTO.setUrl("/resources/images/uploaded_images/"+savedFileName);
+			courseService.insertFile(fileUploadDTO);
+		} catch (IOException e) {
+			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제
+			jsonObject.addProperty("responseCode", "error");
+			courseService.deleteFileByUrl("/resources/images/uploaded_images/"+savedFileName);
+			e.printStackTrace();
+		} 
+		String a = jsonObject.toString();
+		return a;
 	}
 	
 	@RequestMapping("/courses/submitReply")

@@ -1,10 +1,18 @@
 package com.spring.ex.service;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.TeacherDAO;
@@ -16,6 +24,7 @@ import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dao.course.HistoryOrderLectureDAO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseFileUploadDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -23,7 +32,10 @@ import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
-
+	
+	@Resource(name="uploadPath")
+	String uploadPath;
+	
 	@Inject
 	private CourseDAO courseDAO;
 	
@@ -103,26 +115,103 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int submitCourse(CourseDTO dto) {
-		return courseDAO.submitCourse(dto);
+	public int insertCourse(CourseDTO dto) {
+		return courseDAO.insertCourse(dto);
 	}
 
 	@Override
 	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList) {
-		courseDAO.updateCourse(courseDTO);
-		courseTagDAO.deleteCourseTag(courseDTO.getOli_no());
-		courseVideoDAO.deleteCourseVideo(courseDTO.getOli_no());
-		
-		for(CourseTagDTO courseTag : courseTagList) {
-			courseTagDAO.submitCourseTag(courseTag);
-		}
-		
-		for(CourseVideoDTO courseVideo : courseVideoList) {
-			courseVideoDAO.submitCourseVideo(courseVideo);
-		}
-		
-		return 1;
+		return courseDAO.updateCourse(courseDTO, courseTagList, courseVideoList);
 	}
+	
+	@Override
+	public int deleteCourse(int oli_no) throws Exception {
+		return courseDAO.deleteCourse(oli_no);
+	}
+
+	// 파일 검색
+	@Override
+	public List<CourseFileUploadDTO> selectFileListByoli_no(int oli_no) throws Exception {
+		return courseDAO.selectFileListByOli_no(oli_no);
+	}
+	
+	// 반환값이 String인 파일 검색 
+	@Override
+	public List<String> selectUrlListByoli_no(int oli_no) throws Exception {
+		List<CourseFileUploadDTO> fileUploadDTOList = courseDAO.selectFileListByOli_no(oli_no);
+		List<String> stringList = new ArrayList<String>();
+		for(int i = 0; i < fileUploadDTOList.size(); i++) {
+			stringList.add(fileUploadDTOList.get(i).getUrl());
+		}
+		return stringList;
+	}
+
+	// 파일 추가
+	@Override
+	public int insertFile(CourseFileUploadDTO dto) throws Exception {
+		return courseDAO.insertFile(dto);
+	}
+
+	// 파일 삭제
+	@Override
+	public int deleteFileByUrl(String url) throws Exception {
+		return courseDAO.deleteFileByUrl(url);
+	}
+
+	// 서버, 로컬, 데이터베이스에서 파일 삭제
+	@Override
+	public int deleteFileEveryWhere(String url, String contextRoot) throws Exception {
+		try {
+			File serverFile = new File(contextRoot + url);
+			File localFile = new File(uploadPath + "/images/uploaded_images/" + serverFile.getName());
+			serverFile.delete();
+			localFile.delete();
+			
+			System.out.println("사용되지 않는 이미지 삭제");
+			System.out.println("서버 삭제 : " + serverFile.getPath().toString());
+			System.out.println("로컬 삭제 : " + localFile.getPath().toString());
+			deleteFileByUrl(url); 					  // database
+			return 1;
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return -1;
+		}
+	}
+	
+	// 메인의 url에 없는 것은 삭제
+	@Override
+	public void deleteFileNotInMain(List<String> main, List<String> target, String contextRoot) throws Exception {
+		for(String url : target) {
+			if(!main.contains(url)) {
+				deleteFileEveryWhere(url, contextRoot);
+			}
+		}
+	}
+	
+	// html 태그의 img src 값을 리스트로 반환
+	@Override
+	public List<String> convertHtmlToSrcList(String html) throws Exception {
+		List<String> srcList = new ArrayList<String>();
+		Document doc = Jsoup.parseBodyFragment(html);
+		Elements imgs = doc.getElementsByTag("img");
+		for(int i = 0; i < imgs.size(); i++)
+			srcList.add(imgs.get(i).attr("src"));
+		return srcList;
+	}
+
+	// srcList를 로컬 저장소에 복사
+	@Override
+	public void copySrcListToLocal(List<String> srcList, String contextRoot) throws Exception {
+		for(int i = 0; i < srcList.size(); i++) {
+			File file = new File(contextRoot + srcList.get(i));
+			File newFile = new File(uploadPath + "/images/uploaded_images/" + file.getName());
+			Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+			System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
+		}
+	}
+
 	
 	@Override
 	public int submitReply(CourseReplyDTO dto) {
@@ -197,4 +286,6 @@ public class CourseServiceImpl implements CourseService {
 		}
 		return false;
 	}
+
+	
 }

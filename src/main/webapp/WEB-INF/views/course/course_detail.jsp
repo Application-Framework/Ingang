@@ -152,7 +152,7 @@ ${course.content}
 					</textarea>
 					
 					<%-- 커리큘럼 --%>
-					<div class="mb-3 fs-3 fw-bold">
+					<div id="curriculum" class="mb-3 fs-3 fw-bold">
 						커리큘럼
 					</div>
 					<div class="mb-4">
@@ -176,7 +176,7 @@ ${course.content}
 						</c:forEach>
 					</div>
 					<%-- 수강평 --%>
-					<div class="mb-3 fs-3 fw-bold">
+					<div id="reviews" class="mb-3 fs-3 fw-bold">
 						수강평
 					</div>
 					
