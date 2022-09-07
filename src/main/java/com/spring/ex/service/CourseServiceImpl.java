@@ -120,8 +120,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList) {
-		return courseDAO.updateCourse(courseDTO, courseTagList, courseVideoList);
+	public int updateCourse(CourseDTO courseDTO) {
+		return courseDAO.updateCourse(courseDTO);
 	}
 	
 	@Override
@@ -131,13 +131,13 @@ public class CourseServiceImpl implements CourseService {
 
 	// 파일 검색
 	@Override
-	public List<CourseFileUploadDTO> selectFileListByoli_no(int oli_no) throws Exception {
+	public List<CourseFileUploadDTO> selectFileListByOli_no(int oli_no) throws Exception {
 		return courseDAO.selectFileListByOli_no(oli_no);
 	}
 	
 	// 반환값이 String인 파일 검색 
 	@Override
-	public List<String> selectUrlListByoli_no(int oli_no) throws Exception {
+	public List<String> selectUrlListByOli_no(int oli_no) throws Exception {
 		List<CourseFileUploadDTO> fileUploadDTOList = courseDAO.selectFileListByOli_no(oli_no);
 		List<String> stringList = new ArrayList<String>();
 		for(int i = 0; i < fileUploadDTOList.size(); i++) {
@@ -163,7 +163,7 @@ public class CourseServiceImpl implements CourseService {
 	public int deleteFileEveryWhere(String url, String contextRoot) throws Exception {
 		try {
 			File serverFile = new File(contextRoot + url);
-			File localFile = new File(uploadPath + "/images/uploaded_images/" + serverFile.getName());
+			File localFile = new File(uploadPath + "/img/course/uploaded_images/" + serverFile.getName());
 			serverFile.delete();
 			localFile.delete();
 			
@@ -206,7 +206,7 @@ public class CourseServiceImpl implements CourseService {
 	public void copySrcListToLocal(List<String> srcList, String contextRoot) throws Exception {
 		for(int i = 0; i < srcList.size(); i++) {
 			File file = new File(contextRoot + srcList.get(i));
-			File newFile = new File(uploadPath + "/images/uploaded_images/" + file.getName());
+			File newFile = new File(uploadPath + "/img/course/uploaded_images/" + file.getName());
 			Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
 		}
@@ -224,8 +224,18 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public int deleteCourseTag(int oli_no) {
+		return courseTagDAO.deleteCourseTag(oli_no);
+	}
+	
+	@Override
 	public int submitCourseVideo(CourseVideoDTO dto) {
 		return courseVideoDAO.submitCourseVideo(dto);
+	}
+	
+	@Override
+	public int deleteCourseVideo(int oli_no) {
+		return courseVideoDAO.deleteCourseVideo(oli_no);
 	}
 	
 	@Override
@@ -280,6 +290,7 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName) {
+		if(tagList == null) return false;
 		for(CourseTagDTO tag : tagList) {
 			if(tag.getTag().equals(tagName))
 				return true;

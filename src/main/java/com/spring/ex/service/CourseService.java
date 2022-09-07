@@ -49,7 +49,7 @@ public interface CourseService {
 	public int insertCourse(CourseDTO dto);
 	
 	// 강의 수정
-	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList);
+	public int updateCourse(CourseDTO courseDTO);
 	
 	// 강의 삭제
 	public int deleteCourse(int oli_no) throws Exception;
@@ -60,14 +60,20 @@ public interface CourseService {
 	// 강의에 태그 등록
 	public int submitCourseTag(CourseTagDTO dto);
 	
+	// 강의 태그 삭제
+	public int deleteCourseTag(int oli_no);
+	
 	// 강의 비디오 등록
 	public int submitCourseVideo(CourseVideoDTO dto);
 	
+	// 강의 비디오 삭제
+	public int deleteCourseVideo(int oli_no);
+	
 	// 파일 검색
-	public List<CourseFileUploadDTO> selectFileListByoli_no(int oli_no) throws Exception;
+	public List<CourseFileUploadDTO> selectFileListByOli_no(int oli_no) throws Exception;
 
 	// 반환값이 String인 파일 검색
-	public List<String> selectUrlListByoli_no(int oli_no) throws Exception;
+	public List<String> selectUrlListByOli_no(int oli_no) throws Exception;
 	
 	// 파일 추가
 	public int insertFile(CourseFileUploadDTO dto) throws Exception;

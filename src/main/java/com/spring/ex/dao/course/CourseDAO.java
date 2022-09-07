@@ -26,7 +26,7 @@ public interface CourseDAO {
 	public int insertCourse(CourseDTO dto);
 	
 	// 강의 수정
-	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList);
+	public int updateCourse(CourseDTO courseDTO);
 	
 	// 강의 삭제
 	public int deleteCourse(int oli_no) throws Exception;

@@ -71,19 +71,6 @@
 		</if>
 	</sql>
 	
-	<select id="getCourseDetail" resultType="CourseDTO">
-		SELECT *
-		FROM online_lecture_introduction
-		WHERE enable = 1 AND oli_no = #{oli_no}
-	</select>
-	
-	
-	<select id="getCourseReplys" resultType="CourseReplyDTO">
-		SELECT *
-		FROM online_lecture_reply
-		WHERE oli_no = #{oli_no}
-	</select>
-	
 	<!-- 태그 부분 -->
 	
 	<select id="getCourseTags" resultType="CourseTagDTO">
@@ -102,7 +89,7 @@
 		WHERE oli_no = #{oli_no}
 	</delete>
 	
-	
+	<!-- 좋아요 부분 -->
 	<select id="getCourseLikeCount" resultType="int">
 		SELECT COUNT(*)
 		FROM online_lecture_like
@@ -124,24 +111,49 @@
 		SELECT EXISTS(SELECT * FROM online_lecture_like WHERE oli_no = #{oli_no} AND m_no = #{m_no})
 	</select>
 	
-	<insert id="submitCourse" useGeneratedKeys="true" keyProperty="oli_no">
+	<!-- 강의 페이지 부분 -->
+	<!-- 강의 상세 페이지 가져오기 -->
+	<select id="getCourseDetail" resultType="CourseDTO">
+		SELECT *
+		FROM online_lecture_introduction
+		WHERE enable = 1 AND oli_no = #{oli_no}
+	</select>
+	
+	<!-- 강의 생성 -->
+	<insert id="insertCourse" useGeneratedKeys="true" keyProperty="oli_no">
 		INSERT INTO online_lecture_introduction(olt_no, title, content, img_path, price, reg_date, enable) 
 		VALUES(#{olt_no}, #{title}, #{content}, #{img_path}, #{price}, #{reg_date}, 1)
 	</insert>
 	
+	<!-- 강의 수정 -->
 	<update id="updateCourse">
 		UPDATE online_lecture_introduction
 		SET 
 			title = #{title},
 			content = #{content},
+			img_path = #{img_path},
 			price = #{price}
 		WHERE oli_no = #{oli_no}
 	</update>
+	
+	<!-- 강의 삭제 -->
+	<delete id="deleteCourse">
+		DELETE FROM online_lecture_introduction
+		WHERE oli_no = #{oli_no}
+	</delete>
+	
+	<!-- 수강평 부분 -->
+	<select id="getCourseReplys" resultType="CourseReplyDTO">
+		SELECT *
+		FROM online_lecture_reply
+		WHERE oli_no = #{oli_no}
+	</select>
 	
 	<insert id="submitReply">
 		INSERT INTO online_lecture_reply (oli_no, m_no, star_rating, content, reg_date)
 		VALUES(#{oli_no}, #{m_no}, #{star_rating}, #{content}, #{reg_date})
 	</insert>
+	
 	
 	<!-- 강의 영상 부분 -->
 	
@@ -213,4 +225,25 @@
 		SELECT * FROM history_order_lecture
 		WHERE m_no = #{m_no}
 	</select>
+	
+	<!-- 파일 부분 -->
+
+	<!-- 파일 검색 -->
+	<select id="selectFileListByOli_no" resultType="CourseFileUploadDTO">
+		SELECT *
+		FROM online_lecture_file_upload
+		WHERE oli_no = #{oli_no}
+	</select>
+	
+	<!-- 파일 추가 -->
+	<insert id="insertFile">
+		INSERT online_lecture_file_upload(oli_no, url) 
+		VALUE(#{oli_no}, #{url})
+	</insert>
+	
+	<!-- 파일 삭제 -->
+	<delete id="deleteFileByUrl">
+		DELETE FROM online_lecture_file_upload
+		WHERE url = #{url}
+	</delete>
 </mapper>

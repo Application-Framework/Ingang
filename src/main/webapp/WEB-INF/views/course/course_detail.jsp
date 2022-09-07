@@ -299,7 +299,7 @@ ${course.content}
 			        <c:if test="${member != null}">
 			        	<c:choose>
 			        		<c:when test="${isCurrentCourseTeacher == true}">
-			        			<form action="/courses/writeCourse" method="post">
+			        			<form action="/updateCourse" method="post">
 			        				<input type="hidden" name="pageNo" value="${pageNo}"/>
 			        				<input type="hidden" name="update" value="true"/>
 			        				<button type="submit" class="btn head-btn1 mb-3" style="min-width:100%;">강의 수정</button>
@@ -350,7 +350,9 @@ ${course.content}
     <%------------ footer section  ------------%>
     
     <script>
+    	<c:if test="${classify != null}">
     	var classify = ${classify};
+    	</c:if>
     	
     	// textarea 자동 늘리기
 	    $(function() {

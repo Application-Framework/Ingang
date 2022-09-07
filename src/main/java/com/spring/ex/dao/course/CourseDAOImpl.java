@@ -37,14 +37,13 @@ public class CourseDAOImpl implements CourseDAO {
 	
 	@Override
 	public int insertCourse(CourseDTO dto) {
-		return sqlSession.insert(namespace + ".insertCourseCourse", dto);
+		return sqlSession.insert(namespace + ".insertCourse", dto);
 	}
 
 	@Override
-	public int updateCourse(CourseDTO courseDTO, List<CourseTagDTO> courseTagList, List<CourseVideoDTO> courseVideoList) {
-		HashMap<String, Object> map = new HashMap<String, Object>();
+	public int updateCourse(CourseDTO courseDTO) {
 		// 추가해야 함
-		return sqlSession.update(namespace + ".updateCourse", map);
+		return sqlSession.update(namespace + ".updateCourse", courseDTO);
 	}
 	
 	@Override

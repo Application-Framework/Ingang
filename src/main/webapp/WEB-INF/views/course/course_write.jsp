@@ -6,9 +6,13 @@
 <html>
 <head>
 	<meta charset="UTF-8">
+    <meta HTTP-EQUIV="Expires" CONTENT="-1">
+    <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+	
 	<title>강의 소개 작성</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
-	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 	
@@ -16,10 +20,15 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
-	
-	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+	
+	<%-- summernote --%>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
+	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 	
 	<style>
 		a {
@@ -70,8 +79,7 @@
     <jsp:include page="../fix/header.jsp" />
     
     <div class="container">
-    	<form <c:if test="${course == null}">action="/courses/submitCourse"</c:if>
-    		  <c:if test="${course != null}">action="/courses/updateCourse"</c:if> method="post" enctype="multipart/form-data">
+    	<form action="/saveCourse" method="post" enctype="multipart/form-data">
     		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
@@ -113,16 +121,16 @@
     			</div>
     		</div>
     		
-    		<c:if test="${course == null}">
-	    		<div class="row mb-1">
-	   				<label class="col-sm-2 col-form-label fs-5">표지</label>
-	   				<div class="col-sm-10">
-			    		<input type="file" class="form-control" name="thumbnail" value="${course.img_path}" required/>
-	    			</div>
-	    		</div>
-    		</c:if>
+    		<div class="row mb-1">
+   				<label class="col-sm-2 col-form-label fs-5">표지</label>
+   				<div class="col-sm-10">
+		    		<input type="file" class="form-control" name="thumbnail" value="${course.img_path}" accept="image/*" onchange="loadFile(event)" required/>
+	    		 	<img id="thumbnail" src="<c:url value='${course.img_path}'/>" width="200px"/>
+    			</div>
+    		</div>
+	    		
     		<div class="row mb-4">
-    			<textarea class="form-control fs-5" name="content" placeholder="강의 소개 내용" rows="10">${course.content}</textarea>
+    			<textarea class="summernote" id="content" name="content" rows="10">${course.content}</textarea>
     		</div>
     		
     		<div class="row mb-4" id="videoSection">
@@ -296,6 +304,108 @@
         <!-- Footer End-->
     </footer>
     
+    <script>
+	    var submitted = false;
+		
+		$(document).ready(function() {
+			$('.summernote').summernote({
+				placeholder: 'write the text',
+				tabsize: 2,
+				height: 300,
+				toolbar: [
+					['style', ['style']],
+					['font', ['bold', 'underline', 'clear']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['table', ['table']],
+					['insert', ['link', 'picture', 'video']],
+					['view', ['fullscreen', 'codeview', 'help']]
+				],
+				codemirror: { // codemirror options 
+			    	theme: 'monokai',
+					mode: 'htmlmixed',
+					lineNumbers: 'true'
+			  	},
+				callbacks : { 
+					onImageUpload : function(files, editor, welEditable) {
+						// 파일 업로드(다중업로드를 위해 반복문 사용)
+						for (var i = files.length - 1; i >= 0; i--) {
+							uploadSummernoteImageFile(files[i], this);
+						}
+					}
+				}
+			});
+		});
+		
+		function uploadSummernoteImageFile(file, el) {
+			data = new FormData();
+			data.append("file", file);
+			data.append("oli_no", ${course.oli_no})
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/courseUploadSummernoteImageFile",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(el).summernote('editor.insertImage', data.url);
+				}
+			});
+		}
+		
+		$(window).on("beforeunload", function() {
+            var url = <c:choose>
+	            <c:when test="${update}">"/cancelCourse"</c:when>
+	            <c:otherwise>"/deleteCourse"</c:otherwise>
+	        </c:choose>;
+			
+			console.log("글쓰기 종료");
+			
+			// 변경이 있을 때 나가면 경고 뜨게 하기
+			//   기존 내용이 있다면 cancelPost
+			//   기존 내용이 없다면 deletePost
+			
+			// 변경이 없을 때 
+			//   내용이 있다면 cancelPost
+			//   내용이 없다면 deletePost
+			if(!submitted) {
+				$.ajax({
+					type : "POST",
+					url : url,
+					data : {
+						pageNo : ${course.oli_no}
+					}
+				});
+				
+				return "작성중인 글이 존재합니다. 페이지를 나가시겠습니까?";
+			}
+		});
+		
+		// 등록 버튼을 눌렀을 때는 경고창 뜨지 않게 설정
+		$("form").submit(function() {
+			submitted = true;
+		});
+		
+		
+		var loadFile = function(event) {
+		    var thumbnail = document.getElementById('thumbnail');
+		    thumbnail.src = URL.createObjectURL(event.target.files[0]);
+		    thumbnail.onload = function() {
+		      URL.revokeObjectURL(thumbnail.src) // free memory
+		    }
+	  	};	
+	  	
+        /* window.onpageshow = function(event) {
+	        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+	            console.log("뒤로가기");
+	            location.reload();
+	        }
+	        else {
+	            console.log("새로 열린 페이지");
+	        }
+    	} */
+    </script>
     
 </body>
 </html>

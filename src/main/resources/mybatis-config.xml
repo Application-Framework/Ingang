@@ -18,5 +18,6 @@
 		<typeAlias type="com.spring.ex.dto.note.NoteLikeDTO" alias="NoteLikeDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.NoteReplyDTO" alias="NoteReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.HistoryOrderNoteDTO" alias="HistoryOrderNoteDTO"/>
+		<typeAlias type="com.spring.ex.dto.course.CourseFileUploadDTO" alias="CourseFileUploadDTO"/>
 	</typeAliases>
 </configuration>
