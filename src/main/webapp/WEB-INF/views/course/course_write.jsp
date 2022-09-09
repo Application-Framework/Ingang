@@ -64,12 +64,14 @@
 	    function addVideoSlot(title, file_name) {
 	    	cnt = cnt + 1;
 	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
+	    	isChange = true;
 	    }
 	    
 	    function removeVideoSlot() {
 	    	if(cnt == 1) return;
 	    	$('#v_'+cnt).remove();
 	    	cnt = cnt - 1;
+	    	isChange = true;
 	    }
 	    
     </script>
@@ -79,7 +81,7 @@
     <jsp:include page="../fix/header.jsp" />
     
     <div class="container">
-    	<form action="/saveCourse" method="post" enctype="multipart/form-data">
+    	<form action="${actionURL}" method="post" enctype="multipart/form-data">
     		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
@@ -305,9 +307,14 @@
     </footer>
     
     <script>
-	    var submitted = false;
-		
+	    var changed = false;
+		var unloaded = false;
+	    
 		$(document).ready(function() {
+			$(window).bind("pageshow", function(event) {
+				if(unloaded) location.reload();
+			});
+			
 			$('.summernote').summernote({
 				placeholder: 'write the text',
 				tabsize: 2,
@@ -333,14 +340,25 @@
 							uploadSummernoteImageFile(files[i], this);
 						}
 					}
-				}
+				},
+				onChange: function() {}
+			});
+			
+			// input, select에 change event가 일어날 경우
+		    $(document).on("change", "input, select, textarea, summernote.change", function() {
+		    	console.log("변경");
+		    	changed  = true;
+	    	});
+			
+			// form 전송 시 경고창 없애기
+		    $(document).on("submit", "form", function(event){
+		        window.onbeforeunload = null;
 			});
 		});
 		
 		function uploadSummernoteImageFile(file, el) {
 			data = new FormData();
 			data.append("file", file);
-			data.append("oli_no", ${course.oli_no})
 			$.ajax({
 				data : data,
 				type : "POST",
@@ -354,40 +372,7 @@
 			});
 		}
 		
-		$(window).on("beforeunload", function() {
-            var url = <c:choose>
-	            <c:when test="${update}">"/cancelCourse"</c:when>
-	            <c:otherwise>"/deleteCourse"</c:otherwise>
-	        </c:choose>;
-			
-			console.log("글쓰기 종료");
-			
-			// 변경이 있을 때 나가면 경고 뜨게 하기
-			//   기존 내용이 있다면 cancelPost
-			//   기존 내용이 없다면 deletePost
-			
-			// 변경이 없을 때 
-			//   내용이 있다면 cancelPost
-			//   내용이 없다면 deletePost
-			if(!submitted) {
-				$.ajax({
-					type : "POST",
-					url : url,
-					data : {
-						pageNo : ${course.oli_no}
-					}
-				});
-				
-				return "작성중인 글이 존재합니다. 페이지를 나가시겠습니까?";
-			}
-		});
-		
-		// 등록 버튼을 눌렀을 때는 경고창 뜨지 않게 설정
-		$("form").submit(function() {
-			submitted = true;
-		});
-		
-		
+		// 썸네일 미리보기
 		var loadFile = function(event) {
 		    var thumbnail = document.getElementById('thumbnail');
 		    thumbnail.src = URL.createObjectURL(event.target.files[0]);
@@ -396,6 +381,15 @@
 		    }
 	  	};	
 	  	
+		// 페이지가 unload 되기 전에 실행되는 이벤트
+		$(window).on("beforeunload", function() {
+			unloaded = true;
+			if(changed)
+			{
+				return "저장하지 않고 페이지를 떠나시겠습니까";
+			}
+		});
+		
         /* window.onpageshow = function(event) {
 	        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
 	            console.log("뒤로가기");

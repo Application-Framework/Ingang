@@ -322,9 +322,29 @@ public class CourseController {
 	// 강의 상세 페이지 관리 부분
 	//--------------------------------
 	
-	// 빈 강의 생성
-	@RequestMapping("/insertCourse")
-	public String insertCourse(HttpServletRequest request, Model model) throws Exception {
+	// 강의 생성 페이지
+	@RequestMapping("/writeCourse")
+	public String writeCourse(HttpServletRequest request, Model model) {
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		if(memberDTO == null) {
+			System.out.println("로그인이 필요합니다.");
+			return "error";
+		}
+		
+		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		if(teacherDTO == null) {
+			System.out.println("강사 자격이 없습니다.");
+			return "error";
+		}
+		
+		model.addAttribute("actionURL", "/submitCourse");
+		
+		return "course/course_write";
+	}
+	
+	// 강의 등록 페이지
+	@RequestMapping("/submitCourse")
+	public String submitCourse(HttpServletRequest request, Model model, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
@@ -337,25 +357,62 @@ public class CourseController {
 			return "error";
 		}
 		
+		System.out.println("등록 시작");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String price = request.getParameter("price");
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
+	
+		String img_path = null;
+		if(!thumbnail.isEmpty()) { 
+			img_path = fileUploadService.uploadFile(thumbnail, "/img/course/uploaded_images");
+		}
+		
+		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
+			System.out.println("빈 칸이 있습니다.");
+			return "error";
+		}
+		
+		// 강의 등록
 		CourseDTO courseDTO = new CourseDTO();
 		courseDTO.setOlt_no(teacherDTO.getOlt_no());
+		courseDTO.setTitle(title);
+		courseDTO.setContent(content);
+		courseDTO.setImg_path(img_path);
+		courseDTO.setPrice(Integer.parseInt(price));
 		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
-		courseDTO.setEnable(0);
+		courseDTO.setEnable(1);
 		
-		courseService.insertCourse(courseDTO);
+		courseService.submitCourse(courseDTO);
 		
-		model.addAttribute("course", courseDTO);
-		model.addAttribute("courseService", courseService);
-		model.addAttribute("update", false);
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		model.addAttribute("contextRoot", contextRoot);
+		for(String t : tags) {
+			CourseTagDTO courseTagDTO = new CourseTagDTO();
+			courseTagDTO.setOli_no(courseDTO.getOli_no());
+			courseTagDTO.setTag(t);
+			
+			courseService.submitCourseTag(courseTagDTO);
+		}
 		
-		return "course/course_write";
+		for(int i = 0; i < videoTitles.length; i++) {
+			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+			courseVideoDTO.setOli_no(courseDTO.getOli_no());
+			courseVideoDTO.setTitle(videoTitles[i]);
+			courseVideoDTO.setS_file_name(videoPaths[i]);
+			
+			courseService.submitCourseVideo(courseVideoDTO);
+		}
+		
+		System.out.println("강의 등록 성공");
+		System.out.println("등록 내용 : " + courseDTO);
+		
+		return "redirect:/courses/"+courseDTO.getOli_no();
 	}
 	
 	// 강의 수정 페이지
-	@RequestMapping("/updateCourse")
-	public String updateCourse(HttpServletRequest request, Model model) {
+	@RequestMapping("/rewriteCourse")
+	public String rewriteCourse(HttpServletRequest request, Model model) {
 		String _pageNo = request.getParameter("pageNo");
 		if(_pageNo == null) {
 			System.out.println("강의를 찾을 수 없습니다.");
@@ -393,9 +450,108 @@ public class CourseController {
 		model.addAttribute("tagList", tagList);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("courseService", courseService);
-		model.addAttribute("update", true);
-		
+		model.addAttribute("actionURL", "/updateCourse");
 		return "course/course_write";
+	}
+	
+	@RequestMapping("/updateCourse")
+	public String updateCourse(HttpServletRequest request, Model model, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
+		String _pageNo = request.getParameter("pageNo");
+		if(_pageNo == null) {
+			System.out.println("강의를 찾을 수 없습니다.");
+			return "error";
+		}
+		int pageNo = Integer.parseInt(_pageNo);
+		
+		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		if(memberDTO == null) {
+			System.out.println("로그인이 필요합니다.");
+			return "error";
+		}
+		
+		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		if(teacherDTO == null) {
+			System.out.println("강사 자격이 없습니다.");
+			return "error";
+		}
+		
+		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		if(courseDTO == null) {
+			System.out.println("존재하지 않는 강의입니다.");
+			return "error";
+		}
+		
+		if(teacherDTO.getOlt_no() != courseDTO.getOlt_no()) {
+			System.out.println("강의 수정 권한이 없습니다.");
+			return "error";
+		}
+		
+		System.out.println("수정 시작");
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String price = request.getParameter("price");
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
+	
+		String img_path = null;
+		if(!thumbnail.isEmpty()) { 
+			img_path = fileUploadService.uploadFile(thumbnail, "/img/course/uploaded_images");
+		}
+		
+		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
+			System.out.println("빈 칸이 있습니다.");
+			return "error";
+		}
+		
+		// 강의 수정
+		courseDTO.setTitle(title);
+		courseDTO.setContent(content);
+		courseDTO.setImg_path(img_path);
+		courseDTO.setPrice(Integer.parseInt(price));
+		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
+		courseDTO.setEnable(1);
+		
+		courseService.updateCourse(courseDTO);
+		
+		courseService.deleteCourseTag(pageNo);
+		for(String t : tags) {
+			CourseTagDTO courseTagDTO = new CourseTagDTO();
+			courseTagDTO.setOli_no(courseDTO.getOli_no());
+			courseTagDTO.setTag(t);
+			
+			courseService.submitCourseTag(courseTagDTO);
+		}
+		
+		courseService.deleteCourseVideo(pageNo);
+		for(int i = 0; i < videoTitles.length; i++) {
+			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+			courseVideoDTO.setOli_no(courseDTO.getOli_no());
+			courseVideoDTO.setTitle(videoTitles[i]);
+			courseVideoDTO.setS_file_name(videoPaths[i]);
+			
+			courseService.submitCourseVideo(courseVideoDTO);
+		}
+		
+		System.out.println("강의 수정 성공");
+		System.out.println("수정 내용 : " + courseDTO);
+		
+		// 임시로 저장된 사진은 로컬에 복사하고, 사용되지 않는 사진은 DB와 서버에서 삭제하는 작업
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
+		
+		// html의 src값을 추출
+		List<String> srcList = courseService.convertHtmlToSrcList(content); 
+		
+		// 서버에 저장된 이미지를 로컬과 DB에 복사
+		courseService.copySrcListToLocalAndDB(srcList, pageNo, contextRoot);
+		
+		// 해당 강의의 임시 + 모든 파일의 url 가져오기
+		List<String> uploadedUrlList = courseService.selectUrlListByOli_no(courseDTO.getOli_no());
+		
+		// 현재 강의에 필요한 사진을 제외한 사진은 삭제
+		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
+		
+		return "redirect:/courses/"+pageNo;
 	}
 	
 	/*
@@ -437,107 +593,6 @@ public class CourseController {
 	}
 	*/
 	
-	// 강의 저장
-	@RequestMapping("/saveCourse")
-	public String saveCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
-		String _pageNo = request.getParameter("pageNo");
-		if(_pageNo == null) {
-			System.out.println("강의를 찾을 수 없습니다.");
-			return "error";
-		}
-		int pageNo = Integer.parseInt(_pageNo);
-		
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		if(memberDTO == null) {
-			System.out.println("로그인이 필요합니다.");
-			return "error";
-		}
-		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
-		if(teacherDTO == null) {
-			System.out.println("강사 자격이 없습니다.");
-			return "error";
-		}
-		
-		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		if(courseDTO == null) {
-			System.out.println("존재하지 않는 강의입니다.");
-			return "error";
-		}
-		
-		if(teacherDTO.getOlt_no() != courseDTO.getOlt_no()) {
-			System.out.println("강의 수정 권한이 없습니다.");
-			return "error";
-		}
-		
-		System.out.println("등록 시작");
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		String price = request.getParameter("price");
-		String[] tags = request.getParameterValues("tags");
-		String[] videoTitles = request.getParameterValues("video_titles");
-		String[] videoPaths = request.getParameterValues("video_paths");
-	
-		String img_path = null;
-		if(!thumbnail.isEmpty()) { 
-			img_path = fileUploadService.uploadFile(thumbnail, "/img/course/uploaded_images");
-		}
-		
-		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
-			System.out.println("빈 칸이 있습니다.");
-			return "error";
-		}
-		
-		// 강의 등록
-		courseDTO.setTitle(title);
-		courseDTO.setContent(content);
-		courseDTO.setImg_path(img_path);
-		courseDTO.setPrice(Integer.parseInt(price));
-		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
-		courseDTO.setEnable(1);
-		
-		System.out.println("등록 내용 : " + courseDTO);
-		
-		courseService.updateCourse(courseDTO);
-		
-		courseService.deleteCourseTag(pageNo);
-		for(String t : tags) {
-			CourseTagDTO courseTagDTO = new CourseTagDTO();
-			courseTagDTO.setOli_no(courseDTO.getOli_no());
-			courseTagDTO.setTag(t);
-			
-			courseService.submitCourseTag(courseTagDTO);
-		}
-		
-		courseService.deleteCourseVideo(pageNo);
-		for(int i = 0; i < videoTitles.length; i++) {
-			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
-			courseVideoDTO.setOli_no(courseDTO.getOli_no());
-			courseVideoDTO.setTitle(videoTitles[i]);
-			courseVideoDTO.setS_file_name(videoPaths[i]);
-			
-			courseService.submitCourseVideo(courseVideoDTO);
-		}
-		
-		System.out.println("강의 등록 성공");
-		
-		// 임시로 저장된 사진은 로컬에 복사하고, 사용되지 않는 사진은 DB와 서버에서 삭제하는 작업
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		
-		// html의 src값을 추출
-		List<String> srcList = courseService.convertHtmlToSrcList(content); 
-		
-		// 서버에 저장된 이미지를 로컬에 복사
-		courseService.copySrcListToLocal(srcList, contextRoot);
-		
-		// 해당 강의의 임시 + 모든 파일의 url 가져오기
-		List<String> uploadedUrlList = courseService.selectUrlListByOli_no(courseDTO.getOli_no());
-		
-		// 현재 강의에 필요한 사진을 제외한 사진은 삭제
-		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
-		
-		return "redirect:/courses/"+pageNo;
-	}
 	
 	// 강의 수정 취소
 	@RequestMapping("/cancelCourse")
@@ -608,7 +663,6 @@ public class CourseController {
 	@ResponseBody
 	@RequestMapping(value="/courseUploadSummernoteImageFile", produces = "application/json; charset=utf8")
 	public String courseUploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
 		JsonObject jsonObject = new JsonObject();
 		// 내부경로로 저장
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
@@ -622,16 +676,9 @@ public class CourseController {
 			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
 			jsonObject.addProperty("url", "/resources/img/course/uploaded_images/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
-			
-			// 데이터베이스에 게시판 id와 경로 저장
-			CourseFileUploadDTO fileUploadDTO = new CourseFileUploadDTO();
-			fileUploadDTO.setOli_no(oli_no);
-			fileUploadDTO.setUrl("/resources/img/course/uploaded_images/"+savedFileName);
-			courseService.insertFile(fileUploadDTO);
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제
 			jsonObject.addProperty("responseCode", "error");
-			courseService.deleteFileByUrl("/resources/img/course/uploaded_images/"+savedFileName);
 			e.printStackTrace();
 		} 
 		String a = jsonObject.toString();

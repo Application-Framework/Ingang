@@ -22,8 +22,8 @@ public interface CourseDAO {
 	// 강의 상세 가져오기
 	public CourseDTO getCourseDetail(int oli_no);
 	
-	// 강의 생성
-	public int insertCourse(CourseDTO dto);
+	// 강의 등록
+	public int submitCourse(CourseDTO courseDTO);
 	
 	// 강의 수정
 	public int updateCourse(CourseDTO courseDTO);

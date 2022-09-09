@@ -36,13 +36,12 @@ public class CourseDAOImpl implements CourseDAO {
 	}
 	
 	@Override
-	public int insertCourse(CourseDTO dto) {
-		return sqlSession.insert(namespace + ".insertCourse", dto);
+	public int submitCourse(CourseDTO courseDTO) {
+		return sqlSession.insert(namespace + ".submitCourse", courseDTO);
 	}
 
 	@Override
 	public int updateCourse(CourseDTO courseDTO) {
-		// 추가해야 함
 		return sqlSession.update(namespace + ".updateCourse", courseDTO);
 	}
 	

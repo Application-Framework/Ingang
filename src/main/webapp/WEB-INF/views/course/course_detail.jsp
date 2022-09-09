@@ -299,9 +299,8 @@ ${course.content}
 			        <c:if test="${member != null}">
 			        	<c:choose>
 			        		<c:when test="${isCurrentCourseTeacher == true}">
-			        			<form action="/updateCourse" method="post">
+			        			<form action="/rewriteCourse" method="post">
 			        				<input type="hidden" name="pageNo" value="${pageNo}"/>
-			        				<input type="hidden" name="update" value="true"/>
 			        				<button type="submit" class="btn head-btn1 mb-3" style="min-width:100%;">강의 수정</button>
 			        			</form>
 			        		</c:when>

@@ -115,8 +115,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int insertCourse(CourseDTO dto) {
-		return courseDAO.insertCourse(dto);
+	public int submitCourse(CourseDTO courseDTO) {
+		return courseDAO.submitCourse(courseDTO);
 	}
 
 	@Override
@@ -203,12 +203,17 @@ public class CourseServiceImpl implements CourseService {
 
 	// srcList를 로컬 저장소에 복사
 	@Override
-	public void copySrcListToLocal(List<String> srcList, String contextRoot) throws Exception {
+	public void copySrcListToLocalAndDB(List<String> srcList, int oli_no, String contextRoot) throws Exception {
 		for(int i = 0; i < srcList.size(); i++) {
 			File file = new File(contextRoot + srcList.get(i));
 			File newFile = new File(uploadPath + "/img/course/uploaded_images/" + file.getName());
 			Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
 			System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
+			
+			CourseFileUploadDTO cfuDTO = new CourseFileUploadDTO();
+			cfuDTO.setOli_no(oli_no);
+			cfuDTO.setUrl(srcList.get(i));
+			insertFile(cfuDTO);
 		}
 	}
 

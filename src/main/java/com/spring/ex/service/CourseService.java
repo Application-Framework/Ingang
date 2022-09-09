@@ -45,8 +45,8 @@ public interface CourseService {
 	// 좋아요가 존재하는지
 	public int existCourseLike(int oli_no, int m_no);
 	
-	// 강의 생성
-	public int insertCourse(CourseDTO dto);
+	// 강의 등록
+	public int submitCourse(CourseDTO courseDTO);
 	
 	// 강의 수정
 	public int updateCourse(CourseDTO courseDTO);
@@ -90,8 +90,8 @@ public interface CourseService {
 	// html 태그의 img src 값을 리스트로 반환
 	public List<String> convertHtmlToSrcList(String html) throws Exception;
 	
-	// srcList를 로컬 저장소에 복사
-	public void copySrcListToLocal(List<String> srcList, String contextRoot) throws Exception;
+	// srcList를 로컬 저장소와 DB에 복사
+	public void copySrcListToLocalAndDB(List<String> srcList, int oli_no, String contextRoot) throws Exception;
 	
 	
 	// 강사

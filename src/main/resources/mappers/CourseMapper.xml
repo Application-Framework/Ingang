@@ -119,10 +119,10 @@
 		WHERE enable = 1 AND oli_no = #{oli_no}
 	</select>
 	
-	<!-- 강의 생성 -->
-	<insert id="insertCourse" useGeneratedKeys="true" keyProperty="oli_no">
+	<!-- 강의 등록 -->
+	<insert id="submitCourse" useGeneratedKeys="true" keyProperty="oli_no">
 		INSERT INTO online_lecture_introduction(olt_no, title, content, img_path, price, reg_date, enable) 
-		VALUES(#{olt_no}, #{title}, #{content}, #{img_path}, #{price}, #{reg_date}, 1)
+		VALUES(#{olt_no}, #{title}, #{content}, #{img_path}, #{price}, #{reg_date}, #{enable})
 	</insert>
 	
 	<!-- 강의 수정 -->
@@ -132,7 +132,8 @@
 			title = #{title},
 			content = #{content},
 			img_path = #{img_path},
-			price = #{price}
+			price = #{price},
+			enable = #{enable}
 		WHERE oli_no = #{oli_no}
 	</update>
 	
