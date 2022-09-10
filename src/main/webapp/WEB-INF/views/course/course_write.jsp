@@ -6,9 +6,9 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-    <meta HTTP-EQUIV="Expires" CONTENT="-1">
+    <!-- <meta HTTP-EQUIV="Expires" CONTENT="0">
     <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
-    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> -->
 	
 	<title>강의 소개 작성</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
@@ -25,10 +25,12 @@
 	
 	<%-- summernote --%>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
-	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> 
-	<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 	
 	<style>
 		a {
@@ -39,6 +41,14 @@
 		a:hover {
 			color: #000000; 
 		}
+		
+		/* .note-toolbar {
+		    z-index: auto;
+		}
+		
+		.note-editor {
+		  z-index: 0;
+		} */
 		
 	</style>
 	
@@ -81,19 +91,19 @@
     <jsp:include page="../fix/header.jsp" />
     
     <div class="container">
-    	<form action="${actionURL}" method="post" enctype="multipart/form-data">
+    	<form id="frmCourse" action="${actionURL}" method="post" enctype="multipart/form-data">
     		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
    				<div class="col-sm-10">
-    				<input type="text" class="form-control" name="title" value="${course.title}" equired/>
+    				<input type="text" class="form-control" name="title" value="${course.title}" required/>
     			</div>
     		</div>
     		
     		<div class="row mb-2">
    				<label class="col-sm-2 col-form-label fs-5">강의 분야</label>
    				<div class="col-sm-10">
-					<select name="tags" id="choices-multiple-remove-button" multiple>
+					<select name="tags" id="choices-multiple-remove-button" multiple required>
 					  <option <c:if test="${courseService.containsInTagList(tagList,'웹 개발') == true}">selected</c:if> value="웹 개발">웹 개발</option>
 					  <option <c:if test="${courseService.containsInTagList(tagList,'프론트엔드') == true}">selected</c:if> value="프론트엔드">프론트엔드</option>
 					  <option <c:if test="${courseService.containsInTagList(tagList,'백엔드') == true}">selected</c:if> value="백엔드">백엔드</option>
@@ -126,7 +136,7 @@
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">표지</label>
    				<div class="col-sm-10">
-		    		<input type="file" class="form-control" name="thumbnail" value="${course.img_path}" accept="image/*" onchange="loadFile(event)" required/>
+		    		<input type="file" class="form-control" name="thumbnail" accept="image/*" onchange="loadFile(event)" <c:if test="${course.img_path == null}">required</c:if>/>
 	    		 	<img id="thumbnail" src="<c:url value='${course.img_path}'/>" width="200px"/>
     			</div>
     		</div>
@@ -173,7 +183,7 @@
     		</div>
     		
     		<div class="row mb-3 d-flex flex-row-reverse">
-    			<button type="submit" class="col-sm-2 btn head-btn1">저장</button>
+    			<input type="button" id="btnSubmit" class="col-sm-2 btn head-btn1" value="저장"/>
     		</div>
     	</form>
     </div>
@@ -307,18 +317,42 @@
     </footer>
     
     <script>
-	    var changed = false;
-		var unloaded = false;
+	    var changed = false, submitted = false;
 	    
-		$(document).ready(function() {
-			$(window).bind("pageshow", function(event) {
-				if(unloaded) location.reload();
-			});
-			
+	    // 등록 버튼 눌렀을 때
+	    $("#btnSubmit").click(function() {
+	    	var form = document.getElementById('frmCourse');
+	    	for(var i=0; i < form.elements.length; i++){
+    	      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+    	        alert('There are some required fields!');
+    	        return false;
+    	      }
+    	    }
+	    	
+	    	if ($('.summernote').summernote('isEmpty')) {
+	    		alert('editor content is empty');
+	    		return false;
+	    	}
+	    	submitted = true;
+	    	form.submit();
+	    });
+	    
+	    $(window).bind("pageshow", function(event) {
+	    	if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+	    		// Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
+	    		// rewriteCourse라면 reload 안하기
+	    		<c:if test="${course != null}">
+	    			location.reload();
+	    		</c:if>
+       		}
+	    });
+	    
+	    
+	    $(function() {
 			$('.summernote').summernote({
 				placeholder: 'write the text',
-				tabsize: 2,
-				height: 300,
+				tabsize: 4,
+				height: 400,
 				toolbar: [
 					['style', ['style']],
 					['font', ['bold', 'underline', 'clear']],
@@ -326,7 +360,7 @@
 					['para', ['ul', 'ol', 'paragraph']],
 					['table', ['table']],
 					['insert', ['link', 'picture', 'video']],
-					['view', ['fullscreen', 'codeview', 'help']]
+					['view', ['codeview', 'help']]
 				],
 				codemirror: { // codemirror options 
 			    	theme: 'monokai',
@@ -340,8 +374,7 @@
 							uploadSummernoteImageFile(files[i], this);
 						}
 					}
-				},
-				onChange: function() {}
+				}
 			});
 			
 			// input, select에 change event가 일어날 경우
@@ -350,12 +383,14 @@
 		    	changed  = true;
 	    	});
 			
-			// form 전송 시 경고창 없애기
-		    $(document).on("submit", "form", function(event){
-		        window.onbeforeunload = null;
-			});
+		    $(document).on("summernote.change", ".summernote", function() {
+		    	console.log("변경");
+		    	changed  = true;
+	    	});
+			
 		});
-		
+	    
+	    // 임시 이미지 등록
 		function uploadSummernoteImageFile(file, el) {
 			data = new FormData();
 			data.append("file", file);
@@ -383,8 +418,7 @@
 	  	
 		// 페이지가 unload 되기 전에 실행되는 이벤트
 		$(window).on("beforeunload", function() {
-			unloaded = true;
-			if(changed)
+			if(!submitted && changed)
 			{
 				return "저장하지 않고 페이지를 떠나시겠습니까";
 			}

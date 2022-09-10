@@ -21,32 +21,35 @@ public class LoginController {
 	MemberService service;
 	
 	@RequestMapping(value="/loginPageView", method = RequestMethod.GET)
-	public String getLogin(MemberDTO dto) throws Exception {
-		
+	public String getLogin(HttpServletRequest request) throws Exception {
+		// 이전 페이지 저장
+		String referer = request.getHeader("Referer");
+		request.getSession().setAttribute("redirectURI", referer);
 		return "/login/login";
 	}
 	
 	// 로그인
 	@RequestMapping(value = "/loginPageView", method = RequestMethod.POST)
-	public String postLogin(MemberDTO dto, HttpServletRequest request, RedirectAttributes rttr) throws Exception {
-
+	public String postLogin(MemberDTO dto, HttpServletRequest request) throws Exception {
 		HttpSession session = request.getSession();
 
 		MemberDTO login = service.login(dto);
 		
 		if (login == null) {
-			session.setAttribute("member", null);
-			rttr.addFlashAttribute("msg", false);
-			
 			return "redirect:/loginPageView";
-		} else {
+		} 
+		else {
 			session.setAttribute("member", login);
 			session.setAttribute("m_no", login.getM_no());
 			
-			return "redirect:/";
+			// 로그인 후 이전 페이지로 이동
+			Object redirectURL = session.getAttribute("redirectURI");
+			// 이전 페이지가 없다면 main 페이지로 이동
+			if(redirectURL == null)
+				redirectURL = "/";
+			
+			return "redirect:" + redirectURL.toString();
 		}
-
-		
 	}
 	
 	@RequestMapping(value="/signUp", method = RequestMethod.GET)

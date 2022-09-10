@@ -147,10 +147,8 @@
 			<div class="col-lg-8">
 				<%-- 강의 소개 출력 --%>
 				<c:if test="${contentType == 'main'}">
-					<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${course.content}
-					</textarea>
-					
+					<c:out value="${course.content}" escapeXml="false" />
+				
 					<%-- 커리큘럼 --%>
 					<div id="curriculum" class="mb-3 fs-3 fw-bold">
 						커리큘럼
@@ -299,10 +297,8 @@ ${course.content}
 			        <c:if test="${member != null}">
 			        	<c:choose>
 			        		<c:when test="${isCurrentCourseTeacher == true}">
-			        			<form action="/rewriteCourse" method="post">
-			        				<input type="hidden" name="pageNo" value="${pageNo}"/>
-			        				<button type="submit" class="btn head-btn1 mb-3" style="min-width:100%;">강의 수정</button>
-			        			</form>
+		        				<a href="/rewriteCourse?no=${pageNo}" class="btn head-btn1 mb-3" style="min-width:100%;">강의 수정</a>
+		        				<a onclick="deleteCourse();" class="btn head-btn1 mb-3" style="min-width:100%;">강의 삭제</a>
 			        		</c:when>
 			        		<c:when test="${purchased == true}">
 			        			<a class="btn head-btn2 mb-3" style="min-width:100%;">수강신청 중</a>
@@ -330,7 +326,7 @@ ${course.content}
 		</div>
 		
 		<%-- 구매 모달창 --%>
-		<div class="modal">
+		<div class="modal" id="regCourseModal">
         	<div class="modal_content card" style="width:20rem; height:16rem;">
 	            <div class="card-body">
 	                <h5 class="card-title">결제</h5>
@@ -409,14 +405,15 @@ ${course.content}
 		
 		// 수강신청 모달창 열기
 		function openRegCoursesModal() {
-			$(".modal").fadeIn();
+			$("#regCourseModal").fadeIn();
 		}
 		
 		// 수강신청 모달창 닫기
 		function closeRegCoursesModal() {
-			$(".modal").fadeOut();
+			$("#regCourseModal").fadeOut();
 		}
 		
+		// 강의 구매
 		function purchaseCourse() {
 			$.ajax({
 				url: '/courses/purchaseCourse',
@@ -430,14 +427,10 @@ ${course.content}
 			});
 		}
 		
-		function updateCourse() {
-			$.ajax({
-				url: '/courses/updateCourse',
-				type: 'post',
-				data: {
-					pageNo: ${pageNo}
-				}
-			});
+		function deleteCourse() {
+			if(confirm("정말 강의를 삭제하시겠습니까?")) {
+				location.href = "/deleteCourse?no=${pageNo}";
+			}
 		}
 		
 		function changeClassify(classify) {

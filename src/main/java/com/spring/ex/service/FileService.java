@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
-public class FileUploadService {
+public class FileService {
 	@Resource(name="uploadPath")
 	String uploadPath;
 	
@@ -58,5 +58,16 @@ public class FileUploadService {
 		else {
         	System.out.println("이미 폴더가 생성되어 있습니다.");
 		}
+	}
+	
+	public void deleteFile(String path) {
+		// /resources 삭제
+		String localPath = uploadPath.substring(0, uploadPath.length()-10);
+		System.out.println("uploadPath : " + uploadPath);
+		System.out.println("localPath : " + localPath);
+		File localFile = new File(localPath + path);
+		localFile.delete();
+		
+		System.out.println("localFile : " + localFile.getPath());
 	}
 }
