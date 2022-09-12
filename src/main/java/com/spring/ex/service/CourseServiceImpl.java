@@ -33,8 +33,11 @@ import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 @Service
 public class CourseServiceImpl implements CourseService {
 	
-	@Resource(name="uploadPath")
-	String uploadPath;
+	@Resource(name="localResourcePath")
+	String localResourcePath;
+	
+	@Resource(name="imagePath")
+	String imagePath;
 	
 	@Inject
 	private CourseDAO courseDAO;
@@ -163,7 +166,7 @@ public class CourseServiceImpl implements CourseService {
 	public int deleteFileEveryWhere(String url, String contextRoot) throws Exception {
 		try {
 			File serverFile = new File(contextRoot + url);
-			File localFile = new File(uploadPath + "/img/course/uploaded_images/" + serverFile.getName());
+			File localFile = new File(localResourcePath + imagePath + serverFile.getName());
 			serverFile.delete();
 			localFile.delete();
 			
@@ -205,15 +208,23 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public void copySrcListToLocalAndDB(List<String> srcList, int oli_no, String contextRoot) throws Exception {
 		for(int i = 0; i < srcList.size(); i++) {
+			// http://localhost:8080/resources와 같은 형식일 때는 복사하지 않기
+			if(srcList.get(i).indexOf("/resources") != 0) {
+				continue;
+			}
 			File file = new File(contextRoot + srcList.get(i));
-			File newFile = new File(uploadPath + "/img/course/uploaded_images/" + file.getName());
-			Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-			System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
 			
-			CourseFileUploadDTO cfuDTO = new CourseFileUploadDTO();
-			cfuDTO.setOli_no(oli_no);
-			cfuDTO.setUrl(srcList.get(i));
-			insertFile(cfuDTO);
+			// 기존에 있는 파일이면 복사 x
+			File newFile = new File(localResourcePath + imagePath + file.getName());
+			if(!newFile.isFile()) {
+				Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
+				
+				CourseFileUploadDTO cfuDTO = new CourseFileUploadDTO();
+				cfuDTO.setOli_no(oli_no);
+				cfuDTO.setUrl(srcList.get(i));
+				insertFile(cfuDTO);
+			}
 		}
 	}
 

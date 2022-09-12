@@ -5,86 +5,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8">
-    <!-- <meta HTTP-EQUIV="Expires" CONTENT="0">
-    <meta HTTP-EQUIV="Pragma" CONTENT="no-cache">
-    <meta HTTP-EQUIV="Cache-Control" CONTENT="no-cache"> -->
-	
+	<meta charset="UTF-8">	
 	<title>강의 소개 작성</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
 	
+	<%-- 부트스트랩 아이콘 --%>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 	
+	<%-- 템플릿에 사용되는 css --%>
 	<link rel="stylesheet" href="<c:url value='/resources/css/animate.min.css'/>">
 	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
-	<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>"> 
+	
+	<%-- for select option drop box --%>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 	<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 	
-	<%-- summernote --%>
+	<%-- summernote section --%>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
+	<%-- popper.js는 항상 bootstrap 위에 와야 함 --%>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	
+	<%-- Bootstrap css, js --%>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 
+	<%-- summernote bootsrap 필요 없는 버전 --%>
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-	
+    <%-- summernote end --%>
+    
+    <%-- 템플릿 css / Boostrap css 아래에 있어야 적용됨 --%>
+    <link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
 	<style>
 		a {
 			color: #635c5c;
 			text-decoration: none;
 		}
-		
-		a:hover {
-			color: #000000; 
-		}
-		
-		/* .note-toolbar {
-		    z-index: auto;
-		}
-		
-		.note-editor {
-		  z-index: 0;
-		} */
-		
 	</style>
-	
 	<script>
-	    $(document).ready(function(){
-	        var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
-	            removeItemButton: true,
-	            maxItemCount:5,
-	            searchResultLimit:10,
-	            //renderChoiceLimit:10
-	        }); 
-	    });
-	    
-	    var cnt;
-	    <c:if test="${videoList == null}">
-		    cnt = 1;
-	    </c:if>
-	    <c:if test="${videoList != null}">
-		    cnt = 0;
-	    </c:if>
-	    
+		// 강의 동영상 슬롯 동적 추가
+	    var cnt = 0;
+	    var changedForm = false;
 	    
 	    function addVideoSlot(title, file_name) {
 	    	cnt = cnt + 1;
 	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
-	    	isChange = true;
+	    	changedForm = true;
 	    }
 	    
 	    function removeVideoSlot() {
 	    	if(cnt == 1) return;
 	    	$('#v_'+cnt).remove();
 	    	cnt = cnt - 1;
-	    	isChange = true;
+	    	changedForm = true;
 	    }
-	    
-    </script>
+	</script>
 </head>
 <body>
 	 <%------------ header section  ------------%>
@@ -163,20 +139,15 @@
     			</div>
     			
     			<c:if test="${videoList == null}">
-	    			<div class="row ps-4 pb-2">
-	    				<div class="col-2">
-	    					<input type="text" class="form-control" name="video_titles" required/>
-	    				</div>
-	    				<div class="col-10">
-	    				 	<input type="text" class="form-control" name="video_paths" required/>
-	    				 </div>
-	    			</div>
+    				<script>
+	    				addVideoSlot('', '');
+	    			</script>
     			</c:if>
     			
     			<c:if test="${videoList != null}">
     				<script>
 	    				<c:forEach var="video" items="${videoList}">
-		    					addVideoSlot('${video.title}', '${video.s_file_name}');
+	    					addVideoSlot('${video.title}', '${video.s_file_name}');
     					</c:forEach>
     				</script>
     			</c:if>
@@ -317,42 +288,23 @@
     </footer>
     
     <script>
-	    var changed = false, submitted = false;
+	   	var submitted = false;
 	    
-	    // 등록 버튼 눌렀을 때
-	    $("#btnSubmit").click(function() {
-	    	var form = document.getElementById('frmCourse');
-	    	for(var i=0; i < form.elements.length; i++){
-    	      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
-    	        alert('There are some required fields!');
-    	        return false;
-    	      }
-    	    }
+	   	// document start
+	   	$(function() {
+	    	// select option drop box 옵션 설정
+	    	var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+	            removeItemButton: true,
+	            maxItemCount:5,
+	            searchResultLimit:10,
+	            //renderChoiceLimit:10
+	        }); 
 	    	
-	    	if ($('.summernote').summernote('isEmpty')) {
-	    		alert('editor content is empty');
-	    		return false;
-	    	}
-	    	submitted = true;
-	    	form.submit();
-	    });
-	    
-	    $(window).bind("pageshow", function(event) {
-	    	if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
-	    		// Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우
-	    		// rewriteCourse라면 reload 안하기
-	    		<c:if test="${course != null}">
-	    			location.reload();
-	    		</c:if>
-       		}
-	    });
-	    
-	    
-	    $(function() {
+	    	// summernote 옵션 설정
 			$('.summernote').summernote({
 				placeholder: 'write the text',
 				tabsize: 4,
-				height: 400,
+				height: 500,
 				toolbar: [
 					['style', ['style']],
 					['font', ['bold', 'underline', 'clear']],
@@ -373,6 +325,15 @@
 						for (var i = files.length - 1; i >= 0; i--) {
 							uploadSummernoteImageFile(files[i], this);
 						}
+					},
+					onPaste: function (e) {
+						var clipboardData = e.originalEvent.clipboardData;
+						if (clipboardData && clipboardData.items && clipboardData.items.length) {
+							var item = clipboardData.items[0];
+							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+								e.preventDefault();
+							}
+						}
 					}
 				}
 			});
@@ -380,18 +341,39 @@
 			// input, select에 change event가 일어날 경우
 		    $(document).on("change", "input, select, textarea, summernote.change", function() {
 		    	console.log("변경");
-		    	changed  = true;
+		    	changedForm  = true;
 	    	});
 			
+			// summernote가 변경된 경우
 		    $(document).on("summernote.change", ".summernote", function() {
 		    	console.log("변경");
-		    	changed  = true;
+		    	changedForm  = true;
 	    	});
 			
 		});
+	   	
+	    // 등록 버튼 눌렀을 때 폼 검증
+	    $("#btnSubmit").click(function() {
+	    	var form = document.getElementById('frmCourse');
+	    	for(var i=0; i < form.elements.length; i++){
+    	      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
+    	        alert('There are some required fields!');
+    	        return false;
+    	      }
+    	    }
+	    	
+	    	if ($('.summernote').summernote('isEmpty')) {
+	    		alert('editor content is empty');
+	    		return false;
+	    	}
+	    	submitted = true;
+	    	form.submit();
+	    });
+	    
+	 	
 	    
 	    // 임시 이미지 등록
-		function uploadSummernoteImageFile(file, el) {
+		function uploadSummernoteImageFile(file, editor) {
 			data = new FormData();
 			data.append("file", file);
 			$.ajax({
@@ -402,7 +384,7 @@
 				enctype : 'multipart/form-data',
 				processData : false,
 				success : function(data) {
-					$(el).summernote('editor.insertImage', data.url);
+					$(editor).summernote('insertImage', data.url);
 				}
 			});
 		}
@@ -414,25 +396,25 @@
 		    thumbnail.onload = function() {
 		      URL.revokeObjectURL(thumbnail.src) // free memory
 		    }
-	  	};	
+	  	};
 	  	
 		// 페이지가 unload 되기 전에 실행되는 이벤트
 		$(window).on("beforeunload", function() {
-			if(!submitted && changed)
+			if(!submitted && changedForm)
 			{
 				return "저장하지 않고 페이지를 떠나시겠습니까";
 			}
 		});
 		
-        /* window.onpageshow = function(event) {
-	        if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
-	            console.log("뒤로가기");
-	            location.reload();
-	        }
-	        else {
-	            console.log("새로 열린 페이지");
-	        }
-    	} */
+		// Back Forward Cache로 브라우저가 로딩될 경우 혹은 브라우저 뒤로가기 했을 경우 폼 비우기
+	    $(window).bind("pageshow", function(event) {
+	    	if (event.persisted || (window.performance && window.performance.navigation.type == 2)) {
+	    		// rewriteCourse라면 reload 안하기
+	    		<c:if test="${course != null}">
+	    			location.reload();
+	    		</c:if>
+       		}
+	    });
     </script>
     
 </body>

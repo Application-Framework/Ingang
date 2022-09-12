@@ -243,8 +243,8 @@
                                     <div class="row row-cols-4 mb-3">
                                     	<c:forEach var="list" items="${clist}">
 	                                        <div class="col">
-	                                            <div class="card shadow-sm mb-3">
-	                                            	<img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
+	                                            <div class="card shadow-sm mb-3 d-flex justify-content-center">
+	                                            	<img src="<c:url value='${list.img_path}'/>" style="padding:5px; height:150px; object-fit: contain;"/>
 	                                                <div class="card-body">
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
 	                                                    	<a href="/courses/${list.oli_no}" class="stretched-link">${list.title}</a>

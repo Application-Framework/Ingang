@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletRequestWrapper;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
@@ -59,6 +59,9 @@ public class CourseController {
 	
 	@Inject
 	private NoteService noteService;
+	
+	@Resource(name="imagePath")
+	String imagePath;
 	
 	void showCourses(HttpServletRequest request, Model model, String tag) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
@@ -572,46 +575,6 @@ public class CourseController {
 		return "redirect:/courses/"+pageNo;
 	}
 	
-	/*
-	@RequestMapping("/courses/updateCourse")
-	public String updateCourse(HttpServletRequest request, Model model) {
-		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		int price = Integer.parseInt(request.getParameter("price"));
-		String[] tags = request.getParameterValues("tags");
-		String[] videoTitles = request.getParameterValues("video_titles");
-		String[] videoPaths = request.getParameterValues("video_paths");
-		
-		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		courseDTO.setTitle(title);
-		courseDTO.setContent(content);
-		courseDTO.setPrice(price);
-		
-		List<CourseTagDTO> tagList = new ArrayList<CourseTagDTO>();
-		for(int i = 0; i < tags.length; i++) {
-			CourseTagDTO courseTagDTO = new CourseTagDTO();
-			courseTagDTO.setOli_no(pageNo);
-			courseTagDTO.setTag(tags[i]);
-			tagList.add(courseTagDTO);
-		}
-		
-		List<CourseVideoDTO> videoList = new ArrayList<CourseVideoDTO>();
-		for(int i = 0; i < videoTitles.length; i++) {
-			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
-			courseVideoDTO.setOli_no(pageNo);
-			courseVideoDTO.setTitle(videoTitles[i]);
-			courseVideoDTO.setS_file_name(videoPaths[i]);
-			videoList.add(courseVideoDTO);
-		}
-		
-		courseService.updateCourse(courseDTO, tagList, videoList);
-		
-		return "redirect:/courses/"+pageNo;
-	}
-	*/
-	
-	
 	// 강의 수정 취소
 	@RequestMapping("/cancelCourse")
 	public void cancelCourse(HttpServletRequest request) throws Exception {
@@ -685,8 +648,8 @@ public class CourseController {
 	public String courseUploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
 		JsonObject jsonObject = new JsonObject();
 		// 내부경로로 저장
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		String fileRoot = contextRoot+"/resources/img/course/uploaded_images/";
+		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/resources");
+		String fileRoot = contextRoot + imagePath;
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
@@ -694,7 +657,7 @@ public class CourseController {
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
-			jsonObject.addProperty("url", "/resources/img/course/uploaded_images/"+savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/resources" + imagePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제

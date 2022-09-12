@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Service
 public class FileService {
-	@Resource(name="uploadPath")
-	String uploadPath;
+	@Resource(name="localResourcePath")
+	String localResourcePath;
 	
 	@Autowired
 	ServletContext servletContext;
@@ -24,7 +24,7 @@ public class FileService {
 	public String uploadFile(MultipartFile file, String path) throws Exception {
 		String databasePath; 
 		String serverPath = servletContext.getRealPath("resources" + path); // 서버 경로
-		createFolder(uploadPath + path);
+		createFolder(localResourcePath + path);
 		createFolder(serverPath);
 		
 		String uuid = UUID.randomUUID().toString();
@@ -33,7 +33,7 @@ public class FileService {
 		databasePath = "/resources" + path + "/" + uuid + file.getOriginalFilename();
 		
 		// 로컬에 저장
-		File localFile = new File(uploadPath + path, uuid + file.getOriginalFilename());
+		File localFile = new File(localResourcePath + path, uuid + file.getOriginalFilename());
 		file.transferTo(localFile);
 		
 		// refresh 없이 바로 적용되게 서버에 저장
@@ -62,8 +62,8 @@ public class FileService {
 	
 	public void deleteFile(String path) {
 		// /resources 삭제
-		String localPath = uploadPath.substring(0, uploadPath.length()-10);
-		System.out.println("uploadPath : " + uploadPath);
+		String localPath = localResourcePath.substring(0, localResourcePath.length()-10);
+		System.out.println("uploadPath : " + localResourcePath);
 		System.out.println("localPath : " + localPath);
 		File localFile = new File(localPath + path);
 		localFile.delete();

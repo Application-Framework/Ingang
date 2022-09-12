@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-    <script src="<c:url value='/resources/js/main.js'/>"></script>
+    <%-- <script src="<c:url value='/resources/js/main.js'/>"></script> --%>
     
 	<%-- 모달용 --%>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -104,8 +104,8 @@
     	<div class="container p-5">
     		<div class="row">
 	    		<%-- 강의 표지 --%>
-	    		<div class="col-xl-5">
-	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px;"/>
+	    		<div class="col-xl-5 d-flex justify-content-center">
+	    			<img src="<c:url value='${course.img_path}'/>" style="height:286px; object-fit: contain;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
 			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
