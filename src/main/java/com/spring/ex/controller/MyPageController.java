@@ -17,7 +17,7 @@ import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.PurchaseCourseDTO;
 import com.spring.ex.dto.PurchaseNoteDTO;
-import com.spring.ex.service.FileService;
+import com.spring.ex.service.FileServiceImpl;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.MyPageService;
 import com.spring.ex.service.OrderHistoryService;
@@ -35,7 +35,7 @@ public class MyPageController {
 	OrderHistoryService orderHistoryService;
 	
 	@Inject
-	private FileService fileUploadService;
+	private FileServiceImpl fileUploadService;
 	
 	@RequestMapping("/mypage" )
 	public String mypage(HttpSession session, HttpServletRequest request, Model model) throws Exception {

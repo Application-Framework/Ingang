@@ -1,73 +1,43 @@
 package com.spring.ex.service;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.UUID;
+import java.util.List;
 
-import javax.annotation.Resource;
-import javax.servlet.ServletContext;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.type.StandardAnnotationMetadata;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.spring.ex.dto.UploadedFileDTO;
+
 @Service
-public class FileService {
-	@Resource(name="localResourcePath")
-	String localResourcePath;
+public interface FileService {
 	
-	@Autowired
-	ServletContext servletContext;
+	// 로컬과 서버에서 파일 삭제
+	public void deleteFileToLocalAndServer(String path) throws Exception;
 	
-	public String uploadFile(MultipartFile file, String path) throws Exception {
-		String databasePath; 
-		String serverPath = servletContext.getRealPath("resources" + path); // 서버 경로
-		createFolder(localResourcePath + path);
-		createFolder(serverPath);
-		
-		String uuid = UUID.randomUUID().toString();
-		
-		// 데이터베이스에 저장될 경로
-		databasePath = "/resources" + path + "/" + uuid + file.getOriginalFilename();
-		
-		// 로컬에 저장
-		File localFile = new File(localResourcePath + path, uuid + file.getOriginalFilename());
-		file.transferTo(localFile);
-		
-		// refresh 없이 바로 적용되게 서버에 저장
-		File serverFile = new File(serverPath, uuid + file.getOriginalFilename());
-		Files.copy(localFile.toPath(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-		
-		return databasePath;
-	}
+	// DB에서 파일 리스트 불러오기
+	public List<UploadedFileDTO> getFileList(int content_no, int category) throws Exception;
 	
-	public void createFolder(String path) {
-		File folder = new File(path);
-		
-		if (!folder.exists()) {
-			try{
-			    folder.mkdir(); //폴더 생성합니다.
-			    System.out.println("폴더가 생성되었습니다.");
-	        } 
-	        catch(Exception e){
-			    e.getStackTrace();
-			}        
-        } 
-		else {
-        	System.out.println("이미 폴더가 생성되어 있습니다.");
-		}
-	}
+	// DB에 파일 추가
+	public int insertFileToDB(UploadedFileDTO dto) throws Exception;
 	
-	public void deleteFile(String path) {
-		// /resources 삭제
-		String localPath = localResourcePath.substring(0, localResourcePath.length()-10);
-		System.out.println("uploadPath : " + localResourcePath);
-		System.out.println("localPath : " + localPath);
-		File localFile = new File(localPath + path);
-		localFile.delete();
-		
-		System.out.println("localFile : " + localFile.getPath());
-	}
+	// DB에서 파일 삭제
+	public int deleteFileToDB(String url) throws Exception;
+	
+	// 로컬과 서버에서 파일 추가, 반환 값 : 생성한 파일의 /resource부터 경로
+	// path : /resources의 하위 폴더('/resource' 포함 x)
+	public String insertFileToLocalAndServer(MultipartFile file, String path) throws Exception;
+	
+	// 메인의 url에 없는 것은 삭제
+	public void deleteFileNotInMain(List<UploadedFileDTO> main, List<UploadedFileDTO> target) throws Exception;
+	
+	// html 태그의 src 값을 파일 리스트로 반환
+	public List<UploadedFileDTO> convertHtmlToFileList(String html, int content_no, int category) throws Exception;
+	
+	// fileList를 로컬 저장소와 DB에 복사
+	public void copyFileListToLocalAndDB(List<UploadedFileDTO> fileList) throws Exception;
+	
+	// 게시글 등록 후 파일 관리
+	public void manageFileAfterPostSubmission(String html, int content_no, int category) throws Exception;
+	
+	// 게시글의 모든 파일 삭제
+	public void deleteAllFileOfPost(int content_no, int category) throws Exception;
 }

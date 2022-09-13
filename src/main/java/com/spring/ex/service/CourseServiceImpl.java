@@ -22,9 +22,9 @@ import com.spring.ex.dao.course.CourseReplyDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dao.course.HistoryOrderLectureDAO;
+import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseFileUploadDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -32,12 +32,6 @@ import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
-	
-	@Resource(name="localResourcePath")
-	String localResourcePath;
-	
-	@Resource(name="imagePath")
-	String imagePath;
 	
 	@Inject
 	private CourseDAO courseDAO;
@@ -131,103 +125,6 @@ public class CourseServiceImpl implements CourseService {
 	public int deleteCourse(int oli_no) throws Exception {
 		return courseDAO.deleteCourse(oli_no);
 	}
-
-	// 파일 검색
-	@Override
-	public List<CourseFileUploadDTO> selectFileListByOli_no(int oli_no) throws Exception {
-		return courseDAO.selectFileListByOli_no(oli_no);
-	}
-	
-	// 반환값이 String인 파일 검색 
-	@Override
-	public List<String> selectUrlListByOli_no(int oli_no) throws Exception {
-		List<CourseFileUploadDTO> fileUploadDTOList = courseDAO.selectFileListByOli_no(oli_no);
-		List<String> stringList = new ArrayList<String>();
-		for(int i = 0; i < fileUploadDTOList.size(); i++) {
-			stringList.add(fileUploadDTOList.get(i).getUrl());
-		}
-		return stringList;
-	}
-
-	// 파일 추가
-	@Override
-	public int insertFile(CourseFileUploadDTO dto) throws Exception {
-		return courseDAO.insertFile(dto);
-	}
-
-	// 파일 삭제
-	@Override
-	public int deleteFileByUrl(String url) throws Exception {
-		return courseDAO.deleteFileByUrl(url);
-	}
-
-	// 서버, 로컬, 데이터베이스에서 파일 삭제
-	@Override
-	public int deleteFileEveryWhere(String url, String contextRoot) throws Exception {
-		try {
-			File serverFile = new File(contextRoot + url);
-			File localFile = new File(localResourcePath + imagePath + serverFile.getName());
-			serverFile.delete();
-			localFile.delete();
-			
-			System.out.println("사용되지 않는 이미지 삭제");
-			System.out.println("서버 삭제 : " + serverFile.getPath().toString());
-			System.out.println("로컬 삭제 : " + localFile.getPath().toString());
-			deleteFileByUrl(url); 					  // database
-			return 1;
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			return -1;
-		}
-	}
-	
-	// 메인의 url에 없는 것은 삭제
-	@Override
-	public void deleteFileNotInMain(List<String> main, List<String> target, String contextRoot) throws Exception {
-		for(String url : target) {
-			if(!main.contains(url)) {
-				deleteFileEveryWhere(url, contextRoot);
-			}
-		}
-	}
-	
-	// html 태그의 img src 값을 리스트로 반환
-	@Override
-	public List<String> convertHtmlToSrcList(String html) throws Exception {
-		List<String> srcList = new ArrayList<String>();
-		Document doc = Jsoup.parseBodyFragment(html);
-		Elements imgs = doc.getElementsByTag("img");
-		for(int i = 0; i < imgs.size(); i++)
-			srcList.add(imgs.get(i).attr("src"));
-		return srcList;
-	}
-
-	// srcList를 로컬 저장소에 복사
-	@Override
-	public void copySrcListToLocalAndDB(List<String> srcList, int oli_no, String contextRoot) throws Exception {
-		for(int i = 0; i < srcList.size(); i++) {
-			// http://localhost:8080/resources와 같은 형식일 때는 복사하지 않기
-			if(srcList.get(i).indexOf("/resources") != 0) {
-				continue;
-			}
-			File file = new File(contextRoot + srcList.get(i));
-			
-			// 기존에 있는 파일이면 복사 x
-			File newFile = new File(localResourcePath + imagePath + file.getName());
-			if(!newFile.isFile()) {
-				Files.copy(file.toPath(), newFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
-				System.out.println("로컬에 이미지 복사 : " + newFile.toPath().toString());
-				
-				CourseFileUploadDTO cfuDTO = new CourseFileUploadDTO();
-				cfuDTO.setOli_no(oli_no);
-				cfuDTO.setUrl(srcList.get(i));
-				insertFile(cfuDTO);
-			}
-		}
-	}
-
 	
 	@Override
 	public int submitReply(CourseReplyDTO dto) {

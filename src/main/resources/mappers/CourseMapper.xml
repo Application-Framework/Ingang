@@ -226,25 +226,4 @@
 		SELECT * FROM history_order_lecture
 		WHERE m_no = #{m_no}
 	</select>
-	
-	<!-- 파일 부분 -->
-
-	<!-- 파일 검색 -->
-	<select id="selectFileListByOli_no" resultType="CourseFileUploadDTO">
-		SELECT *
-		FROM online_lecture_file_upload
-		WHERE oli_no = #{oli_no}
-	</select>
-	
-	<!-- 파일 추가 -->
-	<insert id="insertFile">
-		INSERT online_lecture_file_upload(oli_no, url) 
-		VALUE(#{oli_no}, #{url})
-	</insert>
-	
-	<!-- 파일 삭제 -->
-	<delete id="deleteFileByUrl">
-		DELETE FROM online_lecture_file_upload
-		WHERE url = #{url}
-	</delete>
 </mapper>

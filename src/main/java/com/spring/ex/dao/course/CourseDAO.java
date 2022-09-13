@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseFileUploadDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 
@@ -30,13 +30,4 @@ public interface CourseDAO {
 	
 	// 강의 삭제
 	public int deleteCourse(int oli_no) throws Exception;
-
-	// 파일 검색
-	public List<CourseFileUploadDTO> selectFileListByOli_no(int oli_no) throws Exception;
-	
-	// 파일 추가
-	public int insertFile(CourseFileUploadDTO dto) throws Exception;
-	
-	// 파일 삭제
-	public int deleteFileByUrl(String url) throws Exception;
 }

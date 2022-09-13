@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseFileUploadDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -68,31 +68,6 @@ public interface CourseService {
 	
 	// 강의 비디오 삭제
 	public int deleteCourseVideo(int oli_no);
-	
-	// 파일 검색
-	public List<CourseFileUploadDTO> selectFileListByOli_no(int oli_no) throws Exception;
-
-	// 반환값이 String인 파일 검색
-	public List<String> selectUrlListByOli_no(int oli_no) throws Exception;
-	
-	// 파일 추가
-	public int insertFile(CourseFileUploadDTO dto) throws Exception;
-	
-	// 파일 삭제
-	public int deleteFileByUrl(String url) throws Exception;
-	
-	// 서버, 로컬, 데이터베이스에서 파일 삭제
-	public int deleteFileEveryWhere(String url, String contextRoot) throws Exception;
-	
-	// 메인의 url에 없는 것은 삭제
-	public void deleteFileNotInMain(List<String> main, List<String> target, String contextRoot) throws Exception;
-	
-	// html 태그의 img src 값을 리스트로 반환
-	public List<String> convertHtmlToSrcList(String html) throws Exception;
-	
-	// srcList를 로컬 저장소와 DB에 복사
-	public void copySrcListToLocalAndDB(List<String> srcList, int oli_no, String contextRoot) throws Exception;
-	
 	
 	// 강사
 	public TeacherDTO getTeacherInfo(int olt_no);

@@ -24,10 +24,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseFileUploadDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -36,7 +36,7 @@ import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
-import com.spring.ex.service.FileService;
+import com.spring.ex.service.FileServiceImpl;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
@@ -55,7 +55,7 @@ public class CourseController {
 	CommunityBoardService cbService;
 	
 	@Inject
-	private FileService fileService;
+	private FileServiceImpl fileService;
 	
 	@Inject
 	private NoteService noteService;
@@ -371,7 +371,7 @@ public class CourseController {
 	
 		String img_path = null;
 		if(!thumbnail.isEmpty()) { 
-			img_path = fileService.uploadFile(thumbnail, "/img/course/uploaded_images");
+			img_path = fileService.insertFileToLocalAndServer(thumbnail, imagePath);
 		}
 		
 		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
@@ -411,21 +411,9 @@ public class CourseController {
 		System.out.println("강의 등록 성공");
 		System.out.println("등록 내용 : " + courseDTO);
 		
-		// 임시로 저장된 사진은 로컬에 복사하고, 사용되지 않는 사진은 DB와 서버에서 삭제하는 작업
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		
-		// html의 src값을 추출
-		List<String> srcList = courseService.convertHtmlToSrcList(content); 
-		
-		// 서버에 저장된 이미지를 로컬과 DB에 복사
-		courseService.copySrcListToLocalAndDB(srcList, courseDTO.getOli_no(), contextRoot);
-		
-		// 해당 강의의 임시 + 모든 파일의 url 가져오기
-		List<String> uploadedUrlList = courseService.selectUrlListByOli_no(courseDTO.getOli_no());
-		
-		// 현재 강의에 필요한 사진을 제외한 사진은 삭제
-		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
-		
+		// 게시글의 파일 관리
+		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1); // category 강의 : 1
+
 		return "redirect:/courses/"+courseDTO.getOli_no();
 	}
 	
@@ -515,8 +503,8 @@ public class CourseController {
 	
 		String img_path = null;
 		if(!thumbnail.isEmpty()) { 
-			img_path = fileService.uploadFile(thumbnail, "/img/course/uploaded_images");
-			fileService.deleteFile(courseDTO.getImg_path());
+			img_path = fileService.insertFileToLocalAndServer(thumbnail, "/img/course/uploaded_images");
+			fileService.deleteFileToDB(courseDTO.getImg_path());
 		}
 		
 		if(memberDTO == null || title == null || content == null || price == null) {
@@ -557,20 +545,8 @@ public class CourseController {
 		System.out.println("강의 수정 성공");
 		System.out.println("수정 내용 : " + courseDTO);
 		
-		// 임시로 저장된 사진은 로컬에 복사하고, 사용되지 않는 사진은 DB와 서버에서 삭제하는 작업
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		
-		// html의 src값을 추출
-		List<String> srcList = courseService.convertHtmlToSrcList(content); 
-		
-		// 서버에 저장된 이미지를 로컬과 DB에 복사
-		courseService.copySrcListToLocalAndDB(srcList, pageNo, contextRoot);
-		
-		// 해당 강의의 임시 + 모든 파일의 url 가져오기
-		List<String> uploadedUrlList = courseService.selectUrlListByOli_no(courseDTO.getOli_no());
-		
-		// 현재 강의에 필요한 사진을 제외한 사진은 삭제
-		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
+		// 게시글의 파일 관리
+		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1);
 		
 		return "redirect:/courses/"+pageNo;
 	}
@@ -583,14 +559,9 @@ public class CourseController {
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		// html의 src값을 추출
-		List<String> srcList = courseService.convertHtmlToSrcList(courseDTO.getContent()); 
 		
-		// 해당 강의의 모든 파일의 url 가져오기
-		List<String> uploadedUrlList = courseService.selectUrlListByOli_no(pageNo);
-		
-		// 임시로 저장된 파일 삭제
-		courseService.deleteFileNotInMain(srcList, uploadedUrlList, contextRoot);
+		// 게시글의 파일 관리
+		fileService.manageFileAfterPostSubmission(courseDTO.getContent(), courseDTO.getOli_no(), 1);
 	}
 	
 	// 게시물 삭제
@@ -626,21 +597,12 @@ public class CourseController {
 			return "error";
 		}
 		
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
-		// 데이터베이스에서 게시물의 모든 파일 정보 불러오고 삭제하기
-		List<CourseFileUploadDTO> fileUploadDTOList = courseService.selectFileListByOli_no(pageNo);
-		for(int i = 0; i < fileUploadDTOList.size(); i++) {
-			courseService.deleteFileEveryWhere(fileUploadDTOList.get(i).getUrl(), contextRoot);
-		}
-		
-		courseService.deleteFileEveryWhere(courseDTO.getImg_path(), contextRoot);
-		
+		fileService.deleteAllFileOfPost(pageNo, 1);
 		courseService.deleteCourse(pageNo);
-		System.out.println("게시물 삭제 성공");
+		System.out.println("강의 삭제 성공");
 		
 		return "redirect:/courses";
 	}
-	
 	
 	// 서버에만 이미지 임시로 저장
 	@ResponseBody
