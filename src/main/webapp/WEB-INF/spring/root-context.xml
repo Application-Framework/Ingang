@@ -11,8 +11,7 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 	
-	<context:property-placeholder location="classpath:config/dbConnection.properties" />
-	<context:property-placeholder location="classpath:config/localPath.properties" />
+	<context:property-placeholder location="classpath:config/*.properties" />
 	
 	<!-- MariaDB DataSource -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
@@ -42,7 +41,7 @@
 	
 	<!--  파일업로드 경로 설정 -->
 	<bean id="localPath" class="java.lang.String">
-	  <constructor-arg value="${localPath}"/>
+	  <constructor-arg value="${file.localPath}"/>
 	</bean>
 	
 	<!--  강의 이미지 경로 설정 -->

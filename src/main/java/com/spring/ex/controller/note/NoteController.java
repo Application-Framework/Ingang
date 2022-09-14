@@ -1,4 +1,4 @@
-package com.spring.ex.controller;
+package com.spring.ex.controller.note;
 
 import java.sql.Date;
 import java.util.List;
