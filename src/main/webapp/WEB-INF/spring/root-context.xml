@@ -11,12 +11,15 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
 	
+	<context:property-placeholder location="classpath:config/dbConnection.properties" />
+	<context:property-placeholder location="classpath:config/localPath.properties" />
+	
 	<!-- MariaDB DataSource -->
 	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-		<property name="driverClassName" value="org.mariadb.jdbc.Driver"></property>
-		<property name="url" value="jdbc:mariadb://127.0.0.1:3307/ingang"></property>
-		<property name="username" value="root"></property>
-		<property name="password" value="123456"></property>
+		<property name="driverClassName" value="${db.driverClassName}"></property>
+		<property name="url" value="${db.url}"></property>
+		<property name="username" value="${db.username}"></property>
+		<property name="password" value="${db.password}"></property>
 	</bean>
 	
 	<!-- MyBatis SqlSessionFactoryBean -->
@@ -37,15 +40,23 @@
 	  <!-- <property name="defaultEncoding" value="UTF-8" />-->
 	</bean>
 	
-	<!--  파일업로드 디렉토리 설정 -->
-	<bean id="localResourcePath" class="java.lang.String">
-		<!-- 각자 프로젝트 resource 경로로 바꿔주세요 -->
-	  <constructor-arg value="C:/Workspace/Eclipse/Spring/Ingang/Ingang/src/main/webapp/resources"/>
-	  <!-- <constructor-arg value="C:/Users/m9613/git/Ingang/src/main/webapp/resources"/> -->
+	<!--  파일업로드 경로 설정 -->
+	<bean id="localPath" class="java.lang.String">
+	  <constructor-arg value="${localPath}"/>
 	</bean>
 	
-	<!--  이미지 폴더 경로 설정 -->
-	<bean id="imagePath" class="java.lang.String">
+	<!--  강의 이미지 경로 설정 -->
+	<bean id="courseImagePath" class="java.lang.String">
 	  <constructor-arg value="/img/course/uploaded_images/"/>
+	</bean>
+	
+	<!--  노트 이미지 경로 설정 -->
+	<bean id="noteImagePath" class="java.lang.String">
+	  <constructor-arg value="/img/note/uploaded_images/"/>
+	</bean>
+	
+	<!--  노트 글 이미지 경로 설정 -->
+	<bean id="noteArticleImagePath" class="java.lang.String">
+	  <constructor-arg value="/img/note_article/uploaded_images/"/>
 	</bean>
 </beans>

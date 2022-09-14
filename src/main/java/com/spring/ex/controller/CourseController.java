@@ -24,7 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
-import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
@@ -36,7 +35,7 @@ import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
-import com.spring.ex.service.FileServiceImpl;
+import com.spring.ex.service.FileService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
@@ -55,13 +54,13 @@ public class CourseController {
 	CommunityBoardService cbService;
 	
 	@Inject
-	private FileServiceImpl fileService;
+	private FileService fileService;
 	
 	@Inject
 	private NoteService noteService;
 	
-	@Resource(name="imagePath")
-	String imagePath;
+	@Resource(name="courseImagePath")
+	String courseImagePath;
 	
 	void showCourses(HttpServletRequest request, Model model, String tag) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
@@ -371,7 +370,7 @@ public class CourseController {
 	
 		String img_path = null;
 		if(!thumbnail.isEmpty()) { 
-			img_path = fileService.insertFileToLocalAndServer(thumbnail, imagePath);
+			img_path = fileService.insertFileToLocalAndServer(thumbnail, courseImagePath);
 		}
 		
 		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
@@ -611,7 +610,7 @@ public class CourseController {
 		JsonObject jsonObject = new JsonObject();
 		// 내부경로로 저장
 		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/resources");
-		String fileRoot = contextRoot + imagePath;
+		String fileRoot = contextRoot + courseImagePath;
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
@@ -619,7 +618,7 @@ public class CourseController {
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
-			jsonObject.addProperty("url", "/resources" + imagePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/resources" + courseImagePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제

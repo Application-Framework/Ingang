@@ -27,21 +27,19 @@ public class FileServiceImpl implements FileService {
 	@Inject
 	private UploadedFileDAO uploadedFileDAO;
 	
-	@Resource(name="localResourcePath")
-	String localResourcePath;
+	@Resource(name="localPath")
+	String localPath;
 	
 	@Autowired
 	ServletContext servletContext;
-	String serverPath = servletContext.getRealPath("resources");
 	
-	// /resources 문자열만 제거
-	String localPath = localResourcePath.substring(0, localResourcePath.length()-10);
-	
-	// 로컬과 서버에서 파일 추가, 반환 값 : 생성한 파일의 /resource부터 경로
-	// path : /resources의 하위 폴더('/resource' 포함 x)
+	// 로컬과 서버에 파일 추가
+	// path : /resources의 하위 폴더
+	// 반환 값 : 생성한 파일의 /resource부터의 경로
 	@Override
 	public String insertFileToLocalAndServer(MultipartFile file, String path) throws Exception {
-		createFolder(localResourcePath + path);
+		String serverPath = servletContext.getRealPath("resources");
+		createFolder(localPath + "/resources" + path);
 		createFolder(serverPath + path);
 		
 		String originalFileName = file.getOriginalFilename();	//오리지날 파일명
@@ -49,12 +47,14 @@ public class FileServiceImpl implements FileService {
 		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
 		
 		// 로컬에 저장
-		File localFile = new File(localResourcePath + path, savedFileName);
+		File localFile = new File(localPath + "/resources" + path, savedFileName);
 		file.transferTo(localFile);
+		System.out.println("insert localFile : " + localFile.getPath());
 		
 		// refresh 없이 바로 적용되게 서버에 저장
 		File serverFile = new File(serverPath + path, savedFileName);
 		Files.copy(localFile.toPath(), serverFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+		System.out.println("insert serverFile : " + serverFile.getPath());
 		
 		return "/resources" + path + "/" + savedFileName;
 	}
@@ -62,9 +62,8 @@ public class FileServiceImpl implements FileService {
 	// 로컬과 서버에서 파일 삭제
 	@Override
 	public void deleteFileToLocalAndServer(String path) {
-		// /resources 삭제
-		//String localPath = localResourcePath.substring(0, localResourcePath.length()-10);
-		File localFile = new File(localResourcePath + path);
+		String serverPath = servletContext.getRealPath("");
+		File localFile = new File(localPath + path);
 		localFile.delete();
 		System.out.println("delete localFile : " + localFile.getPath());
 		
@@ -94,7 +93,7 @@ public class FileServiceImpl implements FileService {
 	public void deleteFileNotInMain(List<UploadedFileDTO> main, List<UploadedFileDTO> target) throws Exception {
 		for(UploadedFileDTO fileDTO : target) {
 			if(!main.contains(fileDTO)) {
-				deleteFileToLocalAndServer(localPath + fileDTO.getUrl());
+				deleteFileToLocalAndServer(fileDTO.getUrl());
 				deleteFileToDB(fileDTO.getUrl());
 			}
 		}
@@ -133,6 +132,7 @@ public class FileServiceImpl implements FileService {
 			if(!localFile.exists()) {
 				// 서버에 임시 저장되어있던 파일을 로컬로 복사
 				Files.copy(serverFile.toPath(), localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+				System.out.println("insert localFile : " + localFile.getPath());
 				
 				// DB에 추가
 				insertFileToDB(file);

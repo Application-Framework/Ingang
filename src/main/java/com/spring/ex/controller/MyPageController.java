@@ -69,7 +69,7 @@ public class MyPageController {
 		String m_phone = request.getParameter("m_phone");
 		
 		if(!profile.isEmpty()) { 
-			img_path = fileUploadService.uploadFile(profile, "/img/profile/uploaded_images");
+			img_path = fileUploadService.insertFileToLocalAndServer(profile, "/img/profile/uploaded_images");
 		}
 		
 		MemberDTO memberDTO = new MemberDTO();
