@@ -223,7 +223,7 @@ public class CoursePostController {
 		String img_path = null;
 		if(!thumbnail.isEmpty()) { 
 			img_path = fileService.insertFileToLocalAndServer(thumbnail, "/img/course/uploaded_images");
-			fileService.deleteFileToDB(courseDTO.getImg_path());
+			fileService.deleteFileToLocalAndServer(courseDTO.getImg_path());
 		}
 		
 		if(memberDTO == null || title == null || content == null || price == null) {
@@ -275,7 +275,6 @@ public class CoursePostController {
 	public void cancelCourse(HttpServletRequest request) throws Exception {
 		System.out.println("강의 수정 취소");
 		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/");
 		
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		
@@ -315,7 +314,8 @@ public class CoursePostController {
 			System.out.println("강의 삭제 권한이 없습니다.");
 			return "error";
 		}
-		
+		// 섬네일 삭제
+		fileService.deleteFileToLocalAndServer(courseDTO.getImg_path());
 		fileService.deleteAllFileOfPost(pageNo, 1);
 		courseService.deleteCourse(pageNo);
 		System.out.println("강의 삭제 성공");

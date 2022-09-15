@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;

@@ -44,8 +44,9 @@ public class LoginController {
 			
 			// 로그인 후 이전 페이지로 이동
 			Object redirectURL = session.getAttribute("redirectURI");
+			
 			// 이전 페이지가 없다면 main 페이지로 이동
-			if(redirectURL == null)
+			if(redirectURL == null || redirectURL.toString().indexOf("/loginPageView") != -1)
 				redirectURL = "/";
 			
 			return "redirect:" + redirectURL.toString();

@@ -158,7 +158,7 @@ public class FileServiceImpl implements FileService {
 		List<UploadedFileDTO> fileList = getFileList(content_no, category);
 		
 		for(UploadedFileDTO fileDTO : fileList) {
-			deleteFileToLocalAndServer(localPath + fileDTO.getUrl());
+			deleteFileToLocalAndServer(fileDTO.getUrl());
 			deleteFileToDB(fileDTO.getUrl());
 		}
 	}

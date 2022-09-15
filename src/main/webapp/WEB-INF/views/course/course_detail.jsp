@@ -233,7 +233,7 @@
 								<article class="blog_item">
 									<div class="blog_details" style="padding: 10px 10px 10px 10px;">
 									
-										<a class="d-inline-block" href="boardRead?cb_no=${list.cb_no}&classify=1">
+										<a class="d-inline-block" href="/communityBoardRead?cb_no=${list.cb_no}&classify=1&isOnlineLecture=${pageNo}">
 											<font size="1px;">NO. <c:url value="${list.cb_no}"/></font>
 											<h2><c:url value="${fn:substring(list.title, 0, 35)}"/></h2>
 										</a>

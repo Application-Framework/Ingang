@@ -1,18 +1,10 @@
 package com.spring.ex.service;
 
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.TeacherDAO;
@@ -22,7 +14,6 @@ import com.spring.ex.dao.course.CourseReplyDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dao.course.HistoryOrderLectureDAO;
-import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
