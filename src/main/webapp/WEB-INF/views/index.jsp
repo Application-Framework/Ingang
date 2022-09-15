@@ -119,9 +119,9 @@
         <!-- slider Area Start-->
 		<!-- Mobile Menu -->
 		<div class="slider-active">
-			<%-- <div class="single-slider slider-height d-flex align-items-center"
-				data-background="<c:url value='/resources/img/hero/h1_hero.jpg'/>"> --%>
-				<div class="single-slider slider-height d-flex align-items-center" style="background-color:rgb(95, 204, 255, 0.8);">
+				<div class="single-slider slider-height d-flex align-items-center"
+				data-background="<c:url value='/resources/img/main_background.jpg'/>">
+				<%-- <div class="single-slider slider-height d-flex align-items-center" style="background-color:rgb(95, 204, 255, 0.8);"> --%>
 				<div class="container">
 					<div class="row">
 						<div class="col-xl-6 col-lg-9 col-md-10">
