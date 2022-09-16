@@ -5,16 +5,13 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseTagDTO;
-import com.spring.ex.dto.course.CourseVideoDTO;
 
 @Repository
 public interface CourseDAO {
 	
 	// 페이지의 게시물 가져오기
-	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map);
+	public List<CourseDTO> getCoursePage(HashMap<String, Object> map);
 	
 	// 페이지 개수 가져오기
 	public int getCourseTotalCount(HashMap<String, Object> map);

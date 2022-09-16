@@ -31,6 +31,6 @@ public interface MemberDAO {
 	// 게시글 작성 건수
 	public Integer countMyPost(Integer m_no) throws Exception;
 	
-	// primary key로 이름 가져오기
-	public String getNameByM_no(int m_no) throws Exception;
+	// primary key로 멤버 가져오기
+	public MemberDTO getMemberByM_no(int m_no) throws Exception;
 }

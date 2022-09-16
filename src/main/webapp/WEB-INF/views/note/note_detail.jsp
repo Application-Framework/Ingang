@@ -117,7 +117,7 @@
 		            </div>
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
-		            <p class="text-white">${writerName}</p>
+		            <p class="text-white">${memberService.getMemberByM_no(note.m_no)}</p>
 		            <div>
 		            	<c:forEach var="tag" items="${tags}">
 		            		<span class="border border-info border-3 rounded-pill">#${tag.tag}</span>

@@ -136,7 +136,6 @@ public class NoteController {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		NoteDTO noteDTO = noteService.getNote(pageNo);
 		CourseDTO courseDTO = courseService.getCourseDetail(noteDTO.getOli_no());
-		String writerName = memberService.getNameByM_no(noteDTO.getM_no());
 		List<NoteReplyDTO> replys = noteService.getNoteReplyList(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(noteDTO.getOli_no());
 		List<NoteArticleDTO> articles = noteService.getNoteArticleList(pageNo);
@@ -160,7 +159,6 @@ public class NoteController {
 		
 		System.out.println("노트 상세 페이지 정보 출력");
 		System.out.println(noteDTO);
-		System.out.println(writerName);
 		System.out.println(replys);
 		System.out.println(tags);
 		System.out.println(likeCnt);
@@ -168,7 +166,6 @@ public class NoteController {
 		
 		model.addAttribute("note", noteDTO);
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("writerName", writerName);
 		model.addAttribute("replys", replys);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);

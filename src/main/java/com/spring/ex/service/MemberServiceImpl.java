@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public String getNameByM_no(int m_no) throws Exception {
-		return dao.getNameByM_no(m_no);
+	public MemberDTO getMemberByM_no(int m_no) throws Exception {
+		return dao.getMemberByM_no(m_no);
 	}
 }

@@ -57,7 +57,7 @@
 		where m_no = #{m_no}
 	</select>
 	
-	<select id="getNameByM_no" resultType="string">
+	<select id="getMemberByM_no" resultType="MemberDTO">
 		SELECT m_name
 		FROM member
 		WHERE m_no = #{m_no}

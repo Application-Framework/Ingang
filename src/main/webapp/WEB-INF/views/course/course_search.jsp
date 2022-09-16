@@ -11,7 +11,8 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
-
+	
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<!-- CSS here -->
         <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
@@ -147,53 +148,83 @@
                             <aside class="single_sidebar_widget post_category_widget">
                                 <ul class="list cat-list">
                                 	<li>
-                                        <a href="/courses">
+                                        <a href="/courses/it-programming">
                                             <p class="d-flex">ALL</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/web-dev">
+                                        <a href="/courses/it-programming/web-dev">
                                             <p class="d-flex">웹 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/front-end" class="d-flex">
+                                        <a href="/courses/it-programming/front-end" class="d-flex">
                                             <p class="d-flex">프론트엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/back-end" class="d-flex">
+                                        <a href="/courses/it-programming/back-end" class="d-flex">
                                             <p class="d-flex">백엔드</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/programming-lang" class="d-flex">
-                                            <p class="d-flex">프로그래밍 언어</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/database-dev" class="d-flex">
-                                            <p class="d-flex">데이터베이스</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/algorithm" class="d-flex">
-                                            <p class="d-flex">알고리즘·자료구조</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/mobile-app" class="d-flex">
+                                        <a href="/courses/it-programming/mobile-app" class="d-flex">
                                             <p class="d-flex">모바일 앱 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/artificial-intelligence" class="d-flex">
-                                            <p class="d-flex">AI</p>
+                                        <a href="/courses/it-programming/game-dev" class="d-flex">
+                                            <p class="d-flex">게임 개발</p>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/courses/security" class="d-flex">
-                                            <p class="d-flex">보안</p>
+                                        <a href="/courses/it-programming/programming-lang" class="d-flex">
+                                            <p class="d-flex">프로그래밍 언어</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/algorithm" class="d-flex">
+                                            <p class="d-flex">알고리즘·자료구조</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/database-dev" class="d-flex">
+                                            <p class="d-flex">데이터베이스</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/devops-infra" class="d-flex">
+                                            <p class="d-flex">데브옵스-인프라</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/certificate-programming" class="d-flex">
+                                            <p class="d-flex">자격증</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/programming-tool" class="d-flex">
+                                            <p class="d-flex">개발 도구</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/embedded-iot" class="d-flex">
+                                            <p class="d-flex">임베디드-IoT</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/dev-data-science" class="d-flex">
+                                            <p class="d-flex">데이터 사이언스</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/desktop-application" class="d-flex">
+                                            <p class="d-flex">데스크톱 앱 개발</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="/courses/it-programming/dev-besides" class="d-flex">
+                                            <p class="d-flex">교양-기타</p>
                                         </a>
                                     </li>
                                 </ul>
@@ -208,15 +239,23 @@
                                         <div class="col-lg-12">
                                             <div class="count-job mb-35">
                                                 <span>${totalCount} course found</span>
-                                                <!-- Select job items start -->
+                                                
+                                                <div class="select-job-items">
+                                                    <span>filter</span>
+                                                    <form>
+	                                                    <select onchange="changeOrder()" name="order">
+	                                                        <option <c:if test="${order == 'none'}">selected</c:if> value="none">입문자용</option>
+	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">초급</option>
+	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">중급이상</option>
+	                                                    </select>
+                                                    </form>
+                                                </div>
+                                                
                                                 <div class="select-job-items">
                                                     <span>Sort by</span>
                                                     <form>
-                                                    	<c:if test="${keyword != ''}">
-                                                    	<input type="hidden" name="keyword" value="${keyword}"/>
-                                                    	</c:if>
-	                                                    <select onchange="this.form.submit()" name="order">
-	                                                        <option <c:if test="${order == '' || order == 'none'}">selected</c:if> value="none">None</option>
+	                                                    <select onchange="changeOrder()" name="order">
+	                                                        <option <c:if test="${order == 'none'}">selected</c:if> value="none">None</option>
 	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
 	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
 	                                                        <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
@@ -230,12 +269,12 @@
                                     </div>
 
                                     <%-- 강의 검색 입력 폼 --%>
-                                    <form action="${nowURL}" class="search-box mb-5">
+                                    <form class="search-box mb-5">
                                         <div class="input-form item" >
-                                            <input type="text" name="keyword" value="${keyword}" placeholder="강의 제목 검색" tabindex="0">
+                                            <input type="text" name="title" value="${title}" placeholder="강의 제목 검색" tabindex="0">
                                         </div>
                                         <div class="search-form item">
-                                        	<button type="submit" class="btn w-100 h-100">검색</button>
+                                        	<button onlick="searchByCourseTitle()" class="btn w-100 h-100">검색</button>
                                         </div>	
                                     </form>
 
@@ -249,11 +288,11 @@
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
 	                                                    	<a href="/courses/${list.oli_no}" class="stretched-link">${list.title}</a>
 	                                                    </div>
-	                                                    <div id="teacher-name" class="card-text">${list.name}</div>
+	                                                    <div id="teacher-name" class="card-text">${courseService.getTeacherInfo(list.olt_no).name}</div>
 	                                                    <div class="stars-outer">
-	                                                        <div class="stars-inner" style="width:${list.star_avg*20}%"></div>
+	                                                        <div class="stars-inner" style="width:${courseService.getCourseStarAvg(list.oli_no)*20}%"></div>
 	                                                    </div>
-	                                                    <span class="number-rating">${list.star_avg}</span>
+	                                                    <span class="number-rating">${courseService.getCourseReplys(list.oli_no).size()}</span>
 	                                                    <div id="course-price" class="card-text">₩${list.price}</div>
 	                                                </div>
 	                                            </div>
@@ -296,15 +335,39 @@
         </main>
     	
     	<script>
-    		function submitOrder(x) {
-    			console.log(x);
+    		var url = new URL(window.location);
+    		
+	       	
+	        $(function() {
+	        	
+	        });
+	        
+    		function changeOrder() {
+    			
+    			console.log($("#level").val())
+    			console.log($("#charge").val())
+    			console.log($("#s").val())
+    			console.log($("#order").val())
+    			console.log($("#tags").val())
+    			
+				url.searchParams.set('level', level);
+				url.searchParams.set('charge', charge);
+				url.searchParams.set('s', search);
+				url.searchParams.set('order', order);
+				url.searchParams.set('tags', tags);
+				url.searchParams.set('page', page);
     			$.ajax({
-   	                 url: '${nowURL}',
-   	                 type: 'GET',
-   	                 data: {order: x}
-   	            });
-    			
-    			
+    				url: url.toString(),
+    				data: 'get',
+    				dataType: 'html',
+    				success: function(html) {
+    					var content = $(html).find("#content");
+    					var pagination = $(html).find("#pagination");
+    					$("#content").html(content);
+    					$("#pagination").html(pagination);
+    					history.pushState(null, null, url);
+    				}
+    			});
     		}
     	</script>
 		<jsp:include page="../fix/footer.jsp" />

@@ -15,7 +15,7 @@ import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 @Service
 public interface CourseService {
 	// 페이지의 게시물 가져오기
-	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map);
+	public List<CourseDTO> getCoursePage(HashMap<String, Object> map);
 	
 	// 페이지 개수 가져오기
 	public int getCourseTotalCount(HashMap<String, Object> map);

@@ -45,8 +45,11 @@ public class CourseServiceImpl implements CourseService {
 	@Inject
 	private HistoryOrderLectureDAO historyOrderLectureDAO;
 	
+	@Inject
+	private MemberService memberService;
+	
 	@Override
-	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map) {
+	public List<CourseDTO> getCoursePage(HashMap<String, Object> map) {
 		return courseDAO.getCoursePage(map);
 	}
 
@@ -74,7 +77,9 @@ public class CourseServiceImpl implements CourseService {
 				 starAvg += reply.getStar_rating();
 			starAvg /= replys.size();
 		}
-		return starAvg;
+		// 소수점 첫째자리까지 반올림
+		starAvg = Math.round(starAvg * 10);
+		return starAvg / 10;
 	}
 	
 	@Override
@@ -201,6 +206,4 @@ public class CourseServiceImpl implements CourseService {
 		}
 		return false;
 	}
-
-	
 }

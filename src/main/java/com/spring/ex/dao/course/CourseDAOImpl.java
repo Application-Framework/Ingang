@@ -8,11 +8,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.UploadedFileDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseReplyDTO;
-import com.spring.ex.dto.course.CourseTagDTO;
-import com.spring.ex.dto.course.CourseVideoDTO;
 
 @Repository
 public class CourseDAOImpl implements CourseDAO {
@@ -21,7 +17,7 @@ public class CourseDAOImpl implements CourseDAO {
 	private static final String namespace = "com.spring.ex.CourseMapper";
 	
 	@Override
-	public List<HashMap<String, Object>> getCoursePage(HashMap<String, Object> map) {
+	public List<CourseDTO> getCoursePage(HashMap<String, Object> map) {
 		return sqlSession.selectList(namespace + ".getCoursePage", map);
 	}
 
