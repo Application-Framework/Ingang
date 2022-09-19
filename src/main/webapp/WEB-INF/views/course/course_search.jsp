@@ -11,12 +11,20 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
-	
+		<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
+		
+		<%-- for select option drop box --%>
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
+		<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+		
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-		<!-- CSS here -->
-        <!-- CSS only -->
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		
+		
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-        <%-- <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>"> --%>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+		
+		
         <link rel="stylesheet" href="<c:url value='/resources/css/owl.carousel.min.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/flaticon.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/price_rangs.css'/>">
@@ -27,30 +35,14 @@
         <link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/slick.css'/>">
-        <link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
+		
         <link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/responsive.css'/>">
         <%-- <link rel="stylesheet" href="<c:url value='/resources/css/sidebars.css'/>"> --%>
-
+		
+		
+		
         <style>
-            .btn:hover::before {
-                /* transform: translate(-50%,-50%); */
-            }
-
-            .btn-toggle::before {
-                /* position:absolute;
-                top:50%;
-                left:10%;
-                background: none;
-                transform:translate(-50%,-50%);
-                width: 1.25em;
-                height: auto;
-                line-height: 0;
-                content: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='rgba%280,0,0,.5%29' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M5 14l6-6-6-6'/%3e%3c/svg%3e");
-                transition: transform .35s ease;
-                transform-origin: 50% 50%; */
-            }
-
             .btn-toggle[aria-expanded="true"] {
                 color: rgba(0, 0, 0, .85);
             }
@@ -121,6 +113,10 @@
 
             form.search-box .search-form {
                 width: auto;
+            }
+            
+            .choices__list--dropdown {
+            	z-index: 999;
             }
         </style>
    </head>
@@ -235,51 +231,59 @@
                             <section class="featured-job-area">
                                 <div class="container">
                                     <!-- Count of Job list Start -->
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="count-job mb-35">
-                                                <span>${totalCount} course found</span>
-                                                
-                                                <div class="select-job-items">
-                                                    <span>filter</span>
-                                                    <form>
-	                                                    <select onchange="changeOrder()" name="order">
-	                                                        <option <c:if test="${order == 'none'}">selected</c:if> value="none">입문자용</option>
-	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">초급</option>
-	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">중급이상</option>
-	                                                    </select>
-                                                    </form>
-                                                </div>
-                                                
-                                                <div class="select-job-items">
-                                                    <span>Sort by</span>
-                                                    <form>
-	                                                    <select onchange="changeOrder()" name="order">
-	                                                        <option <c:if test="${order == 'none'}">selected</c:if> value="none">None</option>
-	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
-	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
-	                                                        <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
-	                                                        <option <c:if test="${order == 'price'}">selected</c:if> value="price">가격순</option>
-	                                                    </select>
-                                                    </form>
-                                                </div>
-                                                <!--  Select job items End-->
-                                            </div>
-                                        </div>
+                                    <div class="d-flex align-items-center mb-3">
+	                                	<div class="w-100">
+	                                        <span>${totalCount} course found</span>
+	                                    </div>
+	                                    
+	                                    <div class="flex-shrink-1">
+	                                        <span>요금</span>
+	                                        <select onchange="refreshPage()" id="charge" name="charge" multiple>
+	                                            <option <c:if test="${order == 'free'}">selected</c:if> value="free">무료</option>
+	                                            <option <c:if test="${order == 'paid'}">selected</c:if> value="paid">유료</option>
+	                                        </select>
+	                                    </div>
+	                                    
+	                                    <div class="flex-shrink-1">
+	                                        <span>level</span>
+	                                        <select onchange="refreshPage()" id="level" name="level" multiple>
+	                                            <option <c:if test="${order == '1'}">selected</c:if> value="1">입문자용</option>
+	                                            <option <c:if test="${order == '2'}">selected</c:if> value="2">초급</option>
+	                                            <option <c:if test="${order == '3'}">selected</c:if> value="3">중급이상</option>
+	                                        </select>
+	                                    </div>
+	                                    
+	                                    <div class="flex-shrink-1">
+	                                        <span>Sort by</span>
+	                                         <select onchange="refreshPage()" id="order" name="order">
+	                                             <option <c:if test="${order == 'none'}">selected</c:if> value="none">None</option>
+	                                             <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
+	                                             <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
+	                                             <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
+	                                             <option <c:if test="${order == 'price'}">selected</c:if> value="price">가격순</option>
+	                                         </select>
+	                                    </div>
+	                                    <!--  Select job items End-->
                                     </div>
 
                                     <%-- 강의 검색 입력 폼 --%>
-                                    <form class="search-box mb-5">
+                                    <form class="search-box mb-3">
                                         <div class="input-form item" >
-                                            <input type="text" name="title" value="${title}" placeholder="강의 제목 검색" tabindex="0">
+                                            <input type="text" name="s" id="s" value="${s}" placeholder="강의 제목 검색" tabindex="0">
                                         </div>
                                         <div class="search-form item">
-                                        	<button onlick="searchByCourseTitle()" class="btn w-100 h-100">검색</button>
+                                        	<button id="search" type="button" class="btn w-100 h-100">검색</button>
                                         </div>	
                                     </form>
-
+									
+									<%-- 태그 --%>
+									<div class="row mb-5">
+										<select onchange="refreshPage()" id="tags" placeholder="태그 검색" multiple required>
+										  <option value="웹 개발">웹 개발</option>
+										</select>
+					    			</div>
                                     <%-- 강의 리스트 출력 부분 --%>
-                                    <div class="row row-cols-4 mb-3">
+                                    <div id="content" class="row row-cols-4 mb-3">
                                     	<c:forEach var="list" items="${clist}">
 	                                        <div class="col">
 	                                            <div class="card shadow-sm mb-3 d-flex justify-content-center">
@@ -303,7 +307,7 @@
                             </section>
                             
                             <%-- 페이지 번호 --%>
-                            <div class="pagination-area pb-115 text-center mt-5">
+                            <div id="pagination" class="pagination-area pb-115 text-center mt-5">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-xl-12">
@@ -335,43 +339,69 @@
         </main>
     	
     	<script>
-    		var url = new URL(window.location);
-    		
-	       	
+    		var url = new URL(location.origin + location.pathname);
+    		var search = "";
 	        $(function() {
+	        	// select option drop box 옵션 설정
+		    	var multipleCancelButton = new Choices('#tags', {
+		            removeItemButton: true,
+		            maxItemCount:5,
+		            searchResultLimit:10,
+		            //renderChoiceLimit:10
+		        }); 
 	        	
+	        	$('#search').on("click", function() {
+	        		search = $("#s").val();
+	        		refreshPage();
+	        	});
 	        });
 	        
-    		function changeOrder() {
+    		function refreshPage() {
+    			url = new URL(location.origin + location.pathname);
+    			var level = $("#level").val();
+    			var charge = $("#charge").val();
+    			var s = search;
+    			var order = $("#order").val();
+    			var tags = $("#tags").val()
+    			/* console.log(level);
+    			console.log(charge);
+    			console.log(s);
+    			console.log(order);
+    			console.log(tags);
+    			console.log(${paging.pageNo}); */
     			
-    			console.log($("#level").val())
-    			console.log($("#charge").val())
-    			console.log($("#s").val())
-    			console.log($("#order").val())
-    			console.log($("#tags").val())
-    			
-				url.searchParams.set('level', level);
-				url.searchParams.set('charge', charge);
-				url.searchParams.set('s', search);
-				url.searchParams.set('order', order);
-				url.searchParams.set('tags', tags);
-				url.searchParams.set('page', page);
+    			if(level.length != 0)
+					url.searchParams.set('level', level);
+    			if(charge.length != 0)
+					url.searchParams.set('charge', charge);
+    			if(s != "")
+					url.searchParams.set('s', s);
+    			if(order.length != 0)
+					url.searchParams.set('order', order);
+    			if(tags.length != 0)
+					url.searchParams.set('tags', tags);
+				url.searchParams.set('page', ${paging.pageNo});
     			$.ajax({
     				url: url.toString(),
     				data: 'get',
     				dataType: 'html',
     				success: function(html) {
-    					var content = $(html).find("#content");
-    					var pagination = $(html).find("#pagination");
+    					
+    					var content = $(html).find("#content>*");
+    					var pagination = $(html).find("#pagination>*");
+    					console.log(content);
+    					console.log(pagination);
+    					
     					$("#content").html(content);
     					$("#pagination").html(pagination);
     					history.pushState(null, null, url);
     				}
     			});
     		}
+    		
+    		
     	</script>
 		<jsp:include page="../fix/footer.jsp" />
         <!-- JavaScript Bundle with Popper -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>

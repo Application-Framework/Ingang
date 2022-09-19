@@ -55,14 +55,12 @@ public class CourseController {
 		String order = request.getParameter("order");
 		String _tags = request.getParameter("tags");
 		List<String> tags = null;
-		if(_tags != null)
-			tags = Arrays.asList(_tags.split("\\s*,\\s*"));
-		
+		if(_tags != null) {
+			tags = Arrays.asList(_tags.split("\\s*,\\s*")); // convert string to separated comma string
+			System.out.println("tags : " + tags);
+		}
 		String level = request.getParameter("level");
 		String charge = request.getParameter("charge");
-		
-		if(tags!= null)
-			System.out.println("tag : " + tags);
 		
 		final int pageSize = 12;
 		
@@ -74,6 +72,8 @@ public class CourseController {
 		countMap.put("charge", charge);
 		
 		int totalCount = courseService.getCourseTotalCount(countMap);
+		System.out.println("totalCount : " + totalCount);
+		
 		
 		pagingService = new PagingService(request, totalCount, pageSize);
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();

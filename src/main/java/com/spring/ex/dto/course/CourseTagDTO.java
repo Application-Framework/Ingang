@@ -1,30 +1,23 @@
 package com.spring.ex.dto.course;
 
 public class CourseTagDTO {
-	private int olt_no;
 	private int oli_no;
-	private String tag;
+	private int tag_no;
 	
-	public int getOlt_no() {
-		return olt_no;
-	}
-	public void setOlt_no(int olt_no) {
-		this.olt_no = olt_no;
-	}
 	public int getOli_no() {
 		return oli_no;
 	}
 	public void setOli_no(int oli_no) {
 		this.oli_no = oli_no;
 	}
-	public String getTag() {
-		return tag;
+	public int getTag_no() {
+		return tag_no;
 	}
-	public void setTag(String tag) {
-		this.tag = tag;
+	public void setTag_no(int tag_no) {
+		this.tag_no = tag_no;
 	}
 	@Override
 	public String toString() {
-		return "CourseTagDTO [olt_no=" + olt_no + ", oli_no=" + oli_no + ", tag=" + tag + "]";
+		return "CourseTagDTO [oli_no=" + oli_no + ", tag_no=" + tag_no + "]";
 	}
 }

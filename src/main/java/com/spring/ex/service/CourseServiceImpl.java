@@ -46,7 +46,7 @@ public class CourseServiceImpl implements CourseService {
 	private HistoryOrderLectureDAO historyOrderLectureDAO;
 	
 	@Inject
-	private MemberService memberService;
+	private t_TagService t_TagService;
 	
 	@Override
 	public List<CourseDTO> getCoursePage(HashMap<String, Object> map) {
@@ -201,7 +201,7 @@ public class CourseServiceImpl implements CourseService {
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName) {
 		if(tagList == null) return false;
 		for(CourseTagDTO tag : tagList) {
-			if(tag.getTag().equals(tagName))
+			if(tag.getTag_no() == t_TagService.getTagByTag_abbr(tagName).getTag_no())
 				return true;
 		}
 		return false;
