@@ -139,92 +139,31 @@
             		<div class="job-listing-area pt-120 pb-120">
             	</c:if>
                     <div class="row">
-                        <!-- Left content -->
-                        <div class="col-lg-3 blog_right_sidebar">
-                            <aside class="single_sidebar_widget post_category_widget">
-                                <ul class="list cat-list">
-                                	<li>
-                                        <a href="/courses/it-programming">
-                                            <p class="d-flex">ALL</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/web-dev">
-                                            <p class="d-flex">웹 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/front-end" class="d-flex">
-                                            <p class="d-flex">프론트엔드</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/back-end" class="d-flex">
-                                            <p class="d-flex">백엔드</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/mobile-app" class="d-flex">
-                                            <p class="d-flex">모바일 앱 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/game-dev" class="d-flex">
-                                            <p class="d-flex">게임 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/programming-lang" class="d-flex">
-                                            <p class="d-flex">프로그래밍 언어</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/algorithm" class="d-flex">
-                                            <p class="d-flex">알고리즘·자료구조</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/database-dev" class="d-flex">
-                                            <p class="d-flex">데이터베이스</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/devops-infra" class="d-flex">
-                                            <p class="d-flex">데브옵스-인프라</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/certificate-programming" class="d-flex">
-                                            <p class="d-flex">자격증</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/programming-tool" class="d-flex">
-                                            <p class="d-flex">개발 도구</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/embedded-iot" class="d-flex">
-                                            <p class="d-flex">임베디드-IoT</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/dev-data-science" class="d-flex">
-                                            <p class="d-flex">데이터 사이언스</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/desktop-application" class="d-flex">
-                                            <p class="d-flex">데스크톱 앱 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/courses/it-programming/dev-besides" class="d-flex">
-                                            <p class="d-flex">교양-기타</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </aside>
+                        <%-- 강의 카테고리 --%>
+                        <div class="col-lg-3 sidebar">
+							<aside class="single_sidebar_widget post_category_widget">
+								<nav class="navbar bg-light navbar-light">
+									<div class="navbar-nav w-100">
+										<div class="nav-item dropdown">
+											<a href="/courses" class="dropdown-item">전체 강의</a>
+										</div>
+										<%-- 메인 카테고리 --%>
+										<c:forEach var="mainType" items="${typeService.getMainTypeList()}" >
+											<div class="nav-item dropdown">
+												<a href="#" class="ps-3 nav-link dropdown-toggle" 
+												data-bs-toggle="dropdown">${mainType.main_type_name}</a>
+												<div class="dropdown-menu bg-transparent border-0">
+													<a href="/courses/${mainType.main_type_abbr}" class="dropdown-item">ALL</a>
+													<%-- 서브 카테고리 --%>
+													<c:forEach var="subType" items="${typeService.getSubTypeListOfMainType(mainType.main_type_no)}">
+														<a href="/courses/${mainType.main_type_abbr}/${subType.sub_type_abbr}" class="dropdown-item">${subType.sub_type_name}</a>
+													</c:forEach>
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</nav>
+							</aside>
                         </div>
                         <!-- Right content -->
                         <div class="col-lg-9">
@@ -279,7 +218,9 @@
 									<%-- 태그 --%>
 									<div class="row mb-5">
 										<select onchange="refreshPage()" id="tags" placeholder="태그 검색" multiple required>
-										  <option value="웹 개발">웹 개발</option>
+										  <c:forEach var="tag" items="${tagList}">
+											  <option value="${tag.tag_abbr}">${tag.tag_name}</option>
+										  </c:forEach>
 										</select>
 					    			</div>
                                     <%-- 강의 리스트 출력 부분 --%>
@@ -290,7 +231,7 @@
 	                                            	<img src="<c:url value='${list.img_path}'/>" style="padding:5px; height:150px; object-fit: contain;"/>
 	                                                <div class="card-body">
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
-	                                                    	<a href="/courses/${list.oli_no}" class="stretched-link">${list.title}</a>
+	                                                    	<a href="/course/${list.oli_no}" class="stretched-link">${list.title}</a>
 	                                                    </div>
 	                                                    <div id="teacher-name" class="card-text">${courseService.getTeacherInfo(list.olt_no).name}</div>
 	                                                    <div class="stars-outer">

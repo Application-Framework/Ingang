@@ -19,5 +19,8 @@
 		<typeAlias type="com.spring.ex.dto.note.NoteReplyDTO" alias="NoteReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.HistoryOrderNoteDTO" alias="HistoryOrderNoteDTO"/>
 		<typeAlias type="com.spring.ex.dto.UploadedFileDTO" alias="UploadedFileDTO"/>
+		<typeAlias type="com.spring.ex.dto.MainTypeDTO" alias="MainTypeDTO"/>
+		<typeAlias type="com.spring.ex.dto.SubTypeDTO" alias="SubTypeDTO"/>
+		<typeAlias type="com.spring.ex.dto.t_TagDTO" alias="t_TagDTO"/>
 	</typeAliases>
 </configuration>

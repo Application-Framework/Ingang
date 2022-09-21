@@ -2,5 +2,35 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spring.ex.t_TagMapper">
-
+	
+	<select id="getTagList" resultType="t_TagDTO">
+		SELECT * FROM tag
+	</select>
+	
+	<insert id="insertTag">
+		INSERT INTO tag(tag_name, tag_abbr)
+		VALUES(#{tag_name}, #{tag_abbr})
+	</insert>
+	
+	<update id="updateTag">
+		UPDATE tag
+		SET tag_name = #{tag_name},
+			tag_abbr = #{tag_abbr}
+		WHERE tag_no = #{tag_no}
+	</update>
+	
+	<delete id="deleteTag">
+		DELETE FROM tag
+		WHERE tag_no = #{tag_no}
+	</delete>
+	
+	<select id="getTagByTag_no" resultType="t_TagDTO">
+		SELECT * FROM tag
+		WHERE tag_no = #{tag_no}
+	</select>
+	
+	<select id="getTagByTag_abbr" resultType="t_TagDTO">
+		SELECT * FROM tag
+		WHERE tag_abbr = #{tag_abbr}
+	</select>
 </mapper>

@@ -21,7 +21,7 @@ public class CourseReplyController {
 	@Inject
 	private CourseService courseService; 
 	
-	@RequestMapping("/courses/submitReply")
+	@RequestMapping("/course/submitReply")
 	public String submitReply(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		String oli_no = request.getParameter("pageNo");

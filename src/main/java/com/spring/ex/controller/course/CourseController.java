@@ -27,6 +27,8 @@ import com.spring.ex.service.CourseService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TypeService;
+import com.spring.ex.service.t_TagService;
 
 @Controller
 public class CourseController {
@@ -44,12 +46,21 @@ public class CourseController {
 	@Inject
 	private NoteService noteService;
 	
+	@Inject
+	private t_TagService tagService;
+	
+	@Inject
+	private TypeService typeSerivce;
+	
 	// 강의 검색 페이지
-	void showCourses(HttpServletRequest request, Model model, String type) {
+	private void showCourses(HttpServletRequest request, Model model, String main_type, String sub_type) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		boolean isTeacher = false;
 		if(memberDTO != null) 
 			isTeacher = (courseService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
+		
+		System.out.println("main_type : " + main_type);
+		System.out.println("sub_type : " + sub_type);
 		
 		String searchTitle = request.getParameter("s");
 		String order = request.getParameter("order");
@@ -59,14 +70,16 @@ public class CourseController {
 			tags = Arrays.asList(_tags.split("\\s*,\\s*")); // convert string to separated comma string
 			System.out.println("tags : " + tags);
 		}
+		
 		String level = request.getParameter("level");
 		String charge = request.getParameter("charge");
 		
 		final int pageSize = 12;
 		
 		HashMap<String, Object> countMap = new HashMap<String, Object>();
+		countMap.put("main_type_abbr", main_type);
+		countMap.put("sub_type_abbr", sub_type);
 		countMap.put("searchTitle", searchTitle);
-		countMap.put("type", type);
 		countMap.put("tags", tags);
 		countMap.put("level", level);
 		countMap.put("charge", charge);
@@ -74,18 +87,20 @@ public class CourseController {
 		int totalCount = courseService.getCourseTotalCount(countMap);
 		System.out.println("totalCount : " + totalCount);
 		
-		
 		pagingService = new PagingService(request, totalCount, pageSize);
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("main_type_abbr", main_type);
+		pageMap.put("sub_type_abbr", sub_type);
 		pageMap.put("page", pagingService.getNowPage());
 		pageMap.put("pageSize", pageSize);
 		pageMap.put("order", order);
 		pageMap.put("searchTitle", searchTitle);
-		pageMap.put("type", type);
 		pageMap.put("tags", tags);
 		pageMap.put("level", level);
 		pageMap.put("charge", charge);
 		
+		/* model.addAttribute("mainTypeList", typeSerivce.getMainTypeList()); */
+		model.addAttribute("typeService", typeSerivce);
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
 		model.addAttribute("s", searchTitle);
@@ -93,11 +108,32 @@ public class CourseController {
 		model.addAttribute("totalCount", totalCount);
 		model.addAttribute("isTeacher", isTeacher);
 		model.addAttribute("courseService", courseService);
+		model.addAttribute("tagList", tagService.getTagList());
 	}
 	
+	// 모든 강의 검색
+	@RequestMapping("/courses")
+	public String showAllCourses(HttpServletRequest request, Model model) {
+		showCourses(request, model, null, null);
+		return "course/course_search";
+	}
+	
+	// 메인 타입의 모든 강의 검색
+	@RequestMapping("/courses/{main_type}")
+	public String showAllTypeOfCourses(HttpServletRequest request, Model model, @PathVariable String main_type) {
+		showCourses(request, model, main_type, null);
+		return "course/course_search";
+	}
+	
+	// 서브 타입만 검색
+	@RequestMapping("/courses/{main_type}/{sub_type}")
+	public String showAllCourses(HttpServletRequest request, Model model, @PathVariable String main_type, @PathVariable String sub_type) {
+		showCourses(request, model, main_type, sub_type);
+		return "course/course_search";
+	}
 	
 	// 강의 상세 페이지
-	@RequestMapping("/courses/{pageNo}")
+	@RequestMapping("/course/{pageNo}")
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
@@ -137,6 +173,9 @@ public class CourseController {
 		System.out.println(likeCnt);
 		System.out.println(videos);
 		
+
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("tagService", tagService);
 		model.addAttribute("course", courseDTO);
 		model.addAttribute("teacher", courseTeacherDTO);
 		model.addAttribute("replys", replys);
@@ -144,7 +183,6 @@ public class CourseController {
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberService", memberService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("videos", videos);
@@ -162,7 +200,7 @@ public class CourseController {
 	 * return "course/course_detail"; }
 	 */
 	
-	@RequestMapping("/courses/{pageNo}/community")
+	@RequestMapping("/course/{pageNo}/community")
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
@@ -210,7 +248,7 @@ public class CourseController {
 	}
 	
 	// 강의 재생 페이지
-	@RequestMapping("/courses/{pageNo}/play/{olv_no}")
+	@RequestMapping("/course/{pageNo}/play/{olv_no}")
 	public String course_play(HttpServletRequest request, Model model, @PathVariable int pageNo, @PathVariable int olv_no) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
@@ -233,7 +271,7 @@ public class CourseController {
 		return "course/course_play";
 	}
 	
-	@RequestMapping("/courses/courseClickedLike")
+	@RequestMapping("/course/courseClickedLike")
 	public String clickedLikeInCourse(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -250,7 +288,7 @@ public class CourseController {
 	}
 	
 	// 강의 구매
-	@RequestMapping("/courses/purchaseCourse")
+	@RequestMapping("/course/purchaseCourse")
 	public String purchaseCourse(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -266,121 +304,4 @@ public class CourseController {
 		
 		return "redirect:/";
 	}
-	
-
-	//-----------------------
-	// 강의 검색 페이지 카테고리
-	//-----------------------
-	
-	@RequestMapping("/courses")
-	public String courses(HttpServletRequest request, Model model) {
-		showCourses(request, model, null);
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming")
-	public String coursesItProgrammingAll(HttpServletRequest request, Model model) {
-		showCourses(request, model, "it-programming-all");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/web-dev")
-	public String coursesWebDev(HttpServletRequest request, Model model) {
-		showCourses(request, model, "웹 개발");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/front-end")
-	public String coursesFrontEnd(HttpServletRequest request, Model model) {
-		showCourses(request, model, "프론트엔드");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/back-end")
-	public String coursesBackEnd(HttpServletRequest request, Model model) {
-		showCourses(request, model, "백엔드");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/full-stack")
-	public String coursesFullStack(HttpServletRequest request, Model model) {
-		showCourses(request, model, "풀스택");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/mobile-app")
-	public String coursesMobileApp(HttpServletRequest request, Model model) {
-		showCourses(request, model, "모바일 앱 개발");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/game-dev")
-	public String coursesGameDev(HttpServletRequest request, Model model) {
-		showCourses(request, model, "게임 개발");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/programming-lang")
-	public String coursesProgrammingLang(HttpServletRequest request, Model model) {
-		showCourses(request, model, "프로그래밍 언어");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/algorithm")
-	public String coursesAlgorithm(HttpServletRequest request, Model model) {
-		showCourses(request, model, "알고리즘-자료구조");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/database-dev")
-	public String coursesDatabaseDev(HttpServletRequest request, Model model) {
-		showCourses(request, model, "데이터베이스");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/devops-infra")
-	public String coursesDevopsInfra(HttpServletRequest request, Model model) {
-		showCourses(request, model, "데브옵스-인프라");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/certificate-programming")
-	public String coursesCertificateProgramming(HttpServletRequest request, Model model) {
-		showCourses(request, model, "certificate-programming");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/programming-tool")
-	public String coursesProgrammingTool(HttpServletRequest request, Model model) {
-		showCourses(request, model, "개발 도구");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/embedded-iot")
-	public String coursesEmbeddedIoT(HttpServletRequest request, Model model) {
-		showCourses(request, model, "임베디드-IoT");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/dev-data-science")
-	public String coursesDevDataScience(HttpServletRequest request, Model model) {
-		showCourses(request, model, "데이터 사이언스");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/desktop-application")
-	public String coursesDesktopApplication(HttpServletRequest request, Model model) {
-		showCourses(request, model, "데스크톱 앱 개발");
-		return "course/course_search";
-	}
-	
-	@RequestMapping("/courses/it-programming/dev-besides")
-	public String coursesDevBesides(HttpServletRequest request, Model model) {
-		showCourses(request, model, "dev-besides");
-		return "course/course_search";
-	}
-	
-	//---------------------------
-	// 카테고리 끝
-	//---------------------------
 }

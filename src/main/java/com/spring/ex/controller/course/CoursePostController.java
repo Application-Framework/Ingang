@@ -28,7 +28,7 @@ import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileService;
-import com.spring.ex.service.MemberService;
+import com.spring.ex.service.t_TagService;
 
 @Controller
 public class CoursePostController {
@@ -41,6 +41,9 @@ public class CoursePostController {
 	
 	@Inject
 	private FileService fileService;
+	
+	@Inject
+	private t_TagService tagService;
 	
 	@Resource(name="courseImagePath")
 	String courseImagePath;
@@ -61,6 +64,7 @@ public class CoursePostController {
 		}
 		
 		model.addAttribute("actionURL", "/submitCourse");
+		model.addAttribute("allTagList", tagService.getTagList());
 		
 		return "course/course_write";
 	}
@@ -113,8 +117,7 @@ public class CoursePostController {
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
-			courseTagDTO.setTag(t);
-			
+			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
 			courseService.submitCourseTag(courseTagDTO);
 		}
 		
@@ -133,7 +136,7 @@ public class CoursePostController {
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1); // category 강의 : 1
 
-		return "redirect:/courses/"+courseDTO.getOli_no();
+		return "redirect:/course/"+courseDTO.getOli_no();
 	}
 	
 	// 강의 수정 페이지
@@ -169,11 +172,12 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		List<CourseTagDTO> tagList = courseService.getCourseTags(pageNo);
+		List<CourseTagDTO> myTagList = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
 		
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("tagList", tagList);
+		model.addAttribute("allTagList", tagService.getTagList());
+		model.addAttribute("myTagList", myTagList);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("courseService", courseService);
 		model.addAttribute("actionURL", "/updateCourse");
@@ -246,8 +250,7 @@ public class CoursePostController {
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(courseDTO.getOli_no());
-			courseTagDTO.setTag(t);
-			
+			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
 			courseService.submitCourseTag(courseTagDTO);
 		}
 		
@@ -257,7 +260,6 @@ public class CoursePostController {
 			courseVideoDTO.setOli_no(courseDTO.getOli_no());
 			courseVideoDTO.setTitle(videoTitles[i]);
 			courseVideoDTO.setS_file_name(videoPaths[i]);
-			
 			courseService.submitCourseVideo(courseVideoDTO);
 		}
 		
@@ -267,7 +269,7 @@ public class CoursePostController {
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1);
 		
-		return "redirect:/courses/"+pageNo;
+		return "redirect:/course/"+pageNo;
 	}
 	
 	// 강의 수정 취소

@@ -117,7 +117,7 @@
 		            <p class="text-white">${teacher.name}</p>
 		            <div>
 		            	<c:forEach var="tag" items="${tags}">
-		            		<span class="border border-info border-3 rounded-pill">#${tag.tag}</span>
+		            		<span class="border border-info border-3 rounded-pill">#${tagService.getTagByTag_no(tag.tag_no).tag_name}</span>
 		            	</c:forEach>
 		            </div>
 			    </div>
@@ -131,10 +131,10 @@
     		<nav class="navbar navbar-expand-lg navbar-light">
 				<div class="px-5">
 					<ul class="navbar-nav">
-						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="/courses/${pageNo}">강의소개</a></li>
+						<li class="nav-item me-3"><a class="nav-link active fw-bold" href="/course/${pageNo}">강의소개</a></li>
 						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#curriculum">커리큘럼</a></li>
 						<li class="nav-item me-3"><a class="nav-link fw-bold" href="#reviews">수강평</a></li>
-						<li class="nav-item me-3"><a class="nav-link fw-bold" href="/courses/${pageNo}/community">커뮤니티</a></li>
+						<li class="nav-item me-3"><a class="nav-link fw-bold" href="/course/${pageNo}/community">커뮤니티</a></li>
 					</ul>
 				</div>
 			</nav>
@@ -156,7 +156,7 @@
 					<div class="mb-4">
 						<c:forEach var="video" items="${videos}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/courses/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
+								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/course/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
 							</div>
 						</c:forEach>
 					</div>
@@ -191,7 +191,7 @@
 					
 					<%-- 수강평 입력 --%>
 					<c:if test="${purchased == true}">
-						<form action="/courses/submitReply" method="post">
+						<form action="/course/submitReply" method="post">
 							<input type="hidden" name="pageNo" value="${pageNo}"/>
 							<div class="d-flex align-items-center select-job-items mb-1">
 							<span class="mr-5">평점</span>
@@ -260,7 +260,7 @@
 									<c:when test="${paging.pageNo eq paging.firstPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.prevPageNo}&classify=${classify}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+										<li class="page-item"><a href="/course/${pageNo}/community?page=${paging.prevPageNo}&classify=${classify}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
 								</c:choose>
 								<!-- 페이지 갯수만큼 버튼 생성 -->
@@ -270,7 +270,7 @@
 											<li class="page-item active"> <a href="" class="page-link" style="pointer-events: none;"><c:out value="${i }"/></a> </li>
 										</c:when>
 										<c:otherwise>
-											<li class="page-item"> <a href="/courses/${pageNo}/community?page=${i}&classify=${classify}" class="page-link"><c:out value="${i }"/></a> </li>
+											<li class="page-item"> <a href="/course/${pageNo}/community?page=${i}&classify=${classify}" class="page-link"><c:out value="${i }"/></a> </li>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>
@@ -279,7 +279,7 @@
 									<c:when test="${paging.pageNo eq paging.finalPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"><a href="/courses/${pageNo}/community?page=${paging.nextPageNo}&classify=${classify}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+										<li class="page-item"><a href="/course/${pageNo}/community?page=${paging.nextPageNo}&classify=${classify}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 									</c:otherwise>
 								</c:choose>
 							</ul>
@@ -394,7 +394,7 @@
 			x.classList.toggle("bi-heart-fill");
 			x.classList.toggle("text-danger");
 			$.ajax({
-				url: '/courses/courseClickedLike',
+				url: '/course/courseClickedLike',
 				type: 'post',
 				data: {
 					status: status,
@@ -416,7 +416,7 @@
 		// 강의 구매
 		function purchaseCourse() {
 			$.ajax({
-				url: '/courses/purchaseCourse',
+				url: '/course/purchaseCourse',
 				type: 'post',
 				data: {
 					oli_no: ${pageNo}
@@ -436,7 +436,7 @@
 		function changeClassify(classify) {
 			this.classify = classify;
 			$.ajax({
-				url: '/courses/${pageNo}/community',
+				url: '/course/${pageNo}/community',
 				type: 'post',
 				data: {
 					classify: classify
@@ -458,7 +458,7 @@
 		
 		function searchCommunityBoard() {
 			$.ajax({
-				url: '/courses/${pageNo}/community',
+				url: '/course/${pageNo}/community',
 				type: 'post',
 				data: {
 					classify: classify,

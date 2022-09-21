@@ -77,27 +77,13 @@
     		</div>
     		
     		<div class="row mb-2">
-   				<label class="col-sm-2 col-form-label fs-5">강의 분야</label>
+   				<label class="col-sm-2 col-form-label fs-5">강의 태그</label>
    				<div class="col-sm-10">
 					<select name="tags" id="choices-multiple-remove-button" multiple required>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'웹 개발') == true}">selected</c:if> value="웹 개발">웹 개발</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'프론트엔드') == true}">selected</c:if> value="프론트엔드">프론트엔드</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'백엔드') == true}">selected</c:if> value="백엔드">백엔드</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'C') == true}">selected</c:if> value="C">C</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'C++') == true}">selected</c:if> value="C++">C++</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'C#') == true}">selected</c:if> value="C#">C#</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'HTML') == true}">selected</c:if> value="HTML">HTML</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'Javascript') == true}">selected</c:if> value="Javascript">Javascript</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'Python') == true}">selected</c:if> value="Python">Python</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'CSS') == true}">selected</c:if> value="CSS">CSS</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'PHP') == true}">selected</c:if> value="PHP">PHP</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'Ruby') == true}">selected</c:if> value="Ruby">Ruby</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'데이터베이스') == true}">selected</c:if> value="데이터베이스">데이터베이스</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'알고리즘') == true}">selected</c:if> value="알고리즘">알고리즘</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'모바일 앱 개발') == true}">selected</c:if> value="모바일 앱 개발">모바일 앱 개발</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'AI') == true}">selected</c:if> value="AI">AI</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'보안') == true}">selected</c:if> value="보안">보안</option>
-					  <option <c:if test="${courseService.containsInTagList(tagList,'기타') == true}">selected</c:if> value="기타">기타</option>
+						<c:forEach var="tag" items="${allTagList}">
+						  	<option <c:if test="${courseService.containsInTagList(myTagList, tag.tag_abbr) == true}">selected</c:if> value="${tag.tag_abbr}">${tag.tag_name}</option>
+						</c:forEach>
+					  
 					</select>
     			</div>
     		</div>

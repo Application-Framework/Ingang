@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.TypeMapper">
+	
+	<!-- Main Type -->
+	<select id="getMainTypeList" resultType="MainTypeDTO">
+		SELECT * FROM main_type
+		ORDER BY main_type_order ASC 
+	</select>
+	
+	<insert id="insertMainType">
+		INSERT INTO main_type (main_type_name, main_type_abbr, main_type_order)
+		VALUES(#{main_type_name}, #{main_type_abbr}, (SELECT MAX(main_type_no)+1 FROM main_type mt))
+	</insert>
+	
+	<update id="updateMainType">
+		UPDATE main_type
+		SET main_type_name = #{main_type_name},
+			main_type_abbr = #{main_type_abbr},
+			main_type_order = #{order}
+		WHERE main_type_no = #{main_type_no}
+	</update>
+	
+	<delete id="deleteMainType">
+		DELETE FROM main_type
+		WHERE main_type_no = #{main_type_no}
+	</delete>
+	
+	<select id="getMainTypeByMainTypeNo" resultType="MainTypeDTO">
+		SELECT * FROM main_type
+		WHERE main_type_no = #{main_type_no}
+	</select>
+	
+	<select id="getMainTypeByMainTypeAbbr" resultType="MainTypeDTO">
+		SELECT * FROM main_type
+		WHERE main_type_abbr = #{main_type_abbr}
+	</select>
+	
+	<!-- Sub Type -->
+	<select id="getSubTypeList" resultType="SubTypeDTO">
+		SELECT * FROM sub_type
+		ORDER BY sub_type_order ASC 
+	</select>
+	
+	<select id="getSubTypeListOfMainType" resultType="SubTypeDTO">
+		SELECT * FROM sub_type
+		WHERE main_type_no = #{main_type_no}
+		ORDER BY sub_type_order ASC 
+	</select>
+	
+	<insert id="insertSubType">
+		INSERT INTO sub_type (sub_type_name, sub_type_abbr, sub_type_order)
+		VALUES(#{sub_type_name}, #{sub_type_abbr}, (SELECT MAX(sub_type_no)+1 FROM sub_type st))
+	</insert>
+	
+	<update id="updateSubType">
+		UPDATE sub_type
+		SET sub_type_name = #{sub_type_name},
+			sub_type_abbr = #{sub_type_abbr},
+			sub_type_order = #{order}
+		WHERE sub_type_no = #{sub_type_no}
+	</update>
+	
+	<delete id="deleteSubType">
+		DELETE FROM sub_type
+		WHERE sub_type_no = #{sub_type_no}
+	</delete>
+	
+	<select id="getSubTypeBySubTypeNo" resultType="SubTypeDTO">
+		SELECT * FROM sub_type
+		WHERE sub_type_no = #{sub_type_no}
+	</select>
+	
+	<select id="getSubTypeBySubTypeAbbr" resultType="SubTypeDTO">
+		SELECT * FROM sub_type
+		WHERE sub_type_abbr = #{sub_type_abbr}
+	</select>
+</mapper>

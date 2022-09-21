@@ -117,7 +117,7 @@
 		        	<c:if test="${note != null}">
 		        		<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
 			        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
-			        	<form action="/courses/saveNote" target="dummyframe" method="post">
+			        	<form action="/course/saveNote" target="dummyframe" method="post">
 			        		<input type="hidden" name="oli_no" value="${pageNo}"/>
 			        		<input type="hidden" name="olv_no" value="${olv_no}"/>
 			        		<input type="hidden" name="na_no" value="${noteArticle.na_no}"/>
@@ -140,7 +140,7 @@
 			        	<div class="modal">
 					        <div class="modal_content card" style="width:50rem; height:33rem;">
 					            <div class="card-body m-3">
-					                <form action="/courses/createNote" method="post">
+					                <form action="/course/createNote" method="post">
 					                	<input type="hidden" name="oli_no" value="${pageNo}"/>
 							    		<div class="row mb-1">
 							   				<label class="col-sm-2 col-form-label fs-5 text-start">노트명</label>
