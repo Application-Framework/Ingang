@@ -189,6 +189,8 @@ public class CourseController {
 		model.addAttribute("contentType", "main");
 		model.addAttribute("notes", notes);
 		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
+		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(pageNo).getMain_type_name());
+		model.addAttribute("subCategory", typeSerivce.getSubTypeListOfMainType(stdCnt).get(0).getSub_type_name());
 		
 		return "course/course_detail";
 	}

@@ -8,15 +8,19 @@ import javax.inject.Inject;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dao.TeacherDAO;
+import com.spring.ex.dao.TypeDAO;
 import com.spring.ex.dao.course.CourseDAO;
 import com.spring.ex.dao.course.CourseLikeDAO;
 import com.spring.ex.dao.course.CourseReplyDAO;
+import com.spring.ex.dao.course.CourseSubTypeDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dao.course.HistoryOrderLectureDAO;
+import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.dto.course.HistoryOrderLectureDTO;
@@ -47,6 +51,15 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private t_TagService t_TagService;
+	
+	@Inject
+	private TypeService typeService;
+	
+	@Inject
+	private CourseSubTypeDAO courseSubTypeDAO;
+	
+	@Inject
+	private TypeDAO typeDAO;
 	
 	@Override
 	public List<CourseDTO> getCoursePage(HashMap<String, Object> map) {
@@ -198,12 +211,43 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName) {
+	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr) {
 		if(tagList == null) return false;
 		for(CourseTagDTO tag : tagList) {
-			if(tag.getTag_no() == t_TagService.getTagByTag_abbr(tagName).getTag_no())
+			if(tag.getTag_no() == t_TagService.getTagByTag_abbr(tag_abbr).getTag_no())
 				return true;
 		}
 		return false;
+	}
+
+	@Override
+	public boolean containsInCategoryList(List<CourseSubTypeDTO> categoryList, String tag_abbr) {
+		if(categoryList == null) return false;
+		for(CourseSubTypeDTO category : categoryList) {
+			if(category.getSub_type_no() == typeService.getSubTypeBySubTypeAbbr(tag_abbr).getSub_type_no())
+				return true;
+		}
+		return false;
+	}
+
+	@Override
+	public List<CourseSubTypeDTO> getCourseSubTypeList(int oli_no) {
+		return courseSubTypeDAO.getCourseSubTypeList(oli_no);
+	}
+
+	@Override
+	public int submitCourseSubType(CourseSubTypeDTO dto) {
+		return courseSubTypeDAO.insertCourseSubType(dto);
+	}
+
+	@Override
+	public int deleteCourseSubType(int oli_no) {
+		return courseSubTypeDAO.deleteCourseSubType(oli_no);
+	}
+
+	@Override
+	public MainTypeDTO getMainTypeOfCourse(int oli_no) {
+		MainTypeDTO dto = typeDAO.getMainTypeByMainTypeNo(typeDAO.getSubTypeBySubTypeNo(courseSubTypeDAO.getCourseSubTypeList(oli_no).get(0).getSub_type_no()).getMain_type_no());
+		return dto;
 	}
 }

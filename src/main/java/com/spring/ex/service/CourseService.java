@@ -5,9 +5,11 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.dto.course.HistoryOrderLectureDTO;
@@ -91,5 +93,16 @@ public interface CourseService {
 	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no);
 	
 	// 태그 리스트에 태그가 있는지 확인
-	public boolean containsInTagList(List<CourseTagDTO> tagList, String tagName);
+	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr);
+	
+	// 카테고리 리스트에 카테고리가 있는지 확인
+	public boolean containsInCategoryList(List<CourseSubTypeDTO> categoryList, String tag_abbr);
+	
+	// 강의 카테고리
+	public List<CourseSubTypeDTO> getCourseSubTypeList(int oli_no);
+	public int submitCourseSubType(CourseSubTypeDTO dto);
+	public int deleteCourseSubType(int oli_no);
+	
+	// 강좌의 메인 카테고리 가져오기
+	public MainTypeDTO getMainTypeOfCourse(int oli_no);
 }

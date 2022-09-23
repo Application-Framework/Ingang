@@ -105,9 +105,14 @@
     		<div class="row">
 	    		<%-- 강의 표지 --%>
 	    		<div class="col-xl-5 d-flex justify-content-center">
-	    			<img src="<c:url value='${course.img_path}'/>" style="height:286px; object-fit: contain;"/>
+	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px; object-fit: contain;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
+		    		<div>
+		    			<span>${mainCategory}</span> 
+		    			<span><i class="bi bi-chevron-right"></i></span>
+		    			<span>${subCategory}</span>
+		    		</div>
 			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
 			    	<div class="stars-outer">
 		                <div class="stars-inner" style="width:${starAvg*20}%"></div>
@@ -115,9 +120,10 @@
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
 		            <p class="text-white">${teacher.name}</p>
-		            <div>
+		            <div class="d-flex align-items-center">
+		            	<span class="fs-4 pe-2">#</span>
 		            	<c:forEach var="tag" items="${tags}">
-		            		<span class="border border-info border-3 rounded-pill">#${tagService.getTagByTag_no(tag.tag_no).tag_name}</span>
+		            		<span class="border border-info border-3 rounded-pill">${tagService.getTagByTag_no(tag.tag_no).tag_name}</span>
 		            	</c:forEach>
 		            </div>
 			    </div>

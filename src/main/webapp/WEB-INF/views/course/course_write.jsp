@@ -76,10 +76,36 @@
     			</div>
     		</div>
     		
+    		<%-- 메인 카테고리 --%>
+    		<div class="row mb-2">
+   				<label class="col-sm-2 col-form-label fs-5">메인 카테고리</label>
+   				<div class="col-sm-10">
+					<select name="mainCategory" id="mainCategory" onchange="changeMainCategory()" required>
+						<option value="">Select Main Category</option>
+						<c:forEach var="category" items="${allMainCategoryList}">
+						  	<option <c:if test="${courseService.getMainTypeOfCourse(course.oli_no) != null}">selected</c:if> value="${category.main_type_no}">${category.main_type_name}</option>
+						</c:forEach>
+					</select>
+    			</div>
+    		</div>
+    		
+    		<%-- 서브 카테고리 --%>
+    		<div class="row mb-2">
+   				<label class="col-sm-2 col-form-label fs-5">서브 카테고리</label>
+   				<div class="col-sm-10" id="subCategoryParents">
+					<select name="subCategorys" id="subCategorys" multiple required>
+						<c:forEach var="category" items="${allSubCategoryList}">
+						  	<option <c:if test="${courseService.containsInCategoryList(myCategoryList, category.sub_type_abbr) == true}">selected</c:if> value="${category.sub_type_abbr}">${category.sub_type_name}</option>
+						</c:forEach>
+					</select>
+    			</div>
+    		</div>
+    		
+    		<%-- 태그 --%>
     		<div class="row mb-2">
    				<label class="col-sm-2 col-form-label fs-5">강의 태그</label>
    				<div class="col-sm-10">
-					<select name="tags" id="choices-multiple-remove-button" multiple required>
+					<select name="tags" id="tags" multiple required>
 						<c:forEach var="tag" items="${allTagList}">
 						  	<option <c:if test="${courseService.containsInTagList(myTagList, tag.tag_abbr) == true}">selected</c:if> value="${tag.tag_abbr}">${tag.tag_name}</option>
 						</c:forEach>
@@ -149,14 +175,28 @@
     
     <script>
 	   	var submitted = false;
-	    
+	   	var choicesMainCategory, choicesSubCategorys, choicesTags;
 	   	// document start
 	   	$(function() {
 	    	// select option drop box 옵션 설정
-	    	var multipleCancelButton = new Choices('#choices-multiple-remove-button', {
+	    	choicesMainCategory = new Choices('#mainCategory', {
+	            removeItemButton: true,
+	            maxItemCount:1,
+	            searchResultLimit:10
+	            //renderChoiceLimit:10
+	        }); 
+	    	
+	    	choicesSubCategorys = new Choices('#subCategorys', {
 	            removeItemButton: true,
 	            maxItemCount:5,
-	            searchResultLimit:10,
+	            searchResultLimit:10
+	            //renderChoiceLimit:10
+	        }); 
+	    	
+	    	choicesTags = new Choices('#tags', {
+	            removeItemButton: true,
+	            maxItemCount:5,
+	            searchResultLimit:10
 	            //renderChoiceLimit:10
 	        }); 
 	    	
@@ -211,6 +251,50 @@
 	    	});
 			
 		});
+	   	
+	   	// 메인 카테고리가 바뀌었을 때 서브 카테고리 불러오기
+	   	function changeMainCategory() {
+	   		console.log("#mainCategory.val() : " + $("#mainCategory").val())
+	   		if($("#mainCategory").val() == null || $("#mainCategory").val() == "") {
+	   			$.ajax({
+		   			url: '/writeCourse',
+		   			type: 'post',
+		   			dataType: 'html',
+		   			data: {
+		   				main_type_no: 0
+		   			},
+		   			success: function(html) {
+		   				subCategoryParents = $(html).find('#subCategoryParents>*');
+		   				console.log(subCategoryParents);
+		   				$('#subCategoryParents').html(subCategoryParents);
+		   				choicesSubCategorys = new Choices('#subCategorys', {
+		   		            removeItemButton: true,
+		   		            maxItemCount:5,
+		   		            searchResultLimit:10
+		   		        }); 
+		   			}
+		   		});
+	   			return;
+	   		}
+	   		$.ajax({
+	   			url: '/writeCourse',
+	   			type: 'post',
+	   			dataType: 'html',
+	   			data: {
+	   				main_type_no: $("#mainCategory").val()
+	   			},
+	   			success: function(html) {
+	   				subCategoryParents = $(html).find('#subCategoryParents>*');
+	   				console.log(subCategoryParents);
+	   				$('#subCategoryParents').html(subCategoryParents);
+	   				choicesSubCategorys = new Choices('#subCategorys', {
+	   		            removeItemButton: true,
+	   		            maxItemCount:5,
+	   		            searchResultLimit:10
+	   		        }); 
+	   			}
+	   		});
+	   	}
 	   	
 	    // 등록 버튼 눌렀을 때 폼 검증
 	    $("#btnSubmit").click(function() {

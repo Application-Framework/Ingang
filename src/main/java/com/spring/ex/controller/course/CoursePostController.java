@@ -22,12 +22,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.SubTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileService;
+import com.spring.ex.service.TypeService;
 import com.spring.ex.service.t_TagService;
 
 @Controller
@@ -44,6 +47,9 @@ public class CoursePostController {
 	
 	@Inject
 	private t_TagService tagService;
+	
+	@Inject
+	private TypeService typeService;
 	
 	@Resource(name="courseImagePath")
 	String courseImagePath;
@@ -63,7 +69,13 @@ public class CoursePostController {
 			return "error";
 		}
 		
+		String main_type_no = request.getParameter("main_type_no");
+		System.out.println("main_type_no : " + main_type_no); 
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("actionURL", "/submitCourse");
+		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
+		if(main_type_no != null)
+			model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(Integer.parseInt(main_type_no)));
 		model.addAttribute("allTagList", tagService.getTagList());
 		
 		return "course/course_write";
@@ -88,6 +100,7 @@ public class CoursePostController {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
+		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
 		String[] videoTitles = request.getParameterValues("video_titles");
 		String[] videoPaths = request.getParameterValues("video_paths");
@@ -97,7 +110,7 @@ public class CoursePostController {
 			img_path = fileService.insertFileToLocalAndServer(thumbnail, courseImagePath);
 		}
 		
-		if(memberDTO == null || title == null || content == null || img_path == null || price == null) {
+		if(memberDTO == null || title == null || content == null || img_path == null || price == null || categorys == null || tags == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}
@@ -113,6 +126,13 @@ public class CoursePostController {
 		courseDTO.setEnable(1);
 		
 		courseService.submitCourse(courseDTO);
+		
+		for(String c : categorys) {
+			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
+			courseSubTypeDTO.setOli_no(courseDTO.getOli_no());
+			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
+			courseService.submitCourseSubType(courseSubTypeDTO);
+		}
 		
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
@@ -172,11 +192,18 @@ public class CoursePostController {
 			return "error";
 		}
 		
+		String main_type_no = request.getParameter("main_type_no");
+		
+		List<CourseSubTypeDTO> myCategoryList = courseService.getCourseSubTypeList(pageNo);
 		List<CourseTagDTO> myTagList = courseService.getCourseTags(pageNo);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
 		
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("course", courseDTO);
 		model.addAttribute("allTagList", tagService.getTagList());
+		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
+		model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(courseService.getMainTypeOfCourse(pageNo).getMain_type_no()));
+		model.addAttribute("myCategoryList", myCategoryList);
 		model.addAttribute("myTagList", myTagList);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("courseService", courseService);
@@ -220,6 +247,7 @@ public class CoursePostController {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
+		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
 		String[] videoTitles = request.getParameterValues("video_titles");
 		String[] videoPaths = request.getParameterValues("video_paths");
@@ -230,7 +258,7 @@ public class CoursePostController {
 			fileService.deleteFileToLocalAndServer(courseDTO.getImg_path());
 		}
 		
-		if(memberDTO == null || title == null || content == null || price == null) {
+		if(memberDTO == null || title == null || content == null || price == null || categorys == null || tags == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}
@@ -245,6 +273,14 @@ public class CoursePostController {
 		courseDTO.setEnable(1);
 		
 		courseService.updateCourse(courseDTO);
+		
+		courseService.deleteCourseSubType(pageNo);
+		for(String c : categorys) {
+			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
+			courseSubTypeDTO.setOli_no(courseDTO.getOli_no());
+			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
+			courseService.submitCourseSubType(courseSubTypeDTO);
+		}
 		
 		courseService.deleteCourseTag(pageNo);
 		for(String t : tags) {
@@ -349,5 +385,13 @@ public class CoursePostController {
 		} 
 		String a = jsonObject.toString();
 		return a;
+	}
+	
+	@ResponseBody
+	@RequestMapping("/getSubCategoryListOfMainCategory")
+	public List<SubTypeDTO> getSubCategoryListOfMainCategory(HttpServletRequest request) {
+		int main_type_no = Integer.parseInt(request.getParameter("main_type_no"));
+		System.out.println("main_type_no : " + main_type_no);
+		return typeService.getSubTypeListOfMainType(main_type_no);
 	}
 }

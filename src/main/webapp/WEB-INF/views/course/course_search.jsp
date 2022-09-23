@@ -324,7 +324,7 @@
 				url.searchParams.set('page', ${paging.pageNo});
     			$.ajax({
     				url: url.toString(),
-    				data: 'get',
+    				type: 'get',
     				dataType: 'html',
     				success: function(html) {
     					

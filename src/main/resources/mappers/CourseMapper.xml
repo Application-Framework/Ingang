@@ -12,29 +12,31 @@
 		FROM online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst
 		<include refid="search"></include>
 		GROUP BY oli.oli_no
-		<if test="order != null">
-			<choose>
-				<when test='order.equals("like")'>
-					ORDER BY like_cnt DESC
-				</when>
-				
-				<when test='order.equals("reply")'>
-					ORDER BY reply_cnt DESC
-				</when>
-				
-				<when test='order.equals("star")'>
-					ORDER BY star_avg DESC
-				</when>
-				
-				<when test='order.equals("price")'>
-					ORDER BY price
-				</when>
-				
-				<otherwise>
-					ORDER BY oli.oli_no DESC
-				</otherwise>
-			</choose>
-		</if>
+		<choose>
+			<when test='order == null'>
+				ORDER BY oli.oli_no DESC
+			</when>
+		
+			<when test='order.equals("like")'>
+				ORDER BY like_cnt DESC
+			</when>
+			
+			<when test='order.equals("reply")'>
+				ORDER BY reply_cnt DESC
+			</when>
+			
+			<when test='order.equals("star")'>
+				ORDER BY star_avg DESC
+			</when>
+			
+			<when test='order.equals("price")'>
+				ORDER BY price
+			</when>
+			
+			<otherwise>
+				ORDER BY oli.oli_no DESC
+			</otherwise>
+		</choose>
 		LIMIT #{page}, #{pageSize}
 	</select>
 	
@@ -248,4 +250,21 @@
 		SELECT * FROM history_order_lecture
 		WHERE m_no = #{m_no}
 	</select>
+	
+	<!-- 카테고리 부분 -->
+	<select id="getCourseSubTypeList" resultType="CourseSubTypeDTO">
+		SELECT *
+		FROM online_lecture_sub_type
+		WHERE oli_no = #{oli_no}
+	</select>
+	
+	<insert id="insertCourseSubType">
+		INSERT INTO online_lecture_sub_type (oli_no, sub_type_no)
+		VALUES(#{oli_no}, #{sub_type_no})
+	</insert>
+	
+	<delete id="deleteCourseSubType">
+		DELETE FROM online_lecture_sub_type
+		WHERE oli_no = #{oli_no}
+	</delete>
 </mapper>
