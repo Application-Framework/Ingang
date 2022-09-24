@@ -100,7 +100,7 @@
 											</div>
 										</div>
 										<p class="comment">
-											<c:out value="${cbReadPage.oli_content}"/>
+											${fn:substring(cbReadPage.oli_content, 0 ,170)}
 										</p>
 									</div>
 								</div>
