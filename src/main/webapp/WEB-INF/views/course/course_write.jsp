@@ -122,13 +122,31 @@
     		</div>
     		
     		<div class="row mb-1">
+   				<label class="col-sm-2 col-form-label fs-5">난이도</label>
+   				<div class="col-sm-2">
+    				<select class="form-control" name="level" required>
+    					<option value="1" <c:if test="${level == 1}">selected</c:if>>입문자</option>
+    					<option value="2" <c:if test="${level == 2}">selected</c:if>>초급자</option>
+    					<option value="3" <c:if test="${level == 3}">selected</c:if>>중급자 이상</option>
+    				</select>
+    			</div>
+    		</div>
+    		
+    		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">표지</label>
    				<div class="col-sm-10">
 		    		<input type="file" class="form-control" name="thumbnail" accept="image/*" onchange="loadFile(event)" <c:if test="${course.img_path == null}">required</c:if>/>
 	    		 	<img id="thumbnail" src="<c:url value='${course.img_path}'/>" width="200px"/>
     			</div>
     		</div>
-	    		
+	    	
+	    	<div class="row mb-1">
+   				<label class="col-sm-2 col-form-label fs-5">소개 글</label>
+   				<div class="col-sm-10">
+    				<input type="text" class="form-control" name="introduction" value="${course.introduction}" required/>
+    			</div>
+    		</div>
+	    	
     		<div class="row mb-4">
     			<textarea class="summernote" id="content" name="content" rows="10">${course.content}</textarea>
     		</div>

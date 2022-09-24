@@ -27,7 +27,7 @@
                                     <nav class="d-none d-lg-block">
                                         <ul id="navigation">
                                             <li><a href="/courses">강의</a>
-                                            	<ul class="submenu">
+                                            	<!-- <ul class="submenu">
                                                     <li><a href="/courses">강의전체</a></li>
                                                     <li><a href="/courses/web-dev">웹 개발</a></li>
                                                     <li><a href="/courses/front-end">프론트엔드</a></li>
@@ -38,7 +38,7 @@
                                                     <li><a href="/courses/mobile-app">모바일 앱 개발</a></li>
                                                     <li><a href="/courses/artificial-intelligence">A.I</a></li>
                                                     <li><a href="/courses/security">보안</a></li>
-                                                </ul>
+                                                </ul> -->
                                             </li>
                                             <li><a href="/notes">노트</a>
                                             	<ul class="submenu">

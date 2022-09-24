@@ -92,6 +92,17 @@
             border-style: solid;
             border-radius: 10px;
         }
+        
+        .items-link a {
+        	margin-bottom: 0px;
+        }
+        
+        hr {
+        	margin: 2rem 0;
+		    border-top: 1px solid #cbcbcb;
+		    border-bottom: 1px solid #fff;
+		    opacity: 50%;
+        }
 	</style>
 </head>
 
@@ -111,7 +122,7 @@
 		    		<div>
 		    			<span>${mainCategory}</span> 
 		    			<span><i class="bi bi-chevron-right"></i></span>
-		    			<span>${subCategory}</span>
+		    			<span>${typeService.getSubTypeBySubTypeNo(subCategoryList[0].sub_type_no).sub_type_name}</span>
 		    		</div>
 			    	<h3 class="fw-bold text-white mb-5">${course.title}</h3>
 			    	<div class="stars-outer">
@@ -120,10 +131,11 @@
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
 		            <p class="text-white">${teacher.name}</p>
-		            <div class="d-flex align-items-center">
-		            	<span class="fs-4 pe-2">#</span>
+		            <div class="d-flex align-items-center items-link ">
+		            	<span class="fs-4 pe-2 text-white">#</span>
 		            	<c:forEach var="tag" items="${tags}">
-		            		<span class="border border-info border-3 rounded-pill">${tagService.getTagByTag_no(tag.tag_no).tag_name}</span>
+		            		<%-- <span class="border border-info border-3 rounded-pill">${tagService.getTagByTag_no(tag.tag_no).tag_name}</span> --%>
+		            		<a>${tagService.getTagByTag_no(tag.tag_no).tag_name}</a>
 		            	</c:forEach>
 		            </div>
 			    </div>
@@ -153,10 +165,19 @@
 			<div class="col-lg-8">
 				<%-- 강의 소개 출력 --%>
 				<c:if test="${contentType == 'main'}">
+					<h4 class="mb-3"><b><c:if test="${course.level == 1}">입문자</c:if><c:if test="${course.level == 2}">초급자</c:if><c:if test="${course.level == 3}">중급자</c:if></b>를 위해 준비한<br>
+					<b>[<c:forEach var="category" items="${subCategoryList}" varStatus="status">
+						${typeService.getSubTypeBySubTypeNo(category.sub_type_no).sub_type_name}<c:if test="${not status.last}">, </c:if>
+					</c:forEach>] 강의입니다.</b></h4>
+				
+					<p class="fw-bold">${course.introduction}</p>
+				
+					<hr>
+				
 					<c:out value="${course.content}" escapeXml="false" />
 				
 					<%-- 커리큘럼 --%>
-					<div id="curriculum" class="mb-3 fs-3 fw-bold">
+					<div id="curriculum" class="mt-4 mb-3 fs-3 fw-bold">
 						커리큘럼
 					</div>
 					<div class="mb-4">

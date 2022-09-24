@@ -98,8 +98,10 @@ public class CoursePostController {
 		
 		System.out.println("등록 시작");
 		String title = request.getParameter("title");
+		String introduction = request.getParameter("introduction");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
+		String level = request.getParameter("level");
 		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
 		String[] videoTitles = request.getParameterValues("video_titles");
@@ -110,7 +112,7 @@ public class CoursePostController {
 			img_path = fileService.insertFileToLocalAndServer(thumbnail, courseImagePath);
 		}
 		
-		if(memberDTO == null || title == null || content == null || img_path == null || price == null || categorys == null || tags == null) {
+		if(memberDTO == null || title == null || introduction == null || content == null || img_path == null || price == null || level == null || categorys == null || tags == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}
@@ -119,9 +121,11 @@ public class CoursePostController {
 		CourseDTO courseDTO = new CourseDTO();
 		courseDTO.setOlt_no(teacherDTO.getOlt_no());
 		courseDTO.setTitle(title);
+		courseDTO.setIntroduction(introduction);
 		courseDTO.setContent(content);
 		courseDTO.setImg_path(img_path);
 		courseDTO.setPrice(Integer.parseInt(price));
+		courseDTO.setLevel(Integer.parseInt(level));
 		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		courseDTO.setEnable(1);
 		
@@ -245,8 +249,10 @@ public class CoursePostController {
 		
 		System.out.println("수정 시작");
 		String title = request.getParameter("title");
+		String introduction = request.getParameter("introduction");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
+		String level = request.getParameter("level");
 		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
 		String[] videoTitles = request.getParameterValues("video_titles");
@@ -258,17 +264,19 @@ public class CoursePostController {
 			fileService.deleteFileToLocalAndServer(courseDTO.getImg_path());
 		}
 		
-		if(memberDTO == null || title == null || content == null || price == null || categorys == null || tags == null) {
+		if(memberDTO == null || title == null || introduction == null || content == null || price == null || level == null || categorys == null || tags == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}
 		
 		// 강의 수정
 		courseDTO.setTitle(title);
+		courseDTO.setIntroduction(introduction);
 		courseDTO.setContent(content);
 		if(img_path != null) 
 			courseDTO.setImg_path(img_path);
 		courseDTO.setPrice(Integer.parseInt(price));
+		courseDTO.setLevel(Integer.parseInt(level));
 		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		courseDTO.setEnable(1);
 		

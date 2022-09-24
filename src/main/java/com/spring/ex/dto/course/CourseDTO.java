@@ -6,10 +6,12 @@ public class CourseDTO {
 	private int oli_no;
 	private int olt_no;
 	private String title;
+	private String introduction;
 	private String content;
 	private int hit;
 	private String img_path;
 	private int price;
+	private int level;
 	private Date reg_date;
 	private int enable;
 	
@@ -30,6 +32,12 @@ public class CourseDTO {
 	}
 	public void setTitle(String title) {
 		this.title = title;
+	}
+	public String getIntroduction() {
+		return introduction;
+	}
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
 	}
 	public String getContent() {
 		return content;
@@ -55,6 +63,12 @@ public class CourseDTO {
 	public void setPrice(int price) {
 		this.price = price;
 	}
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	public Date getReg_date() {
 		return reg_date;
 	}
@@ -67,11 +81,10 @@ public class CourseDTO {
 	public void setEnable(int enable) {
 		this.enable = enable;
 	}
-	
 	@Override
 	public String toString() {
-		return "CourseDTO [oli_no=" + oli_no + ", olt_no=" + olt_no + ", title=" + title + ", content=" + content
-				+ ", hit=" + hit + ", img_path=" + img_path + ", price=" + price + ", reg_date=" + reg_date
-				+ ", enable=" + enable + "]";
+		return "CourseDTO [oli_no=" + oli_no + ", olt_no=" + olt_no + ", title=" + title + ", introduction="
+				+ introduction + ", content=" + content + ", hit=" + hit + ", img_path=" + img_path + ", price=" + price
+				+ ", level=" + level + ", reg_date=" + reg_date + ", enable=" + enable + "]";
 	}
 }

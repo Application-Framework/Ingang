@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.SubTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -50,7 +52,7 @@ public class CourseController {
 	private t_TagService tagService;
 	
 	@Inject
-	private TypeService typeSerivce;
+	private TypeService typeService;
 	
 	// 강의 검색 페이지
 	private void showCourses(HttpServletRequest request, Model model, String main_type, String sub_type) {
@@ -100,7 +102,7 @@ public class CourseController {
 		pageMap.put("charge", charge);
 		
 		/* model.addAttribute("mainTypeList", typeSerivce.getMainTypeList()); */
-		model.addAttribute("typeService", typeSerivce);
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
 		model.addAttribute("s", searchTitle);
@@ -173,9 +175,10 @@ public class CourseController {
 		System.out.println(likeCnt);
 		System.out.println(videos);
 		
-
+		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("course", courseDTO);
 		model.addAttribute("teacher", courseTeacherDTO);
 		model.addAttribute("replys", replys);
@@ -190,7 +193,7 @@ public class CourseController {
 		model.addAttribute("notes", notes);
 		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
 		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(pageNo).getMain_type_name());
-		model.addAttribute("subCategory", typeSerivce.getSubTypeListOfMainType(stdCnt).get(0).getSub_type_name());
+		model.addAttribute("subCategoryList", courseService.getCourseSubTypeList(pageNo));
 		
 		return "course/course_detail";
 	}

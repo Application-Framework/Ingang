@@ -21,9 +21,14 @@
 		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 		
 		
+		
+		<%-- bootsrap --%>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
 		
+		<%-- bootstrap 4 --%>
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script> -->
 		
         <link rel="stylesheet" href="<c:url value='/resources/css/owl.carousel.min.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/flaticon.css'/>">
@@ -35,12 +40,13 @@
         <link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/themify-icons.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/slick.css'/>">
-		
-        <link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
+		<link rel="stylesheet" href="<c:url value='/resources/css/style.css'/>">
         <link rel="stylesheet" href="<c:url value='/resources/css/responsive.css'/>">
         <%-- <link rel="stylesheet" href="<c:url value='/resources/css/sidebars.css'/>"> --%>
 		
-		
+		<%-- bootstrap-select --%>
+		<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script> -->
 		
         <style>
             .btn-toggle[aria-expanded="true"] {
@@ -175,26 +181,26 @@
 	                                        <span>${totalCount} course found</span>
 	                                    </div>
 	                                    
-	                                    <div class="flex-shrink-1">
+	                                    <div class="flex-shrink-1 pe-2 text-center">
 	                                        <span>요금</span>
-	                                        <select onchange="refreshPage()" id="charge" name="charge" multiple>
+	                                        <select onchange="refreshPage()" id="charge" name="charge" class="nice-select" multiple>
 	                                            <option <c:if test="${order == 'free'}">selected</c:if> value="free">무료</option>
 	                                            <option <c:if test="${order == 'paid'}">selected</c:if> value="paid">유료</option>
 	                                        </select>
 	                                    </div>
 	                                    
-	                                    <div class="flex-shrink-1">
+	                                    <div class="flex-shrink-1 pe-2 text-center">
 	                                        <span>level</span>
-	                                        <select onchange="refreshPage()" id="level" name="level" multiple>
+	                                        <select onchange="refreshPage()" id="level" name="level" class="nice-select" multiple>
 	                                            <option <c:if test="${order == '1'}">selected</c:if> value="1">입문자용</option>
 	                                            <option <c:if test="${order == '2'}">selected</c:if> value="2">초급</option>
 	                                            <option <c:if test="${order == '3'}">selected</c:if> value="3">중급이상</option>
 	                                        </select>
 	                                    </div>
-	                                    
-	                                    <div class="flex-shrink-1">
+	                                   
+	                                    <div class="flex-shrink-1 text-center">
 	                                        <span>Sort by</span>
-	                                         <select onchange="refreshPage()" id="order" name="order">
+	                                         <select onchange="refreshPage()" id="order" name="order" class="nice-select">
 	                                             <option <c:if test="${order == 'none'}">selected</c:if> value="none">None</option>
 	                                             <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
 	                                             <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
@@ -237,7 +243,7 @@
 	                                                    <div class="stars-outer">
 	                                                        <div class="stars-inner" style="width:${courseService.getCourseStarAvg(list.oli_no)*20}%"></div>
 	                                                    </div>
-	                                                    <span class="number-rating">${courseService.getCourseReplys(list.oli_no).size()}</span>
+	                                                    <span class="number-rating">(${courseService.getCourseReplys(list.oli_no).size()})</span>
 	                                                    <div id="course-price" class="card-text">₩${list.price}</div>
 	                                                </div>
 	                                            </div>
