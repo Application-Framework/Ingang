@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.AdminDashBoardMapper">
+	<select id="getTodayRegisterMemberTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM member
+		WHERE reg_date != CURDATE()
+	</select>
+	
+	<select id="getTodayBoardWriteTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM community_board
+		WHERE reg_date != CURDATE();	
+	</select>
+	
+	
+</mapper>
