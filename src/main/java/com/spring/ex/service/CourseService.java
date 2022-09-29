@@ -6,7 +6,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.MainTypeDTO;
-import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
@@ -69,13 +68,6 @@ public interface CourseService {
 	
 	// 강의 비디오 삭제
 	public int deleteCourseVideo(int oli_no);
-	
-	// 강사
-	public TeacherDTO getTeacherInfo(int olt_no);
-	public TeacherDTO getTeacherInfoByM_no(int m_no);
-	public int insertCourseTeacher(TeacherDTO dto);
-	public int deleteCourseTeacher(int olt_no);
-	public int checkTeacherByM_no(int m_no);
 	
 	// 강의 비디오 리스트 가져오기
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no);

@@ -1,14 +1,11 @@
-// 김홍일 2022-06-16 수정
-// insertCourseTeacher, deleteCourseTeacher, checkTeacherByM_no 추가
+package com.spring.ex.service;
 
-package com.spring.ex.dao;
-
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.TeacherDTO;
 
-@Repository
-public interface TeacherDAO {
+@Service
+public interface TeacherService {
 	public TeacherDTO getTeacherInfo(int olt_no);
 	public TeacherDTO getTeacherInfoByM_no(int m_no);
 	public int insertCourseTeacher(TeacherDTO dto);

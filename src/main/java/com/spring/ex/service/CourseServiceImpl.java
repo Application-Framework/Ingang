@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dao.TeacherDAO;
 import com.spring.ex.dao.TypeDAO;
 import com.spring.ex.dao.course.CourseDAO;
 import com.spring.ex.dao.course.CourseLikeDAO;
@@ -17,7 +16,6 @@ import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dao.course.HistoryOrderLectureDAO;
 import com.spring.ex.dto.MainTypeDTO;
-import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
@@ -36,9 +34,6 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private CourseTagDAO courseTagDAO;
-	
-	@Inject
-	private TeacherDAO teacherDAO;
 	
 	@Inject
 	private CourseLikeDAO courseLikeDAO;
@@ -158,31 +153,6 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public int deleteCourseVideo(int oli_no) {
 		return courseVideoDAO.deleteCourseVideo(oli_no);
-	}
-	
-	@Override
-	public TeacherDTO getTeacherInfo(int olt_no) {
-		return teacherDAO.getTeacherInfo(olt_no);
-	}
-	
-	@Override
-	public TeacherDTO getTeacherInfoByM_no(int m_no) {
-		return teacherDAO.getTeacherInfoByM_no(m_no);
-	}
-	
-	@Override
-	public int insertCourseTeacher(TeacherDTO dto) {
-		return teacherDAO.insertCourseTeacher(dto);
-	}
-
-	@Override
-	public int deleteCourseTeacher(int olt_no) {
-		return teacherDAO.deleteCourseTeacher(olt_no);
-	}
-
-	@Override
-	public int checkTeacherByM_no(int m_no) {
-		return teacherDAO.checkTeacherByM_no(m_no);
 	}
 	
 	@Override

@@ -30,6 +30,7 @@ import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileService;
+import com.spring.ex.service.TeacherService;
 import com.spring.ex.service.TypeService;
 import com.spring.ex.service.t_TagService;
 
@@ -51,6 +52,9 @@ public class CoursePostController {
 	@Inject
 	private TypeService typeService;
 	
+	@Inject
+	private TeacherService teacherService;
+	
 	@Resource(name="courseImagePath")
 	String courseImagePath;
 	
@@ -63,7 +67,7 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
 			return "error";
@@ -90,7 +94,7 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강의 생성 권한이 없습니다.");
 			return "error";
@@ -179,7 +183,7 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
 			return "error";
@@ -195,8 +199,6 @@ public class CoursePostController {
 			System.out.println("강의 수정 권한이 없습니다.");
 			return "error";
 		}
-		
-		String main_type_no = request.getParameter("main_type_no");
 		
 		List<CourseSubTypeDTO> myCategoryList = courseService.getCourseSubTypeList(pageNo);
 		List<CourseTagDTO> myTagList = courseService.getCourseTags(pageNo);
@@ -230,7 +232,7 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
 			return "error";
@@ -344,7 +346,7 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		TeacherDTO teacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
 			return "error";

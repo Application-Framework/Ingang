@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.ex.dto.CommunityBoardDTO;
-import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.MemberDTO;
-import com.spring.ex.dto.SubTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -29,6 +27,7 @@ import com.spring.ex.service.CourseService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TeacherService;
 import com.spring.ex.service.TypeService;
 import com.spring.ex.service.t_TagService;
 
@@ -38,6 +37,9 @@ public class CourseController {
 	
 	@Inject
 	private CourseService courseService; 
+	
+	@Inject
+	private TeacherService teacherService;
 	
 	@Inject
 	private MemberService memberService;
@@ -59,7 +61,7 @@ public class CourseController {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		boolean isTeacher = false;
 		if(memberDTO != null) 
-			isTeacher = (courseService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
+			isTeacher = (teacherService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
 		
 		System.out.println("main_type : " + main_type);
 		System.out.println("sub_type : " + sub_type);
@@ -139,12 +141,12 @@ public class CourseController {
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO courseTeacherDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
 		boolean existLike = false;
 		// 접속한 회원이 현재 강의의 강사인지 확인
 		boolean isCurrentCourseTeacher = false;
 		if(memberDTO != null) {
-			TeacherDTO currentTeacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
 			if(currentTeacherDTO != null) {
 				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
@@ -209,7 +211,7 @@ public class CourseController {
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO teachertDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);

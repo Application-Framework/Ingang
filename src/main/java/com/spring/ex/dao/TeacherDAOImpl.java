@@ -12,7 +12,7 @@ public class TeacherDAOImpl implements TeacherDAO{
 	@Inject
 	private SqlSession sqlSession;
 	
-	private final String namespace = "com.spring.ex.CourseMapper";
+	private final String namespace = "com.spring.ex.TeacherMapper";
 	
 	@Override
 	public TeacherDTO getTeacherInfo(int olt_no) {
@@ -30,6 +30,11 @@ public class TeacherDAOImpl implements TeacherDAO{
 	}
 
 	@Override
+	public int updateCourseTeacher(TeacherDTO dto) {
+		return sqlSession.update(namespace + ".updateCourseTeacher", dto);
+	}
+	
+	@Override
 	public int deleteCourseTeacher(int olt_no) {
 		return sqlSession.delete(namespace + ".deleteCourseTeacher", olt_no);
 	}
@@ -38,5 +43,4 @@ public class TeacherDAOImpl implements TeacherDAO{
 	public int checkTeacherByM_no(int m_no) {
 		return sqlSession.selectOne(namespace + ".checkTeacherByM_no", m_no);
 	}
-	
 }
