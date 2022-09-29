@@ -29,37 +29,37 @@
 							<div class="input-group-prepend">
 								<span class="input-group-text">아이디　</span>
 							</div>
-							<input type="text" class="form-control" id="AdminID" name="UserID" value="${AdminProfile.getUserID() }" readonly>
+							<input type="text" class="form-control" id="AdminID" name="UserID" value="" readonly>
 						</div>
 						<div class="input-group my-2 mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text">비밀번호</span>
 							</div>
-							<input type="Password" class="form-control" id="AdminPassword" name="Password" value="${AdminProfile.getPassword() }">
+							<input type="Password" class="form-control" id="AdminPassword" name="Password" value="">
 						</div>
 						<div class="input-group my-2 mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text">이름　　</span>
 							</div>
-							<input type="text" class="form-control" id="AdminName" name="Name" value="${AdminProfile.getName() }" readonly>
+							<input type="text" class="form-control" id="AdminName" name="Name" value="" readonly>
 						</div>
 						<div class="input-group my-2 mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text">이메일　</span>
 							</div>
-							<input type="email" class="form-control" id="AdminEmail" name="Email" value="${AdminProfile.getEmail() }" required>
+							<input type="email" class="form-control" id="AdminEmail" name="Email" value="" required>
 						</div>
 						<div class="input-group my-2 mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text">휴대전화</span>
 							</div>
-							<input type="tel" class="form-control" id="AdminPhone" name="Phone" value="${AdminProfile.getPhone() }" maxlength="11">
+							<input type="tel" class="form-control" id="AdminPhone" name="Phone" value="" maxlength="11">
 						</div>
 						<div class="input-group my-2 mb-1">
 							<div class="input-group-prepend">
 								<span class="input-group-text">생년월일</span>
 							</div>
-							<input type="date" class="form-control" id="AdminBirth" name="Birth" value="${AdminProfile.getBirth() }" readonly>
+							<input type="date" class="form-control" id="AdminBirth" name="Birth" value="" readonly>
 						</div>
 						<button type="button" id="profileEdit" class="btn btn-primary" onclick="AdminProfileEdit()">수정</button>
 						<button type="button" id="reset" class="btn btn-primary">취소</button>
