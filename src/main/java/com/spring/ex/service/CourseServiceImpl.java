@@ -14,14 +14,12 @@ import com.spring.ex.dao.course.CourseReplyDAO;
 import com.spring.ex.dao.course.CourseSubTypeDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
-import com.spring.ex.dao.course.HistoryOrderLectureDAO;
 import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
-import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -40,9 +38,6 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private CourseVideoDAO courseVideoDAO;
-	
-	@Inject
-	private HistoryOrderLectureDAO historyOrderLectureDAO;
 	
 	@Inject
 	private t_TagService t_TagService;
@@ -163,21 +158,6 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public CourseVideoDTO getCourseVideo(int olv_no) {
 		return courseVideoDAO.getCourseVideo(olv_no);
-	}
-
-	@Override
-	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto) {
-		return historyOrderLectureDAO.insertHistoryOrderLecture(dto);
-	}
-	
-	@Override
-	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no) {
-		return historyOrderLectureDAO.getHistoryOrderLectureByOli_noM_no(oli_no, m_no);
-	}
-	
-	@Override
-	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no) {
-		return historyOrderLectureDAO.getHistoryOrderLectureList(m_no);
 	}
 
 	@Override

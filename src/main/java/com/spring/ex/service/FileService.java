@@ -35,7 +35,15 @@ public interface FileService {
 	// fileList를 로컬 저장소와 DB에 복사
 	public void copyFileListToLocalAndDB(List<UploadedFileDTO> fileList) throws Exception;
 	
-	// 게시글 등록 후 파일 관리
+	/** 게시글 등록 후 파일 저장 및 불필요한 파일 정리
+	 *	@param content_no 게시물의 key 값
+	 *	@param category
+	 *		1 : 강의
+	 *		2 : 노트 메인
+	 *		3 : 노트 서브 글
+	 *		4 : 커뮤니티
+	 * 
+	 */
 	public void manageFileAfterPostSubmission(String html, int content_no, int category) throws Exception;
 	
 	// 게시글의 모든 파일 삭제

@@ -6,19 +6,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.spring.ex.dto.PurchaseCourseDTO;
-import com.spring.ex.service.PurchaseCourseService;
+import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.service.HistoryOrderService;
 
 @Controller
 public class PurchaseController {
 	
 	@Inject
-	PurchaseCourseService purchaseCourseService;
+	HistoryOrderService historyOrderService;
 	
 	@RequestMapping(value = "/purchaseCourse", method = RequestMethod.POST)
-	public String purchaseCourse(PurchaseCourseDTO dto) throws Exception {
+	public String purchaseCourse(HistoryOrderLectureDTO dto) throws Exception {
 		
-		purchaseCourseService.purchaseCourse(dto);
+		historyOrderService.insertHistoryOrderLecture(dto);
 		
 		return "redirect:/courses/" + dto.getOli_no();
 	}

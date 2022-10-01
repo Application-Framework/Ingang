@@ -1,5 +1,7 @@
 package com.spring.ex.controller;
 
+import java.sql.Date;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -22,12 +24,13 @@ public class TeacherController {
 		return "open-knowledge";
 	}
 	
-	// 강사 신청
-	public void applicationTeacher(HttpServletRequest request) {
+	// 강사 지원
+	@RequestMapping("/applyForTeacher")
+	public String applyForTeacher(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
-			return;
+			return "redirect://";
 		}
 		
 		String email = request.getParameter("email");
@@ -35,17 +38,26 @@ public class TeacherController {
 		String phone = request.getParameter("phone");
 		String main_type_no = request.getParameter("main_type_no");
 		String introduction = request.getParameter("introduction");
-		String email = request.getParameter("email");
+		String link = request.getParameter("link");
+		
+		if(email == null || name == null || phone == null || main_type_no == null || introduction == null || link == null) {
+			System.out.println("강사 신청 필드에 빈칸이 있습니다.");
+			return "error";
+		}
 		
 		TeacherDTO teacher = new TeacherDTO();
 		teacher.setM_no(memberDTO.getM_no());
 		teacher.setEmail(email);
-		teacher.setName();
-		teacher.setPhone();
-		teacher.setMain_type_no();
-		teacher.setIntroduction();
-		teacher.setLink();
-		teacher.setGrade();
+		teacher.setName(name);
+		teacher.setPhone(phone);
+		teacher.setMain_type_no(Integer.parseInt(main_type_no));
+		teacher.setIntroduction(introduction);
+		teacher.setLink(link);
+		teacher.setGrade(0);
+		teacher.setReg_date(new Date(System.currentTimeMillis()));
 		teacherService.insertCourseTeacher(teacher);
+		return "mypage";
 	}
+	
+	
 }

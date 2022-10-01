@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
-import com.spring.ex.dto.PurchaseCourseDTO;
-import com.spring.ex.dto.PurchaseNoteDTO;
 import com.spring.ex.service.FileService;
+import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.MyPageService;
-import com.spring.ex.service.OrderHistoryService;
 
 @Controller
 public class MyPageController {
@@ -32,7 +32,7 @@ public class MyPageController {
 	MyPageService myPageService;
 	
 	@Inject
-	OrderHistoryService orderHistoryService;
+	HistoryOrderService historyOrderService;
 	
 	@Inject
 	private FileService fileUploadService;
@@ -114,16 +114,16 @@ public class MyPageController {
 	@RequestMapping("/courses_history")
 	public String coursesHistory(HttpServletRequest request, Model model) throws Exception {
 		
-		List<PurchaseCourseDTO> purChaseList = null;
-		List<PurchaseCourseDTO> interestList = null;
+		List<HistoryOrderLectureDTO> purChaseList = null;
+		List<HistoryOrderLectureDTO> interestList = null;
 		
 		HttpSession session = request.getSession();
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		purChaseList = orderHistoryService.myPurchaseCourseList(m_no);
-		interestList = orderHistoryService.myInterestCourseList(m_no);
+		purChaseList = historyOrderService.myPurchaseCourseList(m_no);
+		interestList = historyOrderService.myInterestCourseList(m_no);
 		
 		model.addAttribute("ocList", purChaseList);
 		model.addAttribute("itList", interestList);
@@ -134,16 +134,16 @@ public class MyPageController {
 	@RequestMapping("/notes_history")
 	public String notesHistory(HttpServletRequest request, Model model) throws Exception {
 		
-		List<PurchaseNoteDTO> purChaseList = null;
-		List<PurchaseNoteDTO> interestList = null;
+		List<HistoryOrderNoteDTO> purChaseList = null;
+		List<HistoryOrderNoteDTO> interestList = null;
 		
 		HttpSession session = request.getSession();
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		purChaseList = orderHistoryService.myPurchaseNoteList(m_no);
-		interestList = orderHistoryService.myInterestNoteList(m_no);
+		purChaseList = historyOrderService.myPurchaseNoteList(m_no);
+		interestList = historyOrderService.myInterestNoteList(m_no);
 		
 		model.addAttribute("ocList", purChaseList);
 		model.addAttribute("itList", interestList);
@@ -159,14 +159,14 @@ public class MyPageController {
 		
 		String keywordParam = (keyword != "") ? "keyword="+keyword+"&" : "";
 		
-		List<PurchaseCourseDTO> list = null;
+		List<HistoryOrderLectureDTO> list = null;
 		
 		HttpSession session = request.getSession();
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		list = orderHistoryService.searchMyPurcaseCourses(m_no, keyword);
+		list = historyOrderService.searchMyPurcaseCourses(m_no, keyword);
 		
 		model.addAttribute("ocList", list);
 		model.addAttribute("keyword", keyword);
@@ -183,14 +183,14 @@ public class MyPageController {
 		
 		String keywordParam = (keyword != "") ? "keyword="+keyword+"&" : "";
 		
-		List<PurchaseNoteDTO> list = null;
+		List<HistoryOrderNoteDTO> list = null;
 		
 		HttpSession session = request.getSession();
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		
 		Integer m_no = memberDTO.getM_no();
 		
-		list = orderHistoryService.myPurchaseNoteList(m_no);
+		list = historyOrderService.myPurchaseNoteList(m_no);
 		
 		model.addAttribute("ocList", list);
 		model.addAttribute("keyword", keyword);

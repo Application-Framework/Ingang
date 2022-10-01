@@ -1,17 +1,16 @@
 package com.spring.ex.service;
 
+import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dao.note.HistoryOrderNoteDAO;
 import com.spring.ex.dao.note.NoteArticleDAO;
 import com.spring.ex.dao.note.NoteDAO;
 import com.spring.ex.dao.note.NoteLikeDAO;
 import com.spring.ex.dao.note.NoteReplyDAO;
-import com.spring.ex.dto.note.HistoryOrderNoteDTO;
 import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.dto.note.NoteReplyDTO;
@@ -31,9 +30,6 @@ public class NoteServiceImpl implements NoteService{
 	@Inject
 	private NoteLikeDAO noteLikeDAO;
 	
-	@Inject 
-	private HistoryOrderNoteDAO historyOrderNoteDAO;
-	
 	@Override
 	public int insertNote(NoteDTO dto) {
 		return noteDAO.insertNote(dto);
@@ -50,8 +46,8 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
-	public List<NoteDTO> getNoteList(String keyword, String tag, String tagParam, String order, int page, int pageSize) {
-		return noteDAO.getNoteList(keyword, tag, tagParam, order, page, pageSize);
+	public List<NoteDTO> getNoteList(HashMap<String, Object> pageMap) {
+		return noteDAO.getNoteList(pageMap);
 	}
 
 	@Override
@@ -70,8 +66,8 @@ public class NoteServiceImpl implements NoteService{
 	}
 	
 	@Override
-	public int getNoteTotalCount(String keyword, String tag, String tagParam) {
-		return noteDAO.getNoteTotalCount(keyword, tag, tagParam);
+	public int getNoteTotalCount(HashMap<String, Object> countMap) {
+		return noteDAO.getNoteTotalCount(countMap);
 	}
 
 	@Override
@@ -132,20 +128,5 @@ public class NoteServiceImpl implements NoteService{
 	@Override
 	public int existNoteLike(int oli_no, int m_no) {
 		return noteLikeDAO.existNoteLike(oli_no, m_no);
-	}
-
-	@Override
-	public int insertHistoryOrderNote(HistoryOrderNoteDTO dto) {
-		return historyOrderNoteDAO.insertHistoryOrderNote(dto);
-	}
-
-	@Override
-	public HistoryOrderNoteDTO getHistoryOrderNoteByN_noM_no(int n_no, int m_no) {
-		return historyOrderNoteDAO.getHistoryOrderNoteByN_noM_no(n_no, m_no);
-	}
-
-	@Override
-	public List<HistoryOrderNoteDTO> getHistoryOrderNoteList(int m_no) {
-		return historyOrderNoteDAO.getHistoryOrderNoteList(m_no);
 	}
 }

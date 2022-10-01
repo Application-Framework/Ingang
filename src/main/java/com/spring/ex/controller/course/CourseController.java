@@ -13,17 +13,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.ex.dto.CommunityBoardDTO;
+import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
-import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
+import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
@@ -55,6 +56,9 @@ public class CourseController {
 	
 	@Inject
 	private TypeService typeService;
+	
+	@Inject
+	private HistoryOrderService historyOrderService;
 	
 	// 강의 검색 페이지
 	private void showCourses(HttpServletRequest request, Model model, String main_type, String sub_type) {
@@ -105,6 +109,7 @@ public class CourseController {
 		
 		/* model.addAttribute("mainTypeList", typeSerivce.getMainTypeList()); */
 		model.addAttribute("typeService", typeService);
+		model.addAttribute("teacherService", teacherService);
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
 		model.addAttribute("s", searchTitle);
@@ -160,7 +165,7 @@ public class CourseController {
 		
 		// 회원이 강의를 구매했는지 확인
 		if(memberDTO != null) {
-			HistoryOrderLectureDTO historyOrderLectureDTO = courseService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
+			HistoryOrderLectureDTO historyOrderLectureDTO = historyOrderService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
 			model.addAttribute("purchased", purchased);
 		}
@@ -278,7 +283,7 @@ public class CourseController {
 		return "course/course_play";
 	}
 	
-	@RequestMapping("/course/courseClickedLike")
+	@RequestMapping("/courseClickedLike")
 	public String clickedLikeInCourse(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -295,7 +300,7 @@ public class CourseController {
 	}
 	
 	// 강의 구매
-	@RequestMapping("/course/purchaseCourse")
+	@RequestMapping("/purchaseCourse")
 	public String purchaseCourse(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -307,7 +312,7 @@ public class CourseController {
 		historyOrderLectureDTO.setPayment(courseDTO.getPrice());
 		historyOrderLectureDTO.setPayment_status(1);
 		
-		courseService.insertHistoryOrderLecture(historyOrderLectureDTO);
+		historyOrderService.insertHistoryOrderLecture(historyOrderLectureDTO);
 		
 		return "redirect:/";
 	}

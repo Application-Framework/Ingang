@@ -22,7 +22,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.MemberDTO;
-import com.spring.ex.dto.SubTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
@@ -397,6 +396,7 @@ public class CoursePostController {
 		return a;
 	}
 	
+	/*
 	@ResponseBody
 	@RequestMapping("/getSubCategoryListOfMainCategory")
 	public List<SubTypeDTO> getSubCategoryListOfMainCategory(HttpServletRequest request) {
@@ -404,4 +404,5 @@ public class CoursePostController {
 		System.out.println("main_type_no : " + main_type_no);
 		return typeService.getSubTypeListOfMainType(main_type_no);
 	}
+	*/
 }

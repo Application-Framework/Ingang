@@ -239,7 +239,7 @@
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
 	                                                    	<a href="/course/${list.oli_no}" class="stretched-link">${list.title}</a>
 	                                                    </div>
-	                                                    <div id="teacher-name" class="card-text">${courseService.getTeacherInfo(list.olt_no).name}</div>
+	                                                    <div id="teacher-name" class="card-text">${teacherService.getTeacherInfo(list.olt_no).name}</div>
 	                                                    <div class="stars-outer">
 	                                                        <div class="stars-inner" style="width:${courseService.getCourseStarAvg(list.oli_no)*20}%"></div>
 	                                                    </div>

@@ -1,26 +1,26 @@
-package com.spring.ex.dto.course;
+package com.spring.ex.dto;
 
 import java.sql.Date;
 
-public class HistoryOrderLectureDTO {
-	private int hol_no;
-	private int oli_no;
+public class HistoryOrderNoteDTO {
+	private int hon_no;
+	private int n_no;
 	private int m_no;
 	private int payment;
 	private Date payment_date;
 	private int payment_status;
 	
-	public int getHol_no() {
-		return hol_no;
+	public int getHon_no() {
+		return hon_no;
 	}
-	public void setHol_no(int hol_no) {
-		this.hol_no = hol_no;
+	public void setHon_no(int hon_no) {
+		this.hon_no = hon_no;
 	}
-	public int getOli_no() {
-		return oli_no;
+	public int getN_no() {
+		return n_no;
 	}
-	public void setOli_no(int oli_no) {
-		this.oli_no = oli_no;
+	public void setN_no(int n_no) {
+		this.n_no = n_no;
 	}
 	public int getM_no() {
 		return m_no;
@@ -48,7 +48,7 @@ public class HistoryOrderLectureDTO {
 	}
 	@Override
 	public String toString() {
-		return "HistoryOrderLectureDTO [hol_no=" + hol_no + ", oli_no=" + oli_no + ", m_no=" + m_no + ", payment="
-				+ payment + ", payment_date=" + payment_date + ", payment_status=" + payment_status + "]";
+		return "HistoryOrderNoteDTO [hon_no=" + hon_no + ", n_no=" + n_no + ", m_no=" + m_no + ", payment=" + payment
+				+ ", payment_date=" + payment_date + ", payment_status=" + payment_status + "]";
 	}
 }

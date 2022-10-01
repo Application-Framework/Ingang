@@ -135,7 +135,7 @@
            		<div class="job-listing-area pt-120 pb-120">
                     <div class="row">
                         <!-- Left content -->
-                        <div class="col-lg-3 blog_right_sidebar">
+                        <!-- <div class="col-lg-3 blog_right_sidebar">
                             <aside class="single_sidebar_widget post_category_widget">
                                 <ul class="list cat-list">
                                 	<li>
@@ -190,9 +190,9 @@
                                     </li>
                                 </ul>
                             </aside>
-                        </div>
+                        </div> -->
                         <!-- Right content -->
-                        <div class="col-lg-9">
+                        <div class="col-lg-12">
                             <section class="featured-job-area">
                                 <div class="container">
                                     <!-- Count of Job list Start -->
