@@ -1,6 +1,5 @@
 package com.spring.ex.controller.note;
 
-import java.sql.Date;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +24,8 @@ import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TypeService;
+import com.spring.ex.service.t_TagService;
 
 @Controller
 public class NoteController {
@@ -42,49 +43,84 @@ public class NoteController {
 	@Inject
 	private HistoryOrderService historyOrderService;
 	
+	@Inject
+	private TypeService typeService;
+	
+	@Inject
+	private t_TagService tagService;
+	
 	// 노트 검색 페이지
-	@RequestMapping("/notes")
-	public String showNotes(HttpServletRequest request, Model model) {
+	public String showNotes(HttpServletRequest request, Model model, String main_type, String sub_type) {
+		System.out.println("main_type : " + main_type);
+		System.out.println("sub_type : " + sub_type);
+		
 		String searchTitle = request.getParameter("s");
-		String _category_tags = request.getParameter("category_tags");
-		List<String> category_tags = null;
-		if(_category_tags != null) {
-			category_tags = Arrays.asList(_category_tags.split("\\s*,\\s*")); // convert string to separated comma string
-			System.out.println("category_tags : " + category_tags);
-		}
 		String order = request.getParameter("order");
+		String _tags = request.getParameter("tags");
+		List<String> tags = null;
+		if(_tags != null) {
+			tags = Arrays.asList(_tags.split("\\s*,\\s*")); // convert string to separated comma string
+			System.out.println("tags : " + tags);
+		}
 		
-		final int pageSize = 28;
+		String level = request.getParameter("level");
+		String charge = request.getParameter("charge");
 		
-		System.out.println("searchTitle : " + searchTitle + ", order : " + order);
+		final int pageSize = 12;
 		
 		HashMap<String, Object> countMap = new HashMap<String, Object>();
+		countMap.put("main_type_abbr", main_type);
+		countMap.put("sub_type_abbr", sub_type);
 		countMap.put("searchTitle", searchTitle);
-		countMap.put("category_tags", category_tags);
+		countMap.put("tags", tags);
+		countMap.put("level", level);
+		countMap.put("charge", charge);
 		
 		int totalCount = noteService.getNoteTotalCount(countMap);
+		System.out.println("totalCount : " + totalCount);
 		
 		pagingService = new PagingService(request, totalCount, pageSize);
-		
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();
+		pageMap.put("main_type_abbr", main_type);
+		pageMap.put("sub_type_abbr", sub_type);
 		pageMap.put("page", pagingService.getNowPage());
 		pageMap.put("pageSize", pageSize);
-		pageMap.put("searchTitle", searchTitle);
-		pageMap.put("category_tags", category_tags);
 		pageMap.put("order", order);
+		pageMap.put("searchTitle", searchTitle);
+		pageMap.put("tags", tags);
+		pageMap.put("level", level);
+		pageMap.put("charge", charge);
 		
-		System.out.println("pagingDTO : " + pagingService.getPaging());
-		
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("nlist", noteService.getNoteList(pageMap));
-		model.addAttribute("nowURL", request.getServletPath());
 		model.addAttribute("s", searchTitle);
-		model.addAttribute("category_tags", category_tags);
 		model.addAttribute("order", order);
 		model.addAttribute("totalCount", totalCount);
-		model.addAttribute("memberService", memberService);
 		model.addAttribute("courseService", courseService);
+		model.addAttribute("tagList", tagService.getTagList());
 		
+		return "note/note_search";
+	}
+	
+	// 모든 강의 검색
+	@RequestMapping("/notes")
+	public String showAllNotes(HttpServletRequest request, Model model) {
+		showNotes(request, model, null, null);
+		return "note/note_search";
+	}
+	
+	// 메인 타입의 모든 강의 검색
+	@RequestMapping("/notes/{main_type}")
+	public String showAllTypeOfNotes(HttpServletRequest request, Model model, @PathVariable String main_type) {
+		showNotes(request, model, main_type, null);
+		return "note/note_search";
+	}
+	
+	// 서브 타입만 검색
+	@RequestMapping("/notes/{main_type}/{sub_type}")
+	public String showAllNotes(HttpServletRequest request, Model model, @PathVariable String main_type, @PathVariable String sub_type) {
+		showNotes(request, model, main_type, sub_type);
 		return "note/note_search";
 	}
 	
@@ -93,7 +129,7 @@ public class NoteController {
 	public String note_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		NoteDTO noteDTO = noteService.getNote(pageNo);
-		CourseDTO courseDTO = courseService.getCourseDetail(noteDTO.getOli_no());
+		CourseDTO course = courseService.getCourseDetail(noteDTO.getOli_no());
 		List<NoteReplyDTO> replys = noteService.getNoteReplyList(pageNo);
 		List<CourseTagDTO> tags = courseService.getCourseTags(noteDTO.getOli_no());
 		List<NoteArticleDTO> articles = noteService.getNoteArticleList(pageNo);
@@ -122,18 +158,22 @@ public class NoteController {
 		System.out.println(likeCnt);
 		System.out.println(articles);
 		
+		model.addAttribute("memberSerivce", memberService);
+		model.addAttribute("tagService", tagService);
+		model.addAttribute("typeService", typeService);
 		model.addAttribute("note", noteDTO);
-		model.addAttribute("course", courseDTO);
+		model.addAttribute("course", course);
 		model.addAttribute("replys", replys);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberSerivce", memberService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("articles", articles);
 		model.addAttribute("contentType", "main");
+		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(course.getOli_no()).getMain_type_name());
+		model.addAttribute("subCategoryList", courseService.getCourseSubTypeList(course.getOli_no()));
 		
 		return "note/note_detail";
 	}
@@ -153,22 +193,4 @@ public class NoteController {
 		
 		return "redirect:" + request.getHeader("referer");
 	}
-	
-	@RequestMapping("/purchaseNote")
-	public String purchaseNote(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		int n_no = Integer.parseInt(request.getParameter("n_no"));
-		NoteDTO noteDTO = noteService.getNote(n_no);
-		
-		HistoryOrderNoteDTO historyOrderNoteDTO = new HistoryOrderNoteDTO();
-		historyOrderNoteDTO.setN_no(n_no);
-		historyOrderNoteDTO.setM_no(memberDTO.getM_no());
-		historyOrderNoteDTO.setPayment(noteDTO.getPrice());
-		historyOrderNoteDTO.setPayment_status(1);
-		
-		historyOrderService.insertHistoryOrderNote(historyOrderNoteDTO);
-		
-		return "redirect:/";
-	}
-	
 }

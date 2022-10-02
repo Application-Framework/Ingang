@@ -15,6 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -43,14 +44,16 @@ public class NotePostController {
 	// 노트 생성 페이지는 강의 영상 재생 페이지에서 modal로만 진행됨
 	
 	// 노트 등록
-	@RequestMapping("/submitNote")
-	public String submitNote(HttpServletRequest request, Model model) throws Exception {
-		String _pageNo = request.getParameter("no");
-		if(_pageNo == null) {
+	@RequestMapping(value="/createNote", method=RequestMethod.POST)
+	public String createNote(HttpServletRequest request, Model model) throws Exception {
+		String _oli_no = request.getParameter("oli_no");
+		String _olv_no = request.getParameter("olv_no");
+		if(_oli_no == null || _olv_no == null) {
 			System.out.println("잘못된 URL 입니다.");
 			return "error";
 		}
-		int pageNo = Integer.parseInt(_pageNo);
+		int oli_no = Integer.parseInt(_oli_no);
+		int olv_no = Integer.parseInt(_olv_no);
 		
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
@@ -62,49 +65,33 @@ public class NotePostController {
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		String price = request.getParameter("price");
-		String enable = request.getParameter("enable");
+		String _enable = request.getParameter("enable");
 		
-		if(memberDTO == null || title == null || content == null || price == null || enable == null) {
+		if(memberDTO == null || title == null || content == null || price == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}
 		
+		int enable = (_enable == null) ? 0 : 1;
 		
-		NoteDTO note = noteService.getNote(pageNo);
-		// 노트가 없다면 생성
-		if(note == null) {
-			note = new NoteDTO();
-			note.setOli_no(pageNo);
-			note.setM_no(memberDTO.getM_no());
-			note.setTitle(title);
-			note.setContent(content);
-			note.setPrice(Integer.parseInt(price));
-			note.setReg_date(new Date(System.currentTimeMillis()));
-			note.setClassify(0);
-			note.setEnable(Integer.parseInt(enable));
-			
-			noteService.insertNote(note);
-			System.out.println("노트 등록 성공");
-			System.out.println("등록 내용 : " + note);
-		}
-		// 노트가 있다면 수정
-		else {
-			note.setTitle(title);
-			note.setContent(content);
-			note.setPrice(Integer.parseInt(price));
-			note.setReg_date(new Date(System.currentTimeMillis()));
-			note.setClassify(0);
-			note.setEnable(Integer.parseInt(enable));
-			
-			noteService.updateNote(note);
-			System.out.println("노트 수정 성공");
-			System.out.println("수정 내용 : " + note);
-		}
+		NoteDTO note = new NoteDTO();
+		note.setOli_no(oli_no);
+		note.setM_no(memberDTO.getM_no());
+		note.setTitle(title);
+		note.setContent(content);
+		note.setPrice(Integer.parseInt(price));
+		note.setReg_date(new Date(System.currentTimeMillis()));
+		note.setClassify(0);
+		note.setEnable(enable);
 		
+		noteService.insertNote(note);
+		System.out.println("노트 등록 성공");
+		System.out.println("등록 내용 : " + note);
+
 		// 게시글의 파일 관리
-		fileService.manageFileAfterPostSubmission(content, note.getOli_no(), 2);
+		fileService.manageFileAfterPostSubmission(content, note.getN_no(), 2);
 		
-		return "redirect:/" + request.getParameter("successURL");
+		return "redirect:/course/" + oli_no + "/play/" + olv_no;
 	}
 	
 	// rewriteNote
@@ -177,10 +164,10 @@ public class NotePostController {
 			return "error";
 		}
 		
-		;
+		
 		
 		// 게시글의 파일 관리
-		fileService.manageFileAfterPostSubmission(content, noteDTO.getOli_no(), 2);
+		fileService.manageFileAfterPostSubmission(content, noteDTO.getN_no(), 2);
 		
 		return "redirect:/course/"+pageNo;
 	}
@@ -227,20 +214,14 @@ public class NotePostController {
 	@RequestMapping(value="/noteUploadSummernoteImageFile", produces = "application/json; charset=utf8")
 	public String noteUploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
 		JsonObject jsonObject = new JsonObject();
-		// 내부경로로 저장
-		String contextRoot = new HttpServletRequestWrapper(request).getRealPath("/resources");
-		String fileRoot = contextRoot + noteImagePath;
-		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
-		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
-		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-		File serverFile = new File(fileRoot + savedFileName);
+		String url = null;
 		try {
-			InputStream fileStream = multipartFile.getInputStream();
-			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
-			jsonObject.addProperty("url", "/resources" + noteImagePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			url = fileService.insertFileToServer(multipartFile, noteImagePath);
+			System.out.println("url : " + url);
+			jsonObject.addProperty("url", url); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 		} catch (IOException e) {
-			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제
+			fileService.deleteFileToLocalAndServer(url);
 			jsonObject.addProperty("responseCode", "error");
 			e.printStackTrace();
 		} 

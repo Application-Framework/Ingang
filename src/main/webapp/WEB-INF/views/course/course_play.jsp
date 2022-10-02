@@ -13,8 +13,14 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/course/course_play.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	
 	<%-- 탭 , 모달기능 사용하기 위해 import --%>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  
+  	<%-- summernote bootsrap 필요 없는 버전 --%>
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
   
 	<style>
 		.modal{ 
@@ -26,13 +32,12 @@
             display:none;
         }
 
-        .modal_content{
+        .modal_content {
             background:#fff;
             position: fixed; 
             top:50%; 
             left:50%;
             transform : translate(-50%, -50%);
-            text-align:center;
             box-sizing:border-box; 
             line-height:23px;
             border-style: solid;
@@ -138,10 +143,11 @@
 			        	</div>
 			        	
 			        	<div class="modal">
-					        <div class="modal_content card" style="width:50rem; height:33rem;">
+					        <div class="modal_content card" style="width:50rem; height:40rem;">
 					            <div class="card-body m-3">
-					                <form action="/course/createNote" method="post">
+					                <form action="/createNote" method="post">
 					                	<input type="hidden" name="oli_no" value="${pageNo}"/>
+					                	<input type="hidden" name="olv_no" value="${olv_no}"/>
 							    		<div class="row mb-1">
 							   				<label class="col-sm-2 col-form-label fs-5 text-start">노트명</label>
 							   				<div class="col-sm-10">
@@ -156,8 +162,15 @@
 							    			</div>
 							    		</div>
 							    		
+							    		<div class="row mb-1">
+											<label class="col-sm-2 col-form-label fs-5 text-start">노트 공개</label>
+											<div class="col-sm-2 form-check form-switch d-flex align-items-center" style="padding-left:1.5em">
+							    				<input class="form-check-input" type="checkbox" name="enable" style="transform:scale(1.5); margin-left:0;">
+							    			</div>
+							    		</div>
+							    		
 							    		<div class="row mb-4">
-							    			<textarea class="form-control fs-5" name="content" placeholder="노트 소개 내용" rows="10"></textarea>
+							    			<textarea class="summernote" id="content" name="content" placeholder="노트 소개 내용"></textarea>
 							    		</div>
 							    		
 							    		<div class="row mb-3 d-flex flex-row-reverse">
@@ -211,8 +224,64 @@
 					closeCreateCourseModal();
 				}
 			});
+			
+			// summernote 옵션 설정
+			$('.summernote').summernote({
+				placeholder: '노트를 소개할 내용을 적으세요',
+				tabsize: 4,
+				height: 335,
+				toolbar: [
+					['style', ['style']],
+					['font', ['bold', 'underline', 'clear']],
+					['color', ['color']],
+					['para', ['ul', 'ol', 'paragraph']],
+					['table', ['table']],
+					['insert', ['link', 'picture', 'video']],
+					['view', ['codeview', 'help']]
+				],
+				codemirror: { // codemirror options 
+			    	theme: 'monokai',
+					mode: 'htmlmixed',
+					lineNumbers: 'true'
+			  	},
+				callbacks : { 
+					onImageUpload : function(files, editor, welEditable) {
+						// 파일 업로드(다중업로드를 위해 반복문 사용)
+						for (var i = files.length - 1; i >= 0; i--) {
+							uploadSummernoteImageFile(files[i], this);
+						}
+					},
+					onPaste: function (e) {
+						var clipboardData = e.originalEvent.clipboardData;
+						if (clipboardData && clipboardData.items && clipboardData.items.length) {
+							var item = clipboardData.items[0];
+							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
+								e.preventDefault();
+							}
+						}
+					}
+				}
+			});
+			
+			$('.note-statusbar').hide(); 
 		});
         
+		// 임시 이미지 등록
+		function uploadSummernoteImageFile(file, editor) {
+			data = new FormData();
+			data.append("file", file);
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/noteUploadSummernoteImageFile",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.url);
+				}
+			});
+		}
     </script>
 </body>
 </html>

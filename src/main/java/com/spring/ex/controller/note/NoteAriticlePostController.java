@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
@@ -32,6 +31,16 @@ public class NoteAriticlePostController {
 	
 	@Inject
 	private FileService fileService;
+	
+	//---------------------------------
+	// 강의 영상에서 노트 글 관리
+	//---------------------------------
+	
+	
+	
+	//---------------------------------
+	// 노트 메인 페이지에서 노트 글 관리
+	//---------------------------------
 	
 	// 노트 글 출력 페이지
 	@RequestMapping("/note_article/{na_no}")
@@ -116,11 +125,13 @@ public class NoteAriticlePostController {
 		}
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
+		/*
 		HistoryOrderNoteDTO historyOrderNote = historyOrderService.getHistoryOrderNoteByN_noM_no(note.getN_no(), member.getM_no());
 		if(historyOrderNote == null) {
 			System.out.println("노트를 구매하지 않은 사용자입니다.");
 			return;
 		}
+		*/
 		
 		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
 		

@@ -181,7 +181,7 @@ public class CourseController {
 		System.out.println(tags);
 		System.out.println(likeCnt);
 		System.out.println(videos);
-		
+		System.out.println(notes);
 		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
@@ -297,23 +297,5 @@ public class CourseController {
 		}
 		
 		return "redirect:" + request.getHeader("referer");
-	}
-	
-	// 강의 구매
-	@RequestMapping("/purchaseCourse")
-	public String purchaseCourse(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		CourseDTO courseDTO = courseService.getCourseDetail(oli_no);
-		
-		HistoryOrderLectureDTO historyOrderLectureDTO = new HistoryOrderLectureDTO();
-		historyOrderLectureDTO.setOli_no(oli_no);
-		historyOrderLectureDTO.setM_no(memberDTO.getM_no());
-		historyOrderLectureDTO.setPayment(courseDTO.getPrice());
-		historyOrderLectureDTO.setPayment_status(1);
-		
-		historyOrderService.insertHistoryOrderLecture(historyOrderLectureDTO);
-		
-		return "redirect:/";
 	}
 }

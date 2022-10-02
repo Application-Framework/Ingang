@@ -4,8 +4,8 @@
 <mapper namespace="com.spring.ex.NoteMapper">
 	<!-- 노트 생성 -->
 	<insert id="insertNote" useGeneratedKeys="true" keyProperty="n_no">
-		INSERT INTO note(oli_no, m_no, title, content, price, classify)
-		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{classify})
+		INSERT INTO note(oli_no, m_no, title, content, price, classify, enable)
+		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{classify}, #{enable})
 	</insert>
 	
 	<!-- 노트 삭제 -->
@@ -80,19 +80,43 @@
 	</select>
 	
 	<sql id="search">
-		FROM note n, online_lecture_introduction oli, online_lecture_tag olt, online_lecture_sub_type olst
-		WHERE n.oli_no = oli.oli_no AND n.oli_no = olt.oli_no AND n.oli_no = olst.oli_no
+		FROM note n, online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst
+		WHERE n.oli_no = oli.oli_no AND n.oli_no = oltag.oli_no AND n.oli_no = olst.oli_no AND n.enable = 1
+		
 		<if test="searchTitle != null">
 			n.title LIKE '%${searchTitle}%'
 		</if>
-		<if test="category_tags != null">
+		
+		<if test='main_type_abbr != null'>
+			<choose>
+				<when test='sub_type_abbr == null and main_type_abbr != null'>
+					AND olst.sub_type_no IN (SELECT sub_type_no FROM sub_type 
+											 WHERE main_type_no = (SELECT main_type_no FROM main_type 
+											 					   WHERE main_type_abbr = #{main_type_abbr}))
+				</when>
+				
+				<when test='sub_type_abbr != null'>
+					AND olst.sub_type_no = (SELECT sub_type_no FROM sub_type 
+								 WHERE sub_type_abbr = #{sub_type_abbr})
+				</when>
+			</choose>
+		</if>
+		
+		<if test="tags != null">
 			AND
-			<foreach collection="category_tags" item="category_tag" separator="OR" open="(" close=")">
-				category_tag IN (SELECT sub_type_name FROM sub_type 
-								 WHERE sub_type_no = olst.sub_type_no) OR
-				category_tag IN (SELECT tag_name FROM tag
-								 WHERE tag_no = olt.tag_no)
+			<foreach collection="tags" item="tag" separator="OR" open="(" close=")" >
+				 oltag.tag_no = (SELECT tag_no FROM tag WHERE tag_abbr = #{tag})
 			</foreach>
+			
+		</if>
+		
+		<if test="charge != null">
+			<if test="charge.equals('free')">
+				AND oli.price = 0
+			</if>
+			<if test="charge.equals('paid')">
+				AND oli.price > 0
+			</if>
 		</if>
 	</sql>
 	

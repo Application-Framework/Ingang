@@ -22,6 +22,9 @@ public interface FileService {
 	// DB에서 파일 삭제
 	public int deleteFileToDB(String url) throws Exception;
 	
+	// 서버에 파일 추가
+	public String insertFileToServer(MultipartFile file, String path) throws Exception;
+	
 	// 로컬과 서버에서 파일 추가, 반환 값 : 생성한 파일의 /resource부터 경로
 	// path : /resources의 하위 폴더('/resource' 포함 x)
 	public String insertFileToLocalAndServer(MultipartFile file, String path) throws Exception;
