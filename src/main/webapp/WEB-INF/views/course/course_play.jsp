@@ -8,18 +8,17 @@
 <meta charset="utf-8">
 <title>${video.title}</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
+	
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="<c:url value='/resources/css/course/course_play.css'/>">
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	
 	<%-- 탭 , 모달기능 사용하기 위해 import --%>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
   	<%-- summernote bootsrap 필요 없는 버전 --%>
-	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
   
 	<style>
@@ -43,12 +42,14 @@
             border-style: solid;
             border-radius: 10px;
         }
+        
+        .note-editable { background-color: white !important;}
 	</style>
 </head>
 <body>
 	<div class="bg-dark d-flex vh-100" id="main">
         <div class="d-flex flex-grow-1 flex-column">
-            <iframe class="w-100 h-100" width="1120" height="630" src="${videoPath}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="w-100 h-100" width="1120" height="630" src="${video.s_file_name}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <div class="footer" style="height: 50px;">
             	<div class="h-100 d-flex justify-content-evenly align-items-center">
             		<div class="col-3 text-center">
@@ -122,14 +123,14 @@
 		        	<c:if test="${note != null}">
 		        		<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
 			        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
-			        	<form action="/course/saveNote" target="dummyframe" method="post">
+			        	<form class="p-3" action="/saveNoteArticle" target="dummyframe" method="post">
 			        		<input type="hidden" name="oli_no" value="${pageNo}"/>
 			        		<input type="hidden" name="olv_no" value="${olv_no}"/>
 			        		<input type="hidden" name="na_no" value="${noteArticle.na_no}"/>
 			        		
-				        	<input class="form-control mb-1" type="text" name="title" value="${noteArticle.title}" placeholder="title" />
-				        	<textarea class="form-control mb-2" name="content" rows="5" placeholder="content">${noteArticle.content}</textarea>
-				        	<div class="d-flex flex-row-reverse">
+				        	<input class="form-control mb-1" type="text" name="title" value="${noteArticle.title}" placeholder="노트 제목" />
+				        	<textarea id="summernote_article" name="content" rows=5 placeholder="content">${noteArticle.content}</textarea>
+				        	<div class="d-flex flex-row-reverse mt-2">
 				        		<input type="submit" value="저장" class="btn btn-dark text-end"/>
 				        	</div>
 			        	</form>
@@ -170,7 +171,7 @@
 							    		</div>
 							    		
 							    		<div class="row mb-4">
-							    			<textarea class="summernote" id="content" name="content" placeholder="노트 소개 내용"></textarea>
+							    			<textarea id="summernote" name="content"></textarea>
 							    		</div>
 							    		
 							    		<div class="row mb-3 d-flex flex-row-reverse">
@@ -197,7 +198,7 @@
         var openFlag = false;
 		
         function openContents() {
-            document.getElementById("mySlidebar").style.width = "250px";
+            document.getElementById("mySlidebar").style.width = "430px";
             openFlag = true;
         }
         
@@ -226,7 +227,7 @@
 			});
 			
 			// summernote 옵션 설정
-			$('.summernote').summernote({
+			$('#summernote').summernote({
 				placeholder: '노트를 소개할 내용을 적으세요',
 				tabsize: 4,
 				height: 335,
@@ -248,16 +249,36 @@
 					onImageUpload : function(files, editor, welEditable) {
 						// 파일 업로드(다중업로드를 위해 반복문 사용)
 						for (var i = files.length - 1; i >= 0; i--) {
-							uploadSummernoteImageFile(files[i], this);
+							uploadSummernoteImageFileOfNote(files[i], this);
 						}
-					},
-					onPaste: function (e) {
-						var clipboardData = e.originalEvent.clipboardData;
-						if (clipboardData && clipboardData.items && clipboardData.items.length) {
-							var item = clipboardData.items[0];
-							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-								e.preventDefault();
-							}
+					}
+				}
+			});
+			
+			$('#summernote_article').summernote({
+				placeholder: '글쓰기 에디터로 노트를 작성할 수 있어요.',
+				tabsize: 4,
+				height: 250,
+				toolbar: [
+					['font', ['bold', 'underline', 'clear']],
+					['insert', ['picture']],
+					['style', ['style']],
+					/* ['color', ['color']], */
+					['para', ['ul', 'ol', 'paragraph']],
+					/* ['table', ['table']], */
+					
+					/* ['view', ['codeview', 'help']] */
+				],
+				codemirror: { // codemirror options 
+			    	theme: 'monokai',
+					mode: 'htmlmixed',
+					lineNumbers: 'true'
+			  	},
+				callbacks : { 
+					onImageUpload : function(files, editor, welEditable) {
+						// 파일 업로드(다중업로드를 위해 반복문 사용)
+						for (var i = files.length - 1; i >= 0; i--) {
+							uploadSummernoteImageFileOfNoteArticle(files[i], this);
 						}
 					}
 				}
@@ -267,13 +288,30 @@
 		});
         
 		// 임시 이미지 등록
-		function uploadSummernoteImageFile(file, editor) {
+		function uploadSummernoteImageFileOfNote(file, editor) {
 			data = new FormData();
 			data.append("file", file);
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/noteUploadSummernoteImageFile",
+				url : "/uploadSummernoteImageFileOfNote",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.url);
+				}
+			});
+		}
+		
+		// 임시 이미지 등록
+		function uploadSummernoteImageFileOfNoteArticle(file, editor) {
+			data = new FormData();
+			data.append("file", file);
+			$.ajax({
+				data : data,
+				type : "POST",
+				url : "/uploadSummernoteImageFileOfNoteArticle",
 				contentType : false,
 				enctype : 'multipart/form-data',
 				processData : false,

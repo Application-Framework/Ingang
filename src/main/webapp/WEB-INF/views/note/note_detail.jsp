@@ -86,7 +86,7 @@
             top:50%; 
             left:50%;
             transform : translate(-50%, -50%);
-            text-align:center;
+            /* text-align:center; */
             box-sizing:border-box; 
             line-height:23px;
             border-style: solid;
@@ -102,6 +102,10 @@
 		    border-top: 1px solid #cbcbcb;
 		    border-bottom: 1px solid #fff;
 		    opacity: 50%;
+        }
+        
+        b {
+        	color: #000000
         }
 	</style>
 </head>
@@ -185,9 +189,8 @@
 							<div class="modal" id="${article.na_no}">
 								<div class="modal_content card" style="width:35rem; height:37rem;">
 									<div class="card-body p-4">
-										<h5 class="card-title fw-bold mb-2">${article.title}</h5>
-						                <textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${article.content}</textarea>
+										<h5 class="card-title fw-bold mb-3 text-center">${article.title}</h5>
+										<c:out value="${article.content}" escapeXml="false"/>
 									</div>
 								</div>
 							</div>
