@@ -116,12 +116,13 @@ public class NoteAriticlePostController {
 	}
 	
 	// 노트 글 저장
+	@ResponseBody
 	@RequestMapping("/saveNoteArticle")
-	public void saveNoteArticle(HttpServletRequest request) throws Exception {
+	public String saveNoteArticle(HttpServletRequest request) throws Exception {
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
 			System.out.println("로그인이 필요합니다.");
-			return;
+			return "error";
 		}
 		
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -131,12 +132,13 @@ public class NoteAriticlePostController {
 		
 		if(title == null || content == null) {
 			System.out.println("빈 칸이 있습니다.");
-			return;
+			return "error";
 		}
+		
+		System.out.println("content : " + content);
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
 		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
-		
 		if(noteArticle == null) {
 			noteArticle = new NoteArticleDTO();
 			noteArticle.setN_no(note.getN_no());
@@ -145,18 +147,23 @@ public class NoteAriticlePostController {
 			noteArticle.setContent(content);
 			
 			noteService.insertNoteArticle(noteArticle);
+			System.out.println("노트 글 추가 : " + noteArticle);
 		}
 		else {
-			noteArticle.setNa_no(Integer.parseInt(request.getParameter("na_no")));
+			noteArticle.setN_no(note.getN_no());
+			noteArticle.setOlv_no(olv_no);
 			noteArticle.setTitle(title);
 			noteArticle.setContent(content);
 			
 			noteService.updateNoteArticle(noteArticle);
+			System.out.println("노트 글 수정 : " + noteArticle);
 		}
 		
 		fileService.manageFileAfterPostSubmission(content, noteArticle.getNa_no(), 3);
+		return "success";
 	}
 	
+	@ResponseBody
 	@RequestMapping("/deleteNoteArticle")
 	public void deleteNoteArticle(HttpServletRequest request) throws Exception {
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
@@ -167,23 +174,14 @@ public class NoteAriticlePostController {
 		
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
 		int olv_no = Integer.parseInt(request.getParameter("olv_no"));
-		String title = request.getParameter("title");
-		String content = request.getParameter("content");
-		
-		if(title == null || content == null) {
-			System.out.println("빈 칸이 있습니다.");
-			return;
-		}
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
-		HistoryOrderNoteDTO historyOrderNote = historyOrderService.getHistoryOrderNoteByN_noM_no(note.getN_no(), member.getM_no());
-		if(historyOrderNote == null) {
-			System.out.println("노트를 구매하지 않은 사용자입니다.");
+		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
+		if(note.getM_no() != member.getM_no() && member.getM_authority() != 1) {
+			System.out.println("노트의 작성자가 아닙니다.");
 			return;
 		}
-		
-		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
-		noteService.deleteNoteArticle(noteArticle.getNa_no());
+		noteService.deleteNoteArticleByN_noAndOlv_no(note.getN_no(), olv_no);
 		fileService.deleteAllFileOfPost(noteArticle.getNa_no(), 3);
 	}
 	

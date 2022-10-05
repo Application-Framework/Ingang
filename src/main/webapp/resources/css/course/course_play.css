@@ -5,6 +5,7 @@
     right: 0;
     float: right;
     background-color: rgb(242, 242, 242);
+    display: block;
 }
 
 .rightMenubar a{
@@ -72,4 +73,10 @@
 
 a {
 	text-decoration: none;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
 }

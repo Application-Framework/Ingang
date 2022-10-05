@@ -177,11 +177,17 @@
 		WHERE na_no = #{na_no}
 	</delete>
 	
+	<!-- 노트 글 삭제 -->
+	<delete id="deleteNoteArticleByN_noAndOlv_no">
+		DELETE FROM note_article
+		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
+	</delete>
+	
 	<!-- 노트 글 수정 -->
 	<update id="updateNoteArticle">
 		UPDATE note_article
 		SET title = #{title}, content = #{content}
-		WHERE na_no = #{na_no}
+		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
 	</update>
 	
 	<!-- 노트 글 리스트 출력 -->

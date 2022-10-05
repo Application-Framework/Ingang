@@ -84,6 +84,11 @@ public class NoteServiceImpl implements NoteService{
 	public int deleteNoteArticle(int na_no) {
 		return noteArticleDAO.deleteNoteArticle(na_no);
 	}
+	
+	@Override
+	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no) {
+		return noteArticleDAO.deleteNoteArticleByN_noAndOlv_no(n_no, olv_no);
+	}
 
 	@Override
 	public NoteArticleDTO getNoteArticleByN_noOlv_no(int n_no, int olv_no) {
