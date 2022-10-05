@@ -123,7 +123,7 @@
 			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
 		        	</div>
 		        	
-		        	<div id="noteAricle" class="p-3">
+		        	<div id="noteArticle" class="p-3">
 			        	<%-- 생성한 노트가 있을 때 --%>
 			        	<c:if test="${note != null}">
 			        		<div id="noteArticleResult">
@@ -151,10 +151,8 @@
 					        	<form action="/saveNoteArticle" target="dummyframe" method="post">
 					        		<input type="hidden" name="oli_no" value="${oli_no}"/>
 					        		<input type="hidden" name="olv_no" value="${olv_no}"/>
-					        		
 						        	<input class="form-control mb-1" type="text" id="na_title" name="title" value="${noteArticle.title}" placeholder="노트 제목" />
-						        	
-						        	<textarea id="summernote_article" name="content" rows=5 placeholder="content">${noteArticle.content}</textarea>
+					        		<textarea id="summernote_article" name="content" rows=5 placeholder="content">${noteArticle.content}</textarea>
 						        	<div class="d-flex flex-row-reverse mt-2">
 						        		<input type="button" data-bs-toggle="collapse" href="#editNoteArticle" onclick="saveNoteArticle()" value="저장" class="btn btn-dark text-end"/>
 						        	</div>
@@ -253,8 +251,10 @@
 				}
 			});
 			
-			
-			
+			initSummernote();
+		});
+        
+		function initSummernote() {
 			// summernote 옵션 설정
 			$('#summernote').summernote({
 				placeholder: '노트를 소개할 내용을 적으세요',
@@ -310,8 +310,8 @@
 			});
 			
 			$('.note-statusbar').hide(); 
-		});
-        
+		}
+		
 		// 임시 이미지 등록
 		function uploadSummernoteImageFileOfNote(file, editor) {
 			data = new FormData();
@@ -356,7 +356,7 @@
 					content: $("#summernote_article").val()
 				},
 				success: function() {
-					$("#noteArticleResult").load(location.href + " #noteArticleResult>*","");
+					$("#noteArticleResult").load(location.href + " #noteArticleResult>*", "");
 				}
 			});
 		}
@@ -371,7 +371,10 @@
 						olv_no: ${olv_no}
 					},
 					success: function() {
-						location.reload();
+						$("#noteArticle").load(location.href + " #noteArticle>*", function() {
+							// 로드가 끝나고 실행
+							initSummernote();
+						});
 					}
 				});
 			}
