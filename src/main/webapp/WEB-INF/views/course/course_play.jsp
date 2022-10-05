@@ -8,19 +8,21 @@
 <meta charset="utf-8">
 <title>${video.title}</title>
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
+	
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
-	<link rel="stylesheet" href="<c:url value='/resources/css/course/course_play.css'/>">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-	
-	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-	
-	<%-- 탭 , 모달기능 사용하기 위해 import --%>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  
-  	<%-- summernote bootsrap 필요 없는 버전 --%>
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="<c:url value='/resources/css/course/course_play.css'/>">
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+	<%-- 탭 , 모달기능 사용하기 위해 import --%>
+	<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+  	<%-- summernote bootsrap 필요 없는 버전 --%>
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+    
+	
   
 	<style>
 		.modal{ 
@@ -43,12 +45,14 @@
             border-style: solid;
             border-radius: 10px;
         }
+        
+        .note-editable { background-color: white !important;}
 	</style>
 </head>
 <body>
 	<div class="bg-dark d-flex vh-100" id="main">
         <div class="d-flex flex-grow-1 flex-column">
-            <iframe class="w-100 h-100" width="1120" height="630" src="${videoPath}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            <iframe class="w-100 h-100" width="1120" height="630" src="${video.s_file_name}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             <div class="footer" style="height: 50px;">
             	<div class="h-100 d-flex justify-content-evenly align-items-center">
             		<div class="col-3 text-center">
@@ -119,37 +123,38 @@
 			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
 		        	</div>
 		        	
-		        	<div id="noteAricle">
+		        	<div id="noteArticle" class="p-3">
 			        	<%-- 생성한 노트가 있을 때 --%>
 			        	<c:if test="${note != null}">
-			        		<%-- 수정 | 삭제 버튼 --%>
-			        		<div class="float-right">
-				    			<div class="collapse show" id="editSummernoteArticle">
-						    		<span><a data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">수정</a></span>
-						    		<span>| <a href="javascript:;" onclick="deleteSummernoteArticle(${noteArticle.na_no})">삭제</a></span>
-					    		</div>
-					    		<span class="collapse" id="editSummernoteArticle"><a onclick="cancelEdit()" data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">닫기</a></span>
-				    		</div>
-			        		
-			        		<%-- 노트 글 출력 --%>
-			        		<div class="collapse show" id="editSummernoteArticle">
-			        			<h5 class="fw-bold mb-3 text-center">${noteArticle.title}</h5>
-			        			<c:out value="${noteArticle.content}" escapeXml="false"/>
-			        		</div>
+			        		<div id="noteArticleResult">
+			        			<c:if test="${noteArticle != null}">
+							  		<%-- 수정 | 삭제 버튼 --%>
+							  		<div class="d-flex flex-row-reverse mb-2">
+										<div class="collapse show" id="editNoteArticle">
+								    		<span><a data-bs-toggle="collapse" href="#editNoteArticle">수정</a></span>
+								    		<span>| <a href="javascript:;" onclick="deleteNoteArticle()">삭제</a></span>
+							  			</div>
+							  			<span class="collapse" id="editNoteArticle"><a data-bs-toggle="collapse" href="#editNoteArticle">닫기</a></span>
+									</div>
+						  			<%-- 노트 글 출력 --%>
+							  		<div class="collapse show" id="editNoteArticle">
+							  			<h5 class="fw-bold mb-3 text-center">${noteArticle.title}</h5>
+							  			<c:out value="${noteArticle.content}" escapeXml="false"/>
+							  		</div>
+								</c:if>
+					  		</div>
 			        		
 			        		<%-- 노트 글 수정 폼--%>
-			        		<div class="collapse" id="editSummernoteArticle">
-			        			<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
+							<div class="collapse <c:if test="${noteArticle == null}">show</c:if>" id="editNoteArticle">
+				        		<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
 					        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
-					        	<form action="/course/saveNote" target="dummyframe" method="post">
-					        		<input type="hidden" name="oli_no" value="${pageNo}"/>
+					        	<form action="/saveNoteArticle" target="dummyframe" method="post">
+					        		<input type="hidden" name="oli_no" value="${oli_no}"/>
 					        		<input type="hidden" name="olv_no" value="${olv_no}"/>
-					        		<input type="hidden" name="na_no" value="${noteArticle.na_no}"/>
-					        		
-						        	<input class="form-control mb-1" type="text" name="title" value="${noteArticle.title}" placeholder="title" />
-						        	<textarea class="form-control mb-2" name="content" rows="5" placeholder="content">${noteArticle.content}</textarea>
-						        	<div class="d-flex flex-row-reverse">
-						        		<input type="submit" value="저장" class="btn btn-dark text-end"/>
+						        	<input class="form-control mb-1" type="text" id="na_title" name="title" value="${noteArticle.title}" placeholder="노트 제목" />
+					        		<textarea id="summernote_article" name="content" rows=5 placeholder="content">${noteArticle.content}</textarea>
+						        	<div class="d-flex flex-row-reverse mt-2">
+						        		<input type="button" data-bs-toggle="collapse" href="#editNoteArticle" onclick="saveNoteArticle()" value="저장" class="btn btn-dark text-end"/>
 						        	</div>
 					        	</form>
 				        	</div>
@@ -167,7 +172,7 @@
 					        <div class="modal_content card" style="width:50rem; height:40rem;">
 					            <div class="card-body m-3">
 					                <form action="/createNote" method="post">
-					                	<input type="hidden" name="oli_no" value="${pageNo}"/>
+					                	<input type="hidden" name="oli_no" value="${oli_no}"/>
 					                	<input type="hidden" name="olv_no" value="${olv_no}"/>
 							    		<div class="row mb-1">
 							   				<label class="col-sm-2 col-form-label fs-5 text-start">노트명</label>
@@ -191,7 +196,7 @@
 							    		</div>
 							    		
 							    		<div class="row mb-4">
-							    			<textarea class="summernote" id="content" name="content" placeholder="노트 소개 내용"></textarea>
+							    			<textarea id="summernote" name="content"></textarea>
 							    		</div>
 							    		
 							    		<div class="row mb-3 d-flex flex-row-reverse">
@@ -207,10 +212,10 @@
         </div>
 		
 		<%-- 우측 메뉴 --%>
-        <div class="rightMenubar">   
-            <a data-toggle="tab" href="#content" class="toggleButton" onclick="openContents()"><i class="bi bi-list-ul"></i></a>
-            <a data-toggle="tab" href="#community" class="toggleButton" onclick="openContents()"><i class="bi bi-chat-square-dots-fill"></i></a>
-            <a data-toggle="tab" href="#note" class="toggleButton" onclick="openContents()"><i class="bi bi-sticky-fill"></i></a>
+        <div class="rightMenubar nav">   
+            <a data-bs-toggle="tab" data-bs-target="#content" onclick="openContents()"><i class="bi bi-list-ul"></i></a>
+            <a data-bs-toggle="tab" data-bs-target="#community" onclick="openContents()"><i class="bi bi-chat-square-dots-fill"></i></a>
+            <a data-bs-toggle="tab" data-bs-target="#note" onclick="openContents()"><i class="bi bi-sticky-fill"></i></a>
         </div>
     </div>
     
@@ -218,7 +223,7 @@
         var openFlag = false;
 		
         function openContents() {
-            document.getElementById("mySlidebar").style.width = "250px";
+            document.getElementById("mySlidebar").style.width = "430px";
             openFlag = true;
         }
         
@@ -237,7 +242,7 @@
 			$(".modal").fadeOut();
 		}
 		
-		$(function(){ 
+		$(document).ready(function() {
 			// 외부영역 클릭 시 팝업 닫기
 			$(document).mouseup(function (e){
 				var modal_content = $(".modal_content");
@@ -246,8 +251,12 @@
 				}
 			});
 			
+			initSummernote();
+		});
+        
+		function initSummernote() {
 			// summernote 옵션 설정
-			$('.summernote').summernote({
+			$('#summernote').summernote({
 				placeholder: '노트를 소개할 내용을 적으세요',
 				tabsize: 4,
 				height: 335,
@@ -269,32 +278,48 @@
 					onImageUpload : function(files, editor, welEditable) {
 						// 파일 업로드(다중업로드를 위해 반복문 사용)
 						for (var i = files.length - 1; i >= 0; i--) {
-							uploadSummernoteImageFile(files[i], this);
+							uploadSummernoteImageFileOfNote(files[i], this);
 						}
-					},
-					onPaste: function (e) {
-						var clipboardData = e.originalEvent.clipboardData;
-						if (clipboardData && clipboardData.items && clipboardData.items.length) {
-							var item = clipboardData.items[0];
-							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-								e.preventDefault();
-							}
+					}
+				}
+			});
+			
+			$('#summernote_article').summernote({
+				placeholder: '글쓰기 에디터로 노트를 작성할 수 있어요.',
+				tabsize: 4,
+				height: 250,
+				toolbar: [
+					['font', ['bold', 'underline', 'clear']],
+					['insert', ['picture']],
+					['style', ['style']],
+					['para', ['ul', 'ol', 'paragraph']],
+				],
+				codemirror: { // codemirror options 
+			    	theme: 'monokai',
+					mode: 'htmlmixed',
+					lineNumbers: 'true'
+			  	},
+				callbacks : { 
+					onImageUpload : function(files, editor, welEditable) {
+						// 파일 업로드(다중업로드를 위해 반복문 사용)
+						for (var i = files.length - 1; i >= 0; i--) {
+							uploadSummernoteImageFileOfNoteArticle(files[i], this);
 						}
 					}
 				}
 			});
 			
 			$('.note-statusbar').hide(); 
-		});
-        
+		}
+		
 		// 임시 이미지 등록
-		function uploadSummernoteImageFile(file, editor) {
+		function uploadSummernoteImageFileOfNote(file, editor) {
 			data = new FormData();
 			data.append("file", file);
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/noteUploadSummernoteImageFile",
+				url : "/uploadSummernoteImageFileOfNote",
 				contentType : false,
 				enctype : 'multipart/form-data',
 				processData : false,
@@ -304,47 +329,55 @@
 			});
 		}
 		
-		function updateComment(cbr_id) {
-			var content = $("#noteAricle").find("#content").val();
-			console.log(content);
+		// 임시 이미지 등록
+		function uploadSummernoteImageFileOfNoteArticle(file, editor) {
+			data = new FormData();
+			data.append("file", file);
 			$.ajax({
-				url : "/community/updateComment",
-				type : "post",
-				data : {
-					cbr_id : cbr_id,
-					content : content
+				data : data,
+				type : "POST",
+				url : "/uploadSummernoteImageFileOfNoteArticle",
+				contentType : false,
+				enctype : 'multipart/form-data',
+				processData : false,
+				success : function(data) {
+					$(editor).summernote('insertImage', data.url);
+				}
+			});
+		}
+		function saveNoteArticle() {
+			$.ajax({
+				url: "/saveNoteArticle",
+				type: "POST",
+				data: {
+					oli_no: ${oli_no},
+					olv_no: ${olv_no},
+					title: $("#na_title").val(),
+					content: $("#summernote_article").val()
 				},
-				success : function() {
-					$("#noteAricle").load(location.href+" #noteAricle>*","");
-				},
-				error : function(xhr, status) {
-		               alert(xhr + " : " + status);
-		           }
+				success: function() {
+					$("#noteArticleResult").load(location.href + " #noteArticleResult>*", "");
+				}
 			});
 		}
 		
-		function deleteComment(cbr_id) {
-			if (confirm('노트의 글을 삭제하시겠습니까?')) {
+		function deleteNoteArticle(na_no) {
+			if(confirm("정말 노트 글을 삭제하시겠습니까?")) {
 				$.ajax({
-					url : "/deleteNoteAricle",
-					type : "POST",
-					data : {
-						cbr_id : cbr_id
+					url: "/deleteNoteArticle",
+					type: "POST",
+					data: {
+						oli_no: ${oli_no},
+						olv_no: ${olv_no}
 					},
-					success : function() {
-						$("#noteAricle").load(location.href+" #noteAricle>*","");
-					},
-					error:function(request,status,error){
-				    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					success: function() {
+						$("#noteArticle").load(location.href + " #noteArticle>*", function() {
+							// 로드가 끝나고 실행
+							initSummernote();
+						});
 					}
 				});
-			} else {
-				
 			}
-		}
-		
-		function cancelEdit() {
-			$("#noteAricle").load(location.href+" #noteAricle>*","");
 		}
     </script>
 </body>
