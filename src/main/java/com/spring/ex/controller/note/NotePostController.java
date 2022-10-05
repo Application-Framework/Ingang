@@ -211,7 +211,7 @@ public class NotePostController {
 	
 	// 서버에만 이미지 임시로 저장
 	@ResponseBody
-	@RequestMapping(value="/noteUploadSummernoteImageFile", produces = "application/json; charset=utf8")
+	@RequestMapping(value="/uploadSummernoteImageFileOfNote", produces = "application/json; charset=utf8")
 	public String noteUploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
 		JsonObject jsonObject = new JsonObject();
 		String url = null;

@@ -103,6 +103,10 @@
 		    border-bottom: 1px solid #fff;
 		    opacity: 50%;
         }
+        
+        b {
+        	color: #000000
+        }
 	</style>
 </head>
 

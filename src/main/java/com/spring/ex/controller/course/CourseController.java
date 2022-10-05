@@ -273,7 +273,7 @@ public class CourseController {
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
 		
-		model.addAttribute("videoPath", courseVideoDTO.getS_file_name());
+		model.addAttribute("video", courseVideoDTO);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("olv_no", olv_no);
 		model.addAttribute("videoList", videoList);

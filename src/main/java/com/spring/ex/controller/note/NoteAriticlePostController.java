@@ -1,5 +1,8 @@
 package com.spring.ex.controller.note;
 
+import java.io.IOException;
+
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -7,7 +10,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.JsonObject;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.note.NoteArticleDTO;
@@ -19,6 +26,9 @@ import com.spring.ex.service.NoteService;
 
 @Controller
 public class NoteAriticlePostController {
+	
+	@Resource(name = "noteArticleImagePath")
+	private String noteArticleImagePath;
 	
 	@Inject
 	private NoteService noteService;
@@ -125,25 +135,9 @@ public class NoteAriticlePostController {
 		}
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
-		/*
-		HistoryOrderNoteDTO historyOrderNote = historyOrderService.getHistoryOrderNoteByN_noM_no(note.getN_no(), member.getM_no());
-		if(historyOrderNote == null) {
-			System.out.println("노트를 구매하지 않은 사용자입니다.");
-			return;
-		}
-		*/
-		
 		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
 		
-		if(noteArticle != null) {
-			int na_no = Integer.parseInt(request.getParameter("na_no"));
-			noteArticle.setNa_no(na_no);
-			noteArticle.setTitle(title);
-			noteArticle.setContent(content);
-			
-			noteService.updateNoteArticle(noteArticle);
-		}
-		else {
+		if(noteArticle == null) {
 			noteArticle = new NoteArticleDTO();
 			noteArticle.setN_no(note.getN_no());
 			noteArticle.setOlv_no(olv_no);
@@ -151,6 +145,13 @@ public class NoteAriticlePostController {
 			noteArticle.setContent(content);
 			
 			noteService.insertNoteArticle(noteArticle);
+		}
+		else {
+			noteArticle.setNa_no(Integer.parseInt(request.getParameter("na_no")));
+			noteArticle.setTitle(title);
+			noteArticle.setContent(content);
+			
+			noteService.updateNoteArticle(noteArticle);
 		}
 		
 		fileService.manageFileAfterPostSubmission(content, noteArticle.getNa_no(), 3);
@@ -186,4 +187,23 @@ public class NoteAriticlePostController {
 		fileService.deleteAllFileOfPost(noteArticle.getNa_no(), 3);
 	}
 	
+	// 서버에만 이미지 임시로 저장
+	@ResponseBody
+	@RequestMapping(value="/uploadSummernoteImageFileOfNoteArticle", produces = "application/json; charset=utf8")
+	public String noteUploadSummernoteImageFile(@RequestParam("file") MultipartFile multipartFile, HttpServletRequest request ) throws Exception {
+		JsonObject jsonObject = new JsonObject();
+		String url = null;
+		try {
+			url = fileService.insertFileToServer(multipartFile, noteArticleImagePath);
+			System.out.println("url : " + url);
+			jsonObject.addProperty("url", url); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("responseCode", "success");
+		} catch (IOException e) {
+			fileService.deleteFileToLocalAndServer(url);
+			jsonObject.addProperty("responseCode", "error");
+			e.printStackTrace();
+		} 
+		String a = jsonObject.toString();
+		return a;
+	}
 }
