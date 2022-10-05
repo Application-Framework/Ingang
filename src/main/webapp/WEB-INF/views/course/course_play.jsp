@@ -118,38 +118,43 @@
 			        	<span class="fs-4 fw-bold">노트</span>
 			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
 		        	</div>
-		        	<%-- 생성한 노트가 있을 때 --%>
-		        	<c:if test="${note != null}">
-		        		<%-- 수정 | 삭제 버튼 --%>
-		        		<div class="float-right">
-			    			<div class="collapse show" id="editSummernoteArticle">
-					    		<span><a data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">수정</a></span>
-					    		<span>| <a href="javascript:;" onclick="deleteSummernoteArticle(${noteArticle.na_no})">삭제</a></span>
+		        	
+		        	<div id="noteAricle">
+			        	<%-- 생성한 노트가 있을 때 --%>
+			        	<c:if test="${note != null}">
+			        		<%-- 수정 | 삭제 버튼 --%>
+			        		<div class="float-right">
+				    			<div class="collapse show" id="editSummernoteArticle">
+						    		<span><a data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">수정</a></span>
+						    		<span>| <a href="javascript:;" onclick="deleteSummernoteArticle(${noteArticle.na_no})">삭제</a></span>
+					    		</div>
+					    		<span class="collapse" id="editSummernoteArticle"><a onclick="cancelEdit()" data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">닫기</a></span>
 				    		</div>
-				    		<span class="collapse" id="editSummernoteArticle"><a onclick="cancelEdit()" data-toggle="collapse" href="#editSummernoteArticle" role="button" aria-expanded="false" aria-controls="editSummernoteArticle">닫기</a></span>
-			    		</div>
-		        		
-		        		<%-- 노트 글 출력 --%>
-		        		<div>
-		        			<c:out value="${noteArticle.content}" escapeXml="false"/>
-		        		</div>
-		        		<%-- 노트 글 수정 폼--%>
-		        		<div class="collapse" id="editSummernoteArticle">
-		        			<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
-				        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
-				        	<form action="/course/saveNote" target="dummyframe" method="post">
-				        		<input type="hidden" name="oli_no" value="${pageNo}"/>
-				        		<input type="hidden" name="olv_no" value="${olv_no}"/>
-				        		<input type="hidden" name="na_no" value="${noteArticle.na_no}"/>
-				        		
-					        	<input class="form-control mb-1" type="text" name="title" value="${noteArticle.title}" placeholder="title" />
-					        	<textarea class="form-control mb-2" name="content" rows="5" placeholder="content">${noteArticle.content}</textarea>
-					        	<div class="d-flex flex-row-reverse">
-					        		<input type="submit" value="저장" class="btn btn-dark text-end"/>
-					        	</div>
-				        	</form>
-			        	</div>
-		        	</c:if>
+			        		
+			        		<%-- 노트 글 출력 --%>
+			        		<div class="collapse show" id="editSummernoteArticle">
+			        			<h5 class="fw-bold mb-3 text-center">${noteArticle.title}</h5>
+			        			<c:out value="${noteArticle.content}" escapeXml="false"/>
+			        		</div>
+			        		
+			        		<%-- 노트 글 수정 폼--%>
+			        		<div class="collapse" id="editSummernoteArticle">
+			        			<%-- 새로고침 없이 저장하기 위해 더미 iframe 생성 --%>
+					        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
+					        	<form action="/course/saveNote" target="dummyframe" method="post">
+					        		<input type="hidden" name="oli_no" value="${pageNo}"/>
+					        		<input type="hidden" name="olv_no" value="${olv_no}"/>
+					        		<input type="hidden" name="na_no" value="${noteArticle.na_no}"/>
+					        		
+						        	<input class="form-control mb-1" type="text" name="title" value="${noteArticle.title}" placeholder="title" />
+						        	<textarea class="form-control mb-2" name="content" rows="5" placeholder="content">${noteArticle.content}</textarea>
+						        	<div class="d-flex flex-row-reverse">
+						        		<input type="submit" value="저장" class="btn btn-dark text-end"/>
+						        	</div>
+					        	</form>
+				        	</div>
+			        	</c:if>
+		        	</div>
 		        	
 		        	<%-- 해당 회원이 이 강의에서 생성한 노트가 없을 때 강의 생성 버튼 + 모달창 --%>
 		        	<c:if test="${note == null}">
@@ -297,6 +302,49 @@
 					$(editor).summernote('insertImage', data.url);
 				}
 			});
+		}
+		
+		function updateComment(cbr_id) {
+			var content = $("#noteAricle").find("#content").val();
+			console.log(content);
+			$.ajax({
+				url : "/community/updateComment",
+				type : "post",
+				data : {
+					cbr_id : cbr_id,
+					content : content
+				},
+				success : function() {
+					$("#noteAricle").load(location.href+" #noteAricle>*","");
+				},
+				error : function(xhr, status) {
+		               alert(xhr + " : " + status);
+		           }
+			});
+		}
+		
+		function deleteComment(cbr_id) {
+			if (confirm('노트의 글을 삭제하시겠습니까?')) {
+				$.ajax({
+					url : "/deleteNoteAricle",
+					type : "POST",
+					data : {
+						cbr_id : cbr_id
+					},
+					success : function() {
+						$("#noteAricle").load(location.href+" #noteAricle>*","");
+					},
+					error:function(request,status,error){
+				    	alert("code:"+request.status+"\n"+"message:"+request.responseText+"\n"+"error:"+error);
+					}
+				});
+			} else {
+				
+			}
+		}
+		
+		function cancelEdit() {
+			$("#noteAricle").load(location.href+" #noteAricle>*","");
 		}
     </script>
 </body>
