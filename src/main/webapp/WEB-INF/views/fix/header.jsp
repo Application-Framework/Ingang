@@ -59,7 +59,8 @@
                                             <c:if test="${member != null}">
                                             	<li><a href="/mypage">마이페이지</a></li>
                                             </c:if>
-                                            
+                                            <li><a href="/open-knowledge">지식공유 참여</a>
+                                            </li>
                                         </ul>
                                     </nav>
                                 </div>          

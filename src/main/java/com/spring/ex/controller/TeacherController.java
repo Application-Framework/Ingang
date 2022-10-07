@@ -6,7 +6,9 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.TeacherDTO;
@@ -59,5 +61,31 @@ public class TeacherController {
 		return "mypage";
 	}
 	
+	// 지식 공유 안내 양식 보내기
+	@RequestMapping(value="/getOpenKnowledgeGuideForm", method=RequestMethod.POST)
+	public String getOpenKnowledgeGuideForm(HttpServletRequest request, Model model) {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.out.println("로그인이 필요합니다.");
+			return "error";
+		}
+		
+		model.addAttribute("member", member);
+		
+		return "modal/open_knowledge_guide_form";
+	}
 	
+	// 지식 공유 신청서 양식 보내기
+	@RequestMapping(value="/getOpenKnowledgeApplicationForm", method=RequestMethod.POST)
+	public String getOpenKnowledgeApplicationForm(HttpServletRequest request, Model model) {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.out.println("로그인이 필요합니다.");
+			return "error";
+		}
+		
+		model.addAttribute("member", member);
+		
+		return "modal/open_knowledge_application_form";
+	}
 }
