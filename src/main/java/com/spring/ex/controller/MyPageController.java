@@ -37,7 +37,7 @@ public class MyPageController {
 	@Inject
 	private FileService fileUploadService;
 	
-	@RequestMapping("/mypage" )
+	@RequestMapping("/mypage")
 	public String mypage(HttpSession session, HttpServletRequest request, Model model) throws Exception {
 		
 		Integer m_no = (Integer)session.getAttribute("m_no");

@@ -216,7 +216,7 @@
 						    	<div class="card shadow-sm mb-3">
 							        <img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
 							        <div class="card-body">
-									    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
+									    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/course/${list.oli_no}">${list.title}</a></div>
 									    <div style="font-size: 10px;">${list.reg_date}</div>
 									    <div id="teacher-name" class="card-text">${list.name}</div>
 									    <div class="stars-outer">
