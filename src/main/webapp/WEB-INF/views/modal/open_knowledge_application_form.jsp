@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div class="modal" id="open_knowledge_modal">
 	<div class="modal_content card card-body d-flex" id="open_knowledge_modal_content" title="클릭하면 창이 닫힙니다.">
 		<div class="mb-2">
@@ -28,7 +28,7 @@
 			
 			<div class="mb-4">
 				<label class="form-label">연락처</label><span class="modal_label--essential">*</span>
-	        	<input type="text" name="name" placeholder="010-0000-0000"  class="single-input" required>
+	        	<input type="text" name="phone" placeholder="010-0000-0000"  class="single-input" required>
 			</div>
 			
 			<div class="mb-4">
@@ -45,7 +45,7 @@
 			<div class="mb-4">
 				<label class="form-label">나를 소개하는 글</label><span class="modal_label--essential">*</span>
 				<div class="form-text">지식공유자님에 대한 소개와, 제작할 강의에 관련된 내용을 적어주세요. 가능한 상세하게 적어주시면 구체적인 안내를 받을 수 있습니다.</div>
-				<textarea class="single-textarea" required></textarea>
+				<textarea name="introduction" class="single-textarea" required></textarea>
 			</div>
 			
 			<div class="mb-4">

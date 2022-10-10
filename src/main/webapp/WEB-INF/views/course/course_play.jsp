@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,10 +10,10 @@
 	<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
 	
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="<c:url value='/resources/css/course/course_play.css'/>">
-	
+	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
@@ -47,6 +47,7 @@
         }
         
         .note-editable { background-color: white !important;}
+        
 	</style>
 </head>
 <body>
@@ -107,13 +108,45 @@
 			        	<a href="#" onclick="closeContents()" id="closeBtn"><i class="fs-4 bi bi-x-lg" style="-webkit-text-stroke: 1px;"></i></a>
 		        	</div>
 		        	
-		        	<c:forEach var="video" items="${videoList}">
-			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
-			        		<i class="fs-5 bi bi-play-circle me-2"></i>
-				       		<div class="fs-5">${video.title}</div>
-				       		<a class="stretched-link" href="${video.olv_no}"></a>
-			       		</div>
-		       		</c:forEach>
+		        	<%-- 커뮤니티 카테고리 선택 버튼 --%>
+		        	<div class="px-3 pt-3">
+		        		<input type="radio" class="btn-check" name="btn_classify" id="btn_classify_2" onclick="setClassify(this, 2);" checked />
+						<label class="btn btn-outline-danger" for="btn_classify_2">질문</label>
+						
+						<input type="radio" class="btn-check" name="btn_classify" id="btn_classify_1" onclick="setClassify(this, 1);" />
+						<label class="btn btn-outline-danger" for="btn_classify_1">자유주제</label>
+						
+						<input type="radio" class="btn-check" name="btn_classify" id="btn_classify_4" onclick="setClassify(this, 4);" />
+						<label class="btn btn-outline-danger" for="btn_classify_4">커뮤니티</label>
+		        	</div>
+		        	
+		        	<%-- 검색 필드 --%>
+		        	<div class="input-group p-3">
+					  <input type="text" class="form-control" id="search">
+					  <button class="btn btn-outline-secondary" type="button" id="search_btn"><svg width="14" aria-hidden="true" focusable="false" data-prefix="far" data-icon="search" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>SearchIcon</title><path fill="#868E96" d="M508.5 468.9L387.1 347.5c-2.3-2.3-5.3-3.5-8.5-3.5h-13.2c31.5-36.5 50.6-84 50.6-136C416 93.1 322.9 0 208 0S0 93.1 0 208s93.1 208 208 208c52 0 99.5-19.1 136-50.6v13.2c0 3.2 1.3 6.2 3.5 8.5l121.4 121.4c4.7 4.7 12.3 4.7 17 0l22.6-22.6c4.7-4.7 4.7-12.3 0-17zM208 368c-88.4 0-160-71.6-160-160S119.6 48 208 48s160 71.6 160 160-71.6 160-160 160z"></path></svg></button>
+					</div>
+					
+					<%-- 게시물 영역 --%>
+					<div id="community_content" class="tab-content">
+						<div class="tab-pane fade show active" id="qwe">
+							<c:forEach var="list" items="${cbList}">
+								<article class="blog_item m-3 border rounded">
+									<div class="blog_details p-2">
+										<a class="d-inline-block" href="/communityBoardRead?cb_no=${list.cb_no}&classify=1&isOnlineLecture=${pageNo}">
+											<font size="1px;">NO. <c:url value="${list.cb_no}"/></font>
+											<p class="fw-bold">${fn:substring(list.title, 0, 35)}</p>
+										</a>
+										<p style="font-size:14px"><c:url value="${fn:substring(list.content,0,200)}"/></p>
+										<span><i class="fa fa-user me-2"></i>${memberService.getMemberByM_no(list.m_no).m_name}</span>
+										<span class="float-end me-2"><i class="fa fa-comments me-2"></i>${cbService.selectCommunityBoardReplyCount(list.cb_no)}</span>
+										<span class="float-end me-4"><i class="fa fa-heart me-2"></i>${cbService.selectCommunityBoardGoodCount(list.cb_no)}</span>
+										<%-- <li><i class="fa fa-clock-o"> </i><font size="2" color="#848484"><c:url value="${list.reg_date}"/></font></li> --%>
+									</div>
+								</article>
+							</c:forEach>
+						</div>
+					</div>
+					<%-- 게시물 영역 끝 --%>
 	       		</div>
 	       		
 	       		<%-- 노트 불러오기 --%>
@@ -221,7 +254,9 @@
     
     <script>
         var openFlag = false;
-		
+        
+        var classify = 2;
+        
         function openContents() {
             document.getElementById("mySlidebar").style.width = "430px";
             openFlag = true;
@@ -249,6 +284,12 @@
 				if(modal_content.has(e.target).length === 0){
 					closeCreateCourseModal();
 				}
+			});
+			
+			// 커뮤니티 검색 버튼 눌렀을 때
+			$(document).on("click", "#search_btn", function() {
+				var search = $("#search").val();
+				loadCommunity(search, classify);
 			});
 			
 			initSummernote();
@@ -378,6 +419,28 @@
 					}
 				});
 			}
+		}
+		
+		function loadCommunity(search, classify) {
+			$.ajax({
+				url: "/course/${oli_no}/play/${olv_no}",
+				type: "post",
+				dataType: "html",
+				data: {
+					search: search,
+					classify: classify
+				},
+				success: function(html) {
+					var content = $(html).find("#community_content>*");
+					$("#community_content").html(content);
+				}
+			});
+		}
+		
+		function setClassify(btn, _classify) {
+			btn.blur();
+			classify = _classify;
+			loadCommunity("", classify);
 		}
     </script>
 </body>

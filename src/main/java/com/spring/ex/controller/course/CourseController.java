@@ -216,12 +216,19 @@ public class CourseController {
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO teachertDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
 		boolean existLike = false;
-		if(memberDTO != null) existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+		boolean isCurrentCourseTeacher = false;
+		if(memberDTO != null) {
+			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
+			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+			if(currentTeacherDTO != null) {
+				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
+			}
+		}
 		int stdCnt = 0;
 		
 		String search = request.getParameter("search");
@@ -241,27 +248,31 @@ public class CourseController {
 		cbMap.put("pageSize", 10);
 		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
 		
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("tagService", tagService);
+		model.addAttribute("typeService", typeService);
+		model.addAttribute("cbService", cbService);
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("teacher", teachertDTO);
+		model.addAttribute("teacher", courseTeacherDTO);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberService", memberService);
-		model.addAttribute("cbService", cbService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("cbList", cbList);
 		model.addAttribute("contentType", "community");
 		model.addAttribute("paging", pagingService.getPaging());
 		model.addAttribute("classify", Integer.parseInt(classify));
-		
+		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
+		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(pageNo).getMain_type_name());
+		model.addAttribute("subCategoryList", courseService.getCourseSubTypeList(pageNo));
 		return "course/course_detail";
 	}
 	
 	// 강의 재생 페이지
 	@RequestMapping("/course/{oli_no}/play/{olv_no}")
-	public String course_play(HttpServletRequest request, Model model, @PathVariable int oli_no, @PathVariable int olv_no) {
+	public String course_play(HttpServletRequest request, Model model, @PathVariable int oli_no, @PathVariable int olv_no) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
@@ -273,12 +284,34 @@ public class CourseController {
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
 		
+		String search = request.getParameter("search");
+		String classify = request.getParameter("classify");
+		
+		if(search == null) 
+			search = "";
+		// 커뮤니티 불러오기
+		HashMap<String, Object> cbMap = new HashMap<String, Object>();
+		cbMap.put("oli_no", oli_no);
+		cbMap.put("search", search);
+		if(classify != null)
+			cbMap.put("classify", Integer.parseInt(classify));
+		else cbMap.put("classify", 2);
+		pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		cbMap.put("page", pagingService.getNowPage());
+		cbMap.put("pageSize", 10);
+		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		
+		System.out.println(cbList);
+		
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("cbService", cbService);
 		model.addAttribute("video", courseVideoDTO);
 		model.addAttribute("oli_no", oli_no);
 		model.addAttribute("olv_no", olv_no);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("type", "content");
 		model.addAttribute("note", noteDTO);
+		model.addAttribute("cbList", cbList);
 		
 		return "course/course_play";
 	}

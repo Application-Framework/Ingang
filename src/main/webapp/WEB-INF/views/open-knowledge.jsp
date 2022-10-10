@@ -112,7 +112,17 @@
 					</div>
 					
 					<div>
-						<a id="open_knowledge_btn" href="javascript:;" class="genric-btn primary e-large">지식 공유 참여</a>
+						<c:choose>
+							<c:when test="${member == null}">
+								<a href="/loginPageView" class="genric-btn primary e-large">지식 공유 참여</a>	
+							</c:when>
+							
+							<c:when test="${isTeacher == false}">
+								<a id="open_knowledge_btn" href="javascript:;" class="genric-btn primary e-large">지식 공유 참여</a>
+							</c:when>
+							
+						</c:choose>
+						
 						<a href="https://drive.google.com/file/d/1W0FBBbalm8nYo2zrLHpdIbE2rGo2L7Uz/view" target="blank" class="genric-btn primary-border e-large">지식 공유자 안내서</a>
 					</div>
 				</div>
