@@ -246,9 +246,9 @@
 		
 		<%-- 우측 메뉴 --%>
         <div class="rightMenubar nav">   
-            <a data-bs-toggle="tab" data-bs-target="#content" onclick="openContents()"><i class="bi bi-list-ul"></i></a>
-            <a data-bs-toggle="tab" data-bs-target="#community" onclick="openContents()"><i class="bi bi-chat-square-dots-fill"></i></a>
-            <a data-bs-toggle="tab" data-bs-target="#note" onclick="openContents()"><i class="bi bi-sticky-fill"></i></a>
+            <button data-bs-toggle="tab" data-bs-target="#content" onclick="openContents()"><i class="bi bi-list-ul"></i></button>
+            <button data-bs-toggle="tab" data-bs-target="#community" onclick="openContents()"><i class="bi bi-chat-square-dots-fill"></i></button>
+            <button data-bs-toggle="tab" data-bs-target="#note" onclick="openContents()"><i class="bi bi-sticky-fill"></i></button>
         </div>
     </div>
     
