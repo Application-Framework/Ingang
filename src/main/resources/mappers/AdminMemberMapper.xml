@@ -5,12 +5,14 @@
 
 	<!-- 회원목록 -->
 	<select id="getMemberList" resultType="MemberDTO">
-		SELECT * FROM member ORDER BY m_no DESC LIMIT #{Page}, #{PageSize}
+		SELECT * FROM member 
+		<include refid="searchAdminMemberBoard"></include> 
+		ORDER BY m_no DESC LIMIT #{Page}, #{PageSize}
 	</select>
 	
 	<!-- 회원 총 수 -->
 	<select id="getMemberTotalCount" resultType="int">
-		SELECT COUNT(*) FROM member
+		SELECT COUNT(*) FROM member <include refid="searchAdminMemberBoard"></include> 
 	</select>
 	
 	<!-- 회원정보 상세조회 -->
@@ -23,4 +25,19 @@
 		DELETE FROM member WHERE m_no = #{m_no}
 	</delete>
     
+   	<sql id="searchAdminMemberBoard">
+		<choose>
+			<when test="searchCategory == 'noContent'">
+			</when>
+			<when test="searchCategory == 'm_no'">
+				WHERE m_no LIKE  CONCAT('%', #{searchKeyword}, '%')
+			</when>
+			<when test="searchCategory == 'm_id'">
+				WHERE m_id LIKE  CONCAT('%', #{searchKeyword}, '%')
+			</when>
+			<when test="searchCategory == 'm_name'">
+				WHERE m_name LIKE  CONCAT('%', #{searchKeyword}, '%')
+			</when>
+		</choose>
+	</sql>
 </mapper>

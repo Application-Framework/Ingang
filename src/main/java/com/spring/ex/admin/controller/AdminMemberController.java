@@ -26,14 +26,24 @@ public class AdminMemberController {
 	@RequestMapping(value = "/admin/memberlist", method = RequestMethod.GET)
 	public String adminMemberMain(Model model, HttpServletRequest request) throws Exception {
 		String searchKeyword = request.getParameter("searchKeyword");
-		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		String searchCategory = request.getParameter("searchCategory");
+		System.out.println( searchCategory + "  "+ searchKeyword);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		if(searchKeyword == null) {
+			map.put("searchCategory", "noContent");
+		}else if(searchKeyword == "") {
+			map.put("searchCategory", "noContent");
+		} else {
+			map.put("searchCategory", searchCategory);
+			map.put("searchKeyword", searchKeyword);
+		}
 		
-		
-		pagingService = new PagingService(request, service.getMemberTotalCount(map) ,10);
+		pagingService = new PagingService(request, service.getMemberTotalCount(map), 15);
 		map.put("Page", pagingService.getNowPage());
-		map.put("PageSize", 10);
+		map.put("PageSize", 15);
 		
 		List<MemberDTO> adminMemberList = service.getMemberList(map);
+		
 		
 		model.addAttribute("adminMemberList", adminMemberList);
 		model.addAttribute("Paging", pagingService.getPaging());

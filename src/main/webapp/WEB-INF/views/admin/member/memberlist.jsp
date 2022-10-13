@@ -25,14 +25,14 @@
 					<hr>
 					<div class="row">
 						<div class="col-sm-8">
-							<form action="memberSearch" role="form" method="GET" class="form-inline">
-								<select class="form-control" id="search" name="search">
+							<form action="/admin/memberlist" role="form" method="GET" class="form-inline">
+								<select class="form-control" id="searchCategory" name="searchCategory">
 									<option value="m_no">회원번호</option>
 									<option value="m_id">아이디</option>
 									<option value="m_name">이름</option>
 								</select>
 								<div class="col-sm-4">
-									<input type="text" id="keyword" name="keyword" placeholder="검색어를 입력하세요." class="form-control">
+									<input type="text" id="searchKeyword " name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control">
 									<button type="submit" class="btn px-3 btn-primary">
 										<i class="fas fa-search"></i>
 									</button>
