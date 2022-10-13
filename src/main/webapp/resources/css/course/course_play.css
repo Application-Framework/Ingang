@@ -5,9 +5,10 @@
     right: 0;
     float: right;
     background-color: rgb(242, 242, 242);
+    display: block;
 }
 
-.rightMenubar a{
+.rightMenubar button{
     padding:5px;
     padding-bottom: 15px;
     margin: auto;
@@ -16,9 +17,11 @@
     display: block;
     transition: 0.3s;
     text-align: center;
+    border: 0;
+    outline: 0;
 }
 
-.rightMenubar a:hover {
+.rightMenubar button:hover {
     color: #1f1f1f;
 }
 
@@ -72,4 +75,10 @@
 
 a {
 	text-decoration: none;
+}
+
+.collapsing {
+    -webkit-transition: none;
+    transition: none;
+    display: none;
 }

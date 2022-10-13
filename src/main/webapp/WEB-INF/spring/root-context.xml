@@ -46,16 +46,16 @@
 	
 	<!--  강의 이미지 경로 설정 -->
 	<bean id="courseImagePath" class="java.lang.String">
-	  <constructor-arg value="/img/course/uploaded_images/"/>
+	  <constructor-arg value="/img/course/uploaded_images"/>
 	</bean>
 	
 	<!--  노트 이미지 경로 설정 -->
 	<bean id="noteImagePath" class="java.lang.String">
-	  <constructor-arg value="/img/note/uploaded_images/"/>
+	  <constructor-arg value="/img/note/uploaded_images"/>
 	</bean>
 	
 	<!--  노트 글 이미지 경로 설정 -->
 	<bean id="noteArticleImagePath" class="java.lang.String">
-	  <constructor-arg value="/img/note_article/uploaded_images/"/>
+	  <constructor-arg value="/img/note_article/uploaded_images"/>
 	</bean>
 </beans>

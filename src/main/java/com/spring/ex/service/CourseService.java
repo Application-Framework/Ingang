@@ -6,13 +6,11 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.MainTypeDTO;
-import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
-import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public interface CourseService {
@@ -70,27 +68,11 @@ public interface CourseService {
 	// 강의 비디오 삭제
 	public int deleteCourseVideo(int oli_no);
 	
-	// 강사
-	public TeacherDTO getTeacherInfo(int olt_no);
-	public TeacherDTO getTeacherInfoByM_no(int m_no);
-	public int insertCourseTeacher(TeacherDTO dto);
-	public int deleteCourseTeacher(int olt_no);
-	public int checkTeacherByM_no(int m_no);
-	
 	// 강의 비디오 리스트 가져오기
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no);
 	
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
-	
-	// 강의 구매 기록 등록
-	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto);
-
-	// 강의 구매 기록 가져오기
-	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no);
-	
-	// 강의 구매 기록 리스트 가져오기
-	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no);
 	
 	// 태그 리스트에 태그가 있는지 확인
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr);

@@ -3,9 +3,9 @@
 
 <mapper namespace="com.spring.ex.NoteMapper">
 	<!-- 노트 생성 -->
-	<insert id="insertNote">
-		INSERT INTO note(oli_no, m_no, title, content, price, classify)
-		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{classify})
+	<insert id="insertNote" useGeneratedKeys="true" keyProperty="n_no">
+		INSERT INTO note(oli_no, m_no, title, content, price, classify, enable)
+		VALUES(#{oli_no}, #{m_no}, #{title}, #{content}, #{price}, #{classify}, #{enable})
 	</insert>
 	
 	<!-- 노트 삭제 -->
@@ -30,10 +30,14 @@
 			TRUNCATE((SELECT AVG(star_rating) FROM note_reply nr WHERE nr.n_no = n.n_no),0) star_avg,
 			(SELECT COUNT(*) FROM note_like nl WHERE nl.n_no = n.n_no) like_cnt,
 			(SELECT COUNT(*) FROM note_reply nr WHERE nr.n_no = n.n_no) reply_cnt
-		FROM note n, online_lecture_introduction oli, online_lecture_tag olt
 		<include refid="search"></include>
 		GROUP BY n_no
+		
 		<choose>
+			<when test='order == null'>
+				ORDER BY n.n_no DESC
+			</when>
+		
 			<when test='order.equals("like")'>
 				ORDER BY like_cnt DESC
 			</when>
@@ -72,44 +76,47 @@
 	<!-- 노트 개수 가져오기 -->
 	<select id="getNoteTotalCount" resultType="int">
 		SELECT count(DISTINCT n.n_no)
-		FROM note n, online_lecture_introduction oli, online_lecture_tag olt
 		<include refid="search"></include>
 	</select>
 	
 	<sql id="search">
-		WHERE n.oli_no = oli.oli_no AND n.oli_no = olt.oli_no
-		<choose>
-			<when test="filter == 'course'">
-				AND oli.title LIKE '%${keyword}%'
-			</when>
-			<when test="filter == 'all'">
-				AND (n.title LIKE '%${keyword}%' OR oli.title LIKE '%${keyword}%') 
-			</when>
-			<otherwise>
-				AND n.title LIKE '%${keyword}%'
-			</otherwise>
-		</choose>
-	
-		<if test="tag != null">
-			<if test="tag.equals('프로그래밍 언어')">
-				AND (olt.tag = 'JAVA'
-				OR olt.tag = 'C'
-				OR olt.tag = 'HTML'
-				OR olt.tag = 'C#'
-				OR olt.tag = 'Javascript'
-				OR olt.tag = 'Python'
-				OR olt.tag = 'CSS'
-				OR olt.tag = 'PHP'
-				OR olt.tag = 'Ruby'
-				OR olt.tag = 'C++')
-			</if>
-			<if test="!tag.equals('프로그래밍 언어')">
-				AND olt.tag = #{tag}
-			</if>
+		FROM note n, online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst
+		WHERE n.oli_no = oli.oli_no AND n.oli_no = oltag.oli_no AND n.oli_no = olst.oli_no AND n.enable = 1
+		
+		<if test="searchTitle != null">
+			n.title LIKE '%${searchTitle}%'
 		</if>
 		
-		<if test="tagParam != null">
-			AND olt.tag = #{tagParam}
+		<if test='main_type_abbr != null'>
+			<choose>
+				<when test='sub_type_abbr == null and main_type_abbr != null'>
+					AND olst.sub_type_no IN (SELECT sub_type_no FROM sub_type 
+											 WHERE main_type_no = (SELECT main_type_no FROM main_type 
+											 					   WHERE main_type_abbr = #{main_type_abbr}))
+				</when>
+				
+				<when test='sub_type_abbr != null'>
+					AND olst.sub_type_no = (SELECT sub_type_no FROM sub_type 
+								 WHERE sub_type_abbr = #{sub_type_abbr})
+				</when>
+			</choose>
+		</if>
+		
+		<if test="tags != null">
+			AND
+			<foreach collection="tags" item="tag" separator="OR" open="(" close=")" >
+				 oltag.tag_no = (SELECT tag_no FROM tag WHERE tag_abbr = #{tag})
+			</foreach>
+			
+		</if>
+		
+		<if test="charge != null">
+			<if test="charge.equals('free')">
+				AND oli.price = 0
+			</if>
+			<if test="charge.equals('paid')">
+				AND oli.price > 0
+			</if>
 		</if>
 	</sql>
 	
@@ -159,7 +166,7 @@
 	<!-- 노트 글 부분 -->
 	
 	<!-- 노트 글 등록 -->
-	<insert id="insertNoteArticle">
+	<insert id="insertNoteArticle" useGeneratedKeys="true" keyProperty="na_no">
 		INSERT INTO note_article(n_no, olv_no, title, content)
 		VALUES(#{n_no}, #{olv_no}, #{title}, #{content})
 	</insert>
@@ -170,11 +177,17 @@
 		WHERE na_no = #{na_no}
 	</delete>
 	
+	<!-- 노트 글 삭제 -->
+	<delete id="deleteNoteArticleByN_noAndOlv_no">
+		DELETE FROM note_article
+		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
+	</delete>
+	
 	<!-- 노트 글 수정 -->
 	<update id="updateNoteArticle">
 		UPDATE note_article
 		SET title = #{title}, content = #{content}
-		WHERE na_no = #{na_no}
+		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
 	</update>
 	
 	<!-- 노트 글 리스트 출력 -->
@@ -193,25 +206,5 @@
 	<select id="getNoteArticleByN_noOlv_no" resultType="NoteArticleDTO">
 		SELECT * FROM note_article
 		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
-	</select>
-	
-	<!-- 노트 주문 -->
-	
-	<!-- 노트 구매 기록에 추가 -->
-	<insert id="insertHistoryOrderNote">
-		INSERT INTO history_order_note(n_no, m_no, payment, payment_status)
-		VALUES(#{n_no}, #{m_no}, #{payment}, #{payment_status})
-	</insert>
-	
-	<!-- 노트 구매 기록 가져오기 -->
-	<select id="getHistoryOrderNoteByN_noM_no" resultType="HistoryOrderNoteDTO">
-		SELECT * FROM history_order_note
-		WHERE n_no = #{n_no} AND m_no = #{m_no}
-	</select>
-	
-	<!-- 노트 구매 기록 리스트 가져오기 -->
-	<select id="getHistoryOrderNoteList" resultType="HistoryOrderNoteDTO">
-		SELECT * FROM history_order_note
-		WHERE m_no = #{m_no}
 	</select>
 </mapper>

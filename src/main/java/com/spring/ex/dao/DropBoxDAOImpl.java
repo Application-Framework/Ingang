@@ -7,8 +7,7 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
-import com.spring.ex.dto.PurchaseCourseDTO;
-import com.spring.ex.dto.course.CourseLikeDTO;
+import com.spring.ex.dto.HistoryOrderLectureDTO;
 
 @Repository
 public class DropBoxDAOImpl implements DropBoxDAO {
@@ -19,7 +18,7 @@ public class DropBoxDAOImpl implements DropBoxDAO {
 	
 	// 드롭박스 관심 강의 내역
 	@Override
-	public List<PurchaseCourseDTO> myInterestedCourseDropBox(Integer m_no) throws Exception {
+	public List<HistoryOrderLectureDTO> myInterestedCourseDropBox(Integer m_no) throws Exception {
 		return sqlSession.selectList(namespace + ".myInterestedCourseDropBox", m_no);
 	}
 	

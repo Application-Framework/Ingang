@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.TeacherMapper">
+	<select id="getTeacherInfo" resultType="TeacherDTO">
+		SELECT *
+		FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
+	</select>
+	
+	<select id="getTeacherInfoByM_no" resultType="TeacherDTO">
+		SELECT * 
+		FROM online_lecture_teacher
+		WHERE m_no = #{m_no}
+	</select>
+	
+	<select id="getTeacherName" resultType="String">
+		SELECT m.m_name
+		FROM online_lecture_teacher olt, member m
+		WHERE olt.m_no = m.m_no AND olt_no = #{olt_no}
+	</select>
+	
+	<insert id="insertCourseTeacher"> 
+		INSERT INTO online_lecture_teacher(m_no, email, name, phone, main_type_no, introduction, link, grade, reg_date)
+		VALUES(#{m_no}, #{email}, #{name}, #{phone}, #{main_type_no}, #{introduction}, #{link}, #{grade}, #{reg_date})
+	</insert>
+	
+	<update id="updateCourseTeacher">
+		UPDATE online_lecture_teacher
+		SET
+			email = #{email},
+			name = #{name},
+			phone = #{phone},
+			main_type_no = #{main_type_no},
+			introduction = #{introduction},
+			link = #{link},
+			grade = #{grade}	
+		WHERE olt_no = #{olt_no}
+	</update>
+	
+	<delete id="deleteCourseTeacher">
+		DELETE FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
+	</delete>
+	
+	<select id="checkTeacherByM_no" resultType="int">
+		SELECT EXISTS(SELECT * FROM online_lecture_teacher WHERE m_no = #{m_no})
+	</select>
+</mapper>

@@ -11,11 +11,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.MemberDTO;
-import com.spring.ex.dto.PurchaseCourseDTO;
 import com.spring.ex.dto.TagDTO;
 import com.spring.ex.dto.course.CourseDTO;
-import com.spring.ex.dto.course.CourseLikeDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CourseBestService;
@@ -78,7 +77,7 @@ public class MainPageController {
 		taglist = tagService.tagRanking(tagDTO);
 		
 		// 드롭박스 관심 강의 목록
-		List<PurchaseCourseDTO> dropInterestedList = null;
+		List<HistoryOrderLectureDTO> dropInterestedList = null;
 		Integer dropInterestedListCount = null;
 		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
 		

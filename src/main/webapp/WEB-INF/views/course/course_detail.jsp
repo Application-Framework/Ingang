@@ -103,6 +103,10 @@
 		    border-bottom: 1px solid #fff;
 		    opacity: 50%;
         }
+        
+        b {
+        	color: #000000
+        }
 	</style>
 </head>
 
@@ -134,7 +138,6 @@
 		            <div class="d-flex align-items-center items-link ">
 		            	<span class="fs-4 pe-2 text-white">#</span>
 		            	<c:forEach var="tag" items="${tags}">
-		            		<%-- <span class="border border-info border-3 rounded-pill">${tagService.getTagByTag_no(tag.tag_no).tag_name}</span> --%>
 		            		<a>${tagService.getTagByTag_no(tag.tag_no).tag_name}</a>
 		            	</c:forEach>
 		            </div>
@@ -196,7 +199,7 @@
 					<div class="mb-4">
 						<c:forEach var="note" items="${notes}" begin="0" end="10" step="1">
 							<div class="p-2">
-								<a href="/notes/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getNameByM_no(note.m_no)}</a> 
+								<a href="/notes/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getMemberByM_no(note.m_no).m_name}</a> 
 							</div>
 						</c:forEach>
 					</div>
@@ -421,7 +424,7 @@
 			x.classList.toggle("bi-heart-fill");
 			x.classList.toggle("text-danger");
 			$.ajax({
-				url: '/course/courseClickedLike',
+				url: '/courseClickedLike',
 				type: 'post',
 				data: {
 					status: status,
@@ -443,13 +446,16 @@
 		// 강의 구매
 		function purchaseCourse() {
 			$.ajax({
-				url: '/course/purchaseCourse',
+				url: '/purchaseCourse',
 				type: 'post',
 				data: {
 					oli_no: ${pageNo}
 				},
 				success: function() {
 					location.reload();
+				},
+				error: function() {
+					alert("error");
 				}
 			});
 		}

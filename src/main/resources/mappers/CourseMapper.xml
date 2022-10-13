@@ -201,58 +201,6 @@
 		WHERE oli_no = #{oli_no}
 	</delete>
 	
-	<!-- 강사 부분 -->
-	
-	<select id="getTeacherInfo" resultType="TeacherDTO">
-		SELECT *
-		FROM online_lecture_teacher
-		WHERE olt_no = #{olt_no}
-	</select>
-	
-	<select id="getTeacherInfoByM_no" resultType="TeacherDTO">
-		SELECT * 
-		FROM online_lecture_teacher
-		WHERE m_no = #{m_no}
-	</select>
-	
-	<select id="getTeacherName" resultType="String">
-		SELECT m.m_name
-		FROM online_lecture_teacher olt, member m
-		WHERE olt.m_no = m.m_no AND olt_no = #{olt_no}
-	</select>
-	
-	<insert id="insertCourseTeacher"> 
-		INSERT INTO online_lecture_teacher(m_no, email, phone, name, field, introduction, link, grade, reg_date)
-		VALUES(#{m_no}, #{email}, #{phone}, #{name}, #{field}, #{introduction}, #{link}, 1, #{reg_date})
-	</insert>
-	
-	<delete id="deleteCourseTeacher">
-		DELETE FROM online_lecture_teacher
-		WHERE olt_no = #{olt_no}
-	</delete>
-	
-	<select id="checkTeacherByM_no" resultType="int">
-		SELECT EXISTS(SELECT * FROM online_lecture_teacher WHERE m_no = #{m_no})
-	</select>
-	
-	<!-- 구매 기록에 추가 -->
-	<insert id="insertHistoryOrderLecture">
-		INSERT INTO history_order_lecture(oli_no, m_no, payment, payment_status)
-		VALUES(#{oli_no}, #{m_no}, #{payment}, #{payment_status})
-	</insert>
-	
-	<!-- 구매 기록 가져오기 -->
-	<select id="getHistoryOrderLectureByOli_noM_no" resultType="HistoryOrderLectureDTO">
-		SELECT * FROM history_order_lecture
-		WHERE oli_no = #{oli_no} AND m_no = #{m_no}
-	</select>
-	
-	<!-- 구매 기록 리스트 가져오기 -->
-	<select id="getHistoryOrderLectureList" resultType="HistoryOrderLectureDTO">
-		SELECT * FROM history_order_lecture
-		WHERE m_no = #{m_no}
-	</select>
-	
 	<!-- 카테고리 부분 -->
 	<select id="getCourseSubTypeList" resultType="CourseSubTypeDTO">
 		SELECT *

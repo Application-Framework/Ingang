@@ -22,7 +22,7 @@
 	<link rel="stylesheet" href="<c:url value='/resources/css/nice-select.css'/>">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-    <script src="<c:url value='/resources/js/main.js'/>"></script>
+    <%-- <script src="<c:url value='/resources/js/main.js'/>"></script> --%>
     
 	<%-- 모달용 --%>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
@@ -58,6 +58,9 @@
 			color: #635c5c;
 			text-decoration: none;
 		}
+		a:hover {
+			color: #fb246a;
+		}
 		
 		.nice-select {
 		    width: 50px;
@@ -86,19 +89,31 @@
             top:50%; 
             left:50%;
             transform : translate(-50%, -50%);
-            text-align:center;
+            /* text-align:center; */
             box-sizing:border-box; 
             line-height:23px;
             border-style: solid;
             border-radius: 10px;
         }
+        
+        .items-link a {
+        	margin-bottom: 0px;
+        }
+        
+        hr {
+        	margin: 2rem 0;
+		    border-top: 1px solid #cbcbcb;
+		    border-bottom: 1px solid #fff;
+		    opacity: 50%;
+        }
+        
+        b {
+        	color: #000000
+        }
 	</style>
 </head>
 
 <body>
-      <%-- Preloader --%>
-    <jsp:include page="../fix/preloader.jsp" />
-   
     <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
@@ -106,21 +121,27 @@
     <div class="container-flex" style="background-color:#000a12">
     	<div class="container p-5">
     		<div class="row">
-	    		<%-- 강의 표지 --%>
-	    		<div class="col-xl-5">
-	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px;"/>
+    			<%-- 강의 표지 --%>
+	    		<div class="col-xl-5 d-flex justify-content-center">
+	    			<img src="<c:url value='${course.img_path}'/>" style="width:440px; height:286px; object-fit: contain;"/>
 	    		</div>
 		    	<div class="col-xl-7 card-body text-white">
+		    		<div>
+		    			<span>${mainCategory}</span> 
+		    			<span><i class="bi bi-chevron-right"></i></span>
+		    			<span>${typeService.getSubTypeBySubTypeNo(subCategoryList[0].sub_type_no).sub_type_name}</span>
+		    		</div>
 			    	<h3 class="fw-bold text-white mb-5">${note.title}</h3>
 			    	<div class="stars-outer">
 		                <div class="stars-inner" style="width:${starAvg*20}%"></div>
 		            </div>
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
-		            <p class="text-white">${memberService.getMemberByM_no(note.m_no)}</p>
-		            <div>
+		            <p class="text-white">${teacher.name}</p>
+		            <div class="d-flex align-items-center items-link ">
+		            	<span class="fs-4 pe-2 text-white">#</span>
 		            	<c:forEach var="tag" items="${tags}">
-		            		<span class="border border-info border-3 rounded-pill">#${tag.tag}</span>
+		            		<a>${tagService.getTagByTag_no(tag.tag_no).tag_name}</a>
 		            	</c:forEach>
 		            </div>
 			    </div>
@@ -150,9 +171,12 @@
 			<div class="col-lg-8">
 				<%-- 강의 소개 출력 --%>
 				<c:if test="${contentType == 'main'}">
-					<textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${note.content}
-					</textarea>
+					<h4 class="mb-3"><b><c:if test="${course.level == 1}">입문자</c:if><c:if test="${course.level == 2}">초급자</c:if><c:if test="${course.level == 3}">중급자</c:if></b>를 위해 준비한<br>
+					<b>[<c:forEach var="category" items="${subCategoryList}" varStatus="status">
+						${typeService.getSubTypeBySubTypeNo(category.sub_type_no).sub_type_name}<c:if test="${not status.last}">, </c:if>
+					</c:forEach>] 노트입니다.</b></h4>
+				
+					<c:out value="${course.content}" escapeXml="false" />
 					
 					<%-- 노트 내용 --%>
 					<div class="mb-3 fs-3 fw-bold">
@@ -162,15 +186,18 @@ ${note.content}
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
 								<a href="javascript:;" <c:if test="${purchased == true || note.m_no == member.m_no}">onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
+								<div class="float-end me-3">
+									<span><a href="/course/${note.oli_no}/play/${article.olv_no}">수정</a></span>
+						    		<span>| <a href="javascript:;" onclick="deleteNoteArticle(${note.oli_no}, ${article.olv_no})">삭제</a></span>
+					    		</div>
 							</div>
 							
 							<%-- 노트 글 모달 --%>
 							<div class="modal" id="${article.na_no}">
 								<div class="modal_content card" style="width:35rem; height:37rem;">
 									<div class="card-body p-4">
-										<h5 class="card-title fw-bold mb-2">${article.title}</h5>
-						                <textarea readonly class="fs-5 w-100" style="overflow:hidden; resize:none; border-style: none; outline: none;">
-${article.content}</textarea>
+										<h5 class="card-title fw-bold mb-3 text-center">${article.title}</h5>
+										<c:out value="${article.content}" escapeXml="false"/>
 									</div>
 								</div>
 							</div>
@@ -348,6 +375,22 @@ ${article.content}</textarea>
 					location.reload();
 				}
 			});
+		}
+		
+		function deleteNoteArticle(oli_no, olv_no) {
+			if(confirm("정말 노트 글을 삭제하시겠습니까?")) {
+				$.ajax({
+					url: "/deleteNoteArticle",
+					type: "POST",
+					data: {
+						oli_no: oli_no,
+						olv_no: olv_no
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+			}
 		}
     </script>
     

@@ -11,6 +11,7 @@ import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -32,6 +33,23 @@ public class FileServiceImpl implements FileService {
 	
 	@Autowired
 	ServletContext servletContext;
+	
+	// 서버에 파일 추가
+	@Override
+	public String insertFileToServer(MultipartFile file, String path) throws Exception {
+		String serverPath = servletContext.getRealPath("resources");
+		createFolder(serverPath + path);
+		String originalFileName = file.getOriginalFilename();	//오리지날 파일명
+		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));
+		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
+		
+		// 로컬에 저장
+		File serverFile = new File(serverPath + path, savedFileName);
+		file.transferTo(serverFile);
+		System.out.println("insert serverFile : " + serverFile.getPath());
+		
+		return "/resources" + path + "/" + savedFileName;
+	}
 	
 	// 로컬과 서버에 파일 추가
 	// path : /resources의 하위 폴더
@@ -129,6 +147,8 @@ public class FileServiceImpl implements FileService {
 			File serverFile = new File(servletContext.getRealPath("") + file.getUrl());
 			File localFile = new File(localPath + file.getUrl());
 			
+			createFolder(localFile.getParent());
+			
 			if(!localFile.exists()) {
 				// 서버에 임시 저장되어있던 파일을 로컬로 복사
 				Files.copy(serverFile.toPath(), localFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
@@ -168,8 +188,9 @@ public class FileServiceImpl implements FileService {
 		
 		if (!folder.exists()) {
 			try{
-			    folder.mkdir(); //폴더 생성합니다.
+			    folder.mkdirs(); //폴더 생성합니다.
 			    System.out.println("폴더가 생성되었습니다.");
+			    System.out.println("폴더 경로 : " + path);
 	        } 
 	        catch(Exception e){
 			    e.getStackTrace();

@@ -32,6 +32,14 @@ public class NoteArticleDAOImpl implements NoteArticleDAO {
 	public int deleteNoteArticle(int na_no) {
 		return sqlSession.delete(namespace + ".deleteNoteArticle", na_no);
 	}
+	
+	@Override
+	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("n_no", n_no);
+		map.put("olv_no", olv_no);
+		return sqlSession.delete(namespace + ".deleteNoteArticleByN_noAndOlv_no", map);
+	}
 
 	@Override
 	public List<NoteArticleDTO> getNoteArticleList(int n_no) {

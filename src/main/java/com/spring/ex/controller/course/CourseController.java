@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.spring.ex.dto.CommunityBoardDTO;
-import com.spring.ex.dto.MainTypeDTO;
+import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.MemberDTO;
-import com.spring.ex.dto.SubTypeDTO;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
-import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.CourseService;
+import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TeacherService;
 import com.spring.ex.service.TypeService;
 import com.spring.ex.service.t_TagService;
 
@@ -38,6 +38,9 @@ public class CourseController {
 	
 	@Inject
 	private CourseService courseService; 
+	
+	@Inject
+	private TeacherService teacherService;
 	
 	@Inject
 	private MemberService memberService;
@@ -54,12 +57,15 @@ public class CourseController {
 	@Inject
 	private TypeService typeService;
 	
+	@Inject
+	private HistoryOrderService historyOrderService;
+	
 	// 강의 검색 페이지
 	private void showCourses(HttpServletRequest request, Model model, String main_type, String sub_type) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		boolean isTeacher = false;
 		if(memberDTO != null) 
-			isTeacher = (courseService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
+			isTeacher = (teacherService.checkTeacherByM_no(memberDTO.getM_no()) == 1) ? true : false;
 		
 		System.out.println("main_type : " + main_type);
 		System.out.println("sub_type : " + sub_type);
@@ -103,6 +109,7 @@ public class CourseController {
 		
 		/* model.addAttribute("mainTypeList", typeSerivce.getMainTypeList()); */
 		model.addAttribute("typeService", typeService);
+		model.addAttribute("teacherService", teacherService);
 		model.addAttribute("paging", pagingService.getPaging()); 
 		model.addAttribute("clist", courseService.getCoursePage(pageMap));
 		model.addAttribute("s", searchTitle);
@@ -139,12 +146,12 @@ public class CourseController {
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO courseTeacherDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
 		boolean existLike = false;
 		// 접속한 회원이 현재 강의의 강사인지 확인
 		boolean isCurrentCourseTeacher = false;
 		if(memberDTO != null) {
-			TeacherDTO currentTeacherDTO = courseService.getTeacherInfoByM_no(memberDTO.getM_no());
+			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
 			if(currentTeacherDTO != null) {
 				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
@@ -158,7 +165,7 @@ public class CourseController {
 		
 		// 회원이 강의를 구매했는지 확인
 		if(memberDTO != null) {
-			HistoryOrderLectureDTO historyOrderLectureDTO = courseService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
+			HistoryOrderLectureDTO historyOrderLectureDTO = historyOrderService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
 			model.addAttribute("purchased", purchased);
 		}
@@ -174,7 +181,7 @@ public class CourseController {
 		System.out.println(tags);
 		System.out.println(likeCnt);
 		System.out.println(videos);
-		
+		System.out.println(notes);
 		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
@@ -209,12 +216,19 @@ public class CourseController {
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO teachertDTO = courseService.getTeacherInfo(courseDTO.getOlt_no());
+		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
 		boolean existLike = false;
-		if(memberDTO != null) existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+		boolean isCurrentCourseTeacher = false;
+		if(memberDTO != null) {
+			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
+			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
+			if(currentTeacherDTO != null) {
+				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
+			}
+		}
 		int stdCnt = 0;
 		
 		String search = request.getParameter("search");
@@ -234,31 +248,35 @@ public class CourseController {
 		cbMap.put("pageSize", 10);
 		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
 		
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("tagService", tagService);
+		model.addAttribute("typeService", typeService);
+		model.addAttribute("cbService", cbService);
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("teacher", teachertDTO);
+		model.addAttribute("teacher", courseTeacherDTO);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("memberService", memberService);
-		model.addAttribute("cbService", cbService);
 		model.addAttribute("existLike", existLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("cbList", cbList);
 		model.addAttribute("contentType", "community");
 		model.addAttribute("paging", pagingService.getPaging());
 		model.addAttribute("classify", Integer.parseInt(classify));
-		
+		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
+		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(pageNo).getMain_type_name());
+		model.addAttribute("subCategoryList", courseService.getCourseSubTypeList(pageNo));
 		return "course/course_detail";
 	}
 	
 	// 강의 재생 페이지
-	@RequestMapping("/course/{pageNo}/play/{olv_no}")
-	public String course_play(HttpServletRequest request, Model model, @PathVariable int pageNo, @PathVariable int olv_no) {
+	@RequestMapping("/course/{oli_no}/play/{olv_no}")
+	public String course_play(HttpServletRequest request, Model model, @PathVariable int oli_no, @PathVariable int olv_no) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
-		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(pageNo);
-		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(pageNo, memberDTO.getM_no());
+		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
+		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(oli_no, memberDTO.getM_no());
 		System.out.println(noteDTO);
 		if(noteDTO != null) {
 			NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOlv_no(noteDTO.getN_no(), olv_no);
@@ -266,17 +284,39 @@ public class CourseController {
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
 		
-		model.addAttribute("videoPath", courseVideoDTO.getS_file_name());
-		model.addAttribute("pageNo", pageNo);
+		String search = request.getParameter("search");
+		String classify = request.getParameter("classify");
+		
+		if(search == null) 
+			search = "";
+		// 커뮤니티 불러오기
+		HashMap<String, Object> cbMap = new HashMap<String, Object>();
+		cbMap.put("oli_no", oli_no);
+		cbMap.put("search", search);
+		if(classify != null)
+			cbMap.put("classify", Integer.parseInt(classify));
+		else cbMap.put("classify", 2);
+		pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		cbMap.put("page", pagingService.getNowPage());
+		cbMap.put("pageSize", 10);
+		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		
+		System.out.println(cbList);
+		
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("cbService", cbService);
+		model.addAttribute("video", courseVideoDTO);
+		model.addAttribute("oli_no", oli_no);
 		model.addAttribute("olv_no", olv_no);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("type", "content");
 		model.addAttribute("note", noteDTO);
+		model.addAttribute("cbList", cbList);
 		
 		return "course/course_play";
 	}
 	
-	@RequestMapping("/course/courseClickedLike")
+	@RequestMapping("/courseClickedLike")
 	public String clickedLikeInCourse(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
@@ -290,23 +330,5 @@ public class CourseController {
 		}
 		
 		return "redirect:" + request.getHeader("referer");
-	}
-	
-	// 강의 구매
-	@RequestMapping("/course/purchaseCourse")
-	public String purchaseCourse(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		CourseDTO courseDTO = courseService.getCourseDetail(oli_no);
-		
-		HistoryOrderLectureDTO historyOrderLectureDTO = new HistoryOrderLectureDTO();
-		historyOrderLectureDTO.setOli_no(oli_no);
-		historyOrderLectureDTO.setM_no(memberDTO.getM_no());
-		historyOrderLectureDTO.setPayment(courseDTO.getPrice());
-		historyOrderLectureDTO.setPayment_status(1);
-		
-		courseService.insertHistoryOrderLecture(historyOrderLectureDTO);
-		
-		return "redirect:/";
 	}
 }

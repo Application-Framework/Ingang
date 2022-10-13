@@ -6,9 +6,9 @@ public class TeacherDTO {
 	private int olt_no;
 	private int m_no;
 	private String email;
-	private String phone;
 	private String name;
-	private String field;
+	private String phone;
+	private int main_type_no;
 	private String introduction;
 	private String link;
 	private int grade;
@@ -32,23 +32,23 @@ public class TeacherDTO {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	public String getPhone() {
-		return phone;
-	}
-	public void setPhone(String phone) {
-		this.phone = phone;
-	}
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getField() {
-		return field;
+	public String getPhone() {
+		return phone;
 	}
-	public void setField(String field) {
-		this.field = field;
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+	public int getMain_type_no() {
+		return main_type_no;
+	}
+	public void setMain_type_no(int main_type_no) {
+		this.main_type_no = main_type_no;
 	}
 	public String getIntroduction() {
 		return introduction;
@@ -76,8 +76,8 @@ public class TeacherDTO {
 	}
 	@Override
 	public String toString() {
-		return "TeacherDTO [olt_no=" + olt_no + ", m_no=" + m_no + ", email=" + email + ", phone=" + phone + ", name="
-				+ name + ", field=" + field + ", introduction=" + introduction + ", link=" + link + ", grade=" + grade
-				+ ", reg_date=" + reg_date + "]";
+		return "TeacherDTO [olt_no=" + olt_no + ", m_no=" + m_no + ", email=" + email + ", name=" + name + ", phone="
+				+ phone + ", main_type_no=" + main_type_no + ", introduction=" + introduction + ", link=" + link
+				+ ", grade=" + grade + ", reg_date=" + reg_date + "]";
 	}
 }

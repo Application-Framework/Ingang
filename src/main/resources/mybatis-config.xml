@@ -5,23 +5,29 @@
 		<typeAlias type="com.spring.ex.dto.CommunityBoardDTO" alias="CommunityBoardDTO"/>
 		<typeAlias type="com.spring.ex.dto.CommunityBoardReplyDTO" alias="CommunityBoardReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.CommunityBoardTagDTO" alias="CommunityBoardTagDTO"/>
+		
 		<typeAlias type="com.spring.ex.dto.MemberDTO" alias="MemberDTO"/>
+		
 		<typeAlias type="com.spring.ex.dto.course.CourseDTO" alias="CourseDTO"/>
 		<typeAlias type="com.spring.ex.dto.course.CourseReplyDTO" alias="CourseReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.course.CourseTagDTO" alias="CourseTagDTO"/>
 		<typeAlias type="com.spring.ex.dto.course.CourseVideoDTO" alias="CourseVideoDTO"/>
-		<typeAlias type="com.spring.ex.dto.course.HistoryOrderLectureDTO" alias="HistoryOrderLectureDTO"/>
 		<typeAlias type="com.spring.ex.dto.course.CourseSubTypeDTO" alias="CourseSubTypeDTO"/>
-		<typeAlias type="com.spring.ex.dto.TeacherDTO" alias="TeacherDTO"/>
-		<typeAlias type="com.spring.ex.dto.TagDTO" alias="TagDTO"/>
+		
 		<typeAlias type="com.spring.ex.dto.note.NoteDTO" alias="NoteDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.NoteArticleDTO" alias="NoteArticleDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.NoteLikeDTO" alias="NoteLikeDTO"/>
 		<typeAlias type="com.spring.ex.dto.note.NoteReplyDTO" alias="NoteReplyDTO"/>
-		<typeAlias type="com.spring.ex.dto.note.HistoryOrderNoteDTO" alias="HistoryOrderNoteDTO"/>
+		
+		<typeAlias type="com.spring.ex.dto.TeacherDTO" alias="TeacherDTO"/>
+		<typeAlias type="com.spring.ex.dto.TagDTO" alias="TagDTO"/>
+		
 		<typeAlias type="com.spring.ex.dto.UploadedFileDTO" alias="UploadedFileDTO"/>
 		<typeAlias type="com.spring.ex.dto.MainTypeDTO" alias="MainTypeDTO"/>
 		<typeAlias type="com.spring.ex.dto.SubTypeDTO" alias="SubTypeDTO"/>
 		<typeAlias type="com.spring.ex.dto.t_TagDTO" alias="t_TagDTO"/>
+		
+		<typeAlias type="com.spring.ex.dto.HistoryOrderLectureDTO" alias="HistoryOrderLectureDTO"/>
+		<typeAlias type="com.spring.ex.dto.HistoryOrderNoteDTO" alias="HistoryOrderNoteDTO"/>
 	</typeAliases>
 </configuration>

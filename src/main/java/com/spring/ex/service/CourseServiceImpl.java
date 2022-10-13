@@ -7,7 +7,6 @@ import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
 
-import com.spring.ex.dao.TeacherDAO;
 import com.spring.ex.dao.TypeDAO;
 import com.spring.ex.dao.course.CourseDAO;
 import com.spring.ex.dao.course.CourseLikeDAO;
@@ -15,15 +14,12 @@ import com.spring.ex.dao.course.CourseReplyDAO;
 import com.spring.ex.dao.course.CourseSubTypeDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
-import com.spring.ex.dao.course.HistoryOrderLectureDAO;
 import com.spring.ex.dto.MainTypeDTO;
-import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
-import com.spring.ex.dto.course.HistoryOrderLectureDTO;
 
 @Service
 public class CourseServiceImpl implements CourseService {
@@ -38,16 +34,10 @@ public class CourseServiceImpl implements CourseService {
 	private CourseTagDAO courseTagDAO;
 	
 	@Inject
-	private TeacherDAO teacherDAO;
-	
-	@Inject
 	private CourseLikeDAO courseLikeDAO;
 	
 	@Inject
 	private CourseVideoDAO courseVideoDAO;
-	
-	@Inject
-	private HistoryOrderLectureDAO historyOrderLectureDAO;
 	
 	@Inject
 	private t_TagService t_TagService;
@@ -161,31 +151,6 @@ public class CourseServiceImpl implements CourseService {
 	}
 	
 	@Override
-	public TeacherDTO getTeacherInfo(int olt_no) {
-		return teacherDAO.getTeacherInfo(olt_no);
-	}
-	
-	@Override
-	public TeacherDTO getTeacherInfoByM_no(int m_no) {
-		return teacherDAO.getTeacherInfoByM_no(m_no);
-	}
-	
-	@Override
-	public int insertCourseTeacher(TeacherDTO dto) {
-		return teacherDAO.insertCourseTeacher(dto);
-	}
-
-	@Override
-	public int deleteCourseTeacher(int olt_no) {
-		return teacherDAO.deleteCourseTeacher(olt_no);
-	}
-
-	@Override
-	public int checkTeacherByM_no(int m_no) {
-		return teacherDAO.checkTeacherByM_no(m_no);
-	}
-	
-	@Override
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
 		return courseVideoDAO.getCourseVideoList(oli_no);
 	}
@@ -193,21 +158,6 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public CourseVideoDTO getCourseVideo(int olv_no) {
 		return courseVideoDAO.getCourseVideo(olv_no);
-	}
-
-	@Override
-	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto) {
-		return historyOrderLectureDAO.insertHistoryOrderLecture(dto);
-	}
-	
-	@Override
-	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no) {
-		return historyOrderLectureDAO.getHistoryOrderLectureByOli_noM_no(oli_no, m_no);
-	}
-	
-	@Override
-	public List<HistoryOrderLectureDTO> getHistoryOrderLectureList(int m_no) {
-		return historyOrderLectureDAO.getHistoryOrderLectureList(m_no);
 	}
 
 	@Override

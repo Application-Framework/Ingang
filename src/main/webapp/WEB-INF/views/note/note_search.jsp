@@ -13,7 +13,7 @@
 		<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
 
 		<!-- CSS here -->
-        <!-- CSS only -->
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
         <%-- <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>"> --%>
         <link rel="stylesheet" href="<c:url value='/resources/css/owl.carousel.min.css'/>">
@@ -31,6 +31,10 @@
         <link rel="stylesheet" href="<c:url value='/resources/css/responsive.css'/>">
         <%-- <link rel="stylesheet" href="<c:url value='/resources/css/sidebars.css'/>"> --%>
 
+		<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
         <style>
             .btn:hover::before {
                 /* transform: translate(-50%,-50%); */
@@ -134,103 +138,84 @@
             <div class="container">
            		<div class="job-listing-area pt-120 pb-120">
                     <div class="row">
-                        <!-- Left content -->
-                        <div class="col-lg-3 blog_right_sidebar">
-                            <aside class="single_sidebar_widget post_category_widget">
-                                <ul class="list cat-list">
-                                	<li>
-                                        <a href="/notes">
-                                            <p class="d-flex">ALL</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/web-dev">
-                                            <p class="d-flex">웹 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/front-end" class="d-flex">
-                                            <p class="d-flex">프론트엔드</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/back-end" class="d-flex">
-                                            <p class="d-flex">백엔드</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/programming-lang" class="d-flex">
-                                            <p class="d-flex">프로그래밍 언어</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/database-dev" class="d-flex">
-                                            <p class="d-flex">데이터베이스</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/algorithm" class="d-flex">
-                                            <p class="d-flex">알고리즘·자료구조</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/mobile-app" class="d-flex">
-                                            <p class="d-flex">모바일 앱 개발</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/artificial-intelligence" class="d-flex">
-                                            <p class="d-flex">AI</p>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="/notes/security" class="d-flex">
-                                            <p class="d-flex">보안</p>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </aside>
+	                    <%-- 강의 카테고리 --%>
+	                    <div class="col-lg-3 sidebar">
+							<aside class="single_sidebar_widget post_category_widget">
+								<nav class="navbar bg-light navbar-light">
+									<div class="navbar-nav w-100">
+										<div class="nav-item dropdown">
+											<a href="/notes" class="dropdown-item">전체 노트</a>
+										</div>
+										<%-- 메인 카테고리 --%>
+										<c:forEach var="mainType" items="${typeService.getMainTypeList()}" >
+											<div class="nav-item dropdown">
+												<a href="#" class="ps-3 nav-link dropdown-toggle" 
+												data-bs-toggle="dropdown">${mainType.main_type_name}</a>
+												<div class="dropdown-menu bg-transparent border-0">
+													<a href="/notes/${mainType.main_type_abbr}" class="dropdown-item">ALL</a>
+													<%-- 서브 카테고리 --%>
+													<c:forEach var="subType" items="${typeService.getSubTypeListOfMainType(mainType.main_type_no)}">
+														<a href="/notes/${mainType.main_type_abbr}/${subType.sub_type_abbr}" class="dropdown-item">${subType.sub_type_name}</a>
+													</c:forEach>
+												</div>
+											</div>
+										</c:forEach>
+									</div>
+								</nav>
+							</aside>
                         </div>
-                        <!-- Right content -->
+                        
+                        
                         <div class="col-lg-9">
                             <section class="featured-job-area">
                                 <div class="container">
-                                    <!-- Count of Job list Start -->
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="count-job mb-35">
-                                                <span>${totalCount} note found</span>
-                                                <!-- Select job items start -->
-                                                <div class="select-job-items">
-                                                    <span>Sort by</span>
-                                                    <form>
-                                                    	<c:if test="${keyword != ''}">
-                                                    	<input type="hidden" name="keyword" value="${keyword}"/>
-                                                    	</c:if>
-	                                                    <select onchange="this.form.submit()" name="order">
-	                                                        <option <c:if test="${order == '' || order == 'none'}">selected</c:if> value="none">None</option>
-	                                                        <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
-	                                                        <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
-	                                                        <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
-	                                                        <option <c:if test="${order == 'price'}">selected</c:if> value="price">가격순</option>
-	                                                    </select>
-                                                    </form>
-                                                </div>
-                                                <!--  Select job items End-->
-                                            </div>
-                                        </div>
+                                    <%-- 검색 필터 --%>
+									<div class="d-flex align-items-center mb-3">
+	                                	<div class="w-100">
+	                                        <span>${totalCount} course found</span>
+	                                    </div>
+	                                    
+	                                    <div class="flex-shrink-1 pe-2 text-center">
+	                                        <span>요금</span>
+	                                        <select onchange="refreshPage()" id="charge" name="charge" class="nice-select" multiple>
+	                                            <option <c:if test="${order == 'free'}">selected</c:if> value="free">무료</option>
+	                                            <option <c:if test="${order == 'paid'}">selected</c:if> value="paid">유료</option>
+	                                        </select>
+	                                    </div>
+	                                   
+	                                    <div class="flex-shrink-1 text-center">
+	                                        <span>Sort by</span>
+	                                         <select onchange="refreshPage()" id="order" name="order" class="nice-select">
+	                                             <option <c:if test="${order == 'none'}">selected</c:if> value="none">None</option>
+	                                             <option <c:if test="${order == 'like'}">selected</c:if> value="like">좋아요순</option>
+	                                             <option <c:if test="${order == 'reply'}">selected</c:if> value="reply">리뷰순</option>
+	                                             <option <c:if test="${order == 'star'}">selected</c:if> value="star">평점순</option>
+	                                             <option <c:if test="${order == 'price'}">selected</c:if> value="price">가격순</option>
+	                                         </select>
+	                                    </div>
+	                                    <!--  Select job items End-->
                                     </div>
-
+									
+									
                                     <%-- 노트 검색 입력 폼 --%>
-                                    <form action="${nowURL}" class="search-box mb-5">
+                                    <form action="${nowURL}" class="search-box mb-3">
                                         <div class="input-form item" >
-                                            <input type="text" name="keyword" value="${keyword}" placeholder="노트 제목 검색" tabindex="0">
+                                            <input type="text" name="s" id="s" value="${s}" placeholder="노트 제목 검색" tabindex="0">
                                         </div>
                                         <div class="search-form item">
                                         	<button type="submit" class="btn w-100 h-100">검색</button>
-                                        </div>	
+                                        </div>
                                     </form>
-
+									
+									<%-- 태그 --%>
+									<div class="row mb-5">
+										<select onchange="refreshPage()" id="tags" placeholder="태그 검색" multiple required>
+										  <c:forEach var="tag" items="${tagList}">
+											  <option value="${tag.tag_abbr}">${tag.tag_name}</option>
+										  </c:forEach>
+										</select>
+					    			</div>
+									
                                     <%-- 노트 리스트 출력 부분 --%>
                                     <div class="row row-cols-4 mb-3">
                                     	<c:forEach var="list" items="${nlist}">
@@ -239,7 +224,7 @@
 	                                            	<img src="<c:url value='${courseService.getCourseDetail(list.oli_no).img_path}'/>" style="height:150px"/>
 	                                                <div class="card-body">
 	                                                    <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis">
-	                                                    	<a href="/notes/${list.n_no}" class="stretched-link">${list.title}</a>
+	                                                    	<a href="/note/${list.n_no}" class="stretched-link">${list.title}</a>
 	                                                    </div>
 	                                                    <div id="teacher-name" class="card-text">${memberService.getNameByM_no(list.m_no)}</div>
 	                                                    <div class="stars-outer">
@@ -288,17 +273,63 @@
         </main>
     	
     	<script>
-    		function submitOrder(x) {
-    			console.log(x);
-    			$.ajax({
-   	                 url: '${nowURL}',
-   	                 type: 'GET',
-   	                 data: {order: x}
-   	            });
-    		}
+	    	var url = new URL(location.origin + location.pathname);
+			var search = "";
+	        $(function() {
+	        	// select option drop box 옵션 설정
+		    	var multipleCancelButton = new Choices('#tags', {
+		            removeItemButton: true,
+		            maxItemCount:5,
+		            searchResultLimit:10,
+		            //renderChoiceLimit:10
+		        }); 
+	        	
+	        	$('#search').on("click", function() {
+	        		search = $("#s").val();
+	        		refreshPage();
+	        	});
+	        });
+	        
+			function refreshPage() {
+				url = new URL(location.origin + location.pathname);
+				var charge = $("#charge").val();
+				var s = search;
+				var order = $("#order").val();
+				var tags = $("#tags").val()
+				/* console.log(level);
+				console.log(charge);
+				console.log(s);
+				console.log(order);
+				console.log(tags);
+				console.log(${paging.pageNo}); */
+				
+				if(charge.length != 0)
+					url.searchParams.set('charge', charge);
+				if(s != "")
+					url.searchParams.set('s', s);
+				if(order.length != 0)
+					url.searchParams.set('order', order);
+				if(tags.length != 0)
+					url.searchParams.set('tags', tags);
+				url.searchParams.set('page', ${paging.pageNo});
+				$.ajax({
+					url: url.toString(),
+					type: 'get',
+					dataType: 'html',
+					success: function(html) {
+						
+						var content = $(html).find("#content>*");
+						var pagination = $(html).find("#pagination>*");
+						console.log(content);
+						console.log(pagination);
+						
+						$("#content").html(content);
+						$("#pagination").html(pagination);
+						history.pushState(null, null, url);
+					}
+				});
+			}
     	</script>
 		<jsp:include page="../fix/footer.jsp" />
-        <!-- JavaScript Bundle with Popper -->
-		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     </body>
 </html>

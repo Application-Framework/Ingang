@@ -8,6 +8,7 @@
 <head>
 <meta charset="UTF-8">
 <title></title>
+<script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
 
 <style>
 	<!-- 드롭다운 CSS -->
@@ -109,10 +110,9 @@
                                                     <li><a href="/communityStudies">스터디</a></li>
                                                 </ul>
                                             </li>
-                                            <!-- 로그인을 수행해야 마이페이지 보임 -->
-                                           <%--  <c:if test="${member != null}">
-                                            	<li><a href="/mypage">마이페이지</a></li>
-                                            </c:if> --%>
+                                            <li>
+                                            	<a href="/open-knowledge">지식공유 참여</a>
+                                            </li>
                                             
                                         </ul>
                                     </nav>
@@ -251,5 +251,4 @@
         </div>
     </header>
 </body>
-<script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
 </html>
