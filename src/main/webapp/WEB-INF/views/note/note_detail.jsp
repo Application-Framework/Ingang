@@ -217,7 +217,7 @@
 			                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
 			            </div>
 			            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
-			    		<span class="fw-bold">${memberSerivce.getNameByM_no(reply.m_no)}</span> <span>${reply.reg_date}</span>
+			    		<span class="fw-bold">${memberSerivce.getMemberByM_no(reply.m_no).m_name}</span> <span>${reply.reg_date}</span>
 			    		<p>${reply.content}</p>
 				    	<hr>
 					</c:forEach>
@@ -331,7 +331,7 @@
 			x.classList.toggle("bi-heart-fill");
 			x.classList.toggle("text-danger");
 			$.ajax({
-				url: '/notes/noteClickedLike',
+				url: '/noteClickedLike',
 				type: 'post',
 				data: {
 					status: status,
@@ -366,7 +366,7 @@
 		
 		function purchaseNote() {
 			$.ajax({
-				url: '/notes/purchaseNotes',
+				url: '/purchaseNote',
 				type: 'post',
 				data: {
 					n_no: ${pageNo}

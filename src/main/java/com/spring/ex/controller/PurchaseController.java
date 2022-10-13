@@ -51,6 +51,7 @@ public class PurchaseController {
 		}
 	}
 	
+	@ResponseBody
 	@RequestMapping(value="/purchaseNote", method=RequestMethod.POST)
 	public String purchaseNote(HttpServletRequest request) {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
