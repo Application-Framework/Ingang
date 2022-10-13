@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
@@ -28,6 +29,7 @@ public class PurchaseController {
 	@Inject
 	private NoteService noteService;
 	
+	@ResponseBody
 	@RequestMapping(value="/purchaseCourse", method=RequestMethod.POST)
 	public String purchaseCourse(HttpServletRequest request) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
@@ -39,7 +41,6 @@ public class PurchaseController {
 		historyOrderLectureDTO.setM_no(memberDTO.getM_no());
 		historyOrderLectureDTO.setPayment(courseDTO.getPrice());
 		historyOrderLectureDTO.setPayment_status(1);
-		
 		try {
 			historyOrderService.insertHistoryOrderLecture(historyOrderLectureDTO);
 			System.out.println("강의 구매 성공 : " + historyOrderLectureDTO);
