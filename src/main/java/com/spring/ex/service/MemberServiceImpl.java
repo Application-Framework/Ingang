@@ -24,6 +24,12 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO idCheck(String m_id) throws Exception {
 		return dao.idCheck(m_id);
 	}
+	
+	// 비밀번호 체크
+	@Override
+	public MemberDTO pwCheck(MemberDTO memberDTO) throws Exception {
+		return dao.pwCheck(memberDTO);
+	}
 
 	//로그인
 	@Override

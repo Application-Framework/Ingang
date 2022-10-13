@@ -1,12 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title></title>
+<script src="https://use.fontawesome.com/releases/v6.2.0/js/all.js"></script>
+
+<style>
+	<!-- 드롭다운 CSS -->
+	.dropdown{
+	  position : relative;
+	  display : inline-block;
+	}
+	
+	.dropbtn_icon{
+	  font-family : 'Material Icons';
+	}
+	.dropbtn{
+	  border : 1px #9c9c9c;
+	  border-radius : 4px;
+	  background-color: #ededeb;
+	  font-weight: 400;
+	  color : white;
+	  padding : 12px;
+	  /*width :200px;*/
+	  text-align: left;
+	  cursor : pointer;
+	  font-size : 12px;
+	}
+	.dropbtn:hover{
+		color : #30c000;
+	}
+	.dropdown-content{
+	  box-shadow: 1px 1px 1px 1px #9c9c9c;
+	  border-radius : 8px;
+	  display : none;
+	  position : absolute;
+	  z-index : 1; /*다른 요소들보다 앞에 배치*/
+	  font-weight: 400;
+	  background-color: #f9f9f9;
+	  min-width : 400px;
+	}
+	
+	.dropdown-content a{
+	  display : block;
+	  text-decoration : none;
+	  color : rgb(37, 37, 37);
+	  font-size: 16px;
+	  padding : 12px 20px;
+	}
+	
+	.dropdown-content a:hover{
+	  background-color : #ececec
+	}
+	
+	.dropdown:hover .dropdown-content {
+	  display: block;
+	}
+</style>
 </head>
 <body>
     <header>
@@ -55,12 +110,10 @@
                                                     <li><a href="/communityStudies">스터디</a></li>
                                                 </ul>
                                             </li>
-                                            <!-- 로그인을 수행해야 마이페이지 보임 -->
-                                            <c:if test="${member != null}">
-                                            	<li><a href="/mypage">마이페이지</a></li>
-                                            </c:if>
-                                            <li><a href="/open-knowledge">지식공유 참여</a>
+                                            <li>
+                                            	<a href="/open-knowledge">지식공유 참여</a>
                                             </li>
+                                            
                                         </ul>
                                     </nav>
                                 </div>          
@@ -75,10 +128,116 @@
                                 
                                 <!-- 로그인에 성공한 경우 로그아웃 버튼 보여줌 -->
                                 <c:if test="${member != null}">
-                              		${member.m_name}님 환영합니다!
-                                	<div class="header-btn d-none f-right d-lg-block">
-	                                    <a href="/logOut" class="btn head-btn2">로그아웃</a>
-                                	</div>
+                                	<div class="row">
+	                              		<!-- 수강바구니(찜한목록) -->
+	                              		<div class="dropdown col-lg-4">
+									    	<button class="dropbtn"> 
+									      		<span class="dropbtn_icon"><i class="fa-sharp fa fa-cart-shopping"></i></span>
+									    		
+									    	</button>
+									    	<div class="dropdown-content">
+									    		<div class="container" style="margin-top: 30px; margin-bottom: 30px;">
+									    			<div class="row">
+									    			
+										    			<!-- 관심 강의 총액 구하기 -->
+										    			<c:set var="sum" value="0" />
+										    			<c:set var="count" value="0" />
+												    	<c:forEach var="dropInterlist" items="${dropInterList}">
+												    		<c:set var="sum" value="${sum + (dropInterlist.price)}" />
+												    	</c:forEach>
+												    	<%-- <c:forEach var="dropInterListCnt" items="${dropInterestedListCount}">
+												    		<c:set var="count" value="${count + (dropInterListCnt)}" />
+												    	</c:forEach> --%>
+									    			
+										    			<div class="col-lg-6" style="font-size:18px; font-weight: 800; margin-bottom: 30px;">
+											    			수강바구니 ${dropInterListCnt} 개
+											    		</div>
+											    		<div class="col-lg-6" style="font-size:18px; font-weight: 800;">
+											    			결제금액 : <fmt:formatNumber pattern="###,###,###" value="${sum}" /> 원
+											    		</div>
+											    		<hr>
+											    		<div class="col-lg-12" style="font-size:18px; font-weight: 800;">
+											    			<c:forEach var="dropInterlist" items="${dropInterList}">
+											    				<div class="container">
+											    					<div class="row">
+												    					<a href="/course/${dropInterlist.oli_no}">
+													    					<div class="col-lg-12" style="font-size: 12px;">
+													    						<table>
+													    							<tr>
+														    							<td rowspan="2"><img src="<c:url value='${dropInterlist.img_path}'/>" style="width:80px; height:40px; margin-left:-20px; margin-right: 20px;"/></td>
+														    							<td>${dropInterlist.title}</td>
+													    							</tr>
+													    							<tr>
+														    							<td>${dropInterlist.price} 원</td>
+													    							</tr>
+													    						</table>
+														    				</div>
+													    				</a>
+																	</div>
+											    				</div>
+											    			</c:forEach>
+											    		</div>
+										    		</div>
+									    		</div>
+									    		<hr>
+										        <a href="#" style="text-align:center; font-size: 20px; color:white; background-color: #30c000;">수강바구니에서 전체보기</a>
+									    	</div>
+									  	</div>
+									  	
+									  	<!-- 알람 -->
+	                              		<div class="dropdown col-lg-4">
+									    	<button class="dropbtn"> 
+									      		<span class="dropbtn_icon"><i class="fa-sharp fa fa-bell"></i></span>
+									    		
+									    	</button>
+									    	<div class="dropdown-content">
+									    		<div class="container" style="margin-top: 30px; margin-bottom: 30px;">
+									    			<div class="row">
+										    			<div class="col-lg-12" style="font-size:18px; text-align: center; font-weight: 800;">
+											    			읽지 않은 알람 00건
+											    		</div>
+										    		</div>
+									    		</div>
+									    		<hr>
+										        <a href="#" style="text-align:center; font-size: 20px; color:white; background-color: #30c000;">더 많은 알람 보기</a>
+									    	</div>
+									  	</div>
+									  	
+									  	<!-- 마이페이지 -->
+	                              		<div class="dropdown col-lg-4">
+									    	<button class="dropbtn"> 
+									      		<span class="dropbtn_icon"><i class="fa-sharp fa fa-user"></i></span>
+									    		
+									    	</button>
+									    	<div class="dropdown-content">
+									    		<div class="container" style="margin-top: 30px; margin-bottom: 30px;">
+									    			<div class="row">
+										    			<div class="col-lg-3">
+											    			<img src="${member.img_path}" class="avatar img-circle img-thumbnail" alt="avatar">
+											    		</div>
+											    		<div class="col-lg-9">
+											    			<a href="/mypage">${member.m_name}</a>
+											    		</div>
+										    		</div>
+									    		</div>
+									    		<hr>
+										      	<a href="/mypage">대시보드</a>
+										      	<a href="/my_course">내 강의</a>
+										      	<a href="/my_note">내 노트</a>
+										      	<a href="/my_post">작성한 글</a>
+										      	<hr>
+										      	<div class="row">
+										      		<div class="col-lg-6">
+												    	<a href="/logOut">로그아웃</a>
+												    </div>
+												    <div class="col-lg-6" style="text-align: right;">
+												    	<a href="/mypage">마이페이지</a>
+												    </div>
+										      	</div>
+										      	
+									    	</div>
+									  	</div>
+								  	</div>
                                 </c:if>
                             </div>
                         </div>

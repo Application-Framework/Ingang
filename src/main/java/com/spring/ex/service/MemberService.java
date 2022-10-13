@@ -12,6 +12,9 @@ public interface MemberService {
 	// 일반 회원 아이디 중복 체크
 	public MemberDTO idCheck(String m_id) throws Exception;
 	
+	// 비밀번호 체크
+	public MemberDTO pwCheck(MemberDTO memberDTO) throws Exception;
+	
 	//로그인
 	public MemberDTO login(MemberDTO dto) throws Exception;
 	

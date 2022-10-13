@@ -37,7 +37,7 @@ public class MyPageController {
 	@Inject
 	private FileService fileUploadService;
 	
-	@RequestMapping("/mypage" )
+	@RequestMapping("/mypage")
 	public String mypage(HttpSession session, HttpServletRequest request, Model model) throws Exception {
 		
 		Integer m_no = (Integer)session.getAttribute("m_no");
@@ -51,6 +51,42 @@ public class MyPageController {
 		model.addAttribute("countMyPost", postCnt);
 		
 		return "mypage";
+	}
+	
+	// 회원 비밀번호 확인 get
+	@RequestMapping(value = "/my_checkPW", method = RequestMethod.GET)
+	public String getCheckMyPW() {
+		return "/mypage/my_checkPW";
+	}
+	
+	// 회원 정보수정 post
+	@RequestMapping(value = "/my_checkPW", method = RequestMethod.POST)
+	public String postCheckMyPW(HttpSession session, HttpServletRequest request) throws Exception {
+		String m_pw = request.getParameter("m_pw");
+		MemberDTO memberDTO = (MemberDTO)session.getAttribute("member");
+		
+		memberDTO.getM_id();
+		memberDTO.setM_pw(m_pw);
+		
+		System.out.println("아이디 : " + memberDTO.getM_id());
+		System.out.println("비밀빈호 : " + memberDTO.getM_pw());
+		MemberDTO pwCheck = memberService.pwCheck(memberDTO);
+
+		int result = 0;
+		
+		//비밀번호 확인
+		if (pwCheck != null) {
+			result = 1;
+		} else {
+			result = 0;
+		}
+
+		if (result == 1) {
+			return "/mypage/my_update";
+		} else {
+			return "redirect:/my_checkPW";
+		}
+		
 	}
 	
 	// 회원 정보수정 get

@@ -16,6 +16,13 @@
 		where m_id = #{m_id}
 	</select>
 	
+	<!-- 비밀번호 체크 -->
+	<select id="pwCheck" resultType="com.spring.ex.dto.MemberDTO">
+		select m_id, m_pw
+		from member
+		where m_id = #{m_id} and m_pw = #{m_pw}
+	</select>
+	
 	<!-- 로그인 -->
 	<select id="login" resultType="com.spring.ex.dto.MemberDTO">
 		select *

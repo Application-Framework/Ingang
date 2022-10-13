@@ -200,7 +200,7 @@
 								</tr>
 						    	<c:forEach var="ocList" items="${ocList}">
 						    		<tr>
-										<td width="70%;"><a href="/courses/${ocList.oli_no}">${ocList.title}</a></td>
+										<td width="70%;"><a href="/course/${ocList.oli_no}">${ocList.title}</a></td>
 										<td width="30%;">${ocList.payment_date}</td>
 									</tr>
 						    	</c:forEach>
@@ -214,7 +214,7 @@
 								</tr>
 							    <c:forEach var="itList" items="${itList}">
 							    	<tr>
-										<td width="70%;"><a href="/courses/${itList.oli_no}">${itList.title}</a></td>
+										<td width="70%;"><a href="/course/${itList.oli_no}">${itList.title}</a></td>
 										<td width="30%;">${itList.reg_date}</td>
 									</tr>
 							    </c:forEach>

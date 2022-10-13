@@ -9,8 +9,8 @@
 	<!-- 강의 구매 내역 -->
 	<select id="myPurcaseCourses" resultType="HashMap">
 		select hol.oli_no, hol.m_no, hol.payment, hol.payment_date,
-				oli.oli_no, oli.title, oli.img_path, oli.price, olt.name
-		from history_order_lecture hol, online_lecture_introduction oli, online_lecture_teacher olt
+				oli.oli_no, oli.title, oli.img_path, oli.price
+		from history_order_lecture hol, online_lecture_introduction oli
 		where hol.m_no = #{m_no} and hol.oli_no = oli.oli_no
 		group by hol.oli_no
 		order by hol.payment_date desc
@@ -18,8 +18,8 @@
 	
 	<!-- 관심 강의 내역 -->
 	<select id="myInterestCourses" resultType="HashMap">
-		select 	oli.oli_no, oli.title, oli.img_path, oli.price, olt.name, oll.reg_date
-		from online_lecture_introduction oli, online_lecture_teacher olt, online_lecture_like oll
+		select 	oli.oli_no, oli.title, oli.img_path, oli.price, oll.reg_date
+		from online_lecture_introduction oli, online_lecture_like oll
 		where oll.m_no = #{m_no} and oll.oli_no = oli.oli_no
 		group by oll.oli_no
 		order by oll.reg_date desc
@@ -28,9 +28,9 @@
 	<!-- 내 강의 목록 -->
 	<select id="searchMyPurcaseCourses" resultType="HashMap">
 		select hol.oli_no, hol.m_no, hol.payment, hol.payment_date,
-				oli.oli_no, oli.title, oli.img_path, oli.price, olt.name, 
+				oli.oli_no, oli.title, oli.img_path, oli.price, 
 				TRUNCATE((SELECT AVG(star_rating) FROM online_lecture_reply olr WHERE olr.oli_no = oli.oli_no),0) star_avg
-		from history_order_lecture hol, online_lecture_introduction oli, online_lecture_teacher olt
+		from history_order_lecture hol, online_lecture_introduction oli
 		where hol.m_no = #{m_no} and hol.oli_no = oli.oli_no and oli.title LIKE concat('%', #{keyword}, '%')
 		group by hol.oli_no
 		order by hol.payment_date desc
@@ -62,7 +62,7 @@
 		order by hon.payment_date desc
 	</select>
 	
-	<!-- 노트 강의 내역 -->
+	<!-- 노트 관심 내역 -->
 	<select id="myInterestNotes" resultType="HashMap">
 		select 	n.n_no, n.m_no, n.title, nl.n_no, nl.m_no, nl.reg_date
 		from note n, note_like nl
