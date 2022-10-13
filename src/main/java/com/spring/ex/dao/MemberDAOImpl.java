@@ -28,6 +28,12 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberDTO idCheck(String m_id) throws Exception {
 		return sql.selectOne(namespcae + ".idCheck", m_id);
 	}
+	
+	// 비밀번호 체크
+	@Override
+	public MemberDTO pwCheck(MemberDTO memberDTO) throws Exception {
+		return sql.selectOne(namespcae + ".pwCheck", memberDTO);
+	}
 
 	//로그인
 	@Override
