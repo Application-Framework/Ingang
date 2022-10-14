@@ -27,7 +27,7 @@
     
    	<sql id="searchAdminMemberBoard">
 		<choose>
-			<when test="searchCategory == 'noContent'">
+			<when test="searchCategory == 'noSearch'">
 			</when>
 			<when test="searchCategory == 'm_no'">
 				WHERE m_no LIKE  CONCAT('%', #{searchKeyword}, '%')

@@ -25,7 +25,7 @@
 					<hr>
 					<div class="row">
 						<div class="col-sm-8">
-							<form action="/admin/memberlist" role="form" method="GET" class="form-inline">
+							<form action="/admin/memberSearchList" role="form" method="GET" class="form-inline">
 								<select class="form-control" id="searchCategory" name="searchCategory">
 									<option value="m_no">회원번호</option>
 									<option value="m_id">아이디</option>
