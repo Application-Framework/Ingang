@@ -8,8 +8,6 @@
 </head>
 <body id="page-top">
     <div id="wrapper">
-    	<!-- 좌측 배너 부분 -->
-		<jsp:include page="../layout/banner.jsp"/>
 		<!-- 좌측 배너 부분 -->
 		<div id="content-wrapper" class="d-flex flex-column">
 			<div id="content">
@@ -19,94 +17,84 @@
 				<!-- 상단 헤더 부분 -->
 				
 				<!-- 본문 -->
-				<div class="container-fluid">
+				<div class="container-fluid" >
 					<div class="form-title text-center">
 						<h4>회원 상세정보</h4>
 						<hr>
 					</div>
 					<div class="d-flex flex-column">
 						<form role="form" name="memberUpdate" id="memberUpdate" action="memberUpdate" method="POST">
-							<!-- 아이디 & 비밀번호 -->
-							<div class="form-group row">
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">아이디</span>
+							<div class="row">
+								<div class="col-xs-4 col-md-4">
+									<div class="form-group row">
+										<div class="col-xs-12 col-md-12">
+											<img alt="" width="70%;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
 										</div>
-										<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.getUserID()}" readonly>
 									</div>
 								</div>
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">비밀번호</span>
+								
+								<div class="col-xs-8 col-md-8">
+									<!-- 아이디 & 비밀번호 -->
+									<div class="form-group row">
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">No</span>
+												</div>
+												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.getUserID()}" readonly>
+											</div>
 										</div>
-										<input type="password" name="password" id="password" class="form-control" value="${mDetail.getPassword()}">
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">이름</span>
+												</div>
+												<input type="text" name="name" id="name" class="form-control" value="${mDetail.getName()}" readonly>
+											</div>
+										</div>
 									</div>
-								</div>
-							</div>
-							<!-- 이름 & 마일리지 -->
-							<div class="form-group row">
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">이름</span>
+									<!-- 이름 & 마일리지 -->
+									<div class="form-group row">
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">아이디</span>
+												</div>
+												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.getUserID()}" readonly>
+											</div>
 										</div>
-										<input type="text" name="name" id="name" class="form-control" value="${mDetail.getName()}" readonly>
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">비밀번호</span>
+												</div>
+												<input type="password" name="password" id="password" class="form-control" value="${mDetail.getPassword()}">
+											</div>
+										</div>
 									</div>
-								</div>
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">마일리지</span>
+									
+									<div class="form-group row">
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">권한</span>
+												</div>
+												<select id="grade" name="grade" class="form-control">
+													<option value="User">일반</option>
+													<option value="VIP">VIP</option>
+													<option value="BlackConsumer">블랙리스트</option>
+													<option value="Admin">관리자</option>
+												</select>
+											</div>
 										</div>
-										<input type="text" name="mileage" id="mileage" class="form-control" value="${mDetail.getMileage()}" >
-									</div>
-								</div>
-							</div>
-							<!-- 권한 & 성별 -->
-							<div class="form-group row">
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">권한</span>
+										<div class="col-xs-6 col-md-6">
+											<div class="input-group my-2 mb-1">
+												<div class="input-group-prepend">
+													<span class="input-group-text">가입일</span>
+												</div>
+												<input type="text" name="name" id="name" class="form-control" value="${mDetail.getName()}" readonly>
+											</div>
 										</div>
-										<select id="grade" name="grade" class="form-control">
-											<option value="User">일반</option>
-											<option value="VIP">VIP</option>
-											<option value="BlackConsumer">블랙리스트</option>
-											<option value="Admin">관리자</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">성별</span>
-										</div>
-										<select class="form-control" id="sex" name="sex">
-											<option value="0">남성</option>
-											<option value="1">여성</option>
-										</select>
-									</div>
-								</div>
-							</div>
-							<!-- 이메일 & 휴대전화 -->
-							<div class="form-group row">
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">이메일</span>
-										</div>
-										<input type="email" name="email" id="email" class="form-control" value="${mDetail.getEmail()}" readonly>
-									</div>
-								</div>
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">휴대전화</span>
-										</div>
-										<input type="tel" name="phone" id="phone" class="form-control" value="${mDetail.getPhone()}" readonly>
 									</div>
 								</div>
 							</div>
@@ -125,12 +113,12 @@
 							<table class="table table-hover table-white">
 								<thead>
 									<tr>
-										<th>No</th>
 										<th>주문번호</th>
+										<th>종류</th>
 										<th>상품명</th>
 										<th>결제금액</th>
-										<th>마일리지 적립액</th>
 										<th>결제일자</th>
+										<th>결제상태</th>
 									</tr>
 								</thead>
 								<tbody>

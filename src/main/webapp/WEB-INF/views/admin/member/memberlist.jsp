@@ -32,7 +32,7 @@
 									<option value="m_name">이름</option>
 								</select>
 								<div class="col-sm-4">
-									<input type="text" id="searchKeyword " name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control">
+									<input type="text" id="searchKeyword " name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control" required="required">
 									<button type="submit" class="btn px-3 btn-primary">
 										<i class="fas fa-search"></i>
 									</button>
@@ -74,7 +74,7 @@
 									</td>
 									<td><font size="3">${memberData.m_no}</font></td>
 									<td><font size="3"><c:out value="${memberData.m_id}"></c:out></font></td>
-									<td><font size="3"><a href="memberView?AID=${memberData.m_no}"><c:out value="${memberData.m_name}"></c:out></a></font></td>
+									<td><font size="3"><a href="javascript:void(window.open('/admin/memberDetail', '상세페이지' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));"><c:out value="${memberData.m_name}"></c:out></a></font></td>
 									<c:choose>
 										<c:when test="${memberData.m_authority eq 0}">
 											<td><font size="3"></font></td>
@@ -112,12 +112,12 @@
 					<c:choose>
 						<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 							<li class="page-item disabled">
-								<a class="page-link" href="memberlist?page=${Paging.prevPageNo}">Previus</a>
+								<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
 							</li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="memberlist?page=${Paging.prevPageNo}">Previus</a>
+								<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
 							</li>
 						</c:otherwise>
 					</c:choose>
@@ -126,12 +126,12 @@
 						<c:choose>
 							<c:when test="${i eq Paging.pageNo }">
 								<li class="page-item disabled">
-									<a class="page-link" href="memberlist?page=${i}"><c:out value="${i }"/></a>
+									<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="memberlist?page=${i}"><c:out value="${i }"/></a>
+									<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
 								</li>
 							</c:otherwise>
 						</c:choose>
@@ -140,12 +140,12 @@
 					<c:choose>
 						<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
 							<li class="page-item disabled">
-								<a class="page-link" href="memberlist?page=${Paging.nextPageNo}">Next</a>
+								<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
 							</li>
 						</c:when>
 						<c:otherwise>
 							<li class="page-item">
-								<a class="page-link" href="memberlist?page=${Paging.nextPageNo}">Next</a>
+								<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
 							</li>
 						</c:otherwise>
 					</c:choose>

@@ -30,7 +30,7 @@
 			<when test="searchCategory == 'noSearch'">
 			</when>
 			<when test="searchCategory == 'm_no'">
-				WHERE m_no LIKE  CONCAT('%', #{searchKeyword}, '%')
+				WHERE m_no = #{searchKeyword}
 			</when>
 			<when test="searchCategory == 'm_id'">
 				WHERE m_id LIKE  CONCAT('%', #{searchKeyword}, '%')
@@ -40,4 +40,8 @@
 			</when>
 		</choose>
 	</sql>
+	
+	<select id="getMemberDetail">
+		
+	</select>
 </mapper>

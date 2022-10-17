@@ -28,9 +28,9 @@ public class AdminMemberController {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
 		map.put("searchCategory", "noSearch");
-		pagingService = new PagingService(request, service.getMemberTotalCount(map), 15);
+		pagingService = new PagingService(request, service.getMemberTotalCount(map), 10);
 		map.put("Page", pagingService.getNowPage());
-		map.put("PageSize", 15);
+		map.put("PageSize", 10);
 		
 		List<MemberDTO> adminMemberList = service.getMemberList(map);
 		
@@ -52,9 +52,9 @@ public class AdminMemberController {
 		map.put("searchCategory", searchCategory);
 		map.put("searchKeyword", searchKeyword);
 		
-		pagingService = new PagingService(request, service.getMemberTotalCount(map), 15);
+		pagingService = new PagingService(request, service.getMemberTotalCount(map), 10);
 		map.put("Page", pagingService.getNowPage());
-		map.put("PageSize", 15);
+		map.put("PageSize", 10);
 		
 		List<MemberDTO> adminMemberList = service.getMemberList(map);
 		
@@ -64,10 +64,17 @@ public class AdminMemberController {
 		model.addAttribute("searchKeyword", searchKeyword);
 		
 		return "admin/member/memberlist";
+	}
+	
+	//관리자 페이지 회원 상세 페이지
+	@RequestMapping(value = "/admin/memberDetail", method = RequestMethod.GET)
+	public String adminMemberDetail(Model model, HttpServletRequest request) throws Exception {
 		
 		
-
-
+		
+		//model.addAttribute("adminMemberList", adminMemberList);
+		
+		return "admin/member/memberView";
 	}
 	
 }

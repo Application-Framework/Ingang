@@ -31,7 +31,7 @@
 		<div class="sidebar-heading">회원 관리</div>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="member">
+		<a class="nav-link" href="/admin/memberList">
 			<i class="fas fa-fw fa-table"></i>
 			<span>회원 목록</span>
 		</a>
