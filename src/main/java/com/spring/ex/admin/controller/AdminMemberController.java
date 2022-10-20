@@ -1,5 +1,7 @@
 package com.spring.ex.admin.controller;
 
+import java.io.File;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,8 +10,10 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.dto.MemberDTO;
@@ -73,6 +77,29 @@ public class AdminMemberController {
 		model.addAttribute("mDetail", service.getMemberView(m_no));
 		
 		return "admin/member/memberView";
+	}
+	
+	//회원 삭제
+	@RequestMapping(value = "/admin/memberSelectDelete", method = RequestMethod.GET )
+	@ResponseBody
+	public int MemberSelectDelete(HttpServletRequest request) throws Exception {
+		
+        int[] ajaxMsg = Arrays.stream(request.getParameterValues("valueArr")).mapToInt(Integer::parseInt).toArray();
+        int delResult = 0, ajaxResult = 0;
+        int size = ajaxMsg.length;
+        for(int i=0; i<size; i++) {
+        	delResult = service.deleteMember(ajaxMsg[i]); //DB에서 삭제
+        	if(delResult == 1) {
+        		ajaxResult += 1;
+        	}else {
+        		System.out.println("회원 삭제 문제");
+        	}
+        }
+        if(size != ajaxResult){
+        	return 0;
+        }else {
+        	return 1;
+        }
 	}
 	
 }

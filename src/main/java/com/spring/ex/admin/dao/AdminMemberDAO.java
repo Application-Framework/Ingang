@@ -21,7 +21,7 @@ public interface AdminMemberDAO {
 	public MemberDTO getMemberView(int m_no) throws Exception;
 	
 	//회원정보 삭제
-	public void deleteMember(int m_no) throws Exception;
+	public int deleteMember(int m_no) throws Exception;
 	
 	
 }

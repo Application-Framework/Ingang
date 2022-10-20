@@ -142,60 +142,6 @@
 			<jsp:include page="../layout/footer.jsp"/>
     		<!-- 하단 푸터 부분 -->
     		
-			<script type="text/javascript">
-			//회원 선택삭제
-				$(function(){
-					var chkObj = document.getElementsByName("RowCheck");
-					var rowCnt = chkObj.length;
-					$("input[name='allCheck']").click(function(){
-						var chk_listArr = $("input[name='RowCheck']");
-						for (var i=0; i<chk_listArr.length; i++){
-							chk_listArr[i].checked = this.checked;
-						}
-					});
-					$("input[name='RowCheck']").click(function(){
-						if($("input[name='RowCheck']:checked").length == rowCnt){
-							$("input[name='allCheck']")[0].checked = true;
-						}
-						else{
-							$("input[name='allCheck']")[0].checked = false;
-						}
-					});
-				});
-				function deleteValue(){
-					var url = "delete";    // Controller로 보내고자 하는 URL
-					var valueArr = new Array();
-				    var list = $("input[name='RowCheck']");
-				    for(var i = 0; i < list.length; i++){
-				        if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
-				            valueArr.push(list[i].value);
-				        }
-				    }
-				    if (valueArr.length == 0){
-				    	alert("선택된 회원이 없습니다.");
-				    }
-				    else{
-						var chk = confirm("정말 삭제하시겠습니까?");				 
-						$.ajax({
-						    url : url,                    // 전송 URL
-						    type : 'POST',                // POST 방식
-						    traditional : true,
-						    data : {
-						    	valueArr : valueArr        // 보내고자 하는 data 변수 설정
-						    },
-			                success: function(jdata){
-			                    if(jdata = 1) {
-			                        alert("삭제 성공");
-			                        location.replace("member") //list 로 페이지 새로고침
-			                    }
-			                    else{
-			                        alert("삭제 실패");
-			                    }
-			                }
-						});
-					}
-				}
-			</script>
 		</div>
 	</div>
 	
@@ -295,5 +241,77 @@
 			</div>
 		</div>
 	</div>
+	
+	<script type="text/javascript">
+	//체크박스 선택 관련
+	$(function(){
+		var chkObj = document.getElementsByName("RowCheck");
+		var rowCnt = chkObj.length;
+		
+		$("input[name='allCheck']").click(function(){
+			var chk_listArr = $("input[name='RowCheck']");
+			for (var i=0; i<chk_listArr.length; i++){
+				chk_listArr[i].checked = this.checked;
+			}
+		});
+		$("input[name='RowCheck']").click(function(){
+			if($("input[name='RowCheck']:checked").length == rowCnt){
+				$("input[name='allCheck']")[0].checked = true;
+			}
+			else{
+				$("input[name='allCheck']")[0].checked = false;
+			}
+		});
+	});
+	//삭제버튼 눌렀을 때 실행 
+	function deleteValue(){
+		var url = "/admin/memberSelectDelete";    // Controller로 보내고자 하는 URL
+		var valueArr = new Array();
+	    var list = $("input[name='RowCheck']");
+	    for(var i = 0; i < list.length; i++){
+	        if(list[i].checked){ //선택되어 있으면 배열에 값을 저장함
+	            valueArr.push(list[i].value);
+	        }
+	    }
+	    if (valueArr.length == 0){
+    		Swal.fire({
+	  			title: '선택된 회원이 없습니다.',
+		  		text: "삭제하실 회원을 선택해주세요.",
+		  		icon: 'warning',
+		  		confirmButtonColor: '#3085d6',
+		  		confirmButtonText: '확인',
+		  	})
+	    }else{
+	    	Swal.fire({
+	  		  	title: '회원을 삭제하시겠습니까?',
+  		  		text: "삭제하시면 다시 복구시킬 수 없습니다.",
+  		    	icon: 'warning',
+  		   		showCancelButton: true,
+  		   		confirmButtonColor: '#3085d6',
+  		   		cancelButtonColor: '#d33',
+  		  	 	confirmButtonText: '삭제',
+  		  	 	cancelButtonText: '취소'
+	  		}).then((result) => {
+	  		  if (result.value) {
+		  			$.ajax({
+					    url : url,                    // 전송 URL
+					    type : 'GET',                // GET or POST 방식
+					    traditional : true,
+					    data : {
+					    	valueArr : valueArr        // 보내고자 하는 data 변수 설정
+					    },
+		                success: function(jdata){
+		                    if(jdata != 1) {
+		                    	alert("삭제 실패(문의전화 : 010-9748-5575 or 010-3266-5702)");
+		                    } else{
+		                    	location.reload(); // 메인 -> 회원페이지 -> 삭제 -> 뒤로가기해도 메인으로 감
+		                    }
+		                }
+					});
+	  		  }
+	  		})
+		}
+	}
+</script>
 </body>
 </html>

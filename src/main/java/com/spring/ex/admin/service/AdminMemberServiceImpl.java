@@ -32,8 +32,8 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	}
 	
 	//회원정보 삭제
-	public void deleteMember(int m_no) throws Exception {
-		adminDao.deleteMember(m_no);
+	public int deleteMember(int m_no) throws Exception {
+		return adminDao.deleteMember(m_no);
 	}
 	
 	

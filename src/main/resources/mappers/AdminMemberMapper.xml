@@ -25,6 +25,18 @@
 		DELETE FROM member WHERE m_no = #{m_no}
 	</delete>
     
+    <select id="">
+    	SELECT *
+		FROM history_order_lecture hol
+		WHERE hol.m_no = #{m_no}
+    </select>
+    
+     <select id="">
+     	SELECT *
+		FROM history_order_note hon
+		WHERE hon.m_no = #{m_no}
+    </select>
+    
    	<sql id="searchAdminMemberBoard">
 		<choose>
 			<when test="searchCategory == 'noSearch'">

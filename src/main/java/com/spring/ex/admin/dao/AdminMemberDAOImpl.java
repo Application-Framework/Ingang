@@ -33,7 +33,7 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	}
 	
 	//회원정보 삭제
-	public void deleteMember(int m_no) throws Exception {
-		sqlSession.delete(namespaceAdmin + ".deleteMember", m_no);
+	public int deleteMember(int m_no) throws Exception {
+		return sqlSession.delete(namespaceAdmin + ".deleteMember", m_no);
 	}
 }
