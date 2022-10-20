@@ -28,7 +28,13 @@
 								<div class="col-xs-4 col-md-4">
 									<div class="form-group row">
 										<div class="col-xs-12 col-md-12">
-											<img alt="" width="70%;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
+										
+											<c:if test="${mDetail.img_path ne null}">
+													<img alt="" width="70%;" src="${mDetail.img_path}">
+											</c:if>
+											<c:if test="${mDetail.img_path eq null}">
+												<img alt="" width="70%;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
+											</c:if>
 										</div>
 									</div>
 								</div>
@@ -41,7 +47,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">No</span>
 												</div>
-												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.getUserID()}" readonly>
+												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.m_no}" readonly>
 											</div>
 										</div>
 										<div class="col-xs-6 col-md-6">
@@ -49,7 +55,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">이름</span>
 												</div>
-												<input type="text" name="name" id="name" class="form-control" value="${mDetail.getName()}" readonly>
+												<input type="text" name="name" id="name" class="form-control" value="${mDetail.m_name}" readonly>
 											</div>
 										</div>
 									</div>
@@ -60,7 +66,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">아이디</span>
 												</div>
-												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.getUserID()}" readonly>
+												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.m_id}" readonly>
 											</div>
 										</div>
 										<div class="col-xs-6 col-md-6">
@@ -68,7 +74,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">비밀번호</span>
 												</div>
-												<input type="password" name="password" id="password" class="form-control" value="${mDetail.getPassword()}">
+												<input type="password" name="password" id="password" class="form-control" value="${mDetail.m_pw}">
 											</div>
 										</div>
 									</div>
@@ -79,11 +85,11 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">권한</span>
 												</div>
-												<select id="grade" name="grade" class="form-control">
-													<option value="User">일반</option>
-													<option value="VIP">VIP</option>
-													<option value="BlackConsumer">블랙리스트</option>
-													<option value="Admin">관리자</option>
+												<select id="m_authority" name="m_authority" class="form-control">
+													<option value="2">일반</option>
+													<option value="3">VIP</option>
+													<option value="4">블랙리스트</option>
+													<option value="1">관리자</option>
 												</select>
 											</div>
 										</div>
@@ -92,7 +98,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">가입일</span>
 												</div>
-												<input type="text" name="name" id="name" class="form-control" value="${mDetail.getName()}" readonly>
+												<input type="text" name="name" id="name" class="form-control" value="${mDetail.reg_date}" readonly>
 											</div>
 										</div>
 									</div>
@@ -104,7 +110,7 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text">특이사항</span>
 									</div>
-									<textarea rows="5" cols="25" name="comment" id="comment" class="form-control" >${mDetail.getComment()}</textarea>
+									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control" >${mDetail.m_comment}</textarea>
 								</div>
 							</div>
 							<!-- 회원 주문내역 Table -->
@@ -170,8 +176,7 @@
   		<!-- 하단 푸터 부분 -->
 	<script type="text/javascript">
 	$(document).ready(function(){
-		$("#grade").val("${mDetail.getGrade()}").prop("selected", true);
-		$("#sex").val("${mDetail.getSex()}").prop("selected", true);
+		$("#m_authority").val("${mDetail.m_authority}").prop("selected", true);
 	})
 	</script>
 </body>

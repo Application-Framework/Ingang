@@ -18,7 +18,7 @@ public interface AdminMemberService {
 	public int getMemberTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//회원 정보 상세조회
-	public Map<String, Object> getMemberView(int m_no) throws Exception;
+	public MemberDTO getMemberView(int m_no) throws Exception;
 	
 	//회원정보 삭제
 	public void deleteMember(int m_no) throws Exception;

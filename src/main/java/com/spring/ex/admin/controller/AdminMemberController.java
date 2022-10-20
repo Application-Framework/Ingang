@@ -69,10 +69,8 @@ public class AdminMemberController {
 	//관리자 페이지 회원 상세 페이지
 	@RequestMapping(value = "/admin/memberDetail", method = RequestMethod.GET)
 	public String adminMemberDetail(Model model, HttpServletRequest request) throws Exception {
-		
-		
-		
-		//model.addAttribute("adminMemberList", adminMemberList);
+		int m_no = Integer.parseInt(request.getParameter("m_no"));
+		model.addAttribute("mDetail", service.getMemberView(m_no));
 		
 		return "admin/member/memberView";
 	}

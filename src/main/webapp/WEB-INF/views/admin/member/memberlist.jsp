@@ -60,9 +60,6 @@
 								<th><font size="3">ID</font></th>
 								<th><font size="3">이름</font></th>
 								<th><font size="3">권한</font></th>
-								<th><font size="3">휴대전화</font></th>
-								<th><font size="3">생년월일</font></th>
-								<th><font size="3">성별</font></th>
 								<th><font size="3">가입일자</font></th>
 							</tr>
 						</thead>
@@ -74,7 +71,7 @@
 									</td>
 									<td><font size="3">${memberData.m_no}</font></td>
 									<td><font size="3"><c:out value="${memberData.m_id}"></c:out></font></td>
-									<td><font size="3"><a href="javascript:void(window.open('/admin/memberDetail', '상세페이지' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));"><c:out value="${memberData.m_name}"></c:out></a></font></td>
+									<td><font size="3"><a href="javascript:void(window.open('/admin/memberDetail?m_no=${memberData.m_no}', '상세페이지' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));"><c:out value="${memberData.m_name}"></c:out></a></font></td>
 									<c:choose>
 										<c:when test="${memberData.m_authority eq 0}">
 											<td><font size="3"></font></td>
@@ -84,16 +81,6 @@
 										</c:when>
 										<c:when test="${memberData.m_authority eq 2}">
 											<td><font size="3">회원</font></td>
-										</c:when>
-									</c:choose>
-									<td><font size="3"><c:out value="${memberData.m_phone}"></c:out></font></td>
-									<td><font size="3"><c:out value="${memberData.m_birth}"></c:out></font></td>
-									<c:choose>
-										<c:when test="${memberData.getM_sex() eq 0}">
-											<td><font size="3">여자</font></td>
-										</c:when>
-										<c:when test="${memberData.getM_sex() eq 1}">
-											<td><font size="3">남자</font></td>
 										</c:when>
 									</c:choose>
 									<td><font size="3"><c:out value="${memberData.reg_date}"></c:out></font></td>

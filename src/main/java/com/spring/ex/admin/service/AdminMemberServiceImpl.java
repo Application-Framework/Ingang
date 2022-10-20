@@ -27,7 +27,7 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	}
 	
 	//회원 정보 상세조회
-	public Map<String, Object> getMemberView(int m_no) throws Exception {
+	public MemberDTO getMemberView(int m_no) throws Exception {
 		return adminDao.getMemberView(m_no);
 	}
 	

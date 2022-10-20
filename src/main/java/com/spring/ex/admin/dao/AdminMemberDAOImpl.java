@@ -28,7 +28,7 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	}
 	
 	//회원 정보 상세조회
-	public Map<String, Object> getMemberView(int m_no) throws Exception {
+	public MemberDTO getMemberView(int m_no) throws Exception {
 		return sqlSession.selectOne(namespaceAdmin + ".getMemberView", m_no);
 	}
 	
