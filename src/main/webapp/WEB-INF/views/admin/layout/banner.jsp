@@ -15,13 +15,13 @@
 		<div class="sidebar-heading">강의 및 노트 관리</div>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="banner">
+		<a class="nav-link" href="/admin/course">
 			<i class="fas fa-fw fa-table"></i>
 			<span>강의</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="packageproduct">
+		<a class="nav-link" href="/admin/note">
 			<i class="fas fa-fw fa-table"></i>
 			<span>노트</span>
 		</a>

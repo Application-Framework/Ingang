@@ -21,7 +21,7 @@
 					<i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>내 정보
 				</a>
 				<div class="dropdown-divider"></div>
-				<a class="dropdown-item" href="/ex/main">
+				<a class="dropdown-item" href="/admin/main">
 					<i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>메인화면
 				</a>
 				<div class="dropdown-divider"></div>
