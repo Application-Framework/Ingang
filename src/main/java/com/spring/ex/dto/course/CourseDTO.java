@@ -13,6 +13,7 @@ public class CourseDTO {
 	private int price;
 	private int level;
 	private Date reg_date;
+	private Date update_date;
 	private int enable;
 	
 	public int getOli_no() {
@@ -75,6 +76,12 @@ public class CourseDTO {
 	public void setReg_date(Date reg_date) {
 		this.reg_date = reg_date;
 	}
+	public Date getUpdate_date() {
+		return update_date;
+	}
+	public void setUpdate_date(Date update_date) {
+		this.update_date = update_date;
+	}
 	public int getEnable() {
 		return enable;
 	}
@@ -85,6 +92,7 @@ public class CourseDTO {
 	public String toString() {
 		return "CourseDTO [oli_no=" + oli_no + ", olt_no=" + olt_no + ", title=" + title + ", introduction="
 				+ introduction + ", content=" + content + ", hit=" + hit + ", img_path=" + img_path + ", price=" + price
-				+ ", level=" + level + ", reg_date=" + reg_date + ", enable=" + enable + "]";
+				+ ", level=" + level + ", reg_date=" + reg_date + ", update_date=" + update_date + ", enable=" + enable
+				+ "]";
 	}
 }

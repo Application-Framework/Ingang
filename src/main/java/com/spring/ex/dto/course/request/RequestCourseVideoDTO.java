@@ -1,26 +1,26 @@
-package com.spring.ex.dto.course;
+package com.spring.ex.dto.course.request;
 
 import java.sql.Time;
 
-public class CourseVideoDTO {
-	private int olv_no;
-	private int oli_no;
+public class RequestCourseVideoDTO {
+	private int rolv_no;
+	private int roli_no;
 	private String title;
 	private String s_file_name;
 	private Time playtime;
 	private int order;
 	
-	public int getOlv_no() {
-		return olv_no;
+	public int getRolv_no() {
+		return rolv_no;
 	}
-	public void setOlv_no(int olv_no) {
-		this.olv_no = olv_no;
+	public void setRolv_no(int rolv_no) {
+		this.rolv_no = rolv_no;
 	}
-	public int getOli_no() {
-		return oli_no;
+	public int getRoli_no() {
+		return roli_no;
 	}
-	public void setOli_no(int oli_no) {
-		this.oli_no = oli_no;
+	public void setRoli_no(int roli_no) {
+		this.roli_no = roli_no;
 	}
 	public String getTitle() {
 		return title;
@@ -48,7 +48,7 @@ public class CourseVideoDTO {
 	}
 	@Override
 	public String toString() {
-		return "CourseVideoDTO [olv_no=" + olv_no + ", oli_no=" + oli_no + ", title=" + title + ", s_file_name="
-				+ s_file_name + ", playtime=" + playtime + ", order=" + order + "]";
+		return "RequestCourseVideoDTO [rolv_no=" + rolv_no + ", roli_no=" + roli_no + ", title=" + title
+				+ ", s_file_name=" + s_file_name + ", playtime=" + playtime + ", order=" + order + "]";
 	}
 }

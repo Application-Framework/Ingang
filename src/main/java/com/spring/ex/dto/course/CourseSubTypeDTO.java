@@ -3,7 +3,6 @@ package com.spring.ex.dto.course;
 public class CourseSubTypeDTO {
 	private int oli_no;
 	private int sub_type_no;
-	private int order;
 	
 	public int getOli_no() {
 		return oli_no;
@@ -17,14 +16,8 @@ public class CourseSubTypeDTO {
 	public void setSub_type_no(int sub_type_no) {
 		this.sub_type_no = sub_type_no;
 	}
-	public int getOrder() {
-		return order;
-	}
-	public void setOrder(int order) {
-		this.order = order;
-	}
 	@Override
 	public String toString() {
-		return "CourseSubTypeDTO [oli_no=" + oli_no + ", sub_type_no=" + sub_type_no + ", order=" + order + "]";
+		return "CourseSubTypeDTO [oli_no=" + oli_no + ", sub_type_no=" + sub_type_no + "]";
 	}
 }

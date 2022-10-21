@@ -153,6 +153,7 @@
 			img_path = #{img_path},
 			price = #{price},
 			level = #{level},
+			update_date = #{update_date},
 			enable = #{enable}
 		WHERE oli_no = #{oli_no}
 	</update>

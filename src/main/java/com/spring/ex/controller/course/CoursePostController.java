@@ -120,6 +120,8 @@ public class CoursePostController {
 			return "error";
 		}
 		
+		
+		// 이부분 수정해야 함
 		// 강의 등록
 		CourseDTO courseDTO = new CourseDTO();
 		courseDTO.setOlt_no(teacherDTO.getOlt_no());
