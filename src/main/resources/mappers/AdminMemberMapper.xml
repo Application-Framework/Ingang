@@ -16,28 +16,43 @@
 	</select>
 	
 	<!-- 회원정보 상세조회 -->
-    <select id="getMemberView" resultType="MemberDTO">
-        SELECT * FROM member WHERE m_no = #{m_no}
-    </select>
-    
-    <!-- 회원정보 삭제 -->
+	<select id="getMemberView" resultType="MemberDTO">
+		SELECT * FROM member WHERE m_no = #{m_no}
+	</select>
+	
+	<!-- 회원정보 삭제 -->
 	<delete id="deleteMember">
 		DELETE FROM member WHERE m_no = #{m_no}
 	</delete>
-    
-    <select id="">
-    	SELECT *
+
+	<!--회원정보 강의 구매이력 출력  -->
+	<select id="getMemberOrderLecture">
+		SELECT *
 		FROM history_order_lecture hol
 		WHERE hol.m_no = #{m_no}
-    </select>
-    
-     <select id="">
-     	SELECT *
+	</select>
+	
+	<select id="getMemberOrderLectureTotalCount">
+		SELECT COUNT(*)
+		FROM history_order_lecture hol
+		WHERE hol.m_no = #{m_no}
+	</select>
+	
+	<!--회원정보 노트 구매이력 출력  -->
+	<select id="getMemberOrderNote">
+		SELECT *
 		FROM history_order_note hon
 		WHERE hon.m_no = #{m_no}
-    </select>
-    
-   	<sql id="searchAdminMemberBoard">
+	</select>
+	
+	<select id="getMemberOrderNoteTotalCount">
+		SELECT COUNT(*)
+		FROM history_order_note hon
+		WHERE hon.m_no = #{m_no}
+	</select>
+	
+	<!-- 회원목록 페이지 검색 -->
+	<sql id="searchAdminMemberBoard">
 		<choose>
 			<when test="searchCategory == 'noSearch'">
 			</when>

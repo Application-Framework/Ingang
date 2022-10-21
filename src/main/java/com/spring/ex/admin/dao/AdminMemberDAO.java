@@ -23,5 +23,13 @@ public interface AdminMemberDAO {
 	//회원정보 삭제
 	public int deleteMember(int m_no) throws Exception;
 	
+	//회원정보 강의 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderLecture() throws Exception;
+	public int getMemberOrderLectureTotalCount() throws Exception;
+	
+	//회원정보 노트 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderNote() throws Exception;
+	public int getMemberOrderNoteTotalCount() throws Exception;
+	
 	
 }

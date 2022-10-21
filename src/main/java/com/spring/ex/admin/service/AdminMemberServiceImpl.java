@@ -36,5 +36,20 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 		return adminDao.deleteMember(m_no);
 	}
 	
+	//회원정보 강의 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderLecture() throws Exception {
+		return adminDao.getMemberOrderLecture();
+	}
+	public int getMemberOrderLectureTotalCount() throws Exception {
+		return adminDao.getMemberOrderLectureTotalCount();
+	}
+	
+	//회원정보 노트 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderNote() throws Exception {
+		return adminDao.getMemberOrderNote();
+	}
+	public int getMemberOrderNoteTotalCount() throws Exception {
+		return adminDao.getMemberOrderNoteTotalCount();
+	}
 	
 }

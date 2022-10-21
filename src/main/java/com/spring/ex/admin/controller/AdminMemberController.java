@@ -74,7 +74,10 @@ public class AdminMemberController {
 	@RequestMapping(value = "/admin/memberDetail", method = RequestMethod.GET)
 	public String adminMemberDetail(Model model, HttpServletRequest request) throws Exception {
 		int m_no = Integer.parseInt(request.getParameter("m_no"));
+		pagingService = new PagingService(request, service.getMemberOrderLectureTotalCount(), 5);
+		
 		model.addAttribute("mDetail", service.getMemberView(m_no));
+		//model.addAttribute("" , service)
 		
 		return "admin/member/memberView";
 	}
