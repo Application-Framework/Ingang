@@ -145,26 +145,30 @@
 									</c:forEach>
 								</tbody>
 							</table>
-							
-							<nav aria-label="Page navigation">
-								<ul class="pagination justify-content-center">
-									<!-- 페이지 갯수만큼 버튼 생성 -->
-									<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
-										<c:choose>
-											<c:when test="${i eq Paging.pageNo }">
-												<li class="page-item disabled">
-													<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
-												</li>
-											</c:when>
-											<c:otherwise>
-												<li class="page-item">
-													<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
-												</li>
-											</c:otherwise>
-										</c:choose>
-									</c:forEach>
-								</ul>
-							</nav>
+							<c:if test="${ Paging.totalCount > 5}">
+								<nav aria-label="Page navigation">
+									<ul class="pagination justify-content-center">
+										<!-- 페이지 갯수만큼 버튼 생성 -->
+										<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+											<c:choose>
+												<c:when test="${i eq Paging.pageNo }">
+													<li class="page-item disabled">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+													</li>
+												</c:when>
+												<c:otherwise>
+													<li class="page-item">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+													</li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+									</ul>
+								</nav>
+							</c:if>
+							<c:if  test="${Paging.totalCount <= 0 }">
+								<div align="center">강의 구매 이력이 없습니다.</div>
+							</c:if>
 							<hr>
 							
 							<h4>노트 구매 내역</h4>
@@ -198,7 +202,7 @@
 									</c:forEach>
 								</tbody>
 							</table>
-							<c:if test="">
+							<c:if test="${ Paging2.totalCount > 5}">
 								<nav aria-label="Page navigation">
 									<ul class="pagination justify-content-center">
 										
@@ -220,6 +224,9 @@
 										
 									</ul>
 								</nav>
+							</c:if>
+							<c:if  test="${Paging2.totalCount <= 0 }">
+								<div align="center">노트 구매 이력이 없습니다.</div><br>
 							</c:if>
 							<button type="submit" class="btn btn-primary btn-block btn-round">수정</button>
 						</form>
