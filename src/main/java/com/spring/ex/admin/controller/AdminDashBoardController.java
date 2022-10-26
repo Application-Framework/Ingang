@@ -19,8 +19,11 @@ public class AdminDashBoardController {
 	@RequestMapping(value = "/admin/main", method = RequestMethod.GET)
 	public String AdminDashBoard(HttpSession session, Model model) throws Exception {
 		
+		model.addAttribute("todayVisitorsCount", service.getTodayVisitorsCount());
 		model.addAttribute("todayRegisterMemberTotalCount", service.getTodayRegisterMemberTotalCount());
 		model.addAttribute("todayBoardWriteTotalCount", service.getTodayBoardWriteTotalCount());
+		model.addAttribute("TodayCourseTotalSales", service.getTodayCourseTotalSales());
+		model.addAttribute("WeekCourseTotalSales", service.getWeekCourseTotalSales());
 		
 		return "admin/index";
 	}

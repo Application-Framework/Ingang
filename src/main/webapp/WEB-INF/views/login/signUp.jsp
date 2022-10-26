@@ -73,25 +73,6 @@
 									badge
 								</span>
                             </div>
-                            <div class="input__item">
-                                <input type="date" class="form-control" name="m_birth" placeholder="생일을 입력해 주세요">
-                                <span class="material-symbols-outlined">
-									celebration
-								</span>
-                            </div>
-                            <div class="gender">
-                         	  	<span class="material-symbols-outlined">
-									person
-								</span>
-                                <input type="radio" name="m_sex" value="1" checked>남성
-								<input type="radio" name="m_sex" value="2">여성
-                            </div>
-                            <div class="input__item">
-                                <input type="text" class="form-control" name="m_phone" placeholder="전화번호를 입력해 주세요" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                <span class="material-symbols-outlined">
-									call
-								</span>
-                            </div>
                             <input type="text" name="m_authority" value="1" hidden="hidden">
                             <button type="submit" id="submit" disabled="disabled" class="btn head-btn2">회원가입</button>
                         </form>

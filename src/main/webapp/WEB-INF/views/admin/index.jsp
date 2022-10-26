@@ -30,7 +30,7 @@
 									<div class="row no-gutters align-items-center">
 										<div class="col mr-2">
 											<div class="text-xs font-weight-bold text-primary text-uppercase mb-1">오늘의 방문자 수</div>
-											<div class="h5 mb-0 font-weight-bold text-gray-800">${TodayVisitorTotalCount }명</div>
+											<div class="h5 mb-0 font-weight-bold text-gray-800">${todayVisitorsCount }명</div>
 										</div>
 										<div class="col-auto">
 											<i class="fas fa-calendar fa-2x text-gray-300"></i>
@@ -86,8 +86,8 @@
 											<div class="text-xs font-weight-bold text-warning text-uppercase mb-1">오늘의 매출</div>
 											<div class="h5 mb-0 font-weight-bold text-gray-800">
 												<c:choose>
-													<c:when test="${TodayRevenueTotalCount ne null}">
-														<fmt:formatNumber value="${TodayRevenueTotalCount }" pattern="###,###,###"/>원
+													<c:when test="${TodayCourseTotalSales ne null}">
+														<fmt:formatNumber value="${TodayCourseTotalSales }" pattern="###,###,###"/>원
 													</c:when>
 													<c:otherwise>
 														금일 매출이 없습니다.
@@ -108,10 +108,21 @@
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">주간 매출 통계</h6>
+									
+									<c:choose>
+												<c:when test="${WeekCourseTotalSales ne null}">
+													<fmt:formatNumber value="${WeekCourseTotalSales}" pattern="###,###,###"/>원
+												</c:when>
+												<c:otherwise>
+													주간 매출이 없습니다.
+												</c:otherwise>
+											</c:choose>
 								</div>
 								<div class="card-body">
 									<div class="chart-area">
-										<canvas id="myAreaChart"></canvas>
+										<canvas id="myAreaChart">
+										 	
+										</canvas>
 									</div>
 								</div>
 							</div>

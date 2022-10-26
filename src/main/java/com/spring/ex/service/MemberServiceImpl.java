@@ -37,6 +37,24 @@ public class MemberServiceImpl implements MemberService {
 		return dao.login(dto);
 	}
 	
+	//최초 접속 확인
+	@Override
+	public int checkConMemberLog(int m_no) throws Exception {
+		return dao.checkConMemberLog(m_no);
+	}
+	
+	//최초 접속일 추가
+	@Override
+	public void insertFirstConMemberLog(int m_no) throws Exception {
+		dao.insertFirstConMemberLog(m_no);
+	}
+	
+	//최근 접속일 수정
+	@Override
+	public void updateConMemberLog(int m_no) throws Exception {
+		dao.updateConMemberLog(m_no);
+	}
+	
 	// 회원 정보수정
 	@Override
 	public void update(MemberDTO memberDTO) throws Exception {
@@ -71,4 +89,5 @@ public class MemberServiceImpl implements MemberService {
 	public MemberDTO getMemberByM_no(int m_no) throws Exception {
 		return dao.getMemberByM_no(m_no);
 	}
+
 }

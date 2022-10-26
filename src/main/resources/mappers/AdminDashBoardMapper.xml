@@ -2,16 +2,40 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.spring.ex.AdminDashBoardMapper">
+
+	<!-- 오늘 가입한 회원수 -->
+	<select id="getTodayVisitorsCount" resultType="int">
+		SELECT COUNT(*)
+		FROM member_connect_log
+		WHERE DATE(con_date) = DATE_FORMAT(NOW(), '%Y-%m-%d')
+	</select>
+	
+	<!-- 오늘 가입한 회원수 -->
 	<select id="getTodayRegisterMemberTotalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM member
-		WHERE reg_date != CURDATE()
+		WHERE reg_date = DATE_FORMAT(NOW(), '%Y-%m-%d')
 	</select>
 	
+	<!-- 오늘 작성된 게시글 수 -->
 	<select id="getTodayBoardWriteTotalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM community_board
-		WHERE reg_date != CURDATE();	
+		WHERE DATE(reg_date) = DATE_FORMAT(NOW(), '%Y-%m-%d')
+	</select>
+	
+	<!-- 오늘 강의 총 매출 -->
+	<select id="getTodayCourseTotalSales" resultType="int">
+		SELECT sum(payment)
+		FROM history_order_lecture
+		WHERE payment_date = DATE_FORMAT(NOW(), '%Y-%m-%d')
+	</select>
+	
+	<!-- 주간 강의 매출 -->
+	<select id="getWeekCourseTotalSales" resultType="int">
+		SELECT SUM(payment)
+		FROM history_order_lecture 
+		WHERE payment_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()
 	</select>
 	
 	

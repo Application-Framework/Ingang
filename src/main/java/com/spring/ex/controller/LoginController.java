@@ -42,6 +42,19 @@ public class LoginController {
 			session.setAttribute("member", login);
 			session.setAttribute("m_no", login.getM_no());
 			
+			int m_no = (Integer)session.getAttribute("m_no");
+			
+			int conLog = service.checkConMemberLog(m_no);
+			
+			//최초 접속 있는지 확인
+			if(conLog == 0) { //최초 접속 없을시
+				//최초 접속일 추가
+				service.insertFirstConMemberLog(m_no);
+			} else { //접속 기록 있을시
+				//최근 접속일로 업데이트
+				service.updateConMemberLog(m_no);
+			}
+			
 			// 로그인 후 이전 페이지로 이동
 			Object redirectURL = session.getAttribute("redirectURI");
 			

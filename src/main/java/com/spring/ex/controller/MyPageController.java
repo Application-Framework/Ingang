@@ -102,7 +102,6 @@ public class MyPageController {
 		String img_path = null;
 		String m_id = request.getParameter("m_id");
 		String m_pw = request.getParameter("m_pw");
-		String m_phone = request.getParameter("m_phone");
 		
 		if(!profile.isEmpty()) { 
 			img_path = fileUploadService.insertFileToLocalAndServer(profile, "/img/profile/uploaded_images");
@@ -111,7 +110,6 @@ public class MyPageController {
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setM_id(m_id);
 		memberDTO.setM_pw(m_pw);
-		memberDTO.setM_phone(m_phone);
 		memberDTO.setImg_path(img_path);
 		
 		// update 후 session 만료

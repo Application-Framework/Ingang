@@ -5,8 +5,8 @@
 <mapper namespace="com.spring.mappers.memberMapper">
 	<!-- 회원 가입 -->
 	<insert id="signUp">
-		insert into member (m_id, m_pw, m_name, m_birth, m_sex, m_phone, m_authority)
-		values (#{m_id}, #{m_pw}, #{m_name}, #{m_birth}, #{m_sex}, #{m_phone}, #{m_authority})
+		insert into member (m_id, m_pw, m_name, m_authority)
+		values (#{m_id}, #{m_pw}, #{m_name}, #{m_authority})
 	</insert>
 	
 	<!-- 아이디 중복 체크 -->
@@ -30,10 +30,30 @@
 		where m_id = #{m_id} and m_pw = #{m_pw}
 	</select>
 	
+	<!-- 최초 접속일 확인 -->
+	<select id="checkConMemberLog" resultType="int">
+		select count(*)
+		from member_connect_log
+		where m_no = #{m_no}
+	</select>
+	
+	<!-- 최초 접속일 추가 -->
+	<insert id="insertFirstConMemberLog">
+		insert into member_connect_log (m_no)
+		values (#{m_no})
+	</insert>
+	
+	<!-- 최근 접속일 수정 -->
+	<update id="updateConMemberLog">
+		update member_connect_log
+			set	con_date = now()
+		where m_no = #{m_no}
+	</update>
+	
 	<!-- 회원 정보수정 -->
 	<update id="update">
 		update member
-			set	img_path = #{img_path}, m_phone = #{m_phone}
+			set	img_path = #{img_path}
 		where m_id = #{m_id} and m_pw = #{m_pw}
 	</update>
 	

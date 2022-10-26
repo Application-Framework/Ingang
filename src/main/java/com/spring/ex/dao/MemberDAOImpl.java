@@ -41,6 +41,24 @@ public class MemberDAOImpl implements MemberDAO {
 		return sql.selectOne(namespcae + ".login", dto);
 	}
 	
+	//최초 접속 확인
+	@Override
+	public int checkConMemberLog(int m_no) throws Exception {
+		return sql.selectOne(namespcae + ".checkConMemberLog", m_no);
+	}
+	
+	//최초 접속일 추가
+	@Override
+	public void insertFirstConMemberLog(int m_no) throws Exception {
+		sql.insert(namespcae + ".insertFirstConMemberLog", m_no);
+	}
+	
+	//최근 접속일 수정
+	@Override
+	public void updateConMemberLog(int m_no) throws Exception {
+		sql.update(namespcae + ".updateConMemberLog", m_no);
+	}
+	
 	// 회원 정보수정
 	@Override
 	public void update(MemberDTO memberDTO) throws Exception {
@@ -75,4 +93,5 @@ public class MemberDAOImpl implements MemberDAO {
 	public MemberDTO getMemberByM_no(int m_no) throws Exception {
 		return sql.selectOne(namespcae + ".getMemberByM_no", m_no);
 	}
+
 }
