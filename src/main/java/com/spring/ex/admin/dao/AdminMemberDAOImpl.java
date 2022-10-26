@@ -38,18 +38,18 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	}
 	
 	//회원정보 강의 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderLecture() throws Exception {
-		return sqlSession.selectList(namespaceAdmin + ".getMemberOrderLecture");
+	public List<Map<String, Object>> getMemberOrderLecture(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespaceAdmin + ".getMemberOrderLecture", map);
 	}
-	public int getMemberOrderLectureTotalCount() throws Exception {
-		return sqlSession.selectOne(namespaceAdmin + ".getMemberOrderLectureTotalCount");
+	public int getMemberOrderLectureTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespaceAdmin + ".getMemberOrderLectureTotalCount", map);
 	}
 	
 	//회원정보 노트 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderNote() throws Exception {
-		return sqlSession.selectList(namespaceAdmin + ".getMemberOrderNote");
+	public List<Map<String, Object>> getMemberOrderNote(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespaceAdmin + ".getMemberOrderNote", map);
 	}
-	public int getMemberOrderNoteTotalCount() throws Exception {
-		return sqlSession.selectOne(namespaceAdmin + ".getMemberOrderNoteTotalCount");
+	public int getMemberOrderNoteTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespaceAdmin + ".getMemberOrderNoteTotalCount", map);
 	}
 }

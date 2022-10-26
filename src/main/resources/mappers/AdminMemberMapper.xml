@@ -26,29 +26,29 @@
 	</delete>
 
 	<!--회원정보 강의 구매이력 출력  -->
-	<select id="getMemberOrderLecture">
-		SELECT *
-		FROM history_order_lecture hol
-		WHERE hol.m_no = #{m_no}
+	<select id="getMemberOrderLecture" resultType="HashMap">
+		SELECT hol.*, title
+		FROM history_order_lecture hol, online_lecture_introduction oli
+		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no
 	</select>
 	
-	<select id="getMemberOrderLectureTotalCount">
+	<select id="getMemberOrderLectureTotalCount" resultType="int">
 		SELECT COUNT(*)
-		FROM history_order_lecture hol
-		WHERE hol.m_no = #{m_no}
+		FROM history_order_lecture hol, online_lecture_introduction oli
+		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no
 	</select>
 	
 	<!--회원정보 노트 구매이력 출력  -->
-	<select id="getMemberOrderNote">
-		SELECT *
-		FROM history_order_note hon
-		WHERE hon.m_no = #{m_no}
+	<select id="getMemberOrderNote" resultType="HashMap">
+		SELECT *, title 
+		FROM history_order_note hon, note n
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no
 	</select>
 	
-	<select id="getMemberOrderNoteTotalCount">
+	<select id="getMemberOrderNoteTotalCount" resultType="int">
 		SELECT COUNT(*)
-		FROM history_order_note hon
-		WHERE hon.m_no = #{m_no}
+		FROM history_order_note hon, note n
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no
 	</select>
 	
 	<!-- 회원목록 페이지 검색 -->

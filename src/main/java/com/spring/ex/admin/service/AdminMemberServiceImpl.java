@@ -37,19 +37,19 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	}
 	
 	//회원정보 강의 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderLecture() throws Exception {
-		return adminDao.getMemberOrderLecture();
+	public List<Map<String, Object>> getMemberOrderLecture(HashMap<String, Object> map) throws Exception {
+		return adminDao.getMemberOrderLecture(map);
 	}
-	public int getMemberOrderLectureTotalCount() throws Exception {
-		return adminDao.getMemberOrderLectureTotalCount();
+	public int getMemberOrderLectureTotalCount(HashMap<String, Object> map) throws Exception {
+		return adminDao.getMemberOrderLectureTotalCount(map);
 	}
 	
 	//회원정보 노트 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderNote() throws Exception {
-		return adminDao.getMemberOrderNote();
+	public List<Map<String, Object>> getMemberOrderNote(HashMap<String, Object> map) throws Exception {
+		return adminDao.getMemberOrderNote(map);
 	}
-	public int getMemberOrderNoteTotalCount() throws Exception {
-		return adminDao.getMemberOrderNoteTotalCount();
+	public int getMemberOrderNoteTotalCount(HashMap<String, Object> map) throws Exception {
+		return adminDao.getMemberOrderNoteTotalCount(map);
 	}
 	
 }

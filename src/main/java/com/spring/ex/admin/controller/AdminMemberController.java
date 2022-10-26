@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ public class AdminMemberController {
 	@Inject AdminMemberService service;
 	
 	private PagingService pagingService;
+	private PagingService pagingService2;
 	
 	//관리자 페이지 회원 메인페이지
 	@RequestMapping(value = "/admin/memberList", method = RequestMethod.GET)
@@ -74,8 +76,23 @@ public class AdminMemberController {
 	@RequestMapping(value = "/admin/memberDetail", method = RequestMethod.GET)
 	public String adminMemberDetail(Model model, HttpServletRequest request) throws Exception {
 		int m_no = Integer.parseInt(request.getParameter("m_no"));
-		pagingService = new PagingService(request, service.getMemberOrderLectureTotalCount(), 5);
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		map.put("m_no", m_no);
 		
+		pagingService = new PagingService(request, service.getMemberOrderLectureTotalCount(map), 5);
+		pagingService2 = new PagingService(request, service.getMemberOrderNoteTotalCount(map), 5);
+		map.put("Page1", pagingService.getNowPage());
+		map.put("PageSize1", 5);
+		map.put("Page2", pagingService2.getNowPage());
+		map.put("PageSize2", 5);
+		
+		List<Map<String, Object>> adminMemberLectureList = service.getMemberOrderLecture(map);
+		List<Map<String, Object>> adminMemberNoteList = service.getMemberOrderNote(map);
+		
+		model.addAttribute("adminMemberLectureList", adminMemberLectureList);
+		model.addAttribute("Paging", pagingService.getPaging());
+		model.addAttribute("adminMemberNoteList", adminMemberNoteList);
+		model.addAttribute("Paging2", pagingService2.getPaging());
 		model.addAttribute("mDetail", service.getMemberView(m_no));
 		//model.addAttribute("" , service)
 		

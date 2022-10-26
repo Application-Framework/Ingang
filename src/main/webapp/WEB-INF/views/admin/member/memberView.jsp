@@ -113,56 +113,114 @@
 									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control" >${mDetail.m_comment}</textarea>
 								</div>
 							</div>
-							<!-- 회원 주문내역 Table -->
 							<hr>
-							<h4>회원 주문내역</h4>
+							
+							<h4>강의 구매 내역</h4>
 							<table class="table table-hover table-white">
 								<thead>
 									<tr>
 										<th>주문번호</th>
-										<th>종류</th>
-										<th>상품명</th>
+										<th>강의명</th>
 										<th>결제금액</th>
 										<th>결제일자</th>
 										<th>결제상태</th>
 									</tr>
 								</thead>
 								<tbody>
-								<c:forEach items="${morder}" var="OrderVO">
+								<c:forEach items="${adminMemberLectureList}" var="LectureList">
 									<tr>
-										<td>${OrderVO.oId }</td>
-										<td>${OrderVO.pId }</td>
-										<td><a href="/ex/detailInfo?PID=${OrderVO.pId }" target="_blank">${OrderVO.productname }</a></td>
-										<td>${OrderVO.payment }</td>
-										<td>${OrderVO.accumlatemileage }</td>
-										<td>${OrderVO.paymentdate }</td>
+										<td>L-${LectureList.hol_no }</td>
+										<td><a href="/ex/detailInfo?PID=${LectureList.oli_no}" target="_blank">${LectureList.title}</a></td>
+										<td>${LectureList.payment }</td>
+										<td>${LectureList.payment_date }</td>
+										<c:choose>
+											<c:when test="${LectureList.payment_status eq 0}">
+												<td><font size="3">결제보류</font></td>
+											</c:when>
+											<c:when test="${LectureList.payment_status eq 1}">
+												<td><font size="3">결제완료</font></td>
+											</c:when>
+										</c:choose>
 									</tr>
 									</c:forEach>
 								</tbody>
 							</table>
+							
+							<nav aria-label="Page navigation">
+								<ul class="pagination justify-content-center">
+									<!-- 페이지 갯수만큼 버튼 생성 -->
+									<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+										<c:choose>
+											<c:when test="${i eq Paging.pageNo }">
+												<li class="page-item disabled">
+													<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+												</li>
+											</c:when>
+											<c:otherwise>
+												<li class="page-item">
+													<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+												</li>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+								</ul>
+							</nav>
 							<hr>
-							<!-- 회원 문의내역 Table -->
-							<h4>회원 문의내역</h4>
+							
+							<h4>노트 구매 내역</h4>
 							<table class="table table-hover table-white">
 								<thead>
 									<tr>
-										<th>No</th>
-										<th>제목</th>
-										<th>작성일</th>
-										<th>답변상태</th>
+										<th>주문번호</th>
+										<th>노트명</th>
+										<th>결제금액</th>
+										<th>결제일자</th>
+										<th>결제상태</th>
 									</tr>
 								</thead>
 								<tbody>
-								<c:forEach items="${minquiry}" var="InquiryVO">
+									<c:forEach items="${adminMemberNoteList}" var="NoteList">
 									<tr>
-										<td>${InquiryVO.iId }</td>
-										<td><a href="inquiryView?iId=${InquiryVO.iId }" target="_blank">${InquiryVO.title }</a></td>
-										<td>${InquiryVO.reDate }</td>
-										<td>${InquiryVO.status }</td>
+										<td>N-${NoteList.hon_no }</td>
+										<td><a href="/ex/detailInfo?PID=${NoteList.n_no}" target="_blank">${NoteList.title}</a></td>
+										<td>${NoteList.payment }</td>
+										<td>${NoteList.payment_date }</td>
+										<c:choose>
+											<c:when test="${NoteList.payment_status eq 0}">
+												<td><font size="3">결제보류</font></td>
+											</c:when>
+											<c:when test="${NoteList.payment_status eq 1}">
+												<td><font size="3">결제완료</font></td>
+											</c:when>
+										</c:choose>
+										
 									</tr>
 									</c:forEach>
 								</tbody>
 							</table>
+							<c:if test="">
+								<nav aria-label="Page navigation">
+									<ul class="pagination justify-content-center">
+										
+										<!-- 페이지 갯수만큼 버튼 생성 -->
+										<c:forEach var="i" begin="${Paging2.startPageNo }" end="${Paging2.endPageNo }" step="1">
+											<c:choose>
+												<c:when test="${i eq Paging2.pageNo }">
+													<li class="page-item disabled">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+													</li>
+												</c:when>
+												<c:otherwise>
+													<li class="page-item">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+													</li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										
+									</ul>
+								</nav>
+							</c:if>
 							<button type="submit" class="btn btn-primary btn-block btn-round">수정</button>
 						</form>
 					</div>

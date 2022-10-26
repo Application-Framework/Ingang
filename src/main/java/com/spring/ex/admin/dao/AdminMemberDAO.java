@@ -24,12 +24,12 @@ public interface AdminMemberDAO {
 	public int deleteMember(int m_no) throws Exception;
 	
 	//회원정보 강의 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderLecture() throws Exception;
-	public int getMemberOrderLectureTotalCount() throws Exception;
+	public List<Map<String, Object>> getMemberOrderLecture(HashMap<String, Object> map) throws Exception;
+	public int getMemberOrderLectureTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//회원정보 노트 구매이력 출력
-	public List<Map<String, Object>> getMemberOrderNote() throws Exception;
-	public int getMemberOrderNoteTotalCount() throws Exception;
+	public List<Map<String, Object>> getMemberOrderNote(HashMap<String, Object> map) throws Exception;
+	public int getMemberOrderNoteTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	
 }
