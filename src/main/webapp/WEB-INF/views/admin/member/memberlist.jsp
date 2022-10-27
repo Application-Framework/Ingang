@@ -71,7 +71,7 @@
 									</td>
 									<td><font size="3">${memberData.m_no}</font></td>
 									<td><font size="3"><c:out value="${memberData.m_id}"></c:out></font></td>
-									<td><font size="3"><a href="javascript:void(window.open('/admin/memberDetail?m_no=${memberData.m_no}', '상세페이지' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));"><c:out value="${memberData.m_name}"></c:out></a></font></td>
+									<td><font size="3"><a href="javascript:void(window.open('/admin/memberDetail?m_no=${memberData.m_no}', '상세페이지' , 'width=1280px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));"><c:out value="${memberData.m_name}"></c:out></a></font></td>
 									<c:choose>
 										<c:when test="${memberData.m_authority eq 0}">
 											<td><font size="3"></font></td>

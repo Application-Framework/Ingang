@@ -29,7 +29,8 @@
 	<select id="getMemberOrderLecture" resultType="HashMap">
 		SELECT hol.*, title
 		FROM history_order_lecture hol, online_lecture_introduction oli
-		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no
+		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no  
+		LIMIT #{Page1}, #{PageSize1};
 	</select>
 	
 	<select id="getMemberOrderLectureTotalCount" resultType="int">
@@ -42,13 +43,28 @@
 	<select id="getMemberOrderNote" resultType="HashMap">
 		SELECT *, title 
 		FROM history_order_note hon, note n
-		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no  
+		LIMIT #{Page2}, #{PageSize2};
 	</select>
 	
 	<select id="getMemberOrderNoteTotalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM history_order_note hon, note n
-		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no 
+	</select>
+	
+	<!--회원정보 작성 게시글 출력  -->
+	<select id="getMemberCommunity" resultType="HashMap">
+		SELECT *
+		FROM community_board
+		WHERE m_no = #{m_no}
+		LIMIT #{Page3}, #{PageSize3};
+	</select>
+	
+	<select id="getMemberCommunityTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM community_board
+		WHERE m_no = #{m_no}
 	</select>
 	
 	<!-- 회원목록 페이지 검색 -->

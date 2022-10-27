@@ -113,8 +113,10 @@
 									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control" >${mDetail.m_comment}</textarea>
 								</div>
 							</div>
-							<hr>
 							
+							<button type="submit" class="btn btn-primary btn-block btn-round">수정</button>
+							<br>
+							<!-- 강의 -->
 							<h4>강의 구매 내역</h4>
 							<table class="table table-hover table-white">
 								<thead>
@@ -153,12 +155,12 @@
 											<c:choose>
 												<c:when test="${i eq Paging.pageNo }">
 													<li class="page-item disabled">
-														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}&nPage=${Paging2.getPageNo()}&cPage=${Paging3.getPageNo()}"><c:out value="${i }"/></a>
 													</li>
 												</c:when>
 												<c:otherwise>
 													<li class="page-item">
-														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}&nPage=${Paging2.getPageNo()}&cPage=${Paging3.getPageNo()}"><c:out value="${i }"/></a>
 													</li>
 												</c:otherwise>
 											</c:choose>
@@ -170,7 +172,7 @@
 								<div align="center">강의 구매 이력이 없습니다.</div>
 							</c:if>
 							<hr>
-							
+							<!--노트  -->
 							<h4>노트 구매 내역</h4>
 							<table class="table table-hover table-white">
 								<thead>
@@ -207,16 +209,16 @@
 									<ul class="pagination justify-content-center">
 										
 										<!-- 페이지 갯수만큼 버튼 생성 -->
-										<c:forEach var="i" begin="${Paging2.startPageNo }" end="${Paging2.endPageNo }" step="1">
+										<c:forEach var="j" begin="${Paging2.startPageNo }" end="${Paging2.endPageNo }" step="1">
 											<c:choose>
-												<c:when test="${i eq Paging2.pageNo }">
+												<c:when test="${j eq Paging2.pageNo }">
 													<li class="page-item disabled">
-														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${Paging.getPageNo()}&nPage=${j}&cPage=${Paging3.getPageNo()}"><c:out value="${j }"/></a>
 													</li>
 												</c:when>
 												<c:otherwise>
 													<li class="page-item">
-														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${i}"><c:out value="${i }"/></a>
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${Paging.getPageNo()}&nPage=${j}&cPage=${Paging3.getPageNo()}"><c:out value="${j }"/></a>
 													</li>
 												</c:otherwise>
 											</c:choose>
@@ -228,7 +230,82 @@
 							<c:if  test="${Paging2.totalCount <= 0 }">
 								<div align="center">노트 구매 이력이 없습니다.</div><br>
 							</c:if>
-							<button type="submit" class="btn btn-primary btn-block btn-round">수정</button>
+							<!-- 커뮤니티 -->
+							<h4>커뮤니티 게시글 작성 내역</h4>
+							<table class="table table-hover table-white">
+								<thead>
+									<tr>
+										<th>게시글번호</th>
+										<th>종류</th>
+										<th>제목</th>
+										<th>조회수</th>
+										<th>작성일</th>
+										<th>게시여부</th>
+									</tr>
+								</thead>
+								<tbody>
+									<c:forEach items="${adminMemberCommunityList}" var="cList">
+									<tr>
+										<td>C-${cList.cb_no}</td>
+										<c:choose>
+											<c:when test="${cList.classify eq 1}">
+												<td><font size="3">자유게시판</font></td>
+											</c:when>
+											<c:when test="${cList.classify eq 2}">
+												<td><font size="3">질문답변(미해결)</font></td>
+											</c:when>
+											<c:when test="${cList.classify eq 3}">
+												<td><font size="3">질문답변(해결)</font></td>
+											</c:when>
+											<c:when test="${cList.classify eq 4}">
+												<td><font size="3">스터디(모집중)</font></td>
+											</c:when>
+											<c:when test="${cList.classify eq 5}">
+												<td><font size="3">스터디(모집완료)</font></td>
+											</c:when>
+										</c:choose>
+										<td><a href="/ex/detailInfo?PID=${cList.cb_no}" target="_blank">${cList.title}</a></td>
+										<td>${cList.hit }</td>
+										<td>${cList.reg_date }</td>
+										<c:choose>
+											<c:when test="${cList.flag eq 0}">
+												<td><font size="3">x</font></td>
+											</c:when>
+											<c:when test="${cList.flag eq 1}">
+												<td><font size="3">O</font></td>
+											</c:when>
+										</c:choose>
+										
+									</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+							<c:if test="${ Paging3.totalCount > 5}">
+								<nav aria-label="Page navigation">
+									<ul class="pagination justify-content-center">
+										
+										<!-- 페이지 갯수만큼 버튼 생성 -->
+										<c:forEach var="j" begin="${Paging3.startPageNo }" end="${Paging3.endPageNo }" step="1">
+											<c:choose>
+												<c:when test="${j eq Paging3.pageNo }">
+													<li class="page-item disabled">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${Paging.getPageNo()}&nPage=${Paging2.getPageNo()}&cPage=${j}"><c:out value="${j }"/></a>
+													</li>
+												</c:when>
+												<c:otherwise>
+													<li class="page-item">
+														<a class="page-link" href="memberDetail?m_no=${mDetail.m_no}&page=${Paging.getPageNo()}&nPage=${Paging2.getPageNo()}&cPage=${j}"><c:out value="${j }"/></a>
+													</li>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>
+										
+									</ul>
+								</nav>
+							</c:if>
+							<c:if  test="${Paging3.totalCount <= 0 }">
+								<div align="center">작성 게시글 이력이 없습니다.</div><br>
+							</c:if>
 						</form>
 					</div>
 				</div>

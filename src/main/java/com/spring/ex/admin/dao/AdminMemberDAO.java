@@ -31,5 +31,8 @@ public interface AdminMemberDAO {
 	public List<Map<String, Object>> getMemberOrderNote(HashMap<String, Object> map) throws Exception;
 	public int getMemberOrderNoteTotalCount(HashMap<String, Object> map) throws Exception;
 	
+	//회원정보 작성게시글 출력
+	public List<Map<String, Object>> getMemberCommunity(HashMap<String, Object> map) throws Exception;
+	public int getMemberCommunityTotalCount(HashMap<String, Object> map) throws Exception;
 	
 }
