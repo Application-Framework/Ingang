@@ -17,4 +17,10 @@
 		WHERE content_no = #{content_no} AND
 			  category = #{category}
 	</select>
+	
+	<update id="changeContent_no">
+		UPDATE uploaded_file
+		SET content_no = #{afterContent_no}
+		WHERE content_no = #{beforeContent_no}
+	</update>
 </mapper>

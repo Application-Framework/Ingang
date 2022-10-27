@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseRequestDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -45,7 +46,7 @@ public interface CourseService {
 	public int existCourseLike(int oli_no, int m_no);
 	
 	// 강의 등록
-	public int submitCourse(CourseDTO courseDTO);
+	public int insertCourse(CourseDTO courseDTO);
 	
 	// 강의 수정
 	public int updateCourse(CourseDTO courseDTO);
@@ -87,4 +88,24 @@ public interface CourseService {
 	
 	// 강좌의 메인 카테고리 가져오기
 	public MainTypeDTO getMainTypeOfCourse(int oli_no);
+	
+	//-------------------------------
+	// 강의 요청 부분
+	//-------------------------------
+	
+	public List<CourseRequestDTO> getCourseRequestList();
+	public List<CourseRequestDTO> getCourseRequestListByOli_no(int oli_no);
+	public CourseRequestDTO getCourseRequest(int olr_no);
+	public int insertCourseRequest(CourseRequestDTO dto);
+	public int updateCourseRequest(CourseRequestDTO dto);
+	public int deleteCourseRequest(int olr_no);
+	
+	// 사용자의 강의 저장
+	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
+	
+	// 관리자의 강의 승인
+	public int approveCourse(int olr_no);
+	
+	// 관리자의 강의 거절
+	public int rejectCourse(int olr_no, String rejection_message);
 }

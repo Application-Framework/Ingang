@@ -200,4 +200,9 @@ public class FileServiceImpl implements FileService {
         	System.out.println("이미 폴더가 생성되어 있습니다.");
 		}
 	}
+
+	@Override
+	public int changeContent_no(int beforeContent_no, int afterContent_no) {
+		return uploadedFileDAO.changeContent_no(beforeContent_no, afterContent_no);
+	}
 }

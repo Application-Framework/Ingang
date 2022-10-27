@@ -139,8 +139,8 @@
 	
 	<!-- 강의 등록 -->
 	<insert id="submitCourse" useGeneratedKeys="true" keyProperty="oli_no">
-		INSERT INTO online_lecture_introduction(olt_no, title, introduction, content, img_path, price, level, reg_date, enable) 
-		VALUES(#{olt_no}, #{title}, #{introduction}, #{content}, #{img_path}, #{price}, #{level}, #{reg_date}, #{enable})
+		INSERT INTO online_lecture_introduction(olt_no, title, introduction, content, img_path, price, level, reg_date, update_date, enable, origin) 
+		VALUES(#{olt_no}, #{title}, #{introduction}, #{content}, #{img_path}, #{price}, #{level}, #{reg_date}, #{update_date}, #{enable}, #{origin})
 	</insert>
 	
 	<!-- 강의 수정 -->
@@ -217,5 +217,43 @@
 	<delete id="deleteCourseSubType">
 		DELETE FROM online_lecture_sub_type
 		WHERE oli_no = #{oli_no}
+	</delete>
+	
+	
+	<!-- 강의 요청 부분 -->
+
+	<select id="selectListCourseRequest" resultType="CourseRequestDTO">
+		SELECT * FROM online_lecture_request
+	</select>
+	
+	<select id="selectListCourseRequestByOli_no" resultType="CourseRequestDTO">
+		SELECT * FROM online_lecture_request
+		WHERE oli_no = #{oli_no}
+	</select>
+	
+	<select id="selectOneCourseRequest" resultType="CourseRequestDTO">
+		SELECT * FROM online_lecture_request
+		WHERE olr_no = #{olr_no}
+	</select>
+	
+	<insert id="insertCourseRequest">
+		INSERT INTO online_lecture_request(oli_no, origin_oli_no, approval_status, rejection_message, request_datetime)
+		VALUES(#{oli_no}, #{origin_oli_no}, #{approval_status}, #{rejection_message}, #{request_datetime})
+	</insert>
+	
+	<update id="updateCourseRequest">
+		UPDATE online_lecture_request
+		SET
+			oli_no = #{oli_no},
+			origin_oli_no = #{origin_oli_no},
+			approval_status = #{approval_status},
+			rejection = #{rejection},
+			request_datetime = #{request_datetime}
+		WHERE olr_no = #{olr_no}
+	</update>
+	
+	<delete id="deleteCourseRequest">
+		DELETE FROM online_lecture_request
+		WHERE olr_no = #{olr_no}
 	</delete>
 </mapper>

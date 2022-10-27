@@ -8,13 +8,13 @@ public class CourseDTO {
 	private String title;
 	private String introduction;
 	private String content;
-	private int hit;
 	private String img_path;
 	private int price;
 	private int level;
 	private Date reg_date;
 	private Date update_date;
 	private int enable;
+	private int origin;
 	
 	public int getOli_no() {
 		return oli_no;
@@ -45,12 +45,6 @@ public class CourseDTO {
 	}
 	public void setContent(String content) {
 		this.content = content;
-	}
-	public int getHit() {
-		return hit;
-	}
-	public void setHit(int hit) {
-		this.hit = hit;
 	}
 	public String getImg_path() {
 		return img_path;
@@ -88,11 +82,17 @@ public class CourseDTO {
 	public void setEnable(int enable) {
 		this.enable = enable;
 	}
+	public int getOrigin() {
+		return origin;
+	}
+	public void setOrigin(int origin) {
+		this.origin = origin;
+	}
 	@Override
 	public String toString() {
 		return "CourseDTO [oli_no=" + oli_no + ", olt_no=" + olt_no + ", title=" + title + ", introduction="
-				+ introduction + ", content=" + content + ", hit=" + hit + ", img_path=" + img_path + ", price=" + price
-				+ ", level=" + level + ", reg_date=" + reg_date + ", update_date=" + update_date + ", enable=" + enable
-				+ "]";
+				+ introduction + ", content=" + content + ", img_path=" + img_path + ", price=" + price + ", level="
+				+ level + ", reg_date=" + reg_date + ", update_date=" + update_date + ", enable=" + enable + ", origin="
+				+ origin + "]";
 	}
 }

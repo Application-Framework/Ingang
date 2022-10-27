@@ -36,4 +36,12 @@ public class UploadedFileDAOImpl implements UploadedFileDAO {
 		map.put("category", category);
 		return sqlSession.selectList(namespace + ".selectFileList", map);
 	}
+
+	@Override
+	public int changeContent_no(int beforeContent_no, int afterContent_no) {
+		HashMap<String, Integer> map = new HashMap<String, Integer>();
+		map.put("beforeContent_no", beforeContent_no);
+		map.put("afterContent_no", afterContent_no);
+		return sqlSession.update(namespace + ".changeContent_no", map);
+	}
 }

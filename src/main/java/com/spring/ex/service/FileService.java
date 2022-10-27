@@ -51,4 +51,7 @@ public interface FileService {
 	
 	// 게시글의 모든 파일 삭제
 	public void deleteAllFileOfPost(int content_no, int category) throws Exception;
+	
+	// content_no 바꾸기
+	public int changeContent_no(int beforeContent_no, int afterContent_no);
 }

@@ -1,5 +1,6 @@
 package com.spring.ex.service;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -11,12 +12,14 @@ import com.spring.ex.dao.TypeDAO;
 import com.spring.ex.dao.course.CourseDAO;
 import com.spring.ex.dao.course.CourseLikeDAO;
 import com.spring.ex.dao.course.CourseReplyDAO;
+import com.spring.ex.dao.course.CourseRequestDAO;
 import com.spring.ex.dao.course.CourseSubTypeDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
 import com.spring.ex.dto.MainTypeDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.dto.course.CourseRequestDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
@@ -40,7 +43,7 @@ public class CourseServiceImpl implements CourseService {
 	private CourseVideoDAO courseVideoDAO;
 	
 	@Inject
-	private t_TagService t_TagService;
+	private t_TagService tagService;
 	
 	@Inject
 	private TypeService typeService;
@@ -50,6 +53,12 @@ public class CourseServiceImpl implements CourseService {
 	
 	@Inject
 	private TypeDAO typeDAO;
+	
+	@Inject
+	private CourseRequestDAO courseRequestDAO;
+	
+	@Inject
+	private FileService fileService;
 	
 	@Override
 	public List<CourseDTO> getCoursePage(HashMap<String, Object> map) {
@@ -111,7 +120,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int submitCourse(CourseDTO courseDTO) {
+	public int insertCourse(CourseDTO courseDTO) {
 		return courseDAO.submitCourse(courseDTO);
 	}
 
@@ -164,7 +173,7 @@ public class CourseServiceImpl implements CourseService {
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr) {
 		if(tagList == null) return false;
 		for(CourseTagDTO tag : tagList) {
-			if(tag.getTag_no() == t_TagService.getTagByTag_abbr(tag_abbr).getTag_no())
+			if(tag.getTag_no() == tagService.getTagByTag_abbr(tag_abbr).getTag_no())
 				return true;
 		}
 		return false;
@@ -199,5 +208,149 @@ public class CourseServiceImpl implements CourseService {
 	public MainTypeDTO getMainTypeOfCourse(int oli_no) {
 		MainTypeDTO dto = typeDAO.getMainTypeByMainTypeNo(typeDAO.getSubTypeBySubTypeNo(courseSubTypeDAO.getCourseSubTypeList(oli_no).get(0).getSub_type_no()).getMain_type_no());
 		return dto;
+	}
+
+	@Override
+	public List<CourseRequestDTO> getCourseRequestList() {
+		return courseRequestDAO.selectListCourseRequest();
+	}
+
+	@Override
+	public List<CourseRequestDTO> getCourseRequestListByOli_no(int oli_no) {
+		return courseRequestDAO.selectListCourseRequestByOli_no(oli_no);
+	}
+
+	@Override
+	public CourseRequestDTO getCourseRequest(int olr_no) {
+		return courseRequestDAO.selectOneCourseRequest(olr_no);
+	}
+
+	@Override
+	public int insertCourseRequest(CourseRequestDTO dto) {
+		return courseRequestDAO.insertCourseRequest(dto);
+	}
+
+	@Override
+	public int updateCourseRequest(CourseRequestDTO dto) {
+		return courseRequestDAO.updateCourseRequest(dto);
+	}
+
+	@Override
+	public int deleteCourseRequest(int olr_no) {
+		return courseRequestDAO.deleteCourseRequest(olr_no);
+	}
+
+	@Override
+	public int approveCourse(int olr_no) {
+		CourseRequestDTO cr = getCourseRequest(olr_no);
+		cr.setApproval_status(1);
+		
+		// 신규등록이면 복제 과정을 안거쳐도 됨. 수정일 때만 원본 <- 요청본 복제
+		if(cr.getOli_no() != cr.getOrigin_oli_no()) {
+			CourseDTO currentCourse = getCourseDetail(cr.getOli_no());
+			CourseDTO originCourse = getCourseDetail(cr.getOrigin_oli_no());
+			
+			// 강의 수정
+			originCourse.setTitle(currentCourse.getTitle());
+			originCourse.setContent(currentCourse.getContent());
+			originCourse.setIntroduction(currentCourse.getIntroduction());
+			originCourse.setImg_path(currentCourse.getImg_path());
+			originCourse.setPrice(currentCourse.getPrice());
+			originCourse.setLevel(currentCourse.getLevel());
+			originCourse.setUpdate_date(new Date(System.currentTimeMillis()));
+			updateCourse(originCourse);
+			
+			// 강의 서브 카테고리 복제
+			deleteCourseSubType(originCourse.getOli_no());
+			for(CourseSubTypeDTO cst : getCourseSubTypeList(currentCourse.getOli_no())) {
+				cst.setOli_no(currentCourse.getOli_no());
+				submitCourseSubType(cst);
+			}
+			
+			// 강의 태그 복제
+			deleteCourseTag(originCourse.getOli_no());
+			for(CourseTagDTO ct : getCourseTags(currentCourse.getOli_no())) {
+				ct.setOli_no(currentCourse.getOli_no());
+				submitCourseTag(ct);
+			}
+			
+			// 강의 동영상 복제
+			deleteCourseVideo(originCourse.getOli_no());
+			for(CourseVideoDTO cv : getCourseVideoList(currentCourse.getOli_no())) {
+				cv.setOli_no(currentCourse.getOli_no());
+				submitCourseVideo(cv);
+			}
+			
+			// 파일 관리 테이블의 content_no 바꾸기
+			fileService.changeContent_no(originCourse.getOli_no(), currentCourse.getOli_no());
+		}
+		
+		updateCourseRequest(cr);
+		return 1;
+	}
+
+	// 강의 요청 거절
+	@Override
+	public int rejectCourse(int olr_no, String rejection_message) {
+		CourseRequestDTO cr = getCourseRequest(olr_no);
+		cr.setApproval_status(1);
+		cr.setRejection_message(rejection_message);
+		updateCourseRequest(cr);
+		return 1;
+	}
+
+	@Override
+	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {
+		// 강의 수정일 때
+		int origin_oli_no = 0;
+		if(dto.getOrigin() != 1) {
+			origin_oli_no = dto.getOli_no();
+		}
+		
+		insertCourse(dto);
+		
+		for(String c : categorys) {
+			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
+			courseSubTypeDTO.setOli_no(dto.getOli_no());
+			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
+			submitCourseSubType(courseSubTypeDTO);
+		}
+		
+		for(String t : tags) {
+			CourseTagDTO courseTagDTO = new CourseTagDTO();
+			courseTagDTO.setOli_no(dto.getOli_no());
+			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
+			submitCourseTag(courseTagDTO);
+		}
+		
+		for(int i = 0; i < videoTitles.length; i++) {
+			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
+			courseVideoDTO.setOli_no(dto.getOli_no());
+			courseVideoDTO.setTitle(videoTitles[i]);
+			courseVideoDTO.setS_file_name(videoPaths[i]);
+			
+			submitCourseVideo(courseVideoDTO);
+		}
+		
+		// 게시글의 파일 관리
+		try {
+			fileService.manageFileAfterPostSubmission(dto.getContent(), dto.getOli_no(), 1); // category 강의 : 1
+		}
+		catch(Exception e) {
+			System.err.println("강의 파일 저장 실패 : " + e.getMessage());
+		}
+		
+		// 강의 요청 대기열에 등록
+		CourseRequestDTO cr = new CourseRequestDTO();
+		cr.setOli_no(dto.getOli_no());
+		// 강의 수정일 때 원본 강의 번호 넣기
+		if(origin_oli_no != 0)
+			cr.setOrigin_oli_no(origin_oli_no);
+		else cr.setOrigin_oli_no(dto.getOli_no());
+		cr.setRequest_datetime(new Date(System.currentTimeMillis()));
+		cr.setApproval_status(0);
+		insertCourseRequest(cr);
+		
+		return 1;
 	}
 }

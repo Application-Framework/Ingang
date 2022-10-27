@@ -120,8 +120,6 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		
-		// 이부분 수정해야 함
 		// 강의 등록
 		CourseDTO courseDTO = new CourseDTO();
 		courseDTO.setOlt_no(teacherDTO.getOlt_no());
@@ -133,37 +131,9 @@ public class CoursePostController {
 		courseDTO.setLevel(Integer.parseInt(level));
 		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		courseDTO.setEnable(1);
+		courseDTO.setOrigin(1);
 		
-		courseService.submitCourse(courseDTO);
-		
-		for(String c : categorys) {
-			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
-			courseSubTypeDTO.setOli_no(courseDTO.getOli_no());
-			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
-			courseService.submitCourseSubType(courseSubTypeDTO);
-		}
-		
-		for(String t : tags) {
-			CourseTagDTO courseTagDTO = new CourseTagDTO();
-			courseTagDTO.setOli_no(courseDTO.getOli_no());
-			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
-			courseService.submitCourseTag(courseTagDTO);
-		}
-		
-		for(int i = 0; i < videoTitles.length; i++) {
-			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
-			courseVideoDTO.setOli_no(courseDTO.getOli_no());
-			courseVideoDTO.setTitle(videoTitles[i]);
-			courseVideoDTO.setS_file_name(videoPaths[i]);
-			
-			courseService.submitCourseVideo(courseVideoDTO);
-		}
-		
-		System.out.println("강의 등록 성공");
-		System.out.println("등록 내용 : " + courseDTO);
-		
-		// 게시글의 파일 관리
-		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1); // category 강의 : 1
+		courseService.saveCourse(courseDTO, categorys, tags, videoTitles, videoPaths);
 
 		return "redirect:/course/"+courseDTO.getOli_no();
 	}
@@ -280,38 +250,10 @@ public class CoursePostController {
 			courseDTO.setImg_path(img_path);
 		courseDTO.setPrice(Integer.parseInt(price));
 		courseDTO.setLevel(Integer.parseInt(level));
-		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		courseDTO.setEnable(1);
+		courseDTO.setOrigin(0);
 		
-		courseService.updateCourse(courseDTO);
-		
-		courseService.deleteCourseSubType(pageNo);
-		for(String c : categorys) {
-			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
-			courseSubTypeDTO.setOli_no(courseDTO.getOli_no());
-			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
-			courseService.submitCourseSubType(courseSubTypeDTO);
-		}
-		
-		courseService.deleteCourseTag(pageNo);
-		for(String t : tags) {
-			CourseTagDTO courseTagDTO = new CourseTagDTO();
-			courseTagDTO.setOli_no(courseDTO.getOli_no());
-			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
-			courseService.submitCourseTag(courseTagDTO);
-		}
-		
-		courseService.deleteCourseVideo(pageNo);
-		for(int i = 0; i < videoTitles.length; i++) {
-			CourseVideoDTO courseVideoDTO = new CourseVideoDTO();
-			courseVideoDTO.setOli_no(courseDTO.getOli_no());
-			courseVideoDTO.setTitle(videoTitles[i]);
-			courseVideoDTO.setS_file_name(videoPaths[i]);
-			courseService.submitCourseVideo(courseVideoDTO);
-		}
-		
-		System.out.println("강의 수정 성공");
-		System.out.println("수정 내용 : " + courseDTO);
+		courseService.saveCourse(courseDTO, categorys, tags, videoTitles, videoPaths);
 		
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1);
