@@ -2,6 +2,7 @@ package com.spring.ex.service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -93,12 +94,13 @@ public interface CourseService {
 	// 강의 요청 부분
 	//-------------------------------
 	
-	public List<CourseRequestDTO> getCourseRequestList();
+	public List<Map<String, Object>> getPendingCourseRequestList();
 	public List<CourseRequestDTO> getCourseRequestListByOli_no(int oli_no);
 	public CourseRequestDTO getCourseRequest(int olr_no);
 	public int insertCourseRequest(CourseRequestDTO dto);
 	public int updateCourseRequest(CourseRequestDTO dto);
 	public int deleteCourseRequest(int olr_no);
+	
 	
 	// 사용자의 강의 저장
 	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);

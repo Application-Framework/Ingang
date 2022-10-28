@@ -6,6 +6,12 @@
 <head>
 <meta charset="UTF-8">
 <title>인강인강 승인 대기중인 강의 관리</title>
+	<style>
+		.table td {
+			vertical-align: middle!important;
+		    font-size: medium;
+		}
+	</style>
 </head>
 <body id="page-top">
     <div id="wrapper">
@@ -46,39 +52,42 @@
 							<div class="d-flex">
 								<div class="ml-auto">
 									<button class="btn btn-primary mr-2" data-toggle="modal" data-target="#AdminSignUp">강의 등록</button>
-									<input type="button" class="btn btn-info" value="승인" onclick="deleteValue();">
-									<input type="button" class="btn btn-info" value="거절" onclick="deleteValue();">
+									
 								</div>
 							</div>
 						</div>
 					</div>
 					
 					<div>
-						<table class="table table-hover table-white">
+						<table class="table table-hover table-white text-center">
 							<thead>
 								<tr>
 									<th>
 										<input id="allCheck" type="checkbox" name="allCheck">
 									</th>
-									<th><font size="3">강의 No</font></th>
-									<th><font size="3">강사 NO</font></th>
-									<th><font size="3">강의명</font></th>
-									<th><font size="3">가격</font></th>
-									<th><font size="3">난이도</font></th>
-									<th><font size="3">생성일자</font></th>
-									<th><font size="3">수정일자</font></th>
+									<th>강의NO</th>
+									<th>ori No</th>
+									<th>강의명</th>
+									<th>강사명</th>
+									<th>요청날짜</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${courseList}" var="course">
+								<c:forEach var="cr" items="${courseRequestList}">
 									<tr>
 										<td>
-											<input name="RowCheck" type="checkbox" value="${memberData.m_no}">			
+											<input name="rowCheck" type="checkbox" value="${cr.olr_no}">			
 										</td>
-										<td><font size="3">${memberData.m_no}</font></td>
-										<td><font size="3">${memberData.olt_no}</font></td>
+										<td>${cr.oli_no}</td>
+										<td>${cr.origin_oli_no}</td>
+										<td><a href="">${cr.course_title}</a></td>
+										<td>${cr.teacher_name}</td>
+										<td>${cr.request_datetime}</td>
 										<td>
+											<input type="button" class="btn btn-info" value="승인" onclick="approvalCourseRequest(${cr.olr_no});">
+											<button type="button" class="btn btn-secondary" onclick="rejectCourseRequest(${cr.olr_no});">거절</button>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -138,8 +147,82 @@
 			<!-- 하단 푸터 부분 -->
 			<jsp:include page="../layout/footer.jsp"/>
     		<!-- 하단 푸터 부분 -->
+    		
+    		
+    		<!-- 요청 거절 확인 Modal -->
+			<div class="modal fade" id="rejectionModal" tabindex="-1" role="dialog">
+			  <div class="modal-dialog" role="document">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <h5 class="modal-title" id="exampleModalLabel">거절 사유를 입력하세요</h5>
+			        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			          <span aria-hidden="true">&times;</span>
+			        </button>
+			      </div>
+			      <div class="modal-body">
+			      	<textarea class="form-control" rows="5" id="rejection_message"></textarea>
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+			        <button id="rejection_btn" type="button" class="btn btn-primary">거절</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 		</div>
 	</div>
+    
+    <script>
+    	var rejection_olr_no = 0;
+    
+   		// 전체 체크박스 클릭 이벤트
+	    $("#allCheck").click(function () {
+	        $("[name='rowCheck']").prop('checked', $(this).prop('checked'));
+	    });
+   		
+   		// 요청 승인
+   		function approvalCourseRequest(olr_no) {
+   			if(confirm("정말 승인하시겠습니까?")) {
+   				$.ajax({
+   					url: "/approvalCourseRequest",
+   					type: "post",
+   					data: {
+	   					olr_no: olr_no
+   					},
+   					success: function() {
+   						location.reload();
+   					}
+   				});
+   			}
+   		}
+   	
+   		
+   		// 요청 거절
+   		function rejectCourseRequest(olr_no) {
+   			rejection_olr_no = olr_no;
+   			$("#rejection_message").val('');
+   			$("#rejectionModal").modal('show');
+   		}
+   		
+   		$("#rejection_btn").click(function() {
+   			if($("#rejection_message").val().trim() == '') {
+   				alert("거절 사유를 입력하세요");
+   				return;
+   			}
+   			$.ajax({
+				url: "/rejectCourseRequest",
+				type: "post",
+				data: {
+  						olr_no: rejection_olr_no,
+  						rejection_message: $("#rejection_message").val()
+				},
+				success: function() {
+					location.reload();
+				}
+			});
+   		});
+    
+    </script>
     
 	<!-- Chart -->
 	<script src='<c:url value="/resources/js/Chart.min.js"/>'></script>

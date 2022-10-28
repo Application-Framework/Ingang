@@ -1,6 +1,7 @@
 package com.spring.ex.dao.course;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -15,11 +16,11 @@ public class CourseRequestDAOImpl implements CourseRequestDAO {
 	@Inject
 	private SqlSession sql;
 	
-	private String namespace = "com.spring.ex.CourseRequestMapper";
+	private String namespace = "com.spring.ex.CourseMapper";
 	
 	@Override
-	public List<CourseRequestDTO> selectListCourseRequest() {
-		return sql.selectList(namespace + ".selectCourseRequestList");
+	public List<Map<String, Object>> selectListPendingCourseRequest() {
+		return sql.selectList(namespace + ".selectListPendingCourseRequest");
 	}
 
 	@Override

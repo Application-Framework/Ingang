@@ -3,6 +3,7 @@ package com.spring.ex.service;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -211,8 +212,8 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<CourseRequestDTO> getCourseRequestList() {
-		return courseRequestDAO.selectListCourseRequest();
+	public List<Map<String, Object>> getPendingCourseRequestList() {
+		return courseRequestDAO.selectListPendingCourseRequest();
 	}
 
 	@Override
@@ -263,26 +264,29 @@ public class CourseServiceImpl implements CourseService {
 			// 강의 서브 카테고리 복제
 			deleteCourseSubType(originCourse.getOli_no());
 			for(CourseSubTypeDTO cst : getCourseSubTypeList(currentCourse.getOli_no())) {
-				cst.setOli_no(currentCourse.getOli_no());
+				cst.setOli_no(originCourse.getOli_no());
 				submitCourseSubType(cst);
 			}
+			deleteCourseSubType(currentCourse.getOli_no());
 			
 			// 강의 태그 복제
 			deleteCourseTag(originCourse.getOli_no());
 			for(CourseTagDTO ct : getCourseTags(currentCourse.getOli_no())) {
-				ct.setOli_no(currentCourse.getOli_no());
+				ct.setOli_no(originCourse.getOli_no());
 				submitCourseTag(ct);
 			}
+			deleteCourseTag(currentCourse.getOli_no());
 			
 			// 강의 동영상 복제
 			deleteCourseVideo(originCourse.getOli_no());
 			for(CourseVideoDTO cv : getCourseVideoList(currentCourse.getOli_no())) {
-				cv.setOli_no(currentCourse.getOli_no());
+				cv.setOli_no(originCourse.getOli_no());
 				submitCourseVideo(cv);
 			}
+			deleteCourseVideo(currentCourse.getOli_no());
 			
 			// 파일 관리 테이블의 content_no 바꾸기
-			fileService.changeContent_no(originCourse.getOli_no(), currentCourse.getOli_no());
+			fileService.changeContent_no(currentCourse.getOli_no(), originCourse.getOli_no());
 		}
 		
 		updateCourseRequest(cr);
@@ -302,12 +306,9 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {
 		// 강의 수정일 때
-		int origin_oli_no = 0;
-		if(dto.getOrigin() != 1) {
-			origin_oli_no = dto.getOli_no();
-		}
-		
+		int origin_oli_no = dto.getOli_no();
 		insertCourse(dto);
+		if(origin_oli_no == 0) origin_oli_no = dto.getOli_no();
 		
 		for(String c : categorys) {
 			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
@@ -343,11 +344,7 @@ public class CourseServiceImpl implements CourseService {
 		// 강의 요청 대기열에 등록
 		CourseRequestDTO cr = new CourseRequestDTO();
 		cr.setOli_no(dto.getOli_no());
-		// 강의 수정일 때 원본 강의 번호 넣기
-		if(origin_oli_no != 0)
-			cr.setOrigin_oli_no(origin_oli_no);
-		else cr.setOrigin_oli_no(dto.getOli_no());
-		cr.setRequest_datetime(new Date(System.currentTimeMillis()));
+		cr.setOrigin_oli_no(origin_oli_no);
 		cr.setApproval_status(0);
 		insertCourseRequest(cr);
 		

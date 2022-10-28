@@ -9,7 +9,7 @@
 	        TRUNCATE((SELECT AVG(star_rating) FROM online_lecture_reply olr WHERE olr.oli_no = oli.oli_no),0) star_avg,
 			(SELECT COUNT(*) FROM online_lecture_like oll WHERE oli.oli_no = oll.oli_no) like_cnt,
 	        (SELECT COUNT(*) FROM online_lecture_reply olr WHERE olr.oli_no = oli.oli_no) reply_cnt
-		FROM online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst
+		
 		<include refid="search"></include>
 		GROUP BY oli.oli_no
 		<choose>
@@ -42,13 +42,13 @@
 	
 	<select id="getCourseTotalCount" resultType="int">
 		SELECT count(DISTINCT oli.oli_no)
-		FROM online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst
 		<include refid="search"></include>
 	</select>
 	
 	<sql id="search">
-		WHERE oli.oli_no = oltag.oli_no AND oli.oli_no = olst.oli_no AND enable = 1 
-		
+		FROM online_lecture_introduction oli, online_lecture_tag oltag, online_lecture_sub_type olst, online_lecture_request olr
+		WHERE oli.oli_no = oltag.oli_no AND oli.oli_no = olst.oli_no AND enable = 1 AND oli.oli_no = olr.oli_no
+			AND olr.approval_status = 1 AND oli.origin = 1
 		<if test="searchTitle != null">
 			AND oli.title LIKE '%${searchTitle}%'
 		</if>
@@ -221,9 +221,12 @@
 	
 	
 	<!-- 강의 요청 부분 -->
-
-	<select id="selectListCourseRequest" resultType="CourseRequestDTO">
-		SELECT * FROM online_lecture_request
+	<select id="selectListPendingCourseRequest" resultType="HashMap">
+		SELECT olr_no, olr.oli_no, olr.origin_oli_no, olt.name AS teacher_name, oli.title AS course_title, request_datetime 
+		FROM online_lecture_request olr, online_lecture_teacher olt, online_lecture_introduction oli
+		WHERE olr.oli_no = oli.oli_no AND olt.olt_no = oli.olt_no
+			AND olr.approval_status = 0
+		ORDER BY request_datetime
 	</select>
 	
 	<select id="selectListCourseRequestByOli_no" resultType="CourseRequestDTO">
@@ -238,7 +241,7 @@
 	
 	<insert id="insertCourseRequest">
 		INSERT INTO online_lecture_request(oli_no, origin_oli_no, approval_status, rejection_message, request_datetime)
-		VALUES(#{oli_no}, #{origin_oli_no}, #{approval_status}, #{rejection_message}, #{request_datetime})
+		VALUES(#{oli_no}, #{origin_oli_no}, #{approval_status}, #{rejection_message}, NOW())
 	</insert>
 	
 	<update id="updateCourseRequest">
@@ -247,7 +250,7 @@
 			oli_no = #{oli_no},
 			origin_oli_no = #{origin_oli_no},
 			approval_status = #{approval_status},
-			rejection = #{rejection},
+			rejection_message = #{rejection_message},
 			request_datetime = #{request_datetime}
 		WHERE olr_no = #{olr_no}
 	</update>
