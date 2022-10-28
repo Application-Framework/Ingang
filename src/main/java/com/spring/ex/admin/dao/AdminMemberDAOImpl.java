@@ -68,4 +68,16 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	public int getMemberCommunityTotalCount(HashMap<String, Object> map) throws Exception {
 		return sqlSession.selectOne(namespaceAdmin + ".getMemberCommunityTotalCount", map);
 	}
+	
+	//관리자페이지 회원 수정
+	@Override
+	public void updateAdminMember(MemberDTO mDto) throws Exception {
+		sqlSession.update(namespaceAdmin + ".updateAdminMember", mDto);
+	}
+	
+	//관리자페이지 회원 가입
+	@Override
+	public void signUpAdminMember(MemberDTO mDto) throws Exception {
+		sqlSession.insert(namespaceAdmin + ".signUpAdminMember" + mDto);
+	}
 }

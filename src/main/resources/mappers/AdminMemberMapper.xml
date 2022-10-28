@@ -67,6 +67,33 @@
 		WHERE m_no = #{m_no}
 	</select>
 	
+	<!-- 관리자 페이지 회원 수정 -->
+	<update id="updateAdminMember">
+		UPDATE member 
+		SET m_pw = #{m_pw},
+			m_authority = #{m_authority},
+			m_comment = #{m_comment}
+		WHERE m_no = #{m_no}
+	</update>
+	
+	<!-- 관리자 페이지 회원가입 -->
+	<insert id="signUpAdminMember">
+		INSERT INTO member(
+			m_id,
+			m_pw,
+			m_name,
+			m_authority,
+			m_comment,
+			reg_date)
+			VALUES(
+			#{m_id},
+			#{m_pw},
+			#{m_name},
+			#{m_authority},
+			#{m_comment},
+			CURDATE())
+	</insert>
+	
 	<!-- 회원목록 페이지 검색 -->
 	<sql id="searchAdminMemberBoard">
 		<choose>

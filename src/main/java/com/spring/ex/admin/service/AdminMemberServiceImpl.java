@@ -69,4 +69,15 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	public int getMemberCommunityTotalCount(HashMap<String, Object> map) throws Exception {
 		return adminDao.getMemberCommunityTotalCount(map);
 	}
+	
+	//관리자페이지 회원 수정
+	@Override
+	public void updateAdminMember(MemberDTO mDto) throws Exception {
+		adminDao.updateAdminMember(mDto);
+	}
+	//관리자페이지 회원 가입
+	@Override
+	public void signUpAdminMember(MemberDTO mDto) throws Exception {
+		adminDao.signUpAdminMember(mDto);
+	}
 }

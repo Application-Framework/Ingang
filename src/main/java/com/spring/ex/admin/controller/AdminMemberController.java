@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.dto.MemberDTO;
@@ -25,7 +26,6 @@ public class AdminMemberController {
 	@Inject AdminMemberService service;
 	
 	private PagingService pagingService;
-	private PagingService pagingService2;
 	
 	//관리자 페이지 회원 메인페이지
 	@RequestMapping(value = "/admin/memberList", method = RequestMethod.GET)
@@ -145,5 +145,21 @@ public class AdminMemberController {
         	return 1;
         }
 	}
+	//관리자 페이지 회원 수정
+	@RequestMapping(value = "/admin/signUpAdminMember", method = RequestMethod.POST)
+	public String updateAdminMember(MemberDTO mDto, MultipartFile file, HttpServletRequest request) throws Exception {
+		
+		service.updateAdminMember(mDto);
+		
+		return "redirect:memberList";
+	}
 	
+	//관리자 페이지 회원 가입
+	@RequestMapping(value = "/admin/signUpAdminMember", method = RequestMethod.POST)
+	public String signUpAdminMember(MemberDTO mDto, MultipartFile file, HttpServletRequest request) throws Exception {
+		
+		service.signUpAdminMember(mDto);
+		
+		return "redirect:memberList";
+	}
 }
