@@ -23,7 +23,7 @@
 						<hr>
 					</div>
 					<div class="d-flex flex-column">
-						<form role="form" name="memberUpdate" id="memberUpdate" action="memberUpdate" method="POST">
+						<form role="form" name="memberUpdate" id="memberUpdate" method="POST"  enctype="multipart/form-data">
 							<div class="row">
 								<div class="col-xs-4 col-md-4">
 									<div class="form-group row">
@@ -36,6 +36,9 @@
 												<img alt="" width="70%;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
 											</c:if>
 										</div>
+										<div class="col-xs-12 col-md-12">
+											<input type="file" class="form-control" id="file" name="file">
+										</div>
 									</div>
 								</div>
 								
@@ -47,7 +50,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">No</span>
 												</div>
-												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.m_no}" readonly>
+												<input type="text" name="m_no" id="m_no" class="form-control" value="${mDetail.m_no}" readonly>
 											</div>
 										</div>
 										<div class="col-xs-6 col-md-6">
@@ -55,7 +58,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">이름</span>
 												</div>
-												<input type="text" name="name" id="name" class="form-control" value="${mDetail.m_name}" readonly>
+												<input type="text" name="m_name" id="m_name" class="form-control" value="${mDetail.m_name}" readonly>
 											</div>
 										</div>
 									</div>
@@ -66,7 +69,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">아이디</span>
 												</div>
-												<input type="text" name="userID" id="userID" class="form-control" value="${mDetail.m_id}" readonly>
+												<input type="text" name="m_id" id="m_id" class="form-control" value="${mDetail.m_id}" readonly>
 											</div>
 										</div>
 										<div class="col-xs-6 col-md-6">
@@ -74,7 +77,7 @@
 												<div class="input-group-prepend">
 													<span class="input-group-text">비밀번호</span>
 												</div>
-												<input type="password" name="password" id="password" class="form-control" value="${mDetail.m_pw}">
+												<input type="password" name="m_pw" id="m_pw" class="form-control" value="${mDetail.m_pw}">
 											</div>
 										</div>
 									</div>
@@ -86,7 +89,7 @@
 													<span class="input-group-text">권한</span>
 												</div>
 												<select id="m_authority" name="m_authority" class="form-control">
-													<option value="2">일반</option>
+													<option value="2">회원</option>
 													<option value="3">VIP</option>
 													<option value="4">블랙리스트</option>
 													<option value="1">관리자</option>
@@ -110,11 +113,11 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text">특이사항</span>
 									</div>
-									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control" >${mDetail.m_comment}</textarea>
+									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control">${mDetail.m_comment}</textarea>
 								</div>
 							</div>
 							
-							<button type="submit" class="btn btn-primary btn-block btn-round">수정</button>
+							<button type="button" class="btn btn-primary btn-block btn-round" id="btnAdminModify">수정</button>
 							<br>
 							<!-- 강의 -->
 							<h4>강의 구매 내역</h4>
@@ -316,10 +319,34 @@
 	</div>
 	<jsp:include page="../layout/footer.jsp"/>
   		<!-- 하단 푸터 부분 -->
-	<script type="text/javascript">
-	$(document).ready(function(){
-		$("#m_authority").val("${mDetail.m_authority}").prop("selected", true);
-	})
-	</script>
+<script type="text/javascript">
+$(document).ready(function(){
+	$("#m_authority").val("${mDetail.m_authority}").prop("selected", true);
+})
+
+
+$('#btnAdminModify').click(function() {
+	var form = $("form")[0];
+	var formData = new FormData(form);
+	
+	$.ajax({
+		cache : false,
+		url : "updateAdminMember", 
+		processData: false,
+		contentType: false,
+		type : 'POST', 
+		data : formData, 
+		success : function(data = 1) {
+			opener.location.reload();
+			window.close();
+			
+		},
+		error : function(xhr, status) {
+			alert(xhr + " : " + status);
+		}
+	});
+	
+})
+</script>
 </body>
 </html>

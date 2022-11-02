@@ -72,12 +72,12 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	
 	//관리자페이지 회원 수정
 	@Override
-	public void updateAdminMember(MemberDTO mDto) throws Exception {
-		adminDao.updateAdminMember(mDto);
+	public int updateAdminMember(MemberDTO mDto) throws Exception {
+		return adminDao.updateAdminMember(mDto);
 	}
 	//관리자페이지 회원 가입
 	@Override
-	public void signUpAdminMember(MemberDTO mDto) throws Exception {
-		adminDao.signUpAdminMember(mDto);
+	public int signUpAdminMember(MemberDTO mDto) throws Exception {
+		return adminDao.signUpAdminMember(mDto);
 	}
 }

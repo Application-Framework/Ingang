@@ -12,12 +12,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.PagingDTO;
+import com.spring.ex.service.FileService;
 import com.spring.ex.service.PagingService;
 
 @Controller 
@@ -26,6 +28,9 @@ public class AdminMemberController {
 	@Inject AdminMemberService service;
 	
 	private PagingService pagingService;
+	
+	@Inject
+	private FileService fileUploadService;
 	
 	//관리자 페이지 회원 메인페이지
 	@RequestMapping(value = "/admin/memberList", method = RequestMethod.GET)
@@ -146,20 +151,36 @@ public class AdminMemberController {
         }
 	}
 	//관리자 페이지 회원 수정
-	@RequestMapping(value = "/admin/signUpAdminMember", method = RequestMethod.POST)
-	public String updateAdminMember(MemberDTO mDto, MultipartFile file, HttpServletRequest request) throws Exception {
+	@RequestMapping(value = "/admin/updateAdminMember", method = RequestMethod.POST)
+	@ResponseBody
+	public int updateAdminMember(MemberDTO mDto , MultipartFile file, HttpServletRequest request)  throws Exception {
+		String fileName = null;
 		
-		service.updateAdminMember(mDto);
-		
-		return "redirect:memberList";
+		if(!file.isEmpty()) {
+			fileName = fileUploadService.insertFileToLocalAndServer(file, "/img/profile/uploaded_images");
+			//System.out.println(fileName);
+			mDto.setImg_path(fileName);
+		}
+		mDto.setM_comment(mDto.getM_comment().trim());
+		int res = service.updateAdminMember(mDto);
+		//System.out.println(mDto.getM_pw() + " " + mDto.getM_comment() + " " + mDto.getM_authority() + mDto.getImg_path());
+		return res;
 	}
 	
 	//관리자 페이지 회원 가입
 	@RequestMapping(value = "/admin/signUpAdminMember", method = RequestMethod.POST)
-	public String signUpAdminMember(MemberDTO mDto, MultipartFile file, HttpServletRequest request) throws Exception {
+	@ResponseBody
+	public int signUpAdminMember(MemberDTO mDto,  MultipartFile file, HttpServletRequest request) throws Exception {
+		String fileName = null;
 		
-		service.signUpAdminMember(mDto);
+		if(!file.isEmpty()) {
+			fileName = fileUploadService.insertFileToLocalAndServer(file, "/img/profile/uploaded_images");
+			//System.out.println(fileName);
+			mDto.setImg_path(fileName);
+		}
+		mDto.setM_comment(mDto.getM_comment().trim());
+		int res = service.signUpAdminMember(mDto);
 		
-		return "redirect:memberList";
+		return res;
 	}
 }

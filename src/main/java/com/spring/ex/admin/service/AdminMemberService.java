@@ -36,7 +36,7 @@ public interface AdminMemberService {
 	public int getMemberCommunityTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//관리자페이지 회원 수정
-	public void updateAdminMember(MemberDTO mDto) throws Exception;
+	public int updateAdminMember(MemberDTO mDto) throws Exception;
 	//관리자페이지 회원 가입
-	public void signUpAdminMember(MemberDTO mDto) throws Exception;
+	public int signUpAdminMember(MemberDTO mDto) throws Exception;
 }

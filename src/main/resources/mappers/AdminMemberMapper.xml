@@ -69,10 +69,13 @@
 	
 	<!-- 관리자 페이지 회원 수정 -->
 	<update id="updateAdminMember">
-		UPDATE member 
+		UPDATE member
 		SET m_pw = #{m_pw},
 			m_authority = #{m_authority},
 			m_comment = #{m_comment}
+			<if test='img_path != null'>
+				,img_path = #{img_path}
+			</if>
 		WHERE m_no = #{m_no}
 	</update>
 	
@@ -84,14 +87,16 @@
 			m_name,
 			m_authority,
 			m_comment,
-			reg_date)
+			reg_date,
+			img_path)
 			VALUES(
 			#{m_id},
 			#{m_pw},
 			#{m_name},
 			#{m_authority},
 			#{m_comment},
-			CURDATE())
+			CURDATE(),
+			#{img_path})
 	</insert>
 	
 	<!-- 회원목록 페이지 검색 -->

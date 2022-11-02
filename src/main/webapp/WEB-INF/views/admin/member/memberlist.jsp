@@ -82,6 +82,12 @@
 										<c:when test="${memberData.m_authority eq 2}">
 											<td><font size="3">회원</font></td>
 										</c:when>
+										<c:when test="${memberData.m_authority eq 3}">
+											<td><font size="3">VIP</font></td>
+										</c:when>
+										<c:when test="${memberData.m_authority eq 4}">
+											<td><font size="3">블랙리스트</font></td>
+										</c:when>
 									</c:choose>
 									<td><font size="3"><c:out value="${memberData.reg_date}"></c:out></font></td>
 								</tr>
@@ -158,15 +164,18 @@
 						<hr>
 					</div>
 					<div class="d-flex flex-column">
-						<form name="form" id="form" action="AdminSignUp" method="POST">
+						<form id="myform" role="form" method="POST"  enctype="multipart/form-data">
 							<!-- 아이디 & 비밀번호 -->
 							<div class="form-group row">
+								<div class="col-xs-12 col-md-12">
+									<input type="file" class="form-control" id="file" name="file">
+								</div>
 								<div class="col-xs-6 col-md-6">
 									<div class="input-group my-2 mb-1">
 										<div class="input-group-prepend">
 											<span class="input-group-text">아이디</span>
 										</div>
-										<input type="text" name="UserID" id="account" class="form-control" required>
+										<input type="text" name="m_id" id="m_id" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-xs-6 col-md-6">
@@ -174,7 +183,7 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text">비밀번호</span>
 										</div>
-										<input type="password" name="Password" id="password" class="form-control">
+										<input type="password" name="m_pw" id="m_pw" class="form-control" required>
 									</div>
 								</div>
 							</div>
@@ -185,42 +194,20 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text">이름</span>
 										</div>
-										<input type="text" id="Name" name="Name" class="form-control" required>
+										<input type="text" id="m_name" name="m_name" class="form-control" required>
 									</div>
 								</div>
 								<div class="col-xs-6 col-md-6">
 									<div class="input-group my-2 mb-1">
 										<div class="input-group-prepend">
-											<span class="input-group-text">성별</span>
+											<span class="input-group-text">권한</span>
 										</div>
-										<select class="form-control" id="Sex">
-											<option value="1" >남성</option>
-											<option value="0" >여성</option>
+										<select class="form-control" id="m_authority">
+											<option value="1" >관리자</option>
+											<option value="2" >회원</option>
+											<option value="3" >VIP</option>
+											<option value="4" >블랙리스트</option>
 										</select>
-									</div>
-								</div>
-							</div>
-							<!-- 권한 & 성별 -->
-							<div class="form-group row">
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text" id="Grade">권한</span>
-										</div>
-										<select class="form-control">
-											<option value="일반">일반</option>
-											<option value="VIP">VIP</option>
-											<option value="블랙">블랙</option>
-											<option value="관리자">관리자</option>
-										</select>
-									</div>
-								</div>
-								<div class="col-xs-6 col-md-6">
-									<div class="input-group my-2 mb-1">
-										<div class="input-group-prepend">
-											<span class="input-group-text">휴대전화</span>
-										</div>
-										<input type="tel" name="Phone" id="Phone" class="form-control" required>
 									</div>
 								</div>
 							</div>
@@ -230,11 +217,11 @@
 									<div class="input-group-prepend">
 										<span class="input-group-text">특이사항</span>
 									</div>
-									<textarea rows="5" cols="25" name="comment" id="comment" class="form-control"></textarea>
+									<textarea rows="5" cols="25" name="m_comment" id="m_comment" class="form-control"></textarea>
 								</div>
 							</div>
 							
-							<button type="submit" class="btn btn-primary btn-block btn-round" onclick="adminsubmit()">회원등록</button>
+							<button type="button" class="btn btn-primary btn-block btn-round" id="btnAdminSignUp">회원등록</button>
 						</form>
 					</div>
 				</div>
@@ -312,6 +299,29 @@
 	  		})
 		}
 	}
+	
+	$('#btnAdminSignUp').click(function() {
+		var form = $("#myform")[0];
+		var formData = new FormData(form);
+		
+		$.ajax({
+			cache : false,
+			url : "signUpAdminMember", 
+			processData: false,
+			contentType: false,
+			type : 'POST', 
+			data : formData, 
+			success : function(data = 1) {
+				opener.location.reload();
+				//window.close();
+				
+			},
+			error : function(xhr, status) {
+				alert(xhr + " : " + status);
+			}
+		});
+		
+	})
 </script>
 </body>
 </html>
