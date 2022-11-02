@@ -94,8 +94,8 @@ public interface CourseService {
 	// 강의 요청 부분
 	//-------------------------------
 	
-	public List<Map<String, Object>> getPendingCourseRequestList();
-	public List<CourseRequestDTO> getCourseRequestListByOli_no(int oli_no);
+	public List<Map<String, Object>> getPendingCourseRequestList(String searchCategory, String search, int nowPage, int pageSize);
+	public int getPendingCoursesCount();
 	public CourseRequestDTO getCourseRequest(int olr_no);
 	public int insertCourseRequest(CourseRequestDTO dto);
 	public int updateCourseRequest(CourseRequestDTO dto);

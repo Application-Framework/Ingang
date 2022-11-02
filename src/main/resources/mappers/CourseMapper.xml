@@ -223,16 +223,42 @@
 	<!-- 강의 요청 부분 -->
 	<select id="selectListPendingCourseRequest" resultType="HashMap">
 		SELECT olr_no, olr.oli_no, olr.origin_oli_no, olt.name AS teacher_name, oli.title AS course_title, request_datetime 
+		<include refid="pendingCourseRequestSQL" />
+		ORDER BY request_datetime
+		LIMIT #{nowPage}, #{pageSize}
+	</select>
+	
+	<select id="getPendingCoursesCount" resultType="int">
+		SELECT COUNT(*)
+		<include refid="pendingCourseRequestSQL" />
+	</select>
+	
+	<sql id="pendingCourseRequestSQL">
 		FROM online_lecture_request olr, online_lecture_teacher olt, online_lecture_introduction oli
 		WHERE olr.oli_no = oli.oli_no AND olt.olt_no = oli.olt_no
 			AND olr.approval_status = 0
-		ORDER BY request_datetime
-	</select>
-	
-	<select id="selectListCourseRequestByOli_no" resultType="CourseRequestDTO">
-		SELECT * FROM online_lecture_request
-		WHERE oli_no = #{oli_no}
-	</select>
+		
+		<if test="searchCategory != null">
+			AND
+			<choose>
+				<when test="searchCategory.equals('course_title')">
+					oli.title LIKE '%${search}%'
+				</when>
+				
+				<when test="searchCategory.equals('teacher_name')">
+					olt.name LIKE '%${search}%'
+				</when>
+				
+				<when test="searchCategory.equals('teacher_email')">
+					olt.email LIKE '%${search}%'
+				</when>
+				
+				<otherwise>
+					oli.title LIKE '%${search}%'
+				</otherwise>
+			</choose>
+		</if>
+	</sql>
 	
 	<select id="selectOneCourseRequest" resultType="CourseRequestDTO">
 		SELECT * FROM online_lecture_request

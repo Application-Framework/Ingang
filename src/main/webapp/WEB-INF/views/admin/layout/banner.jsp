@@ -5,7 +5,7 @@
 		<hr class="sidebar-divider my-0">
 	</li>
 	<li class="nav-item active">
-		<a class="nav-link" href="main">
+		<a class="nav-link" href="/admin/main">
 			<i class="fas fa-fw fa-tachometer-alt"></i>
 			<span>Home</span>
 		</a>

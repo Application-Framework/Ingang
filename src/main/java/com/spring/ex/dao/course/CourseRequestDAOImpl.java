@@ -1,5 +1,6 @@
 package com.spring.ex.dao.course;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,15 +20,21 @@ public class CourseRequestDAOImpl implements CourseRequestDAO {
 	private String namespace = "com.spring.ex.CourseMapper";
 	
 	@Override
-	public List<Map<String, Object>> selectListPendingCourseRequest() {
-		return sql.selectList(namespace + ".selectListPendingCourseRequest");
+	public List<Map<String, Object>> selectListPendingCourseRequest(String searchCategory, String search, int nowPage, int pageSize) {
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("searchCategory", searchCategory);
+		map.put("search", search);
+		map.put("nowPage", nowPage);
+		map.put("pageSize", pageSize);
+		
+		return sql.selectList(namespace + ".selectListPendingCourseRequest", map);
 	}
 
 	@Override
-	public List<CourseRequestDTO> selectListCourseRequestByOli_no(int oli_no) {
-		return sql.selectList(namespace + ".selectCourseRequestListByOli_no", oli_no);
+	public int getPendingCoursesCount() {
+		return sql.selectOne(namespace + ".getPendingCoursesCount");
 	}
-
+	
 	@Override
 	public CourseRequestDTO selectOneCourseRequest(int olr_no) {
 		return sql.selectOne(namespace + ".selectOneCourseRequest", olr_no);

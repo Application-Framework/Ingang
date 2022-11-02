@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>인강인강 승인 대기중인 강의 관리</title>
+<title>인강인강 강의 관리</title>
 	<style>
 		.table td {
 			vertical-align: middle!important;
@@ -27,34 +27,27 @@
 				<!-- 본문 -->
 				<div class="container-fluid">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">승인 대기중인 강의 관리</h1>
+						<h1 class="h3 mb-0 text-gray-800">강의 관리</h1>
 					</div>
 					<hr>
 					
-					<div class="row mb-3">
-						<div class="col">
-							<form action="/admin/memberSearchList" role="form" method="GET" class="form-inline">
-								<select class="form-control" id="searchCategory" name="searchCategory">
-									<option value="course_title">강의명</option>
-									<option value="teacher_name">강사명</option>
-									<option value="teacher_email">이메일</option>
-								</select>
-								<div class="ml-3">
-									<input type="text" id="searchKeyword " name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control" required="required">
-									<button type="submit" class="btn px-3 btn-primary">
-										<i class="fas fa-search"></i>
-									</button>
-								</div>
-							</form>
-						</div>
-							
-						<div class="col">
-							<div class="d-flex">
-								<div class="ml-auto">
-									<button class="btn btn-primary mr-2" data-toggle="modal" data-target="#AdminSignUp">강의 등록</button>
-									
-								</div>
+					<div class="row mb-3 pl-3">
+						<form action="/admin/course/pending-courses" role="form" method="GET" class="form-inline">
+							<select class="form-control" id="searchCategory" name="searchCategory">
+								<option value="course_title" <c:if test="${searchCategory == 'course_title'}">selected</c:if>>강의명</option>
+								<option value="teacher_name" <c:if test="${searchCategory == 'teacher_name'}">selected</c:if>>강사명</option>
+								<option value="teacher_email" <c:if test="${searchCategory == 'teacher_email'}">selected</c:if>>이메일</option>
+							</select>
+							<div class="ml-3">
+								<input value="${search}" type="text" id="searchKeyword" name="search" placeholder="검색어를 입력하세요." class="form-control">
+								<button type="submit" class="btn px-3 btn-primary">
+									<i class="fas fa-search"></i>
+								</button>
 							</div>
+						</form>
+						
+						<div class="ml-auto">
+							<button onclick="javascript:location.href='/writeCourse'" class="btn btn-primary">강의 생성</button>
 						</div>
 					</div>
 					
@@ -65,8 +58,8 @@
 									<th>
 										<input id="allCheck" type="checkbox" name="allCheck">
 									</th>
-									<th>강의NO</th>
-									<th>ori No</th>
+									<th>강의No</th>
+									<th>원본No</th>
 									<th>강의명</th>
 									<th>강사명</th>
 									<th>요청날짜</th>
@@ -74,16 +67,16 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="cr" items="${courseRequestList}">
+								<c:forEach var="course" items="${courseList}">
 									<tr>
 										<td>
-											<input name="rowCheck" type="checkbox" value="${cr.olr_no}">			
+											<input name="rowCheck" type="checkbox" value="${course.olr_no}">			
 										</td>
-										<td>${cr.oli_no}</td>
-										<td>${cr.origin_oli_no}</td>
-										<td><a href="">${cr.course_title}</a></td>
-										<td>${cr.teacher_name}</td>
-										<td>${cr.request_datetime}</td>
+										<td>${course.oli_no}</td>
+										<td>${course.origin_oli_no}</td>
+										<td><a href="">${course.course_title}</a></td>
+										<td>${course.teacher_name}</td>
+										<td>${course.request_datetime}</td>
 										<td>
 											<input type="button" class="btn btn-info" value="승인" onclick="approvalCourseRequest(${cr.olr_no});">
 											<button type="button" class="btn btn-secondary" onclick="rejectCourseRequest(${cr.olr_no});">거절</button>
@@ -100,42 +93,42 @@
 					
 							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
+								<c:when test="${paging.pageNo eq paging.firstPageNo }">
 									<li class="page-item disabled">
-										<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
+										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
 									</li>
 								</c:when>
 								<c:otherwise>
 									<li class="page-item">
-										<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
+										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
 									</li>
 								</c:otherwise>
 							</c:choose>
 							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
 								<c:choose>
-									<c:when test="${i eq Paging.pageNo }">
+									<c:when test="${i eq paging.pageNo }">
 										<li class="page-item disabled">
-											<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
 										</li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item">
-											<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
 										</li>
 									</c:otherwise>
 								</c:choose>
 							</c:forEach>
 							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
 							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+								<c:when test="${paging.pageNo eq paging.finalPageNo }">
 									<li class="page-item disabled">
-										<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
+										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
 									</li>
 								</c:when>
 								<c:otherwise>
 									<li class="page-item">
-										<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
+										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
 									</li>
 								</c:otherwise>
 							</c:choose>

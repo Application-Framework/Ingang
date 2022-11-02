@@ -212,13 +212,13 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getPendingCourseRequestList() {
-		return courseRequestDAO.selectListPendingCourseRequest();
+	public List<Map<String, Object>> getPendingCourseRequestList(String searchCategory, String search, int nowPage, int pageSize) {
+		return courseRequestDAO.selectListPendingCourseRequest(searchCategory, search, nowPage, pageSize);
 	}
 
 	@Override
-	public List<CourseRequestDTO> getCourseRequestListByOli_no(int oli_no) {
-		return courseRequestDAO.selectListCourseRequestByOli_no(oli_no);
+	public int getPendingCoursesCount() {
+		return courseRequestDAO.getPendingCoursesCount();
 	}
 
 	@Override
@@ -297,7 +297,7 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public int rejectCourse(int olr_no, String rejection_message) {
 		CourseRequestDTO cr = getCourseRequest(olr_no);
-		cr.setApproval_status(1);
+		cr.setApproval_status(-1);
 		cr.setRejection_message(rejection_message);
 		updateCourseRequest(cr);
 		return 1;

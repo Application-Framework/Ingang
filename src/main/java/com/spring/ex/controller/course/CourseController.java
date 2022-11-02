@@ -150,6 +150,14 @@ public class CourseController {
 		boolean existLike = false;
 		// 접속한 회원이 현재 강의의 강사인지 확인
 		boolean isCurrentCourseTeacher = false;
+		
+		/* 테스트를 위해 비활성화
+		if(memberDTO.getM_authority() != 1 && courseDTO.getOrigin() == 0) {
+			System.err.println("원본이 아닌 페이지에 접속을 시도했습니다.");
+			return "error";
+		}
+		*/
+		
 		if(memberDTO != null) {
 			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
