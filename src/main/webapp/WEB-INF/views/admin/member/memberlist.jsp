@@ -97,53 +97,56 @@
 				</div>
 				
 			</div>
-			<!-- 게시글 페이징 처리(기준 10개) -->
-			<nav aria-label="Page navigation">
-				<ul class="pagination justify-content-center">
 			
-					<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-					<c:choose>
-						<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
-							<li class="page-item disabled">
-								<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
-							</li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item">
-								<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
-							</li>
-						</c:otherwise>
-					</c:choose>
-					<!-- 페이지 갯수만큼 버튼 생성 -->
-					<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+			<c:if test="${ Paging.totalCount > 10}">
+				<!-- 게시글 페이징 처리(기준 10개) -->
+				<nav aria-label="Page navigation">
+					<ul class="pagination justify-content-center">
+				
+						<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 						<c:choose>
-							<c:when test="${i eq Paging.pageNo }">
+							<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 								<li class="page-item disabled">
-									<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+									<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
 								</li>
 							</c:when>
 							<c:otherwise>
 								<li class="page-item">
-									<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+									<a class="page-link" href="memberList?page=${Paging.prevPageNo}">Previus</a>
 								</li>
 							</c:otherwise>
 						</c:choose>
-					</c:forEach>
-					<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-					<c:choose>
-						<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
-							<li class="page-item disabled">
-								<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
-							</li>
-						</c:when>
-						<c:otherwise>
-							<li class="page-item">
-								<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
-							</li>
-						</c:otherwise>
-					</c:choose>
-				</ul>
-			</nav>
+						<!-- 페이지 갯수만큼 버튼 생성 -->
+						<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+							<c:choose>
+								<c:when test="${i eq Paging.pageNo }">
+									<li class="page-item disabled">
+										<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+									</li>
+								</c:when>
+								<c:otherwise>
+									<li class="page-item">
+										<a class="page-link" href="memberList?page=${i}"><c:out value="${i }"/></a>
+									</li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+						<c:choose>
+							<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+								<li class="page-item disabled">
+									<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
+								</li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item">
+									<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
+								</li>
+							</c:otherwise>
+						</c:choose>
+					</ul>
+				</nav>
+			</c:if>
 			<!-- 하단 푸터 부분 -->
 			<jsp:include page="../layout/footer.jsp"/>
     		<!-- 하단 푸터 부분 -->
@@ -176,6 +179,9 @@
 											<span class="input-group-text">아이디</span>
 										</div>
 										<input type="text" name="m_id" id="m_id" class="form-control" required>
+										<span class="input-group-btn">
+											<button class="btn btn-primary"  id="IDCheck" type="button">중복체크</button>
+										</span>
 									</div>
 								</div>
 								<div class="col-xs-6 col-md-6">
@@ -202,11 +208,11 @@
 										<div class="input-group-prepend">
 											<span class="input-group-text">권한</span>
 										</div>
-										<select class="form-control" id="m_authority">
-											<option value="1" >관리자</option>
-											<option value="2" >회원</option>
-											<option value="3" >VIP</option>
-											<option value="4" >블랙리스트</option>
+										<select class="form-control" id="m_authority" name="m_authority">
+											<option value="1">관리자</option>
+											<option value="2">회원</option>
+											<option value="3">VIP</option>
+											<option value="4">블랙리스트</option>
 										</select>
 									</div>
 								</div>
@@ -300,27 +306,124 @@
 		}
 	}
 	
+	//아이디 중복체크
+	$('#IDCheck').click(function() {
+		var param = {'m_id':$("#m_id").val()};
+		if ($("#m_id").val() == "") {
+			swal({
+				title: "중복확인",
+				text: "아이디를 입력해주세요.",
+				icon: "info",
+				timer: 3000
+			});
+		}
+		else {
+			$.ajax({
+				url: "idCheck",
+				type: "POST",
+				data: param,
+				success: function(data) {
+					if (data != 1) {
+						console.log(data);
+						swal({
+							title: "중복확인",
+							text: "이미 사용중인 아이디입니다.",
+							icon: "error",
+							timer: 3000
+						});
+					}
+					else {
+						console.log(data);
+						swal({
+							title: "중복확인",
+							text: "사용할 수 있는 아이디입니다.",
+							icon: "success",
+						});
+						$('#IDCheck').attr('disabled', true);
+						$('#m_id').prop('readonly', true);
+					}
+				},
+				error: function() {
+					swal({
+						title: "오류",
+						text: "오류가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+						icon: "error",
+						timer: 3000
+					});
+				}
+			});
+		}
+	})
+	
+	//회원가입 실행 시
 	$('#btnAdminSignUp').click(function() {
-		var form = $("#myform")[0];
-		var formData = new FormData(form);
+		var m_id = $("#m_id").val();
+		var m_pw = $("#m_pw").val();
+		var m_name = $("#m_name").val();
 		
-		$.ajax({
-			cache : false,
-			url : "signUpAdminMember", 
-			processData: false,
-			contentType: false,
-			type : 'POST', 
-			data : formData, 
-			success : function(data = 1) {
-				opener.location.reload();
-				//window.close();
-				
-			},
-			error : function(xhr, status) {
-				alert(xhr + " : " + status);
-			}
-		});
-		
+		if(!m_id) {
+			swal({
+				title: "회원등록",
+				text: "아이디가 입력되지 않았습니다.",
+				icon: "warning",
+				timer: 3000
+			});
+			return false;
+		}
+		else if(!$('#m_id').prop("readonly")) {
+			swal({
+				title: "회원등록",
+				text: "아이디 중복체크가 되지 않았습니다.",
+				icon: "warning",
+				timer: 3000
+			});
+			return false;
+		}
+		else if(!m_pw) {
+			swal({
+				title: "회원등록",
+				text: "비밀번호가 입력되지 않았습니다.",
+				icon: "warning",
+				timer: 3000
+			});
+			return false;
+		}
+		else if(!m_name) {
+			swal({
+				title: "회원등록",
+				text: "이름이 입력되지 않았습니다.",
+				icon: "warning",
+				timer: 3000
+			});
+			return false;
+		}
+		else {
+			var form = $("#myform")[0];
+			var formData = new FormData(form);
+			
+			$.ajax({
+				cache : false,
+				url : "signUpAdminMember", 
+				processData: false,
+				contentType: false,
+				type : 'POST', 
+				data : formData, 
+				success : function(data = 1) {
+					location.reload();
+					
+				},
+				error : function(xhr, status) {
+					alert(xhr + " : " + status);
+				}
+			});
+		}
+	})
+	
+	//모달 닫힐때 초기화
+	$('.modal').on('hidden.bs.modal', function(){
+		$('#IDCheck').attr('disabled', false);
+		$('#m_id').prop('readonly', false);
+		$(this).find('form')[0].reset();
 	})
 </script>
 </body>

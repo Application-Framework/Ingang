@@ -20,6 +20,7 @@ import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.PagingDTO;
 import com.spring.ex.service.FileService;
+import com.spring.ex.service.MemberService;
 import com.spring.ex.service.PagingService;
 
 @Controller 
@@ -27,6 +28,7 @@ public class AdminMemberController {
 	
 	@Inject AdminMemberService service;
 	
+	@Inject MemberService mService;
 	private PagingService pagingService;
 	
 	@Inject
@@ -182,5 +184,23 @@ public class AdminMemberController {
 		int res = service.signUpAdminMember(mDto);
 		
 		return res;
+	}
+	
+	// 아이디 중복 체크
+	@ResponseBody
+	@RequestMapping(value = "/admin/idCheck", method = RequestMethod.POST)
+	public int AdminMemberIdCheck(HttpServletRequest request) throws Exception {
+		String m_id = request.getParameter("m_id");
+		
+		MemberDTO idCheck = mService.idCheck(m_id);
+		int result;
+
+		if (idCheck == null) {
+			result = 1;
+		} else {
+			result = 0;
+		}
+
+		return result;
 	}
 }

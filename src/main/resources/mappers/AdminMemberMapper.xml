@@ -80,7 +80,7 @@
 	</update>
 	
 	<!-- 관리자 페이지 회원가입 -->
-	<insert id="signUpAdminMember">
+	<insert id="signUpAdminMember" parameterType="hashMap">
 		INSERT INTO member(
 			m_id,
 			m_pw,

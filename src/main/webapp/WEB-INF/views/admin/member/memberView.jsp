@@ -37,7 +37,7 @@
 											</c:if>
 										</div>
 										<div class="col-xs-12 col-md-12">
-											<input type="file" class="form-control" id="file" name="file">
+											<input type="file" class="form-control" id="file" name="file" style="border:0 solid black;" >
 										</div>
 									</div>
 								</div>

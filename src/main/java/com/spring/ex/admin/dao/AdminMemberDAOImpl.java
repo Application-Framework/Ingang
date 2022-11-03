@@ -78,6 +78,6 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	//관리자페이지 회원 가입
 	@Override
 	public int signUpAdminMember(MemberDTO mDto) throws Exception {
-		return sqlSession.insert(namespaceAdmin + ".signUpAdminMember" + mDto);
+		return sqlSession.insert(namespaceAdmin + ".signUpAdminMember", mDto);
 	}
 }
