@@ -22,6 +22,9 @@ public interface HistoryOrderDAO {
 	// 강의 구매 내역 추가
 	public int insertHistoryOrderLecture(HistoryOrderLectureDTO dto);
 	
+	// 강의 구매 내역 리스트 가져오기
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureListByOli_no(int oli_no);
+	
 	// 강의 구매 내역 가져오기
 	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no);
 	

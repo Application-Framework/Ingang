@@ -83,53 +83,55 @@
 						</table>
 					</div>
 					
-					<!-- 게시글 페이징 처리(기준 10개) -->
-					<nav aria-label="Page navigation">
-						<ul class="pagination justify-content-center">
-					
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.firstPageNo }">
-									<li class="page-item disabled">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
-									</li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
-									</li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+					<c:if test="${paging.totalCount > 10}">
+						<!-- 게시글 페이징 처리(기준 10개) -->
+						<nav aria-label="Page navigation">
+							<ul class="pagination justify-content-center">
+						
+								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
-									<c:when test="${i eq paging.pageNo }">
+									<c:when test="${paging.pageNo eq paging.firstPageNo }">
 										<li class="page-item disabled">
-											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
 										</li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item">
-											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.finalPageNo }">
-									<li class="page-item disabled">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
-									</li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
-									</li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
+								<!-- 페이지 갯수만큼 버튼 생성 -->
+								<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+									<c:choose>
+										<c:when test="${i eq paging.pageNo }">
+											<li class="page-item disabled">
+												<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											</li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item">
+												<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											</li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+								<c:choose>
+									<c:when test="${paging.pageNo eq paging.finalPageNo }">
+										<li class="page-item disabled">
+											<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
+										</li>
+									</c:when>
+									<c:otherwise>
+										<li class="page-item">
+											<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
+										</li>
+									</c:otherwise>
+								</c:choose>
+							</ul>
+						</nav>
+					</c:if>
 				</div>
 				<!-- 본문 -->
 			</div>

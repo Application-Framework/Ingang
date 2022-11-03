@@ -40,6 +40,12 @@ public class HistoryOrderServiceImpl implements HistoryOrderService {
 		return dao.insertHistoryOrderLecture(dto);
 	}
 
+	// 강의 구매 내역 리스트 가져오기
+	@Override
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureListByOli_no(int oli_no) {
+		return dao.getHistoryOrderLectureListByOli_no(oli_no);
+	}
+	
 	// 강의 구매 내역 가져오기
 	@Override
 	public HistoryOrderLectureDTO getHistoryOrderLectureByOli_noM_no(int oli_no, int m_no) {

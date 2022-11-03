@@ -1,5 +1,7 @@
 package com.spring.ex.admin.controller;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,8 +11,18 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.service.CourseService;
+import com.spring.ex.service.HistoryOrderService;
+import com.spring.ex.service.MemberService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TeacherService;
+import com.spring.ex.service.TypeService;
+import com.spring.ex.service.t_TagService;
 
 @Controller
 public class AdminCourseController {
@@ -19,6 +31,20 @@ public class AdminCourseController {
 	@Inject
 	private CourseService courseService;
 	
+	@Inject
+	private TeacherService teacherService;
+	
+	@Inject
+	private HistoryOrderService historyOrderService;
+	
+	@Inject
+	private MemberService memberService;
+	
+	@Inject
+	private TypeService typeService;
+	
+	@Inject
+	private t_TagService tagService;
 	
 	// 강의 관리 대시보드 페이지
 	@RequestMapping("/admin/course")
@@ -70,6 +96,33 @@ public class AdminCourseController {
 		model.addAttribute("search", search);
 		*/
 		return "admin/course/courses_management";
+	}
+	
+	@RequestMapping("/admin/course/{oli_no}")
+	public String coursesManagement(@PathVariable("oli_no") int oli_no, HttpServletRequest request, Model model) {
+		CourseDTO course = courseService.getCourseDetail(oli_no);
+		List<HistoryOrderLectureDTO> holList = historyOrderService.getHistoryOrderLectureListByOli_no(oli_no);
+		
+		List<CourseSubTypeDTO> myCategoryList = courseService.getCourseSubTypeList(oli_no);
+		List<CourseTagDTO> myTagList = courseService.getCourseTags(oli_no);
+		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
+		
+		
+		model.addAttribute("courseService", courseService);
+		model.addAttribute("teacherService", teacherService);
+		model.addAttribute("memberService", memberService);
+		model.addAttribute("typeService", typeService);
+		
+		model.addAttribute("course", course);
+		model.addAttribute("orderHistoryList", holList);
+		model.addAttribute("allTagList", tagService.getTagList());
+		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
+		model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(courseService.getMainTypeOfCourse(oli_no).getMain_type_no()));
+		model.addAttribute("myCategoryList", myCategoryList);
+		model.addAttribute("myTagList", myTagList);
+		model.addAttribute("videoList", videoList);
+		
+		return "admin/course/course_detail";
 	}
 	
 	@ResponseBody

@@ -42,6 +42,12 @@
 		VALUES(#{oli_no}, #{m_no}, #{payment}, #{payment_status})
 	</insert>
 	
+	<!-- 강의 구매 기록 리스트 가져오기 -->
+	<select id="getHistoryOrderLectureListByOli_no" resultType="HistoryOrderLectureDTO">
+		SELECT * FROM history_order_lecture
+		WHERE oli_no = #{oli_no}
+	</select>
+	
 	<!-- 강의 구매 기록 가져오기 -->
 	<select id="getHistoryOrderLectureByOli_noM_no" resultType="HistoryOrderLectureDTO">
 		SELECT * FROM history_order_lecture

@@ -60,17 +60,17 @@ public class CoursePostController {
 	// 강의 생성 페이지
 	@RequestMapping("/writeCourse")
 	public String writeCourse(HttpServletRequest request, Model model) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		if(memberDTO == null) {
+		//MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+		/*if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
 			return "error";
-		}
+		}*/
 		
-		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-		if(teacherDTO == null) {
+		//TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
+		/*if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
 			return "error";
-		}
+		}*/
 		
 		String main_type_no = request.getParameter("main_type_no");
 		System.out.println("main_type_no : " + main_type_no); 

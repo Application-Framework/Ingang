@@ -6,7 +6,7 @@ public class CourseRequestDTO {
 	private int origin_oli_no;
 	private int approval_status;
 	private String rejection_message;
-	private String request_datetime;
+	private Object request_datetime;
 	
 	public int getOlr_no() {
 		return olr_no;
@@ -38,10 +38,10 @@ public class CourseRequestDTO {
 	public void setRejection_message(String rejection_message) {
 		this.rejection_message = rejection_message;
 	}
-	public String getRequest_datetime() {
+	public Object getRequest_datetime() {
 		return request_datetime;
 	}
-	public void setRequest_datetime(String request_datetime) {
+	public void setRequest_datetime(Object request_datetime) {
 		this.request_datetime = request_datetime;
 	}
 	@Override
