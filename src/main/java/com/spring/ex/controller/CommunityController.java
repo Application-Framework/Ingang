@@ -166,6 +166,7 @@ public class CommunityController {
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
 		model.addAttribute("cbrList", cbService.getReplyCommunityBoard(cb_no));
 		model.addAttribute("classify", classify);
+		model.addAttribute("isOnlineLecture", isOnlineLecture);
 		
 		return "community/communityRead";
 	}

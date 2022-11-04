@@ -230,7 +230,7 @@ $('#addGood').click(function(){
 		type: "GET",
 		data: {'cb_no':${cbReadPage.cb_no}},
 		success: function() {
-			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
 			$("#heartDiv").load(reLoadUrl + " #heartDiv");
 			//location.href = reLoadUrl;
 		}
@@ -244,7 +244,7 @@ $('#subtractGood').click(function(){
 		type: "GET",
 		data: {'cb_no':${cbReadPage.cb_no}},
 		success: function() {
-			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
 			$("#heartDiv").load(reLoadUrl + " #heartDiv");
 		}
 	});
@@ -287,7 +287,7 @@ $('#btnReplyWrite').click(function() {
 					});
 				}
 				else {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
 					location.href = reLoadUrl;
 				}
 			},
@@ -319,7 +319,7 @@ function replyDelete(cbr_no) {
 				});
 			}
 			else {
-				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify};
+				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
 				location.href = reLoadUrl;
 			}
 		},
@@ -486,7 +486,7 @@ $('#btnQuestionsCompleted').click(function(){
 				type: "GET",
 				data: {'cb_no':${cbReadPage.cb_no}, 'classify':2},
 				success: function() {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=3";
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=3" + "&isOnlineLecture="+ ${isOnlineLecture};
 					location.href = reLoadUrl;
 				}
 			});
@@ -513,7 +513,7 @@ $('#btnStudyCompleted').click(function(){
 				type: "GET",
 				data: {'cb_no':${cbReadPage.cb_no}, 'classify':4},
 				success: function() {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=5";
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=5" + "&isOnlineLecture="+ ${isOnlineLecture};
 					location.href = reLoadUrl;
 				}
 			});
