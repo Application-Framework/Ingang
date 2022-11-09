@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.AdminCourseMapper">
+	
+	<!-- 강의 게시판 가져오기 -->
+	<select id="getCourseBoard" resultType="HashMap">
+		SELECT oli.oli_no, oli.title, olt.name AS teacher_name, oli.price, oli.level, oli.reg_date 
+		<include refid="courseBoardSQL" />
+		ORDER BY oli_no DESC
+		LIMIT #{nowPage}, #{pageSize}
+	</select>
+	
+	<!-- 강의 게시물 총 개수 가져오기 -->
+	<select id="getCoursePostCount" resultType="int">
+		SELECT COUNT(*)
+		<include refid="courseBoardSQL" />
+	</select>
+	
+	<sql id="courseBoardSQL">
+		FROM online_lecture_introduction oli, online_lecture_teacher olt
+		WHERE oli.olt_no = olt.olt_no AND oli.origin = 1
+		<if test="searchCategory != null and searchKeyword != null">
+			<choose>
+				<when test="searchCategory.equals('course_title')">
+					AND oli.title LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('teacher_name')">
+					AND olt.name LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('teacher_email')">
+					AND olt.email LIKE '%${searchKeyword}%'
+				</when>
+			</choose>
+		</if>  
+	</sql>
+</mapper>

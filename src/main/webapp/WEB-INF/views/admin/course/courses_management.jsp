@@ -32,14 +32,14 @@
 					<hr>
 					
 					<div class="row mb-3 pl-3">
-						<form action="/admin/course/pending-courses" role="form" method="GET" class="form-inline">
+						<form action="/admin/course/courses-management" role="form" method="GET" class="form-inline">
 							<select class="form-control" id="searchCategory" name="searchCategory">
 								<option value="course_title" <c:if test="${searchCategory == 'course_title'}">selected</c:if>>강의명</option>
 								<option value="teacher_name" <c:if test="${searchCategory == 'teacher_name'}">selected</c:if>>강사명</option>
 								<option value="teacher_email" <c:if test="${searchCategory == 'teacher_email'}">selected</c:if>>이메일</option>
 							</select>
-							<div class="ml-3">
-								<input value="${search}" type="text" id="searchKeyword" name="search" placeholder="검색어를 입력하세요." class="form-control">
+							<div class="ml-2">
+								<input value="${searchKeyword}" type="text" id="searchKeyword" name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control">
 								<button type="submit" class="btn px-3 btn-primary">
 									<i class="fas fa-search"></i>
 								</button>
@@ -48,6 +48,7 @@
 						
 						<div class="ml-auto">
 							<button onclick="javascript:location.href='/writeCourse'" class="btn btn-primary">강의 생성</button>
+							<button onclick="" class="btn btn-danger">강의 선택 삭제</button>
 						</div>
 					</div>
 					
@@ -59,10 +60,11 @@
 										<input id="allCheck" type="checkbox" name="allCheck">
 									</th>
 									<th>강의No</th>
-									<th>원본No</th>
 									<th>강의명</th>
 									<th>강사명</th>
-									<th>요청날짜</th>
+									<th>가격</th>
+									<th>난이도</th>
+									<th>생성일</th>
 									<th></th>
 								</tr>
 							</thead>
@@ -70,70 +72,69 @@
 								<c:forEach var="course" items="${courseList}">
 									<tr>
 										<td>
-											<input name="rowCheck" type="checkbox" value="${course.olr_no}">			
+											<input name="rowCheck" type="checkbox" value="${course.oli_no}">			
 										</td>
 										<td>${course.oli_no}</td>
-										<td>${course.origin_oli_no}</td>
-										<td><a href="">${course.course_title}</a></td>
-										<td>${course.teacher_name}</td>
-										<td>${course.request_datetime}</td>
-										<td>
-											<input type="button" class="btn btn-info" value="승인" onclick="approvalCourseRequest(${cr.olr_no});">
-											<button type="button" class="btn btn-secondary" onclick="rejectCourseRequest(${cr.olr_no});">거절</button>
-										</td>
+										<td><a href="/admin/course/${course.oli_no}">${course.title}</a></td>
+										<td><a href="">${course.teacher_name}</a></td>
+										<td>${course.price}</td>
+										<td>${course.level}</td>
+										<td>${course.reg_date}</td>
 									</tr>
 								</c:forEach>
 							</tbody>
 						</table>
 					</div>
 					
-					<!-- 게시글 페이징 처리(기준 10개) -->
-					<nav aria-label="Page navigation">
-						<ul class="pagination justify-content-center">
-					
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.firstPageNo }">
-									<li class="page-item disabled">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
-									</li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
-									</li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+					<c:if test="${paging.totalCount > 10}">
+						<!-- 게시글 페이징 처리(기준 10개) -->
+						<nav aria-label="Page navigation">
+							<ul class="pagination justify-content-center">
+						
+								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
-									<c:when test="${i eq paging.pageNo }">
+									<c:when test="${paging.pageNo eq paging.firstPageNo }">
 										<li class="page-item disabled">
-											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" onclick="redirectPage(${paging.prevPageNo})">Previus</a>
 										</li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item">
-											<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+											<a class="page-link" onclick="redirectPage(${paging.prevPageNo})">Previus</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${paging.pageNo eq paging.finalPageNo }">
-									<li class="page-item disabled">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
-									</li>
-								</c:when>
-								<c:otherwise>
-									<li class="page-item">
-										<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
-									</li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
+								<!-- 페이지 갯수만큼 버튼 생성 -->
+								<c:forEach var="i" begin="${paging.startPageNo }" end="${paging.endPageNo }" step="1">
+									<c:choose>
+										<c:when test="${i eq paging.pageNo }">
+											<li class="page-item disabled">
+												<a class="page-link" onclick="redirectPage(${i})"><c:out value="${i }"/></a>
+											</li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item">
+												<a class="page-link" onclick="redirectPage(${i})"><c:out value="${i }"/></a>
+											</li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+								<c:choose>
+									<c:when test="${paging.pageNo eq paging.finalPageNo }">
+										<li class="page-item disabled">
+											<a class="page-link" onclick="redirectPage(${paging.nextPageNo})">Next</a>
+										</li>
+									</c:when>
+									<c:otherwise>
+										<li class="page-item">
+											<a class="page-link" onclick="redirectPage(${paging.nextPageNo})">Next</a>
+										</li>
+									</c:otherwise>
+								</c:choose>
+							</ul>
+						</nav>
+					</c:if>
 				</div>
 				<!-- 본문 -->
 			</div>
@@ -173,47 +174,20 @@
 	        $("[name='rowCheck']").prop('checked', $(this).prop('checked'));
 	    });
    		
-   		// 요청 승인
-   		function approvalCourseRequest(olr_no) {
-   			if(confirm("정말 승인하시겠습니까?")) {
-   				$.ajax({
-   					url: "/approvalCourseRequest",
-   					type: "post",
-   					data: {
-	   					olr_no: olr_no
-   					},
-   					success: function() {
-   						location.reload();
-   					}
-   				});
-   			}
-   		}
-   	
    		
-   		// 요청 거절
-   		function rejectCourseRequest(olr_no) {
-   			rejection_olr_no = olr_no;
-   			$("#rejection_message").val('');
-   			$("#rejectionModal").modal('show');
-   		}
-   		
-   		$("#rejection_btn").click(function() {
-   			if($("#rejection_message").val().trim() == '') {
-   				alert("거절 사유를 입력하세요");
-   				return;
-   			}
-   			$.ajax({
-				url: "/rejectCourseRequest",
-				type: "post",
-				data: {
-  						olr_no: rejection_olr_no,
-  						rejection_message: $("#rejection_message").val()
-				},
-				success: function() {
-					location.reload();
-				}
-			});
-   		});
+	    function redirectPage(pageNo) {
+	    	url = new URL(location.origin + location.pathname);
+	    	
+	    	<c:if test="${searchCategory != null}">
+	    		url.searchParams.set('searchCategory', "${searchCategory}");
+	    	</c:if>
+	    	<c:if test="${searchKeyword != null}">
+	    		url.searchParams.set('searchKeyword', "${searchKeyword}");
+	    	</c:if>
+	    	
+	    	url.searchParams.set('page', pageNo);
+	    	location.href = url;
+	    }
     
     </script>
     

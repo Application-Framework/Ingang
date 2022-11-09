@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.ex.admin.service.AdminCourseService;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
@@ -46,6 +47,9 @@ public class AdminCourseController {
 	@Inject
 	private t_TagService tagService;
 	
+	@Inject
+	private AdminCourseService adminCourseService;
+	
 	// 강의 관리 대시보드 페이지
 	@RequestMapping("/admin/course")
 	public String courseDashboard(Model model) {
@@ -80,21 +84,18 @@ public class AdminCourseController {
 	// 모든 강의 관리 페이지
 	@RequestMapping("/admin/course/courses-management")
 	public String coursesManagement(HttpServletRequest request, Model model) {
-		
-		/*
 		String searchCategory = request.getParameter("searchCategory");
-		
-		String search = request.getParameter("search");
+		String searchKeyword = request.getParameter("searchKeyword");
 		
 		final int pageSize = 10;
-		int totalCount = courseService.getCourseTotalCount();
-		PagingService pagingService = new PagingService(request, totalCount, pageSize);
+		int coursePostCount = adminCourseService.getCoursePostCount(searchCategory, searchKeyword);
+		PagingService pagingService = new PagingService(request, coursePostCount, pageSize);
 		
 		model.addAttribute("paging", pagingService.getPaging());
-		model.addAttribute("courseList", courseService.getPendingCourseRequestList(searchCategory, search, pagingService.getNowPage(), pageSize));
+		model.addAttribute("courseList", adminCourseService.getCourseBoard(searchCategory, searchKeyword, pagingService.getNowPage(), pageSize));
 		model.addAttribute("searchCategory", searchCategory);
-		model.addAttribute("search", search);
-		*/
+		model.addAttribute("searchKeyword", searchKeyword);
+		
 		return "admin/course/courses_management";
 	}
 	
