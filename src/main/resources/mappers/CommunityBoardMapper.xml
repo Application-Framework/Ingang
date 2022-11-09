@@ -225,6 +225,43 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
+	<!-- 1:1문의하기 게시판 출력 -->
+	<select id="getCommunityBoardInquiryPage" resultType="hashMap">
+		SELECT i.*, m.m_id
+		FROM inquiry i, member m
+		WHERE i.m_no = m.m_no
+		ORDER BY i.reg_date DESC
+		LIMIT #{Page}, #{PageSize};
+	</select>
+	
+	<!-- 1:1문의하기 게시판 총 갯수 -->
+	<select id="getCommunityBoardInquiryPageTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM inquiry i, member m
+		WHERE i.m_no = m.m_no
+	</select>
+	
+	<!--1:1 문의하기 작성-->
+	<insert id="writeInquiry">
+		INSERT INTO inquiry(m_no, category, title, content, statement ,reg_date)
+		VALUES(#{m_no}, #{category}, #{title}, #{content}, 0, NOW());
+	</insert>
+	
+	<!--1:1 문의하기 상세페이지  -->
+	<select id="getInquiryViewPage" resultType="hashMap">
+		SELECT i.*
+		FROM inquiry i, member m
+		WHERE inq_no = #{inq_no} AND i.m_no = m.m_no; 
+	</select>
+	
+	<!--1:1 문의하기 삭제  -->
+	<delete id="deleteInquiry">
+		DELETE FROM inquiry
+		WHERE inq_no = #{inq_no}
+	</delete>
+	
+	
+	<!--홍일 작성 아래  -->
 	<!-- 2022-09-03 김홍일 / 강의 상세 페이지의 커뮤니티 탭 조건 -->
 	<sql id="selectCommunityBoardByOli_noCondition">
 		WHERE oli_no = #{oli_no} AND 

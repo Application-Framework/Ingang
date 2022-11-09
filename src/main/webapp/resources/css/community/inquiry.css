@@ -1,0 +1,46 @@
+@charset "UTF-8";
+/* 답변대기, 보류, 완료 */
+.inquiry-status {
+	display: inline-block;
+	padding: 0px 5px;
+	min-width: 70px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: normal;
+	color: white;
+	border-radius:2px;
+	background-color: #959595;
+}
+
+.inquiry-status.status-0 { background-color: #959595; }
+.inquiry-status.status-1 { background-color: #1351a5; }
+.inquiry-status.status-2 { background-color: #46C9CE; }
+
+.payment-status {
+	display: inline-block;
+	padding: 0px 5px;
+	min-width: 70px;
+	text-align: center;
+	font-size: 14px;
+	font-weight: normal;
+	color: white;
+	border-radius:2px;
+	background-color: #959595;
+}
+
+.payment-status.status-1 { background-color: #1351a5; }
+.payment-status.status-2 { background-color: #46C9CE; }
+
+.inquiry-category {
+	display:inline-block;
+	padding:0 5px;
+	text-align:center;
+	font-size:14px;
+	font-weight:700;
+	color:#008aff;
+	border:1px solid #008aff;
+	border-radius:2px;
+	height:28px;
+	line-height:27px;
+	margin:0 10px 0 0;
+}

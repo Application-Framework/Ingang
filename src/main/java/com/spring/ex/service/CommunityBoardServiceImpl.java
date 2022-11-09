@@ -12,6 +12,7 @@ import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
@@ -131,6 +132,31 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	//게시판 해결됨, 모집종료로 변경
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return dao.updateCompletedCommunityBoard(map);
+	}
+	
+	//1:1문의하기 게시판 출력
+	public List<InquiryDTO> getCommunityBoardInquiryPage(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardInquiryPage(map);
+	}
+	
+	//1:1문의하기 게시판 총 갯수
+	public int getCommunityBoardInquiryPageTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardInquiryPageTotalCount(map);
+	}
+	
+	//1:1문의하기 작성
+	public int writeInquiry(InquiryDTO dto) throws Exception {
+		return dao.writeInquiry(dto);
+	}
+	
+	//1:1문의하기 상세페이지
+	public Map<String, Object> getInquiryViewPage(int inq_no) throws Exception {
+		return dao.getInquiryViewPage(inq_no);
+	}
+	
+	//1:1문의하기 삭제
+	public int deleteInquiry(int inq_no) throws Exception {
+		return dao.deleteInquiry(inq_no);
 	}
 
 	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용

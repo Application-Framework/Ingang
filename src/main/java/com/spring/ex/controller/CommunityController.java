@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 import com.spring.ex.service.CommunityBoardService;
@@ -451,5 +452,54 @@ public class CommunityController {
 			cbService.updateCompletedCommunityBoard(map);
 		}
 		return "community/communityRead";
+	}
+	
+	//1:1문의 게시판 페이지
+	@RequestMapping(value = "/communityInquiry", method = RequestMethod.GET)
+	public String inquiryPage(Model model, HttpServletRequest request) throws Exception {
+		//String searchKeyword = request.getParameter("searchKeyword");
+		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		//map.put("searchKeyword", searchKeyword);
+		
+		pagingService = new PagingService(request, cbService.getCommunityBoardInquiryPageTotalCount(map), 10);
+		map.put("Page",  pagingService.getNowPage());
+		map.put("PageSize", 10);
+		List<InquiryDTO> cbInquiry = cbService.getCommunityBoardInquiryPage(map);
+		
+		model.addAttribute("cbInquiry", cbInquiry);
+		model.addAttribute("Paging", pagingService.getPaging());
+		
+		return "community/communityInquiry";
+	}
+	
+	//1:1문의 작성 페이지
+	@RequestMapping(value = "/inquiryWritePage", method = RequestMethod.GET)
+	public String inquiryWritePage() throws Exception{
+		
+		return "community/inquiryWrite";
+	}
+	
+	//1:1문의 상세 페이지
+	@RequestMapping(value = "/inquiryView", method = RequestMethod.GET)
+	public String getInquiryViewPage(Model model, HttpServletRequest request) throws Exception{
+		int inq_no = Integer.parseInt(request.getParameter("inq_no"));
+		model.addAttribute("cbReadPage", cbService.getInquiryViewPage(inq_no));
+		return "community/inquiryView";
+	}
+	
+	//1:1문의 작성
+	@RequestMapping(value = "/WriteInquiry", method = RequestMethod.POST)
+	@ResponseBody
+	public int writeInquiry(InquiryDTO dto, HttpServletRequest request) throws Exception{
+		int res = cbService.writeInquiry(dto);
+		return res;
+	}
+	
+	//1:1문의 삭제
+	@RequestMapping(value = "/deleteInquiry", method = RequestMethod.GET)
+	@ResponseBody
+	public int deleteInquiry(int inq_no, HttpServletRequest request) throws Exception{
+		int res = cbService.deleteInquiry(inq_no);
+		return res;
 	}
 }
