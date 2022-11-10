@@ -47,8 +47,8 @@
 						</form>
 						
 						<div class="ml-auto">
-							<button onclick="javascript:location.href='/writeCourse'" class="btn btn-primary">강의 생성</button>
-							<button onclick="" class="btn btn-danger">강의 선택 삭제</button>
+							<button id="create_course" class="btn btn-primary">강의 생성</button>
+							<button onclick="deletePosts()" class="btn btn-danger">강의 선택 삭제</button>
 						</div>
 					</div>
 					
@@ -188,7 +188,47 @@
 	    	url.searchParams.set('page', pageNo);
 	    	location.href = url;
 	    }
-    
+	    
+	 	// 게시물 선택 삭제
+		function deletePosts() {
+    		var oli_noList = [];
+			$('input:checkbox[name=rowCheck]').each(function() {
+				if($(this).is(":checked")==true){
+					oli_noList.push($(this).val());
+			    }
+			});
+			
+			if(oli_noList.length == 0) return;
+			
+			if(confirm("정말 " + oli_noList.join(",") + " 강의를 삭제하시겠습니까?")) {
+				$.ajax({
+					url: "/admin/course/deleteCourses",
+					type: "post",
+					traditional: true,
+					data: {
+						oli_noList: oli_noList
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+			}
+		}
+    	
+	 	$("#create_course").click(function() {
+	 		// 창 크기 지정
+			var width = window.screen.width * 3 / 4;
+			var height = window.screen.height * 85 / 100;
+
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+
+			var url = "/writeCourse";
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+	 	});
     </script>
     
 	<!-- Chart -->

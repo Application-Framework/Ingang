@@ -27,7 +27,7 @@ public interface FileService {
 	
 	// 로컬과 서버에서 파일 추가, 반환 값 : 생성한 파일의 /resource부터 경로
 	// path : /resources의 하위 폴더('/resource' 포함 x)
-	public String insertFileToLocalAndServer(MultipartFile file, String path) throws Exception;
+	public String insertFileToLocalAndServer(MultipartFile file, String path);
 	
 	// 메인의 url에 없는 것은 삭제
 	public void deleteFileNotInMain(List<UploadedFileDTO> main, List<UploadedFileDTO> target) throws Exception;

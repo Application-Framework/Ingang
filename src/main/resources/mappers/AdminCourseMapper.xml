@@ -5,7 +5,7 @@
 	
 	<!-- 강의 게시판 가져오기 -->
 	<select id="getCourseBoard" resultType="HashMap">
-		SELECT oli.oli_no, oli.title, olt.name AS teacher_name, oli.price, oli.level, oli.reg_date 
+		SELECT oli.oli_no, oli.title, IFNULL(olt.name, "관리자") AS teacher_name, oli.price, oli.level, oli.reg_date 
 		<include refid="courseBoardSQL" />
 		ORDER BY oli_no DESC
 		LIMIT #{nowPage}, #{pageSize}
@@ -18,8 +18,9 @@
 	</select>
 	
 	<sql id="courseBoardSQL">
-		FROM online_lecture_introduction oli, online_lecture_teacher olt
-		WHERE oli.olt_no = olt.olt_no AND oli.origin = 1
+		FROM online_lecture_introduction oli LEFT OUTER JOIN online_lecture_teacher olt
+			ON oli.olt_no = olt.olt_no
+		WHERE oli.origin = 1
 		<if test="searchCategory != null and searchKeyword != null">
 			<choose>
 				<when test="searchCategory.equals('course_title')">

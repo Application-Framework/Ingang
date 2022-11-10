@@ -128,7 +128,7 @@
             <div class="container">
             	<c:if test="${isTeacher == true}">
 	            	<div class="d-flex flex-row-reverse pt-10">
-	            		<a class="btn head-btn2" href="/writeCourse">강의 생성</a>
+	            		<a class="btn head-btn2" id="create_course">강의 생성</a>
 	            	</div>
 	            	<div class="job-listing-area pt-40 pb-120">
 	            </c:if>
@@ -337,7 +337,19 @@
     			});
     		}
     		
-    		
+    		$("#create_course").click(function() {
+    			// 창 크기 지정
+    			var width = window.screen.width * 3 / 4;
+    			var height = (window.screen.height * 85 / 100);
+
+    			// pc화면기준 가운데 정렬
+    			var left = (window.screen.width / 2) - (width/2);
+    			var top = (window.screen.height / 4);
+
+    			var url = "/writeCourse";
+    			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+    			window.open(url, "_blank", option);
+    		});
     	</script>
 		<jsp:include page="../fix/footer.jsp" />
         <!-- JavaScript Bundle with Popper -->

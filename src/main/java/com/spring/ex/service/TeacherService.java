@@ -1,5 +1,7 @@
 package com.spring.ex.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.spring.ex.dto.TeacherDTO;
@@ -12,4 +14,5 @@ public interface TeacherService {
 	public int updateCourseTeacher(TeacherDTO dto);
 	public int deleteCourseTeacher(int olt_no);
 	public int checkTeacherByM_no(int m_no);
+	public List<TeacherDTO> getTeacherList();
 }

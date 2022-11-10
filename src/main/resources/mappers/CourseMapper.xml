@@ -140,7 +140,7 @@
 	<!-- 강의 등록 -->
 	<insert id="submitCourse" useGeneratedKeys="true" keyProperty="oli_no">
 		INSERT INTO online_lecture_introduction(olt_no, title, introduction, content, img_path, price, level, reg_date, update_date, enable, origin) 
-		VALUES(#{olt_no}, #{title}, #{introduction}, #{content}, #{img_path}, #{price}, #{level}, #{reg_date}, #{update_date}, #{enable}, #{origin})
+		VALUES(#{olt_no}, #{title}, #{introduction}, #{content}, #{img_path}, #{price}, #{level}, NOW(), #{update_date}, #{enable}, #{origin})
 	</insert>
 	
 	<!-- 강의 수정 -->

@@ -313,14 +313,14 @@ public class CourseServiceImpl implements CourseService {
 		for(String c : categorys) {
 			CourseSubTypeDTO courseSubTypeDTO = new CourseSubTypeDTO();
 			courseSubTypeDTO.setOli_no(dto.getOli_no());
-			courseSubTypeDTO.setSub_type_no(typeService.getSubTypeBySubTypeAbbr(c).getSub_type_no());
+			courseSubTypeDTO.setSub_type_no(Integer.parseInt(c));
 			submitCourseSubType(courseSubTypeDTO);
 		}
 		
 		for(String t : tags) {
 			CourseTagDTO courseTagDTO = new CourseTagDTO();
 			courseTagDTO.setOli_no(dto.getOli_no());
-			courseTagDTO.setTag_no(tagService.getTagByTag_abbr(t).getTag_no());
+			courseTagDTO.setTag_no(Integer.parseInt(t));
 			submitCourseTag(courseTagDTO);
 		}
 		

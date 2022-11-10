@@ -64,11 +64,25 @@
 </head>
 <body>
 	 <%------------ header section  ------------%>
-    <jsp:include page="../fix/header.jsp" />
+    <%-- <jsp:include page="../fix/header.jsp" /> --%>
     
     <div class="container">
-    	<form id="frmCourse" action="${actionURL}" method="post" enctype="multipart/form-data">
+    	<form id="frmCourse" method="post" enctype="multipart/form-data">
     		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
+    		
+    		<c:if test="${member.m_authority == 1}">
+	    		<div class="row mb-2 mt-3">
+	   				<label class="col-sm-2 col-form-label fs-5">강사No</label>
+	   				<div class="col-sm-10">
+	    				<select name="olt_no" id="teacher" required>
+							<option value="0">0 : 관리자</option>
+							<c:forEach var="teacher" items="${teacherList}">
+							  	<option <c:if test="${course.olt_no == teacher.olt_no}">selected</c:if> value="${teacher.olt_no}">${teacher.olt_no} : ${teacher.name}</option>
+							</c:forEach>
+						</select>
+	    			</div>
+	    		</div>
+    		</c:if>
     		<div class="row mb-1">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
    				<div class="col-sm-10">
@@ -95,7 +109,7 @@
    				<div class="col-sm-10" id="subCategoryParents">
 					<select name="subCategorys" id="subCategorys" multiple required>
 						<c:forEach var="category" items="${allSubCategoryList}">
-						  	<option <c:if test="${courseService.containsInCategoryList(myCategoryList, category.sub_type_abbr) == true}">selected</c:if> value="${category.sub_type_abbr}">${category.sub_type_name}</option>
+						  	<option <c:if test="${courseService.containsInCategoryList(myCategoryList, category.sub_type_abbr) == true}">selected</c:if> value="${category.sub_type_no}">${category.sub_type_name}</option>
 						</c:forEach>
 					</select>
     			</div>
@@ -107,7 +121,7 @@
    				<div class="col-sm-10">
 					<select name="tags" id="tags" multiple required>
 						<c:forEach var="tag" items="${allTagList}">
-						  	<option <c:if test="${courseService.containsInTagList(myTagList, tag.tag_abbr) == true}">selected</c:if> value="${tag.tag_abbr}">${tag.tag_name}</option>
+						  	<option <c:if test="${courseService.containsInTagList(myTagList, tag.tag_abbr) == true}">selected</c:if> value="${tag.tag_no}">${tag.tag_name}</option>
 						</c:forEach>
 					  
 					</select>
@@ -189,29 +203,35 @@
     	</form>
     </div>
     
-    <jsp:include page="../fix/footer.jsp" />
+    <%-- <jsp:include page="../fix/footer.jsp" /> --%>
     
     <script>
 	   	var submitted = false;
-	   	var choicesMainCategory, choicesSubCategorys, choicesTags;
 	   	// document start
 	   	$(function() {
-	    	// select option drop box 옵션 설정
-	    	choicesMainCategory = new Choices('#mainCategory', {
+	   		// select option drop box 옵션 설정
+	    	new Choices('#teacher', {
+	            removeItemButton: true,
+	            maxItemCount:1,
+	            searchResultLimit:10
+	            //renderChoiceLimit:10
+	        }); 
+	   		
+	    	new Choices('#mainCategory', {
 	            removeItemButton: true,
 	            maxItemCount:1,
 	            searchResultLimit:10
 	            //renderChoiceLimit:10
 	        }); 
 	    	
-	    	choicesSubCategorys = new Choices('#subCategorys', {
+	    	new Choices('#subCategorys', {
 	            removeItemButton: true,
 	            maxItemCount:5,
 	            searchResultLimit:10
 	            //renderChoiceLimit:10
 	        }); 
 	    	
-	    	choicesTags = new Choices('#tags', {
+	    	new Choices('#tags', {
 	            removeItemButton: true,
 	            maxItemCount:5,
 	            searchResultLimit:10
@@ -285,7 +305,7 @@
 		   				subCategoryParents = $(html).find('#subCategoryParents>*');
 		   				console.log(subCategoryParents);
 		   				$('#subCategoryParents').html(subCategoryParents);
-		   				choicesSubCategorys = new Choices('#subCategorys', {
+		   				new Choices('#subCategorys', {
 		   		            removeItemButton: true,
 		   		            maxItemCount:5,
 		   		            searchResultLimit:10
@@ -329,7 +349,20 @@
 	    		return false;
 	    	}
 	    	submitted = true;
-	    	form.submit();
+	    	
+	    	var form = $('#frmCourse')[0];
+	        var formData = new FormData(form);
+	    	$.ajax({
+		 		cache: false,
+		        contentType: false,
+		        processData: false,
+	    		url: "${actionURL}",
+	    		data: formData,
+	    		type: "post",
+	    		success: function() {
+					window.close();
+	    		}
+	    	});
 	    });
 	    
 	 	

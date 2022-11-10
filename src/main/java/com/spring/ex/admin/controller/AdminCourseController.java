@@ -1,7 +1,9 @@
 package com.spring.ex.admin.controller;
 
+import java.sql.Date;
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,15 +11,19 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.admin.service.AdminCourseService;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
 import com.spring.ex.service.CourseService;
+import com.spring.ex.service.FileService;
 import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
 import com.spring.ex.service.PagingService;
@@ -49,6 +55,9 @@ public class AdminCourseController {
 	
 	@Inject
 	private AdminCourseService adminCourseService;
+	
+	@Inject
+	private FileService fileService;
 	
 	// 강의 관리 대시보드 페이지
 	@RequestMapping("/admin/course")
@@ -151,5 +160,66 @@ public class AdminCourseController {
 		String olr_no = request.getParameter("olr_no");
 		String rejection_message = request.getParameter("rejection_message");
 		courseService.rejectCourse(Integer.parseInt(olr_no), rejection_message);
+	}
+	
+	@ResponseBody
+	@RequestMapping("admin/course/deleteCourses")
+	public void deleteCourses(HttpServletRequest request) throws Exception {
+		String[] oli_noList = request.getParameterValues("oli_noList");
+		
+		for(String _oli_no : oli_noList) {
+			int oli_no = Integer.parseInt(_oli_no);
+			CourseDTO dto = courseService.getCourseDetail(oli_no);
+			// 섬네일 삭제
+			fileService.deleteFileToLocalAndServer(dto.getImg_path());
+			fileService.deleteAllFileOfPost(oli_no, 1);
+			courseService.deleteCourse(oli_no);
+		}
+		
+	}
+	
+	@ResponseBody
+	@RequestMapping("admin/course/createCourse")
+	public void createCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.out.println("로그인이 필요합니다.");
+			return;
+		}
+		
+		if(member.getM_authority() != 1) {
+			System.out.println("관리자 권한이 필요합니다.");
+			return;
+		}
+		
+		System.out.println("등록 시작");
+		String olt_no = request.getParameter("olt_no");
+		String title = request.getParameter("title");
+		String introduction = request.getParameter("introduction");
+		String content = request.getParameter("content");
+		String price = request.getParameter("price");
+		String level = request.getParameter("level");
+		String[] categorys = request.getParameterValues("subCategorys");
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
+		
+		if(member == null || title == null || introduction == null || content == null || price == null || level == null || categorys == null || tags == null) {
+			System.out.println("빈 칸이 있습니다.");
+			return;
+		}
+		
+		// 강의 등록
+		CourseDTO course = new CourseDTO();
+		course.setOlt_no(Integer.parseInt(olt_no));
+		course.setTitle(title);
+		course.setIntroduction(introduction);
+		course.setContent(content);
+		course.setPrice(Integer.parseInt(price));
+		course.setLevel(Integer.parseInt(level));
+		course.setEnable(1);
+		course.setOrigin(1);
+		
+		adminCourseService.createCourse(course, thumbnail, categorys, tags, videoTitles, videoPaths);
 	}
 }

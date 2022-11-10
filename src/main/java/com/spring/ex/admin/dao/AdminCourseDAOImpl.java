@@ -9,6 +9,11 @@ import javax.inject.Inject;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.stereotype.Repository;
 
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
+
 @Repository
 public class AdminCourseDAOImpl implements AdminCourseDAO {
 

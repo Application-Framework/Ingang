@@ -3,6 +3,8 @@
 
 package com.spring.ex.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.spring.ex.dto.TeacherDTO;
@@ -15,4 +17,5 @@ public interface TeacherDAO {
 	public int updateCourseTeacher(TeacherDTO dto);
 	public int deleteCourseTeacher(int olt_no);
 	public int checkTeacherByM_no(int m_no);
+	public List<TeacherDTO> getTeacherList();
 }

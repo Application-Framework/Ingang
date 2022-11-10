@@ -1,5 +1,7 @@
 package com.spring.ex.dao;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.apache.ibatis.session.SqlSession;
@@ -42,5 +44,10 @@ public class TeacherDAOImpl implements TeacherDAO{
 	@Override
 	public int checkTeacherByM_no(int m_no) {
 		return sqlSession.selectOne(namespace + ".checkTeacherByM_no", m_no);
+	}
+
+	@Override
+	public List<TeacherDTO> getTeacherList() {
+		return sqlSession.selectList(namespace + ".getTeacherList");
 	}
 }

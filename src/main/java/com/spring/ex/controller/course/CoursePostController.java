@@ -60,11 +60,11 @@ public class CoursePostController {
 	// 강의 생성 페이지
 	@RequestMapping("/writeCourse")
 	public String writeCourse(HttpServletRequest request, Model model) {
-		//MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		/*if(memberDTO == null) {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
 			System.out.println("로그인이 필요합니다.");
 			return "error";
-		}*/
+		}
 		
 		//TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		/*if(teacherDTO == null) {
@@ -72,15 +72,20 @@ public class CoursePostController {
 			return "error";
 		}*/
 		
+		String actionURL = "/submitCourse";
+		if(member.getM_authority() == 1) {
+			actionURL = "/admin/course/createCourse";
+		}
+		
 		String main_type_no = request.getParameter("main_type_no");
 		System.out.println("main_type_no : " + main_type_no); 
 		model.addAttribute("typeService", typeService);
-		model.addAttribute("actionURL", "/submitCourse");
+		model.addAttribute("actionURL", actionURL);
 		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
 		if(main_type_no != null)
 			model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(Integer.parseInt(main_type_no)));
 		model.addAttribute("allTagList", tagService.getTagList());
-		
+		model.addAttribute("teacherList", teacherService.getTeacherList());
 		return "course/course_write";
 	}
 	

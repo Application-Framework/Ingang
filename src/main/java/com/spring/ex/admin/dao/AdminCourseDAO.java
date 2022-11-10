@@ -5,6 +5,11 @@ import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
+import com.spring.ex.dto.course.CourseDTO;
+import com.spring.ex.dto.course.CourseSubTypeDTO;
+import com.spring.ex.dto.course.CourseTagDTO;
+import com.spring.ex.dto.course.CourseVideoDTO;
+
 @Repository
 public interface AdminCourseDAO {
 	// 강의 게시판 가져오기
@@ -12,4 +17,7 @@ public interface AdminCourseDAO {
 	
 	// 강의 게시물 총 개수 가져오기
 	public int getCoursePostCount(String searchCategory, String searchKeyword);
+	
+	// 강의 요청없이 바로 생성
+	/*public int createCourse(CourseDTO course, List<CourseSubTypeDTO> sub_categorys, List<CourseTagDTO> tags, List<CourseVideoDTO> videos);*/
 }

@@ -1,5 +1,7 @@
 package com.spring.ex.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
@@ -41,5 +43,10 @@ public class TeacherServiceImpl implements TeacherService {
 	@Override
 	public int checkTeacherByM_no(int m_no) {
 		return teacherDAO.checkTeacherByM_no(m_no);
+	}
+
+	@Override
+	public List<TeacherDTO> getTeacherList() {
+		return teacherDAO.getTeacherList();
 	}
 }

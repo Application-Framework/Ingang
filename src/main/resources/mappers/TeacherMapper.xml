@@ -46,4 +46,8 @@
 	<select id="checkTeacherByM_no" resultType="int">
 		SELECT EXISTS(SELECT * FROM online_lecture_teacher WHERE m_no = #{m_no})
 	</select>
+	
+	<select id="getTeacherList" resultType="TeacherDTO">
+		SELECT * FROM online_lecture_teacher
+	</select>
 </mapper>
