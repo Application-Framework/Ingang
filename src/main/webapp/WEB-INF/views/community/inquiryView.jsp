@@ -22,6 +22,7 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.css">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.10/dist/sweetalert2.min.js"></script>
+<link href='<c:url value="/resources/css/community/inquiry.css"/>' rel="stylesheet">
 
 </head>
 
@@ -44,132 +45,103 @@
 		<!-- Hero Area End -->
 		<!--================Blog Area =================-->
 	<section >
+		
 		<div class="container">
-			<div class="row">
-				<div class="col-lg-10 posts-list">
-					<div class="single-post">
-						<div class="blog_details">
-							<h2>${cbReadPage.title}</h2>
-							<ul class="blog-info-link mt-3 mb-4">
-								<li><a href="#"><i class="fa fa-user"></i> ${cbReadPage.m_id}</a></li>
-								<c:choose>
-									<c:when test="${hitReadPage eq 1}"> 
-										<li><a  href="#">조회수 ${cbReadPage.hit+1}</a></li>
-									</c:when>
-									<c:otherwise> 
-										<li><a  href="#">조회수 ${cbReadPage.hit}</a></li>
-									 </c:otherwise>
-								</c:choose>
-								
-								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
-								
-								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
-									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${classify})"><i class="far fa-edit"></i> 수정</a></li>
-									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
-								</c:if>
-							</ul>
-							<P>
-								${cbReadPage.content}
-							</P>
-							<ul id="tag-list" style=""> 
-								<c:forEach var="cbTag" items="${cbTag}">
-									<li class="tag-item">#${cbTag.tag_name}</li>
-								</c:forEach>
-							</ul>
-							
-							<div >
-							<hr>
-							<c:if test="${cbReadPage.oli_no ne 0}">
-								관련강의
-								<div class="user justify-content-start d-flex">
-									<div class="thumb">
-										<c:if test="${cbReadPage.oli_img_path ne null}">
-											<img alt="" width="100px;" src="${cbReadPage.oli_img_path}">
-										</c:if>
-										<c:if test="${cbReadPage.oli_img_path eq null}">
-											<img alt="" width="100px;" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
-										</c:if>
-									</div>
-									<div class="desc">
-										<div>
-											<div class="d-flex align-items-center">
-												<ul class="blog-info-link mt-3 mb-4">
-													<li><a href="#"><i class="fa fa-tablet"></i> <c:out value="${cbReadPage.oli_title}"/></a></li>
-													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbReadPage.olt_name}"/></a> </li>
-												</ul>
-											</div>
-										</div>
-										<p class="comment">
-											${fn:substring(cbReadPage.oli_content, 0 ,170)}
-										</p>
-									</div>
-								</div>
-							</c:if>
-							</div>
-						</div>
-					</div>
-					
-					<div class="comments-area" style="padding: 20px 0px" id="replyList">
-						<h4><a name="target"><c:out value="${cbReadPage.cbr.conunt}"/>개의 댓글이 달렸습니다.</a></h4>
-						<div class="comment-list">
-							<div >
-							<c:forEach var="cbrList" items="${cbrList}">
-								<div class="user justify-content-start d-flex">
-									<div class="thumb">
-										<img alt="" src="<c:out value='/resources/img/logo/logo5.png'></c:out>">
-									</div>
-									<div class="desc">
-										<div>
-											<div class="d-flex align-items-center">
-												<ul class="blog-info-link mt-3 mb-4">
-													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
-													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
-													<c:if test="${sessionScope.member.getM_no() eq cbrList.m_no}">
-														<li><a href="javascript:void(0)" onclick="replyEdit(${cbrList.cbr_no}, '${cbrList.content}')"><i class="far fa-edit"></i> 수정</a></li>
-														<li><a href="javascript:void(0)" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
-													</c:if>
-												</ul>
-											</div>
-										</div>
-										<p class="comment">
-											<c:out value="${cbrList.content}"/>
-										</p>
-									</div>
-								</div>
-							</c:forEach>
-							</div>
-						</div>
-					</div>
-					<div class="comment-form" id="replyTop">
+			<h1>1:1 문의</h1>
+			<hr>
+			<div class="card">
+				<div class="card-body">
+					<h3><i class="fas fa-battery-quarter"></i> 상담내용</h3>
+					<table class="table">
+						<tbody>
+							<tr>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">이름</td>
+								<td>${cbReadPage.m_id }</td>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">등록일</td>
+								<td><fmt:formatDate value="${cbReadPage.reg_date }" pattern="yyyy-MM-dd a h:mm"/></td>
+							</tr>
+							<tr>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">카테고리</td>
+								<td>${cbReadPage.category}</td>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">답변여부</td>
 						<c:choose>
-							<c:when test="${member ne null}"> 
-							<h4>댓글</h4>
-								<form class="form-contact comment_form" id="commentForm" method="POST">
-									<div class="row">
-										<div class="col-12">
-											<input type="hidden" id="cb_no" name="cb_no" value="${cbReadPage.cb_no}">
-											<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
-											<div class="form-group">
-												<textarea class="form-control w-100" name="content" id="content" cols="30" rows="5" placeholder="의견을 남겨주세요"></textarea>
-											</div>
-										</div>
-									</div>
-									<div class="form-group" align="right">
-										<button type="button"  id="btnReplyWrite" class="button button-contactForm btn_1 boxed-btn">작성</button>
-									</div>
-								</form>
+							<c:when test="${cbReadPage.statement eq 0}">
+								<td><span class="inquiry-status status-0">답변대기</span></td>
+							</c:when>
+							<c:when test="${cbReadPage.statement eq 1}">
+								<td><span class="inquiry-status status-1">답변보류</span></td>
 							</c:when>
 							<c:otherwise>
-								<div align="center"><a href="loginPageView">
-									<button type="button"  class="button button-contactForm btn_1 boxed-btn" style="width: 80%;">로그인 후, 댓글 작성이 가능합니다!</button>
-									</a>
-								</div><br>
+								<td><span class="inquiry-status status-2">답변완료</span></td>
 							</c:otherwise>
 						</c:choose>
-					</div>
+							</tr>
+							<tr>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">제목</td>
+								<td colspan="3"><c:out escapeXml="false" value="${cbReadPage.title }"/></td>
+							</tr>
+							<tr>
+								<td id="stresstable" style="background-color: #EAEAEA;" align="center">내용</td>
+								<td colspan="3">
+									<div style="width:500px; height: 300px;">
+										<c:out escapeXml="false" value="${fn:replace(cbReadPage.content, crlf, '<br>')}"/>
+									</div>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
 			</div>
+			<br>
+			<c:if test="${cbReadPage.ia_no ne null}">
+				<h6 class="border-bottom pb-2 mb-0"></h6><br>
+				<div class="card">
+					<div class="card-body">
+						<div class="d-flex">
+							<h3><i class="fas fa-battery-three-quarters"></i> 답변내용</h3>
+							<div class="ml-auto">
+								<small class="text-muted">답변시각 : <fmt:formatDate value="${cbReadPage.ia_reg_date }" pattern="yyyy-MM-dd a h:mm"/></small>
+							</div>
+						</div>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td id="stresstable">내용</td>
+									<td colspan="3">
+										<div style="width:500px; height: 300px;">
+											<c:out escapeXml="false" value="${fn:replace(cbReadPage.ia_content, crlf, '<br>')}"/>
+										</div>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div><br>
+			</c:if>
+			
+			<div class="d-flex">
+				<div class="ml-auto">
+				<c:if test="${answerContent ne null && sessionScope.member ne null && sessionScope.member.getM_authority() eq 'Admin'}">
+					<button class="thm-btn-psd" type="button" data-toggle="modal" data-target="#AnswerEditModal">수정</button>
+					<button class="thm-btn-psd" type="button" onclick="answerInquiryDelete()">삭제</button>
+				</c:if>
+				<c:if test="${answerContent ne null}">
+					<button class="thm-btn-psd" type="button" onclick="location.href='inquiry'">목록</button>
+				</c:if>
+				</div>
+			</div>
+			
+			<br>
+			<div class="d-flex">
+				<div class="ml-auto">
+				<c:if test="${answerContent eq null}">
+					<button class="genric-btn danger-border radius" type="button" onclick="javascript:history.back();">목록</button>
+				</c:if>
+				</div>
+			</div>
+			<br>
 		</div>
+	
 	</section>
 			<!--================ Blog Area end =================-->
 	<%------------ footer section  ------------%>

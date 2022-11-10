@@ -1,15 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ page import="java.time.format.DateTimeFormatter"%>
-<%@ page import="java.time.LocalDateTime"%>
-<%
-	//현재시간 구해서 String으로 formating
-	LocalDateTime nowTime = LocalDateTime.now();
-	
-	DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	String now = nowTime.format(dateTimeFormatter);
-%>
 <!DOCTYPE html>
 <html>
 <head>

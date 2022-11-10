@@ -51,7 +51,7 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form id="searchForm" >
+						<form id="searchForm" action="communityInquiry">
 							<div class="row">
 								<div class="col-lg-2" >
 								<select class="form-control" id="searchType" name="searchType">
@@ -61,10 +61,10 @@
 								</select>
 								</div>
 								<div class="col-lg-8" >
-									<input type="text" id="keyword" name="keyword" class="form-control ml-1 mr-1" placeholder="검색어를 입력해주세요" required>
+									<input type="text" id="searchKeyword " name="searchKeyword" placeholder="검색어를 입력하세요." class="form-control" required="required">
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
-									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
+									<input type="submit" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
 								</div>
 							</div>
 						</form>
@@ -127,7 +127,7 @@
 							<c:if test="${sessionScope.member ne null}">
 								<div class="col-lg-12" align="right">
 									<button class="genric-btn danger-border radius" id="buttonWrite">문의하기</button>
-								</div><br>
+								</div><br><br>
 							</c:if>
 						</div>
 					</div>
@@ -140,17 +140,17 @@
 									<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+										<li class="page-item"><a href="communityInquiry?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
 								</c:choose>
 								<!-- 페이지 갯수만큼 버튼 생성 -->
 								<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
 									<c:choose>
 										<c:when test="${i eq Paging.pageNo }">
-											<li class="page-item  active"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+											<li class="page-item active disabled"> <a href="" class="page-link"><c:out value="${i }"/></a> </li>
 										</c:when>
 										<c:otherwise>
-											<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+											<li class="page-item"> <a href="communityInquiry?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 										</c:otherwise>
 									</c:choose>
 								</c:forEach>
@@ -159,7 +159,7 @@
 									<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+										<li class="page-item"><a href="communityInquiry?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 									</c:otherwise>
 								</c:choose>
 							</ul>
@@ -189,9 +189,6 @@ $('#buttonWrite').click(function(){
 	var popup = window.open('inquiryWritePage', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
-$('#btnBoardSearch').click(function(){
-	$("#searchForm").submit();
-})
 
 </script>
 </body>

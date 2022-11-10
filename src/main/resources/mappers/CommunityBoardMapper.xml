@@ -230,6 +230,7 @@
 		SELECT i.*, m.m_id
 		FROM inquiry i, member m
 		WHERE i.m_no = m.m_no
+		<include refid="searchInauiry"></include> 
 		ORDER BY i.reg_date DESC
 		LIMIT #{Page}, #{PageSize};
 	</select>
@@ -238,7 +239,8 @@
 	<select id="getCommunityBoardInquiryPageTotalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM inquiry i, member m
-		WHERE i.m_no = m.m_no
+		WHERE i.m_no = m.m_no 
+		<include refid="searchInauiry"></include> 
 	</select>
 	
 	<!--1:1 문의하기 작성-->
@@ -249,9 +251,9 @@
 	
 	<!--1:1 문의하기 상세페이지  -->
 	<select id="getInquiryViewPage" resultType="hashMap">
-		SELECT i.*
-		FROM inquiry i, member m
-		WHERE inq_no = #{inq_no} AND i.m_no = m.m_no; 
+		SELECT i.*, ia.*, m.m_id
+		FROM inquiry i LEFT OUTER join inquiry_answer ia ON ia.inq_no = i.inq_no , member m
+		WHERE i.inq_no = #{inq_no} AND i.m_no = m.m_no; 
 	</select>
 	
 	<!--1:1 문의하기 삭제  -->
@@ -260,6 +262,21 @@
 		WHERE inq_no = #{inq_no}
 	</delete>
 	
+	<sql id="searchInauiry">
+		<if test="searchKeyword != null and searchType != null">
+			<choose>
+				<when test="searchType == 'title'">
+					AND i.title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'category'">
+					AND i.category LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'm_id'">
+					AND m.m_id LIKE  CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+	</sql>
 	
 	<!--홍일 작성 아래  -->
 	<!-- 2022-09-03 김홍일 / 강의 상세 페이지의 커뮤니티 탭 조건 -->

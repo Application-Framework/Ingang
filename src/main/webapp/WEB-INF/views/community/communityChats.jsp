@@ -151,37 +151,39 @@
 					</div>
 
 
-					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination" id="pagingDiv">
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+					<c:if test="${Paging.totalCount > 10}">
+						<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
+							<ul class="pagination" id="pagingDiv">
+								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
-									<c:when test="${i eq Paging.pageNo }">
-										<li class="page-item  active"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
 								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
+								<!-- 페이지 갯수만큼 버튼 생성 -->
+								<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+									<c:choose>
+										<c:when test="${i eq Paging.pageNo }">
+											<li class="page-item  active disabled"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+								<c:choose>
+									<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+									</c:when>
+									<c:otherwise>
+										<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+									</c:otherwise>
+								</c:choose>
+							</ul>
+						</nav>
+					</c:if>
 				</div><br>
 			</div>
 			<jsp:include page="communityTagSidebar.jsp" />

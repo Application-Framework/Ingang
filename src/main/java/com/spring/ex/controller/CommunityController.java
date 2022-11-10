@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -457,14 +458,21 @@ public class CommunityController {
 	//1:1문의 게시판 페이지
 	@RequestMapping(value = "/communityInquiry", method = RequestMethod.GET)
 	public String inquiryPage(Model model, HttpServletRequest request) throws Exception {
-		//String searchKeyword = request.getParameter("searchKeyword");
+		String searchType = request.getParameter("searchType");
+		String searchKeyword = request.getParameter("searchKeyword");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		//map.put("searchKeyword", searchKeyword);
+		
+		map.put("searchType", searchType);
+		map.put("searchKeyword", searchKeyword);
 		
 		pagingService = new PagingService(request, cbService.getCommunityBoardInquiryPageTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
 		List<InquiryDTO> cbInquiry = cbService.getCommunityBoardInquiryPage(map);
+		
+		if (searchKeyword == null && searchType == null) {
+			model.addAttribute("search", "no");
+		}
 		
 		model.addAttribute("cbInquiry", cbInquiry);
 		model.addAttribute("Paging", pagingService.getPaging());
