@@ -1,9 +1,8 @@
 package com.spring.ex.admin.controller;
 
-import java.sql.Date;
 import java.util.List;
+import java.util.Map;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -63,11 +62,17 @@ public class AdminCourseController {
 	@RequestMapping("/admin/course")
 	public String courseDashboard(Model model) {
 		int pendingCoursesCount = adminCourseService.getPendingCoursesCount();
+		
+	 	List<Map<String, Object>> courseOrderBy7Days = adminCourseService.getCourseOrderBy7Days();
+	 	Map<String, Object> todayOrder = courseOrderBy7Days.get(courseOrderBy7Days.size() -1);
 		int todaySellingPrice = 0;
 		int todaySellingPriceCount = 0;
+		
 		model.addAttribute("pendingCoursesCount", pendingCoursesCount);
 		model.addAttribute("todaySellingPrice", todaySellingPrice);
 		model.addAttribute("todaySellingPriceCount", todaySellingPriceCount);
+		model.addAttribute("todayOrder", todayOrder);
+		model.addAttribute("courseOrderBy7Days", courseOrderBy7Days);
 		
 		return "admin/course/course_dashboard";
 	}

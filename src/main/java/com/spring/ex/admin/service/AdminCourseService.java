@@ -39,4 +39,7 @@ public interface AdminCourseService {
 	
 	// 관리자의 강의 거절
 	public int rejectCourse(int olr_no, String rejection_message);
+	
+	// 오늘부터 6일전까지의 주문내역 합계 가져오기
+	public List<Map<String, Object>> getCourseOrderBy7Days();
 }
