@@ -471,7 +471,11 @@ public class CommunityController {
 		List<InquiryDTO> cbInquiry = cbService.getCommunityBoardInquiryPage(map);
 		
 		if (searchKeyword == null && searchType == null) {
-			model.addAttribute("search", "no");
+			model.addAttribute("searchType", "no");
+			model.addAttribute("searchKeyword", "no");
+		}else {
+			model.addAttribute("searchType", searchType);
+			model.addAttribute("searchKeyword", searchKeyword);
 		}
 		
 		model.addAttribute("cbInquiry", cbInquiry);

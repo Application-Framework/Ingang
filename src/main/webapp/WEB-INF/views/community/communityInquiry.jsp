@@ -139,6 +139,9 @@
 								<c:choose>
 									<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 									</c:when>
+									<c:when test="${Paging.pageNo ne Paging.firstPageNo && searchType ne 'no' && searchKeyword ne 'no'}">
+										<li class="page-item"><a href="communityInquiry?page=${Paging.prevPageNo}&searchType=${searchType}&searchKeyword=${searchKeyword}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+									</c:when>
 									<c:otherwise>
 										<li class="page-item"><a href="communityInquiry?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
@@ -149,6 +152,9 @@
 										<c:when test="${i eq Paging.pageNo }">
 											<li class="page-item active disabled"> <a href="" class="page-link"><c:out value="${i }"/></a> </li>
 										</c:when>
+										<c:when test="${i ne Paging.pageNo && searchType ne 'no' && searchKeyword ne 'no'}">
+											<li class="page-item"> <a href="communityInquiry?page=${i}&searchType=${searchType}&searchKeyword=${searchKeyword}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:when>
 										<c:otherwise>
 											<li class="page-item"> <a href="communityInquiry?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
 										</c:otherwise>
@@ -157,6 +163,9 @@
 								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
 									<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+									</c:when>
+									<c:when test="${Paging.pageNo ne Paging.finalPageNo && searchType ne 'no' && searchKeyword ne 'no'}">
+										<li class="page-item"><a href="communityInquiry?page=${Paging.nextPageNo}&searchType=${searchType}&searchKeyword=${searchKeyword}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item"><a href="communityInquiry?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
