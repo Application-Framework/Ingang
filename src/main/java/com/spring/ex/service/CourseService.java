@@ -90,24 +90,6 @@ public interface CourseService {
 	// 강좌의 메인 카테고리 가져오기
 	public MainTypeDTO getMainTypeOfCourse(int oli_no);
 	
-	//-------------------------------
-	// 강의 요청 부분
-	//-------------------------------
-	
-	public List<Map<String, Object>> getPendingCourseRequestList(String searchCategory, String search, int nowPage, int pageSize);
-	public int getPendingCoursesCount();
-	public CourseRequestDTO getCourseRequest(int olr_no);
-	public int insertCourseRequest(CourseRequestDTO dto);
-	public int updateCourseRequest(CourseRequestDTO dto);
-	public int deleteCourseRequest(int olr_no);
-	
-	
 	// 사용자의 강의 저장
 	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
-	
-	// 관리자의 강의 승인
-	public int approveCourse(int olr_no);
-	
-	// 관리자의 강의 거절
-	public int rejectCourse(int olr_no, String rejection_message);
 }

@@ -1,9 +1,7 @@
 package com.spring.ex.service;
 
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -207,105 +205,19 @@ public class CourseServiceImpl implements CourseService {
 
 	@Override
 	public MainTypeDTO getMainTypeOfCourse(int oli_no) {
-		MainTypeDTO dto = typeDAO.getMainTypeByMainTypeNo(typeDAO.getSubTypeBySubTypeNo(courseSubTypeDAO.getCourseSubTypeList(oli_no).get(0).getSub_type_no()).getMain_type_no());
-		return dto;
-	}
-
-	@Override
-	public List<Map<String, Object>> getPendingCourseRequestList(String searchCategory, String search, int nowPage, int pageSize) {
-		return courseRequestDAO.selectListPendingCourseRequest(searchCategory, search, nowPage, pageSize);
-	}
-
-	@Override
-	public int getPendingCoursesCount() {
-		return courseRequestDAO.getPendingCoursesCount();
-	}
-
-	@Override
-	public CourseRequestDTO getCourseRequest(int olr_no) {
-		return courseRequestDAO.selectOneCourseRequest(olr_no);
-	}
-
-	@Override
-	public int insertCourseRequest(CourseRequestDTO dto) {
-		return courseRequestDAO.insertCourseRequest(dto);
-	}
-
-	@Override
-	public int updateCourseRequest(CourseRequestDTO dto) {
-		return courseRequestDAO.updateCourseRequest(dto);
-	}
-
-	@Override
-	public int deleteCourseRequest(int olr_no) {
-		return courseRequestDAO.deleteCourseRequest(olr_no);
-	}
-
-	@Override
-	public int approveCourse(int olr_no) {
-		CourseRequestDTO cr = getCourseRequest(olr_no);
-		cr.setApproval_status(1);
-		
-		// 신규등록이면 복제 과정을 안거쳐도 됨. 수정일 때만 원본 <- 요청본 복제
-		if(cr.getOli_no() != cr.getOrigin_oli_no()) {
-			CourseDTO currentCourse = getCourseDetail(cr.getOli_no());
-			CourseDTO originCourse = getCourseDetail(cr.getOrigin_oli_no());
-			
-			// 강의 수정
-			originCourse.setTitle(currentCourse.getTitle());
-			originCourse.setContent(currentCourse.getContent());
-			originCourse.setIntroduction(currentCourse.getIntroduction());
-			originCourse.setImg_path(currentCourse.getImg_path());
-			originCourse.setPrice(currentCourse.getPrice());
-			originCourse.setLevel(currentCourse.getLevel());
-			originCourse.setUpdate_date(new Date(System.currentTimeMillis()));
-			updateCourse(originCourse);
-			
-			// 강의 서브 카테고리 복제
-			deleteCourseSubType(originCourse.getOli_no());
-			for(CourseSubTypeDTO cst : getCourseSubTypeList(currentCourse.getOli_no())) {
-				cst.setOli_no(originCourse.getOli_no());
-				submitCourseSubType(cst);
-			}
-			deleteCourseSubType(currentCourse.getOli_no());
-			
-			// 강의 태그 복제
-			deleteCourseTag(originCourse.getOli_no());
-			for(CourseTagDTO ct : getCourseTags(currentCourse.getOli_no())) {
-				ct.setOli_no(originCourse.getOli_no());
-				submitCourseTag(ct);
-			}
-			deleteCourseTag(currentCourse.getOli_no());
-			
-			// 강의 동영상 복제
-			deleteCourseVideo(originCourse.getOli_no());
-			for(CourseVideoDTO cv : getCourseVideoList(currentCourse.getOli_no())) {
-				cv.setOli_no(originCourse.getOli_no());
-				submitCourseVideo(cv);
-			}
-			deleteCourseVideo(currentCourse.getOli_no());
-			
-			// 파일 관리 테이블의 content_no 바꾸기
-			fileService.changeContent_no(currentCourse.getOli_no(), originCourse.getOli_no());
+		try {
+			MainTypeDTO dto = typeDAO.getMainTypeByMainTypeNo(typeDAO.getSubTypeBySubTypeNo(courseSubTypeDAO.getCourseSubTypeList(oli_no).get(0).getSub_type_no()).getMain_type_no());
+			return dto;
 		}
-		
-		updateCourseRequest(cr);
-		return 1;
-	}
-
-	// 강의 요청 거절
-	@Override
-	public int rejectCourse(int olr_no, String rejection_message) {
-		CourseRequestDTO cr = getCourseRequest(olr_no);
-		cr.setApproval_status(-1);
-		cr.setRejection_message(rejection_message);
-		updateCourseRequest(cr);
-		return 1;
+		catch(Exception e) {
+			return null;
+		}
 	}
 
 	@Override
 	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {
 		// 강의 수정일 때
+		System.out.println("저장 시작");
 		int origin_oli_no = dto.getOli_no();
 		insertCourse(dto);
 		if(origin_oli_no == 0) origin_oli_no = dto.getOli_no();
@@ -333,6 +245,8 @@ public class CourseServiceImpl implements CourseService {
 			submitCourseVideo(courseVideoDTO);
 		}
 		
+		System.out.println("파일 저장 시작");
+		
 		// 게시글의 파일 관리
 		try {
 			fileService.manageFileAfterPostSubmission(dto.getContent(), dto.getOli_no(), 1); // category 강의 : 1
@@ -341,12 +255,15 @@ public class CourseServiceImpl implements CourseService {
 			System.err.println("강의 파일 저장 실패 : " + e.getMessage());
 		}
 		
+		System.out.println("파일 저장 끝");
+		
 		// 강의 요청 대기열에 등록
 		CourseRequestDTO cr = new CourseRequestDTO();
 		cr.setOli_no(dto.getOli_no());
 		cr.setOrigin_oli_no(origin_oli_no);
 		cr.setApproval_status(0);
-		insertCourseRequest(cr);
+		courseRequestDAO.insertCourseRequest(cr);
+		System.out.println("cr : " + cr);
 		
 		return 1;
 	}

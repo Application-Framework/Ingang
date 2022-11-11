@@ -62,7 +62,7 @@ public class AdminCourseController {
 	// 강의 관리 대시보드 페이지
 	@RequestMapping("/admin/course")
 	public String courseDashboard(Model model) {
-		int pendingCoursesCount = courseService.getPendingCoursesCount();
+		int pendingCoursesCount = adminCourseService.getPendingCoursesCount();
 		int todaySellingPrice = 0;
 		int todaySellingPriceCount = 0;
 		model.addAttribute("pendingCoursesCount", pendingCoursesCount);
@@ -79,11 +79,11 @@ public class AdminCourseController {
 		String search = request.getParameter("search");
 		
 		final int pageSize = 10;
-		int totalCount = courseService.getPendingCoursesCount();
+		int totalCount = adminCourseService.getPendingCoursesCount();
 		PagingService pagingService = new PagingService(request, totalCount, pageSize);
 		
 		model.addAttribute("paging", pagingService.getPaging());
-		model.addAttribute("courseRequestList", courseService.getPendingCourseRequestList(searchCategory, search, pagingService.getNowPage(), pageSize));
+		model.addAttribute("courseRequestList", adminCourseService.getPendingCourseRequestList(searchCategory, search, pagingService.getNowPage(), pageSize));
 		model.addAttribute("searchCategory", searchCategory);
 		model.addAttribute("search", search);
 		
@@ -117,21 +117,24 @@ public class AdminCourseController {
 		List<CourseTagDTO> myTagList = courseService.getCourseTags(oli_no);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
 		
-		
 		model.addAttribute("courseService", courseService);
 		model.addAttribute("teacherService", teacherService);
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("typeService", typeService);
 		
+		if(course.getOrigin() == 0) {
+			 model.addAttribute("origin_oli_no", adminCourseService.getCourseRequestByOli_no(oli_no).getOrigin_oli_no());
+		}
 		model.addAttribute("course", course);
 		model.addAttribute("orderHistoryList", holList);
 		model.addAttribute("allTagList", tagService.getTagList());
 		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
-		model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(courseService.getMainTypeOfCourse(oli_no).getMain_type_no()));
+		if(courseService.getMainTypeOfCourse(oli_no) != null)
+			model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(courseService.getMainTypeOfCourse(oli_no).getMain_type_no()));
 		model.addAttribute("myCategoryList", myCategoryList);
 		model.addAttribute("myTagList", myTagList);
 		model.addAttribute("videoList", videoList);
-		
+		model.addAttribute("teacherList", teacherService.getTeacherList());
 		return "admin/course/course_detail";
 	}
 	
@@ -145,7 +148,7 @@ public class AdminCourseController {
 		}*/
 		System.out.println("approvalCourseRequest");
 		String olr_no = request.getParameter("olr_no");
-		courseService.approveCourse(Integer.parseInt(olr_no));
+		adminCourseService.approveCourse(Integer.parseInt(olr_no));
 	}
 	
 	@ResponseBody
@@ -159,7 +162,7 @@ public class AdminCourseController {
 		System.out.println("rejectCourseRequest");
 		String olr_no = request.getParameter("olr_no");
 		String rejection_message = request.getParameter("rejection_message");
-		courseService.rejectCourse(Integer.parseInt(olr_no), rejection_message);
+		adminCourseService.rejectCourse(Integer.parseInt(olr_no), rejection_message);
 	}
 	
 	@ResponseBody
@@ -221,5 +224,49 @@ public class AdminCourseController {
 		course.setOrigin(1);
 		
 		adminCourseService.createCourse(course, thumbnail, categorys, tags, videoTitles, videoPaths);
+	}
+	
+	@ResponseBody
+	@RequestMapping("admin/course/updateCourse")
+	public void updateCourse(HttpServletRequest request, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.out.println("로그인이 필요합니다.");
+			return;
+		}
+		
+		if(member.getM_authority() != 1) {
+			System.out.println("관리자 권한이 필요합니다.");
+			return;
+		}
+		
+		System.out.println("수정 시작");
+		String oli_no = request.getParameter("oli_no");
+		String olt_no = request.getParameter("olt_no");
+		String title = request.getParameter("title");
+		String introduction = request.getParameter("introduction");
+		String content = request.getParameter("content");
+		String price = request.getParameter("price");
+		String level = request.getParameter("level");
+		String[] categorys = request.getParameterValues("subCategorys");
+		String[] tags = request.getParameterValues("tags");
+		String[] videoTitles = request.getParameterValues("video_titles");
+		String[] videoPaths = request.getParameterValues("video_paths");
+		
+		if(member == null || title == null || introduction == null || content == null || price == null || level == null || categorys == null || tags == null) {
+			System.out.println("빈 칸이 있습니다.");
+			return;
+		}
+		
+		// 강의 등록
+		CourseDTO course = courseService.getCourseDetail(Integer.parseInt(oli_no));
+		course.setOlt_no(Integer.parseInt(olt_no));
+		course.setTitle(title);
+		course.setIntroduction(introduction);
+		course.setContent(content);
+		course.setPrice(Integer.parseInt(price));
+		course.setLevel(Integer.parseInt(level));
+		
+		adminCourseService.updateCourse(course, thumbnail, categorys, tags, videoTitles, videoPaths);
 	}
 }

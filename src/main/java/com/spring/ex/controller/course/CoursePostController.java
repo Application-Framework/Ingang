@@ -104,7 +104,6 @@ public class CoursePostController {
 			return "error";
 		}
 		
-		System.out.println("등록 시작");
 		String title = request.getParameter("title");
 		String introduction = request.getParameter("introduction");
 		String content = request.getParameter("content");
@@ -134,7 +133,6 @@ public class CoursePostController {
 		courseDTO.setImg_path(img_path);
 		courseDTO.setPrice(Integer.parseInt(price));
 		courseDTO.setLevel(Integer.parseInt(level));
-		courseDTO.setReg_date(new Date(System.currentTimeMillis()));
 		courseDTO.setEnable(1);
 		courseDTO.setOrigin(1);
 		
@@ -190,6 +188,7 @@ public class CoursePostController {
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("courseService", courseService);
 		model.addAttribute("actionURL", "/updateCourse");
+		model.addAttribute("teacherList", teacherService.getTeacherList());
 		return "course/course_write";
 	}
 	
@@ -330,11 +329,12 @@ public class CoursePostController {
 		String originalFileName = multipartFile.getOriginalFilename();	//오리지날 파일명
 		String extension = originalFileName.substring(originalFileName.lastIndexOf("."));	//파일 확장자
 		String savedFileName = UUID.randomUUID() + extension;	//저장될 파일 명
-		File serverFile = new File(fileRoot + savedFileName);
+		File serverFile = new File(fileRoot + "/" + savedFileName);
+		System.out.println("insert serverFile : " + serverFile.toPath());
 		try {
 			InputStream fileStream = multipartFile.getInputStream();
 			FileUtils.copyInputStreamToFile(fileStream, serverFile);	// 서버에 파일 저장
-			jsonObject.addProperty("url", "/resources" + courseImagePath + savedFileName); // contextroot + resources + 저장할 내부 폴더명
+			jsonObject.addProperty("url", "/resources" + courseImagePath + "/" + savedFileName); // contextroot + resources + 저장할 내부 폴더명
 			jsonObject.addProperty("responseCode", "success");
 		} catch (IOException e) {
 			FileUtils.deleteQuietly(serverFile);	//저장된 파일 삭제

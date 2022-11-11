@@ -44,22 +44,7 @@
 		}
 	</style>
 	<script>
-		// 강의 동영상 슬롯 동적 추가
-	    var cnt = 0;
-	    var changedForm = false;
-	    
-	    function addVideoSlot(title, file_name) {
-	    	cnt = cnt + 1;
-	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
-	    	changedForm = true;
-	    }
-	    
-	    function removeVideoSlot() {
-	    	if(cnt == 1) return;
-	    	$('#v_'+cnt).remove();
-	    	cnt = cnt - 1;
-	    	changedForm = true;
-	    }
+		
 	</script>
 </head>
 <body>
@@ -71,7 +56,7 @@
     		<input type="hidden" name="pageNo" value="${course.oli_no}"/>
     		
     		<c:if test="${member.m_authority == 1}">
-	    		<div class="row mb-2 mt-3">
+	    		<div class="row mt-3">
 	   				<label class="col-sm-2 col-form-label fs-5">강사No</label>
 	   				<div class="col-sm-10">
 	    				<select name="olt_no" id="teacher" required>
@@ -83,7 +68,7 @@
 	    			</div>
 	    		</div>
     		</c:if>
-    		<div class="row mb-1">
+    		<div class="row mb-1 mt-2">
    				<label class="col-sm-2 col-form-label fs-5">강의명</label>
    				<div class="col-sm-10">
     				<input type="text" class="form-control" name="title" value="${course.title}" required/>
@@ -150,7 +135,7 @@
    				<label class="col-sm-2 col-form-label fs-5">표지</label>
    				<div class="col-sm-10">
 		    		<input type="file" class="form-control" name="thumbnail" accept="image/*" onchange="loadFile(event)" <c:if test="${course.img_path == null}">required</c:if>/>
-	    		 	<img id="thumbnail" src="<c:url value='${course.img_path}'/>" width="200px"/>
+	    		 	<img id="thumbnail" src="<c:url value='${course.img_path}'/>" style="margin:10px; max-height:250px; object-fit: contain;"/>
     			</div>
     		</div>
 	    	
@@ -182,19 +167,7 @@
     				</div>
     			</div>
     			
-    			<c:if test="${videoList == null}">
-    				<script>
-	    				addVideoSlot('', '');
-	    			</script>
-    			</c:if>
     			
-    			<c:if test="${videoList != null}">
-    				<script>
-	    				<c:forEach var="video" items="${videoList}">
-	    					addVideoSlot('${video.title}', '${video.s_file_name}');
-    					</c:forEach>
-    				</script>
-    			</c:if>
     		</div>
     		
     		<div class="row mb-3 d-flex flex-row-reverse">
@@ -207,6 +180,8 @@
     
     <script>
 	   	var submitted = false;
+	   	var changedForm = false;
+	   	
 	   	// document start
 	   	$(function() {
 	   		// select option drop box 옵션 설정
@@ -292,34 +267,17 @@
 	   	
 	   	// 메인 카테고리가 바뀌었을 때 서브 카테고리 불러오기
 	   	function changeMainCategory() {
-	   		console.log("#mainCategory.val() : " + $("#mainCategory").val())
-	   		if($("#mainCategory").val() == null || $("#mainCategory").val() == "") {
-	   			$.ajax({
-		   			url: '/writeCourse',
-		   			type: 'post',
-		   			dataType: 'html',
-		   			data: {
-		   				main_type_no: 0
-		   			},
-		   			success: function(html) {
-		   				subCategoryParents = $(html).find('#subCategoryParents>*');
-		   				console.log(subCategoryParents);
-		   				$('#subCategoryParents').html(subCategoryParents);
-		   				new Choices('#subCategorys', {
-		   		            removeItemButton: true,
-		   		            maxItemCount:5,
-		   		            searchResultLimit:10
-		   		        }); 
-		   			}
-		   		});
-	   			return;
+	   		var main_type_no = 0;
+	   		if($("#mainCategory").val() != null && $("#mainCategory").val() != "") {
+	   			main_type_no = $("#mainCategory").val();
 	   		}
+	   		
 	   		$.ajax({
 	   			url: '/writeCourse',
 	   			type: 'post',
 	   			dataType: 'html',
 	   			data: {
-	   				main_type_no: $("#mainCategory").val()
+	   				main_type_no: main_type_no
 	   			},
 	   			success: function(html) {
 	   				subCategoryParents = $(html).find('#subCategoryParents>*');
@@ -361,6 +319,7 @@
 	    		type: "post",
 	    		success: function() {
 					window.close();
+	    			window.opener.location.reload();
 	    		}
 	    	});
 	    });
@@ -410,6 +369,35 @@
 	    		</c:if>
        		}
 	    });
+		
+		
+	 	// 강의 동영상 슬롯 동적 추가
+	    var cnt = 0;
+	    
+	    function addVideoSlot(title, file_name) {
+	    	cnt = cnt + 1;
+	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
+	    	changedForm = true;
+	    }
+	    
+	    function removeVideoSlot() {
+	    	if(cnt == 1) return;
+	    	$('#v_'+cnt).remove();
+	    	cnt = cnt - 1;
+	    	changedForm = true;
+	    }
+		
+		<c:choose>
+			<c:when test="${videoList != null}">
+				<c:forEach var="video" items="${videoList}">
+					addVideoSlot('${video.title}', '${video.s_file_name}');
+				</c:forEach>
+			</c:when>
+			
+			<c:otherwise>
+				addVideoSlot('', '');
+			</c:otherwise>
+		</c:choose>
     </script>
     
 </body>

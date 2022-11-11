@@ -41,6 +41,11 @@ public class CourseRequestDAOImpl implements CourseRequestDAO {
 	}
 	
 	@Override
+	public CourseRequestDTO getCourseRequestByOli_no(int oli_no) {
+		return sql.selectOne(namespace + ".getCourseRequestByOli_no", oli_no);
+	}
+	
+	@Override
 	public int insertCourseRequest(CourseRequestDTO dto) {
 		return sql.insert(namespace + ".insertCourseRequest", dto);
 	}

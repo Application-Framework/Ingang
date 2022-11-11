@@ -75,7 +75,7 @@
 											<input name="rowCheck" type="checkbox" value="${course.oli_no}">			
 										</td>
 										<td>${course.oli_no}</td>
-										<td><a href="/admin/course/${course.oli_no}">${course.title}</a></td>
+										<td><a onclick="openCourseDetail(${course.oli_no});" href="javascript:;">${course.title}</a></td>
 										<td><a href="">${course.teacher_name}</a></td>
 										<td>${course.price}</td>
 										<td>${course.level}</td>
@@ -229,6 +229,22 @@
 			console.log(option);
 			window.open(url, "_blank", option);
 	 	});
+	 	
+	 	// 강의 상세 창 띄우기
+	 	function openCourseDetail(oli_no) {
+	 		// 창 크기 지정
+			var width = window.screen.width * 55 / 100;
+			var height = window.screen.height * 85 / 100;
+
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+
+			var url = "/admin/course/"+oli_no;
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+	 	}
     </script>
     
 	<!-- Chart -->

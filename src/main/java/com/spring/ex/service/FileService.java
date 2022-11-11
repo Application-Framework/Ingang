@@ -11,7 +11,7 @@ import com.spring.ex.dto.UploadedFileDTO;
 public interface FileService {
 	
 	// 로컬과 서버에서 파일 삭제
-	public void deleteFileToLocalAndServer(String path) throws Exception;
+	public void deleteFileToLocalAndServer(String path);
 	
 	// DB에서 파일 리스트 불러오기
 	public List<UploadedFileDTO> getFileList(int content_no, int category) throws Exception;

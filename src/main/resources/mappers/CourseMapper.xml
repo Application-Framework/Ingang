@@ -265,6 +265,11 @@
 		WHERE olr_no = #{olr_no}
 	</select>
 	
+	<select id="getCourseRequestByOli_no" resultType="courseRequestDTO">
+		SELECT * FROM online_lecture_request
+		WHERE oli_no = #{oli_no}
+	</select>
+	
 	<insert id="insertCourseRequest">
 		INSERT INTO online_lecture_request(oli_no, origin_oli_no, approval_status, rejection_message, request_datetime)
 		VALUES(#{oli_no}, #{origin_oli_no}, #{approval_status}, #{rejection_message}, NOW())
