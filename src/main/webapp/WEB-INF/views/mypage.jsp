@@ -208,24 +208,6 @@
 										</div>
 									</div>
 									<div class="form-group">
-										<label class="col-lg-3 control-label">성별:</label>
-										<div class="col-lg-8">
-											<label class="form-control">${member.m_sex}</label>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-lg-3 control-label">생일:</label>
-										<div class="col-lg-8">
-											<label class="form-control">${member.m_birth}</label>
-										</div>
-									</div>
-									<div class="form-group">
-										<label class="col-lg-3 control-label">전화번호:</label>
-										<div class="col-lg-8">
-											<label class="form-control">${member.m_phone}</label>
-										</div>
-									</div>
-									<div class="form-group">
 										<label class="col-lg-3 control-label">가입날짜:</label>
 										<div class="col-lg-8">
 											<label class="form-control">${member.reg_date}</label>

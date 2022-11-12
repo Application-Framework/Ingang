@@ -1,6 +1,11 @@
 package com.spring.ex.admin.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.dto.HistoryOrderNoteDTO;
 
 @Service
 public interface AdminDashBoardService {
@@ -19,4 +24,10 @@ public interface AdminDashBoardService {
 	
 	//주간 강의 매출
 	public int getWeekCourseTotalSales() throws Exception;
+	
+	// 주간 강의 매출 그래프
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureWeek() throws Exception;
+	
+	// 주간 노트 매출 그래프
+	public List<HistoryOrderNoteDTO> getHistoryOrderNoteWeek() throws Exception;
 }

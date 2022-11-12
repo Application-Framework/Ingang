@@ -1,6 +1,11 @@
 package com.spring.ex.admin.dao;
 
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
+
+import com.spring.ex.dto.HistoryOrderLectureDTO;
+import com.spring.ex.dto.HistoryOrderNoteDTO;
 
 @Repository
 public interface AdminDashBoardDAO {
@@ -19,5 +24,11 @@ public interface AdminDashBoardDAO {
 	
 	//주간 강의 매출
 	public int getWeekCourseTotalSales() throws Exception;
+	
+	// 주간 강의 매출 그래프
+	public List<HistoryOrderLectureDTO> getHistoryOrderLectureWeek() throws Exception;
+	
+	// 주간 노트 매출 그래프
+	public List<HistoryOrderNoteDTO> getHistoryOrderNoteWeek() throws Exception;
 	
 }

@@ -4,13 +4,6 @@
 <mapper namespace="com.spring.ex.AdminDashBoardMapper">
 
 	<!-- 오늘 가입한 회원수 -->
-	<select id="getTodayVisitorsCount" resultType="int">
-		SELECT COUNT(*)
-		FROM member_connect_log
-		WHERE DATE(con_date) = DATE_FORMAT(NOW(), '%Y-%m-%d')
-	</select>
-	
-	<!-- 오늘 가입한 회원수 -->
 	<select id="getTodayRegisterMemberTotalCount" resultType="int">
 		SELECT COUNT(*)
 		FROM member
@@ -26,17 +19,97 @@
 	
 	<!-- 오늘 강의 총 매출 -->
 	<select id="getTodayCourseTotalSales" resultType="int">
-		SELECT sum(payment)
+		SELECT ifnull(sum(payment), 0)
 		FROM history_order_lecture
 		WHERE payment_date = DATE_FORMAT(NOW(), '%Y-%m-%d')
 	</select>
 	
 	<!-- 주간 강의 매출 -->
 	<select id="getWeekCourseTotalSales" resultType="int">
-		SELECT SUM(payment)
+		SELECT ifnull(SUM(payment), 0), payment_date, payment
 		FROM history_order_lecture 
 		WHERE payment_date BETWEEN DATE_ADD(NOW(), INTERVAL -1 WEEK ) AND NOW()
 	</select>
 	
+	<!-- 주간 강의 매출 그래프 -->
+	<select id="getHistoryOrderLectureWeek" resultType="HashMap">
+		SELECT date(b.selected_date) as 'payment_date' , IFNULL(a.total, 0) as 'payment'
+		FROM ( 
+		      SELECT payment_date, sum(payment) total 
+		      FROM history_order_lecture 
+		      WHERE payment_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
+		      GROUP BY payment_date
+		   ) a  
+		   RIGHT JOIN
+		   ( 
+		      SELECT selected_date FROM 
+		      (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+		   where selected_date BETWEEN DATE_ADD(CURDATE(),INTERVAL -6 DAY) AND CURDATE()
+		   ) b ON a.payment_date = b.selected_date 
+		ORDER BY b.selected_date ASC
+	</select>
 	
+	<!-- 주간 강의 매출 건수 -->
+	<select id="test1" resultType="HashMap">
+		SELECT 
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-6 then 1 ELSE 0 END) AS 'sub6',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-5 then 1 ELSE 0 END) AS 'sub5',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-4 then 1 ELSE 0 END) AS 'sub4',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-3 then 1 ELSE 0 END) AS 'sub3',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-2 then 1 ELSE 0 END) AS 'sub2',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE()-1 then 1 ELSE 0 END) AS 'sub1',
+			SUM(case when DATE_FORMAT(payment_date, '%Y%m%d') = CURDATE() then 1 ELSE 0 END) AS 'sub0'
+		FROM history_order_lecture
+	</select>
+	
+	<!-- 주간 노트 매출 그래프 -->
+	<select id="getHistoryOrderNoteWeek" resultType="HashMap">
+		SELECT date(b.selected_date) as 'payment_date' , IFNULL(a.total, 0) as 'payment'
+		FROM ( 
+		      SELECT payment_date, sum(payment) total 
+		      FROM history_order_note 
+		      WHERE payment_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
+		      GROUP BY payment_date
+		   ) a  
+		   RIGHT JOIN
+		   ( 
+		      SELECT selected_date FROM 
+		      (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+		   where selected_date BETWEEN DATE_ADD(CURDATE(),INTERVAL -6 DAY) AND CURDATE()
+		   ) b ON a.payment_date = b.selected_date 
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 주간 매출(일별 매출) -->
+	<select id="test2" resultType="HashMap">
+		SELECT b.selected_date, IFNULL(a.total, 0)
+		FROM ( 
+		      SELECT payment_date, sum(payment) total 
+		      FROM history_order_lecture 
+		      WHERE payment_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
+		      GROUP BY payment_date
+		   ) a  
+		   RIGHT JOIN
+		   ( 
+		      SELECT selected_date FROM 
+		      (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		         (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+		   where selected_date BETWEEN DATE_ADD(CURDATE(),INTERVAL -6 DAY) AND CURDATE()
+		   ) b ON a.payment_date = b.selected_date 
+		ORDER BY b.selected_date ASC
+	</select>
 </mapper>

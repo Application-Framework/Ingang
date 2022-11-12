@@ -3,12 +3,12 @@ package com.spring.ex.controller;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.swing.JOptionPane;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.service.MemberService;
@@ -36,6 +36,10 @@ public class LoginController {
 		MemberDTO login = service.login(dto);
 		
 		if (login == null) {
+
+			JOptionPane msg = new JOptionPane();
+			msg.showMessageDialog(null, "올바른 아이디 또는 패스워드를 입력해주세요");
+			
 			return "redirect:/loginPageView";
 		} 
 		else {
@@ -44,16 +48,8 @@ public class LoginController {
 			
 			int m_no = (Integer)session.getAttribute("m_no");
 			
-			int conLog = service.checkConMemberLog(m_no);
-			
-			//최초 접속 있는지 확인
-			if(conLog == 0) { //최초 접속 없을시
-				//최초 접속일 추가
-				service.insertFirstConMemberLog(m_no);
-			} else { //접속 기록 있을시
-				//최근 접속일로 업데이트
-				service.updateConMemberLog(m_no);
-			}
+			// 접속 기록 추가
+			service.insertFirstConMemberLog(m_no);
 			
 			// 로그인 후 이전 페이지로 이동
 			Object redirectURL = session.getAttribute("redirectURI");
