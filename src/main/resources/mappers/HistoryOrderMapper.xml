@@ -54,6 +54,30 @@
 		WHERE oli_no = #{oli_no} AND m_no = #{m_no}
 	</select>
 	
+	<!-- 오늘부터 6일전까지의 강의 주문내역 합계 가져오기 -->
+	<select id="getCourseOrderBy7Days" resultType="HashMap">
+		SELECT b.payment_date, IFNULL(a.total, 0) AS totalPayment
+		FROM
+			( 
+				SELECT payment_date, sum(payment) total 
+				FROM history_order_lecture 
+				WHERE payment_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
+				GROUP BY payment_date
+			) a  
+			RIGHT JOIN
+			( 
+				SELECT payment_date FROM 
+				(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) payment_date from
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			where payment_date BETWEEN DATE_ADD(CURDATE(),INTERVAL -6 DAY) AND CURDATE()
+			) b ON a.payment_date = b.payment_date 
+			ORDER BY b.payment_date ASC
+	</select>
+	
 	<!-- 노트 -->
 	
 	<!-- 노트 구매 내역 -->
@@ -83,9 +107,38 @@
 	</insert>
 	
 	<!-- 노트 구매 기록 가져오기 -->
+	<select id="getHistoryOrderNoteByN_no" resultType="HistoryOrderNoteDTO">
+		SELECT * FROM history_order_note
+		WHERE n_no = #{n_no}
+	</select>
+	
+	<!-- 노트 구매 기록 가져오기 -->
 	<select id="getHistoryOrderNoteByN_noM_no" resultType="HistoryOrderNoteDTO">
 		SELECT * FROM history_order_note
 		WHERE n_no = #{n_no} AND m_no = #{m_no}
 	</select>
 	
+	<!-- 오늘부터 6일전까지의 노트 주문내역 합계 가져오기 -->
+	<select id="getNoteOrderBy7Days" resultType="HashMap">
+		SELECT b.payment_date, IFNULL(a.total, 0) AS totalPayment
+		FROM
+			( 
+				SELECT payment_date, sum(payment) total 
+				FROM history_order_note
+				WHERE payment_date BETWEEN DATE_ADD(CURDATE(), INTERVAL -6 DAY) AND CURDATE()
+				GROUP BY payment_date
+			) a  
+			RIGHT JOIN
+			( 
+				SELECT payment_date FROM 
+				(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) payment_date from
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+					(select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			where payment_date BETWEEN DATE_ADD(CURDATE(),INTERVAL -6 DAY) AND CURDATE()
+			) b ON a.payment_date = b.payment_date 
+			ORDER BY b.payment_date ASC
+	</select>
 </mapper>

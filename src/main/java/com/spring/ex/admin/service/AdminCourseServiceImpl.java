@@ -260,10 +260,4 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 		updateCourseRequest(cr);
 		return 1;
 	}
-
-	// 오늘부터 6일전까지의 주문내역 합계 가져오기
-	@Override
-	public List<Map<String, Object>> getCourseOrderBy7Days() {
-		return adminCourseDAO.getCourseOrderBy7Days();
-	}
 }

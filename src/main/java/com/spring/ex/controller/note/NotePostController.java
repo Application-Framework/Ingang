@@ -62,7 +62,7 @@ public class NotePostController {
 		String price = request.getParameter("price");
 		String _enable = request.getParameter("enable");
 		
-		if(memberDTO == null || title == null || content == null || price == null) {
+		if(title == null || content == null || price == null) {
 			System.out.println("빈 칸이 있습니다.");
 			return "error";
 		}

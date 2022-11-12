@@ -63,14 +63,10 @@ public class AdminCourseController {
 	public String courseDashboard(Model model) {
 		int pendingCoursesCount = adminCourseService.getPendingCoursesCount();
 		
-	 	List<Map<String, Object>> courseOrderBy7Days = adminCourseService.getCourseOrderBy7Days();
+	 	List<Map<String, Object>> courseOrderBy7Days = historyOrderService.getCourseOrderBy7Days();
 	 	Map<String, Object> todayOrder = courseOrderBy7Days.get(courseOrderBy7Days.size() -1);
-		int todaySellingPrice = 0;
-		int todaySellingPriceCount = 0;
 		
 		model.addAttribute("pendingCoursesCount", pendingCoursesCount);
-		model.addAttribute("todaySellingPrice", todaySellingPrice);
-		model.addAttribute("todaySellingPriceCount", todaySellingPriceCount);
 		model.addAttribute("todayOrder", todayOrder);
 		model.addAttribute("courseOrderBy7Days", courseOrderBy7Days);
 		

@@ -2,6 +2,7 @@ package com.spring.ex.dao;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
@@ -63,6 +64,12 @@ public class HistoryOrderDAOImpl implements HistoryOrderDAO {
 		return sqlSession.selectOne(namespace + ".getHistoryOrderLectureByOli_noM_no", map);
 	}
 	
+	// 오늘부터 6일전까지의 강의 주문내역 합계 가져오기
+	@Override
+	public List<Map<String, Object>> getCourseOrderBy7Days() {
+		return sqlSession.selectList(namespace + ".getCourseOrderBy7Days");
+	}
+	
 	// 노트 구매 내역
 	@Override
 	public List<HistoryOrderNoteDTO> myPurchaseNoteList(Integer m_no) throws Exception {
@@ -81,6 +88,11 @@ public class HistoryOrderDAOImpl implements HistoryOrderDAO {
 		return sqlSession.insert(namespace + ".insertHistoryOrderNote", dto);
 	}
 
+	@Override
+	public List<HistoryOrderNoteDTO> getHistoryOrderNoteByN_no(int n_no) {
+		return sqlSession.selectList(namespace + ".getHistoryOrderNoteByN_no", n_no);
+	}
+	
 	// 노트 구매 내역 가져오기
 	@Override
 	public HistoryOrderNoteDTO getHistoryOrderNoteByN_noM_no(int n_no, int m_no) {
@@ -88,5 +100,11 @@ public class HistoryOrderDAOImpl implements HistoryOrderDAO {
 		map.put("n_no", n_no);
 		map.put("m_no", m_no);
 		return sqlSession.selectOne(namespace + ".getHistoryOrderNoteByN_noM_no", map);
+	}
+
+	// 오늘부터 6일전까지의 노트 주문내역 합계 가져오기
+	@Override
+	public List<Map<String, Object>> getNoteOrderBy7Days() {
+		return sqlSession.selectList(namespace + ".getNoteOrderBy7Days");
 	}
 }

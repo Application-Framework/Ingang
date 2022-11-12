@@ -41,11 +41,4 @@ public class AdminCourseDAOImpl implements AdminCourseDAO {
 		map.put("searchKeyword", searchKeyword);
 		return sql.selectOne(namespace + ".getCoursePostCount", map);
 	}
-
-	// 오늘부터 6일전까지의 주문내역 합계 가져오기
-	@Override
-	public List<Map<String, Object>> getCourseOrderBy7Days() {
-		return sql.selectList(namespace + ".getCourseOrderBy7Days");
-	}
-	
 }
