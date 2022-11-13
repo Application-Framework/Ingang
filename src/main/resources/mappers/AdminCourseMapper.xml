@@ -17,6 +17,12 @@
 		<include refid="courseBoardSQL" />
 	</select>
 	
+	<!-- 모든 강의 가져오기 -->
+	<select id="getAllCourseList" resultType="CourseDTO">
+		SELECT * FROM online_lecture_introduction
+		WHERE origin = 1
+	</select>
+	
 	<sql id="courseBoardSQL">
 		FROM online_lecture_introduction oli LEFT OUTER JOIN online_lecture_teacher olt
 			ON oli.olt_no = olt.olt_no

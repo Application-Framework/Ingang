@@ -260,4 +260,10 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 		updateCourseRequest(cr);
 		return 1;
 	}
+	
+	// 모든 강의 가져오기
+	@Override
+	public List<CourseDTO> getAllCourseList() {
+		return adminCourseDAO.getAllCourseList();
+	}
 }

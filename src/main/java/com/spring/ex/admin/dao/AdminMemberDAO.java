@@ -23,5 +23,6 @@ public interface AdminMemberDAO {
 	//회원정보 삭제
 	public void deleteMember(int m_no) throws Exception;
 	
-	
+	// 모든 회원 가져오기
+	public List<MemberDTO> getAllMemberList();
 }

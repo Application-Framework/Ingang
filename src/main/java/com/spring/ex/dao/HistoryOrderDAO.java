@@ -49,4 +49,7 @@ public interface HistoryOrderDAO {
 	
 	// 오늘부터 6일전까지의 노트 주문내역 합계 가져오기
 	public List<Map<String, Object>> getNoteOrderBy7Days();
+	
+	// 오늘의 노트 등록 개수
+	public int getTodaySubmittedNoteCount();
 }

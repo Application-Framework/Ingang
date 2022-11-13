@@ -17,4 +17,7 @@ public interface AdminCourseDAO {
 	
 	// 강의 게시물 총 개수 가져오기
 	public int getCoursePostCount(String searchCategory, String searchKeyword);
+	
+	// 모든 강의 가져오기
+	public List<CourseDTO> getAllCourseList();
 }

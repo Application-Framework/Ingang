@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.spring.ex.AdminNotepMapper">
+<mapper namespace="com.spring.ex.AdminNoteMapper">
 	
 	<select id="getAdminNoteBoard" resultType="HashMap">
-		SELECT n_no, oli_no, m.m_name, title, n.reg_date  
+		SELECT n_no, oli_no, m.m_name, title, n.price, n.reg_date  
 		<include refid="adminNoteBoardSQL" />
 		ORDER BY n_no DESC
 		LIMIT #{nowPage}, #{pageSize}
@@ -16,28 +16,29 @@
 	</select>
 	
 	<sql id="adminNoteBoardSQL">
-		FROM note n, member m
-		WHERE n.m_no = m.m_no
-		<if test="searchCategory != null and searchKeyword != null">
+		FROM note n LEFT JOIN member m
+		ON n.m_no = m.m_no
+		<if test="searchCategory != null and searchKeyword != null and !searchKeyword.equals('')">
+			WHERE 
 			<choose>
 				<when test="searchCategory.equals('n_no')">
-					AND n.n_no = #{searchKeyword} 
+					n.n_no = #{searchKeyword} 
 				</when>
 				
 				<when test="searchCategory.equals('oli_no')">
-					AND n.oli_no = #{searchKeyword} 
+					n.oli_no = #{searchKeyword} 
 				</when>
 				
 				<when test="searchCategory.equals('title')">
-					AND n.title LIKE '%${searchKeyword}%' 
+					n.title LIKE '%${searchKeyword}%' 
 				</when>
 				
 				<when test="searchCategory.equals('m_name')">
-					AND m.m_name LIKE '%${searchKeyword}%' 
+					m.m_name LIKE '%${searchKeyword}%' 
 				</when>
 				
 				<when test="searchCategory.equals('m_id')">
-					AND m.m_id LIKE '%${searchKeyword}%' 
+					m.m_id LIKE '%${searchKeyword}%' 
 				</when>
 			</choose>
 		</if>

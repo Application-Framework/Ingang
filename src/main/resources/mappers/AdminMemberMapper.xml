@@ -44,4 +44,9 @@
 	<select id="getMemberDetail">
 		
 	</select>
+	
+	<!-- 모든 회원 가져오기 -->
+	<select id="getAllMemberList" resultType="MemberDTO">
+		SELECT * FROM member
+	</select>
 </mapper>

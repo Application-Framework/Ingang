@@ -176,7 +176,7 @@
 						${typeService.getSubTypeBySubTypeNo(category.sub_type_no).sub_type_name}<c:if test="${not status.last}">, </c:if>
 					</c:forEach>] 노트입니다.</b></h4>
 				
-					<c:out value="${course.content}" escapeXml="false" />
+					<c:out value="${note.content}" escapeXml="false" />
 					
 					<%-- 노트 내용 --%>
 					<div class="mb-3 fs-3 fw-bold">

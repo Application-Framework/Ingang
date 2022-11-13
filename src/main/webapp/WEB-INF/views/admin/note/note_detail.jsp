@@ -236,7 +236,7 @@
 			</table>
 		
 			<div class="float-end mb-3">
-				<button id="course_update" class="btn btn-primary" type="button" style="width:5rem;">수정</button>
+				<button id="course_update" class="btn btn-primary" style="width:5rem;">수정</button>
 			</div>
 		</form>
 	</div>
@@ -278,7 +278,8 @@
 	    		data: formData,
 	    		type: "post",
 	    		success: function() {
-	    			alert("수정 성공");
+	    			window.close();
+	    			window.opener.location.reload();
 	    		}
 	    	});
 		});

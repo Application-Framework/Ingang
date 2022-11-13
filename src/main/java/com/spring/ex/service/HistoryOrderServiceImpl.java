@@ -94,4 +94,10 @@ public class HistoryOrderServiceImpl implements HistoryOrderService {
 	public List<Map<String, Object>> getNoteOrderBy7Days() {
 		return dao.getNoteOrderBy7Days();
 	}
+
+	// 오늘의 노트 등록 개수
+	@Override
+	public int getTodaySubmittedNoteCount() {
+		return dao.getTodaySubmittedNoteCount();
+	}
 }

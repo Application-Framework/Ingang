@@ -141,4 +141,10 @@
 			) b ON a.payment_date = b.payment_date 
 			ORDER BY b.payment_date ASC
 	</select>
+	
+	<!-- 오늘의 노트 등록 개수 -->
+	<select id="getTodaySubmittedNoteCount" resultType="int">
+		SELECT COUNT(*) FROM history_order_note
+		WHERE payment_date = NOW()
+	</select>
 </mapper>

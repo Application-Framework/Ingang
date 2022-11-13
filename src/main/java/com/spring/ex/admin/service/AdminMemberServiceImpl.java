@@ -35,6 +35,12 @@ public class AdminMemberServiceImpl implements AdminMemberService {
 	public void deleteMember(int m_no) throws Exception {
 		adminDao.deleteMember(m_no);
 	}
+
+	// 모든 회원 가져오기
+	@Override
+	public List<MemberDTO> getAllMemberList() {
+		return adminDao.getAllMemberList();
+	}
 	
 	
 }

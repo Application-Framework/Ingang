@@ -41,4 +41,9 @@ public class AdminCourseDAOImpl implements AdminCourseDAO {
 		map.put("searchKeyword", searchKeyword);
 		return sql.selectOne(namespace + ".getCoursePostCount", map);
 	}
+
+	@Override
+	public List<CourseDTO> getAllCourseList() {
+		return sql.selectList(namespace + ".getAllCourseList");
+	}
 }

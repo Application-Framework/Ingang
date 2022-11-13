@@ -107,4 +107,10 @@ public class HistoryOrderDAOImpl implements HistoryOrderDAO {
 	public List<Map<String, Object>> getNoteOrderBy7Days() {
 		return sqlSession.selectList(namespace + ".getNoteOrderBy7Days");
 	}
+
+	// 오늘의 노트 등록 개수
+	@Override
+	public int getTodaySubmittedNoteCount() {
+		return sqlSession.selectOne(namespace + ".getTodaySubmittedNoteCount");
+	}
 }

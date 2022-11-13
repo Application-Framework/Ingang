@@ -36,4 +36,10 @@ public class AdminMemberDAOImpl implements AdminMemberDAO {
 	public void deleteMember(int m_no) throws Exception {
 		sqlSession.delete(namespaceAdmin + ".deleteMember", m_no);
 	}
+
+	// 모든 회원 가져오기
+	@Override
+	public List<MemberDTO> getAllMemberList() {
+		return sqlSession.selectList(namespaceAdmin + ".getAllMemberList");
+	}
 }
