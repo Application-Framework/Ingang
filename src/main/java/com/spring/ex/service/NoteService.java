@@ -35,7 +35,7 @@ public interface NoteService {
 	public int submitNoteReply(NoteReplyDTO dto);
 	
 	// 좋아요
-	public int getNoteLikeCount(int oli_no);
+	public int getNoteLikeCount(int n_no);
 	public int insertNoteLike(int oli_no, int m_no);
 	public int deleteNoteLike(int oli_no, int m_no);
 	public int existNoteLike(int oli_no, int m_no);

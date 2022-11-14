@@ -217,7 +217,7 @@
 			                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
 			            </div>
 			            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
-			    		<span class="fw-bold">${memberSerivce.getMemberByM_no(reply.m_no).m_name}</span> <span>${reply.reg_date}</span>
+			    		<span class="fw-bold">${memberService.getMemberByM_no(reply.m_no).m_name}</span> <span>${reply.reg_date}</span>
 			    		<p>${reply.content}</p>
 				    	<hr>
 					</c:forEach>

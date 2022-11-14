@@ -116,8 +116,8 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
-	public int getNoteLikeCount(int oli_no) {
-		return noteLikeDAO.getNoteLikeCount(oli_no);
+	public int getNoteLikeCount(int n_no) {
+		return noteLikeDAO.getNoteLikeCount(n_no);
 	}
 
 	@Override

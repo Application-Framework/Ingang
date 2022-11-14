@@ -19,9 +19,12 @@ import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.admin.service.AdminNoteService;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.dto.note.NoteDTO;
+import com.spring.ex.dto.note.NoteReplyDTO;
 import com.spring.ex.service.FileService;
 import com.spring.ex.service.HistoryOrderService;
+import com.spring.ex.service.MemberService;
 import com.spring.ex.service.NoteService;
 import com.spring.ex.service.PagingService;
 
@@ -45,6 +48,9 @@ public class AdminNoteController {
 	
 	@Inject
 	private AdminMemberService adminMemberService;
+	
+	@Inject
+	private MemberService memberService;
 	
 	// 노트 관리 대시보드 페이지
 	@RequestMapping("/admin/note")
@@ -85,9 +91,24 @@ public class AdminNoteController {
 	@RequestMapping("/admin/note/{n_no}")
 	public String noteDetailPage(@PathVariable("n_no") int n_no, HttpServletRequest request, Model model) {
 		NoteDTO note = noteService.getNote(n_no);
+		int noteLikeCount = noteService.getNoteLikeCount(n_no);
+		List<NoteArticleDTO> articles = noteService.getNoteArticleList(n_no);
+		List<NoteReplyDTO> replys = noteService.getNoteReplyList(n_no);
 		List<HistoryOrderNoteDTO> honList = historyOrderService.getHistoryOrderNoteByN_no(n_no);
+		int starAvg = 0;
+		if(replys.size() != 0) {
+			for(NoteReplyDTO reply : replys)
+				 starAvg += reply.getStar_rating();
+			starAvg /= replys.size();
+		}
+		
+		model.addAttribute("memberService", memberService);
 		
 		model.addAttribute("note", note);
+		model.addAttribute("noteLikeCount", noteLikeCount);
+		model.addAttribute("noteArticleList", articles);
+		model.addAttribute("starAvg", starAvg);
+		model.addAttribute("noteReplyList", replys);
 		model.addAttribute("orderHistoryList", honList);
 		
 		return "admin/note/note_detail";

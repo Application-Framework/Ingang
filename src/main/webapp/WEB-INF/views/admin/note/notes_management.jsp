@@ -307,6 +307,22 @@
 			window.open(url, "_blank", option);
 	 	}
 	 	
+		// 강의 상세 창 띄우기
+	 	function openNoteDetail(n_no) {
+	 		// 창 크기 지정
+			var width = window.screen.width * 55 / 100;
+			var height = window.screen.height * 85 / 100;
+
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+
+			var url = "/admin/note/"+n_no;
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+	 	}
+	 	
 	 	$(function() {
 			// summernote 옵션 설정
 			$('#summernote').summernote({

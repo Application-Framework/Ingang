@@ -158,7 +158,7 @@ public class NoteController {
 		System.out.println(likeCnt);
 		System.out.println(articles);
 		
-		model.addAttribute("memberSerivce", memberService);
+		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
 		model.addAttribute("typeService", typeService);
 		model.addAttribute("note", noteDTO);

@@ -6,11 +6,12 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>${course.title}</title>
+	<title>${note.title}</title>
 	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 	<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.css">
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+	<link rel="stylesheet" href="<c:url value='/resources/css/fontawesome-all.min.css'/>">
 	
 	<script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> 
@@ -32,184 +33,140 @@
 		{
 			display: none;
 		}
+		
+		.stars-outer {
+			position: relative;
+			display: inline-block;
+		}
+		
+		.stars-inner {
+			position: absolute;
+			top: 0;
+			left: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			width: 0;
+		}
+		.stars-outer::before {
+			content: "\f005 \f005 \f005 \f005 \f005";
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			color: #ccc;
+		}
+		
+		.stars-inner::before {
+			content: "\f005 \f005 \f005 \f005 \f005";
+			font-family: "Font Awesome 5 Free";
+			font-weight: 900;
+			color: #f8ce0b;
+		}
 	</style>
 </head>
 <body>
 	<div class="container-fluid">
 		<div class="pt-3 text-center">
-			<h4>강의 상세정보</h4>
+			<h4>노트 상세정보</h4>
 		</div>
 		<hr>
-		<form id="frmCourse">
-			<input type="hidden" name="oli_no" value="${course.oli_no}"/>
+		<form id="note_form">
+			<input type="hidden" name="n_no" value="${note.n_no}"/>
 			<div class="row mb-3">
-				<div class="col-5">
+				<div class="col">
 					<div class="input-group">
-						<input type="file" class="input-group-text" name="thumbnail" accept="image/*" onchange="loadFile(event)"/><br>
-						<img id="thumbnail" src="<c:url value='${course.img_path}'/>" style="padding-top:5px; width:100%; max-height:250px; object-fit: contain;"/>
+						<span class="input-group-text">노트No</span>
+						<span class="input-group-text">${note.n_no}</span>
+					</div>
+				</div>
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">강의No</span>
+						<span class="input-group-text">${note.oli_no}</span>
+					</div>
+				</div>
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">회원No</span>
+						<span class="input-group-text">${note.m_no}</span>
+					</div>
+				</div>
+			</div>
+			<div class="row mb-3">
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">가격</span>
+						<input type="text" class="form-control" name="price" value="${note.price}" required>
 					</div>
 				</div>
 				
-				<div class="col-7">
-					<div class="row mb-3">
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text" id="basic-addon1">강의명</span>
-								<input type="text" class="form-control" name="title" value="${course.title}" required>
-							</div>
-						</div>
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text">강사명</span>
-								<select name="olt_no" id="teacher" required>
-									<option value="0" <c:if test="${course.olt_no == 0}">selected</c:if>>0 : 관리자</option>
-									<c:forEach var="teacher" items="${teacherList}">
-									  	<option <c:if test="${course.olt_no == teacher.olt_no}">selected</c:if> value="${teacher.olt_no}">${teacher.olt_no} : ${teacher.name}</option>
-									</c:forEach>
-								</select>
-								
-								<%-- <c:if test="${course.olt_no == 0}">
-									<span class="input-group-text">관리자</span>
-								</c:if>
-								<c:if test="${course.olt_no != 0}">
-									<span class="input-group-text"><a href="">${teacherService.getTeacherInfo(course.olt_no).name}</a></span>
-								</c:if> --%>
-							</div>
-						</div>
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">생성일</span>
+						<span class="input-group-text">${note.reg_date}</span>
 					</div>
-					
-					<div class="row mb-3">
-						<div class="input-group">
-							<span class="input-group-text">강의 소개</span>
-							<textarea name="introduction" class="form-control" required>${course.introduction}</textarea>
-						</div>
-					</div>
-					
-					<div class="row mb-3">
-						
-						<%-- 좌측정렬하려했는데 안먹힘 --%>
-						<div class="col">
-							<div class="input-group ms-auto">
-								<span class="input-group-text">난이도</span>
-								<input type="text" class="form-control" name="level" value="${course.level}" required>
-							</div>
-						</div>
-						
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text">강의 가격</span>
-								<input type="number" class="form-control" name="price" value="${course.price}" required>
-							</div>
-						</div>
-					</div>
-					
-					<div class="row mb-3">
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text">강의 번호</span>
-								<span class="input-group-text">${course.oli_no}</span>
-							</div>
-						</div>
-						<c:if test="${course.origin == 0}">
-							<div class="col">
-								<div class="input-group">
-									<span class="input-group-text">원본 번호</span>
-									<span class="input-group-text">${origin_oli_no}</span>
-								</div>
-							</div>
-						</c:if>
-					</div>
-					
-					<div class="row mb-3">
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text">생성일</span>
-								<span class="input-group-text">${course.reg_date}</span>
-							</div>
-						</div>
-						<div class="col">
-							<div class="input-group">
-								<span class="input-group-text">수정일</span>
-								<c:if test="${course.update_date != null}">
-									<span class="input-group-text">${course.update_date}</span>
-								</c:if>
-								<c:if test="${course.update_date == null}">
-									<span class="input-group-text">NULL</span>
-								</c:if>
-							</div>
-						</div>
+				</div>
+				
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">좋아요 개수</span>
+						<span class="input-group-text">${noteLikeCount}</span>
 					</div>
 				</div>
 			</div>
-		
-			<%-- 메인 카테고리 --%>
-	   		<div class="row mb-3">
-  				<label class="col-sm-2 col-form-label fs-5">메인 카테고리</label>
-  				<div class="col-sm-10">
-					<select name="mainCategory" id="mainCategory" onchange="changeMainCategory()" required>
-						<option value="">Select Main Category</option>
-						<c:forEach var="category" items="${allMainCategoryList}">
-						  	<option <c:if test="${courseService.getMainTypeOfCourse(course.oli_no) != null}">selected</c:if> value="${category.main_type_no}">${category.main_type_name}</option>
-						</c:forEach>
-					</select>
-	   			</div>
-	   		</div>
-			
-			<%-- 서브 카테고리 --%>
+					
 			<div class="row mb-3">
-				<label class="col-sm-2 col-form-label fs-5">서브 카테고리</label>
-				<div class="col-sm-10" id="subCategoryParents">
-					<select name="subCategorys" id="subCategorys" multiple required>
-						<c:forEach var="category" items="${allSubCategoryList}">
-						  	<option <c:if test="${courseService.containsInCategoryList(myCategoryList, category.sub_type_abbr) == true}">selected</c:if> value="${category.sub_type_no}">${category.sub_type_name}</option>
-						</c:forEach>
-					</select>
-	   			</div>
+				<div class="col">
+					<div class="input-group">
+						<span class="input-group-text">노트 제목</span>
+						<input type="text" class="form-control" name="title" value="${note.title}" required>
+					</div>
+				</div>
 			</div>
+				
+			<h4>노트 소개 내용</h4>
 			
-			<%-- 강의 태그 --%>
-	   		<div class="row mb-3">
-	  				<label class="col-sm-2 col-form-label fs-5">강의 태그</label>
-	  				<div class="col-sm-10">
-					<select name="tags" id="tags" multiple required>
-						<c:forEach var="tag" items="${allTagList}">
-						  	<option <c:if test="${courseService.containsInTagList(myTagList, tag.tag_abbr) == true}">selected</c:if> value="${tag.tag_no}">${tag.tag_name}</option>
-						</c:forEach>
-					  
-					</select>
-	   			</div>
-	   		</div>
-			
-			<%-- 강의 내용 --%>
+			<%-- 노트 소개 내용 --%>
 			<div class="row mb-3">
 				<div>
-					<textarea class="summernote" id="content" name="content" rows="10">${course.content}</textarea>
+					<textarea class="summernote" id="content" name="content" rows="10">${note.content}</textarea>
 				</div>
 			</div>
 			
-			<%-- 강의 동영상 --%>
-			<div class="row mb-3" id="videoSection">
-				<div class="fs-4 mb-2">강의 동영상</div>
-    			<div class="row ps-4 pb-2">
-    				<div class="col-2 d-flex align-items-center">
-    					<label>동영상 제목</label>
-    				</div>
-    				<div class="col-8 d-flex align-items-center">
-    					<label>주소</label>
-    				</div>
-    				<div class="col-1 fs-2">
-    					<a href="javascript:;" onclick="addVideoSlot('', '')"><i class="bi bi-plus-circle"></i></a>
-    				</div>
-    				<div class="col-1 fs-2">
-    					<a href="javascript:;" onclick="removeVideoSlot()"><i class="bi bi-dash-circle"></i></a>
-    				</div>
-    			</div>
-    		</div>
+			<hr>
+			<div class="text-center">
+				<h4>노트 글 목록</h4>
+			</div>
+			<hr>
+			<div class="row mb-3">
+				<c:forEach var="article" items="${noteArticleList}">
+					<a onclick="openNoteArticleDetail(${article.na_no});" href="javascript:;">${article.title}</a>
+				</c:forEach>
+				<c:if test="${noteArticleList.size() == 0}"><p class="text-center">없음</p></c:if>
+			</div>
+			
+			<hr>
+			<div class="text-center">
+				<h4>노트 수강평</h4> <span>평균 점수 : ${starAvg}</span>
+			</div>
+			<hr>
+			<div class="mb-3">
+				<c:forEach var="reply" items="${noteReplyList}" varStatus="status">
+					<div class="stars-outer">
+		                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
+		            </div>
+		            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
+		    		<span class="fw-bold"><a href="">${memberService.getMemberByM_no(reply.m_no).m_name}</a></span> <span>${reply.reg_date}</span>
+		    		<p>${reply.content}</p>
+		    		<c:if test="${status.last == false}">
+		    			<hr>
+		    		</c:if>
+				</c:forEach>
+				<c:if test="${noteReplyList.size() == 0}"><p class="text-center">없음</p></c:if>
+			</div>
 			
 			<%-- 판매 내역 --%>
 			<hr>
 			<div class="text-center">
-				<h4>강의 판매 내역</h4>
+				<h4>노트 판매 내역</h4>
 			</div>
 			<hr>
 			<table class="table table-hover text-center mb-4">
@@ -225,7 +182,7 @@
 				<tbody>
 		  			<c:forEach var="oh" items="${orderHistoryList}">
 			  			<tr>
-					    	<th scope="row">${oh.hol_no}</th>
+					    	<th scope="row">${oh.hon_no}</th>
 						    <td><a href="">${memberService.getMemberByM_no(oh.m_no).m_name}</a></td>
 						    <td>${oh.payment}</td>
 						    <td>${oh.payment_date}</td>
@@ -234,17 +191,19 @@
 		  			</c:forEach>
 				</tbody>
 			</table>
+			<c:if test="${orderHistoryList.size() == 0}"><p class="text-center">없음</p></c:if>
+			
 		
 			<div class="float-end mb-3">
-				<button id="course_update" class="btn btn-primary" style="width:5rem;">수정</button>
+				<button id="note_update" class="btn btn-primary" style="width:5rem;">수정</button>
 			</div>
 		</form>
 	</div>
 	
 	<script>
 		
-		// 강의 수정
-		$("#course_update").click(function () {
+		// 노트 수정
+		$("#note_update").click(function () {
 			<c:if test="${member == null}">
 				alert("로그인이 필요합니다");
 				return;
@@ -254,8 +213,7 @@
 				return;
 			</c:if>
 			
-			
-			var form = document.getElementById('frmCourse');
+			var form = document.getElementById('note_form');
 	    	for(var i=0; i < form.elements.length; i++){
     	      if(form.elements[i].value === '' && form.elements[i].hasAttribute('required')){
     	        alert('There are some required fields!');
@@ -268,61 +226,25 @@
 	    		return false;
 	    	}
 	    	
-	    	var form = $('#frmCourse')[0];
+	    	var form = $('#note_form')[0];
 	        var formData = new FormData(form);
 	    	$.ajax({
 		 		cache: false,
 		        contentType: false,
 		        processData: false,
-	    		url: "/admin/course/updateCourse",
+	    		url: "/admin/note/updateNote",
 	    		data: formData,
 	    		type: "post",
 	    		success: function() {
-	    			window.close();
-	    			window.opener.location.reload();
+	    			alert("수정 성공");
+	    		},
+	    		error: function() {
+	    			alert("error");
 	    		}
 	    	});
 		});
-		
-		// 썸네일 미리보기
-		var loadFile = function(event) {
-		    var thumbnail = document.getElementById('thumbnail');
-		    thumbnail.src = URL.createObjectURL(event.target.files[0]);
-		    thumbnail.onload = function() {
-		      URL.revokeObjectURL(thumbnail.src) // free memory
-		    }
-	  	};
 	
 		$(function() {
-			new Choices('#teacher', {
-	            removeItemButton: true,
-	            maxItemCount:1,
-	            searchResultLimit:10
-	            //renderChoiceLimit:10
-	        }); 
-			
-			// select option drop box 옵션 설정
-	    	new Choices('#mainCategory', {
-	            removeItemButton: true,
-	            maxItemCount:1,
-	            searchResultLimit:10
-	            //renderChoiceLimit:10
-	        }); 
-	    	
-	    	new Choices('#subCategorys', {
-	            removeItemButton: true,
-	            maxItemCount:5,
-	            searchResultLimit:10
-	            //renderChoiceLimit:10
-	        }); 
-	    	
-	    	new Choices('#tags', {
-	            removeItemButton: true,
-	            maxItemCount:5,
-	            searchResultLimit:10
-	            //renderChoiceLimit:10
-	        }); 
-		
 			// summernote 옵션 설정
 			$('.summernote').summernote({
 				placeholder: 'write the text',
@@ -348,44 +270,10 @@
 						for (var i = files.length - 1; i >= 0; i--) {
 							uploadSummernoteImageFile(files[i], this);
 						}
-					},
-					onPaste: function (e) {
-						var clipboardData = e.originalEvent.clipboardData;
-						if (clipboardData && clipboardData.items && clipboardData.items.length) {
-							var item = clipboardData.items[0];
-							if (item.kind === 'file' && item.type.indexOf('image/') !== -1) {
-								e.preventDefault();
-							}
-						}
 					}
 				}
 			});
 		});
-		// 메인 카테고리가 바뀌었을 때 서브 카테고리 불러오기
-	   	function changeMainCategory() {
-			var mainCategory = 0;
-	   		if($("#mainCategory").val() != null && $("#mainCategory").val() != "") {
-	   			mainCategory = $("#mainCategory").val();
-	   		}
-			
-	   		$.ajax({
-	   			url: '/writeCourse',
-	   			type: 'post',
-	   			dataType: 'html',
-	   			data: {
-	   				main_type_no: mainCategory
-	   			},
-	   			success: function(html) {
-	   				subCategoryParents = $(html).find('#subCategoryParents>*');
-	   				$('#subCategoryParents').html(subCategoryParents);
-	   				new Choices('#subCategorys', {
-	   		            removeItemButton: true,
-	   		            maxItemCount:5,
-	   		            searchResultLimit:10
-	   		        }); 
-	   			}
-	   		});
-	   	}
 		
 	    // 임시 이미지 등록
 		function uploadSummernoteImageFile(file, editor) {
@@ -394,7 +282,7 @@
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/courseUploadSummernoteImageFile",
+				url : "/noteUploadSummernoteImageFile",
 				contentType : false,
 				enctype : 'multipart/form-data',
 				processData : false,
@@ -403,34 +291,6 @@
 				}
 			});
 		}
-		
-	 	// 강의 동영상 슬롯 동적 추가
-	    var cnt = 0;
-	    
-	    function addVideoSlot(title, file_name) {
-	    	cnt = cnt + 1;
-	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
-	    	changedForm = true;
-	    }
-	    
-	    function removeVideoSlot() {
-	    	if(cnt == 1) return;
-	    	$('#v_'+cnt).remove();
-	    	cnt = cnt - 1;
-	    	changedForm = true;
-	    }
-		
-		<c:choose>
-			<c:when test="${videoList != null}">
-				<c:forEach var="video" items="${videoList}">
-					addVideoSlot('${video.title}', '${video.s_file_name}');
-				</c:forEach>
-			</c:when>
-			
-			<c:otherwise>
-				addVideoSlot('', '');
-			</c:otherwise>
-		</c:choose>
 	</script>
 </body>
 </html>
