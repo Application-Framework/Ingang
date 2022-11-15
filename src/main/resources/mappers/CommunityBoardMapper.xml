@@ -227,7 +227,7 @@
 	
 	<!-- 1:1문의하기 게시판 출력 -->
 	<select id="getCommunityBoardInquiryPage" resultType="hashMap">
-		SELECT i.*, m.m_id
+		SELECT i.*, m.m_id, m.m_name
 		FROM inquiry i, member m
 		WHERE i.m_no = m.m_no
 		<include refid="searchInauiry"></include> 
@@ -251,7 +251,7 @@
 	
 	<!--1:1 문의하기 상세페이지  -->
 	<select id="getInquiryViewPage" resultType="hashMap">
-		SELECT i.*, ia.*, m.m_id
+		SELECT i.*, ia.*, m.m_id, m.m_name
 		FROM inquiry i LEFT OUTER join inquiry_answer ia ON ia.inq_no = i.inq_no , member m
 		WHERE i.inq_no = #{inq_no} AND i.m_no = m.m_no; 
 	</select>

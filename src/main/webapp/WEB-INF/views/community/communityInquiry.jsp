@@ -87,7 +87,7 @@
 									</colgroup>
 									<thead>
 										<tr>
-											<th>번호</th>
+											<th>No</th>
 											<th>카테고리</th>
 											<th>제목</th>
 											<th>작성자</th>
@@ -103,7 +103,7 @@
 												<td><span class="inquiry-category">${cbInquiry.category }</span></td>
 												<td><a href="inquiryView?inq_no=${cbInquiry.inq_no}"><font color="black">${cbInquiry.title }</font></a></td>
 												<td>${cbInquiry.m_id}</td>
-												<td><fmt:formatDate value="${cbInquiry.reg_date }" pattern="yyyy-MM-dd"/><br>
+												<td><fmt:formatDate value="${cbInquiry.reg_date }" pattern="yyyy-MM-dd a h:mm"/><br>
 												<fmt:formatDate value="${cbInquiry.reg_date }" pattern="a h:mm"/></td>
 											<c:choose>
 												<c:when test="${cbInquiry.statement eq 0}">

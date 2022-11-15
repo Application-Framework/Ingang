@@ -121,11 +121,11 @@
 			
 			<div class="d-flex">
 				<div class="ml-auto">
-				<c:if test="${answerContent ne null && sessionScope.member ne null && sessionScope.member.getM_authority() eq 'Admin'}">
+				<c:if test="${cbReadPage.ia_no  ne null && sessionScope.member ne null && sessionScope.member.getM_authority() eq 1}">
 					<button class="thm-btn-psd" type="button" data-toggle="modal" data-target="#AnswerEditModal">수정</button>
-					<button class="thm-btn-psd" type="button" onclick="answerInquiryDelete()">삭제</button>
+					<button class="thm-btn-psd" type="button" onclick="boardDelete(${cbReadPage.inq_no})">삭제</button>
 				</c:if>
-				<c:if test="${answerContent ne null}">
+				<c:if test="${cbReadPage.ia_no  ne null}">
 					<button class="thm-btn-psd" type="button" onclick="location.href='inquiry'">목록</button>
 				</c:if>
 				</div>
@@ -134,9 +134,11 @@
 			<br>
 			<div class="d-flex">
 				<div class="ml-auto">
-				<c:if test="${answerContent eq null}">
-					<button class="genric-btn danger-border radius" type="button" onclick="javascript:history.back();">목록</button>
+				<c:if test="${cbReadPage.ia_no eq null && cbReadPage.m_no eq sessionScope.member.m_no}">
+					<button class="genric-btn danger-border radius" type="button"  onclick="(${cbReadPage.inq_no})">수정</button>
+					<button class="genric-btn danger-border radius" type="button"  onclick="boardDelete(${cbReadPage.inq_no})">삭제</button>
 				</c:if>
+					<button class="genric-btn danger-border radius" type="button" onclick="javascript:history.back();">목록</button>
 				</div>
 			</div>
 			<br>
@@ -151,6 +153,38 @@
 <%-- Jquery Plugins, main Jquery --%>
 <script src="<c:url value='/resources/js/plugins.js'/>"></script>
 <script src="<c:url value='/resources/js/main.js'/>"></script>
+<script type="text/javascript">
+//게시글 삭제
+function boardDelete(inq_no) {
+	$.ajax({
+		url: "deleteInquiry",
+		type: "GET",
+		data:  {'inq_no': inq_no},
+		success: function(data) {
+			if (data != 1) {
+				swal({
+					title: "1:1문의 삭제",
+					text: "1:1문의 삭제가 실패하였습니다.",
+					icon: "error",
+					timer: 3000
+				});
+			}
+			else {
+				var reLoadUrl = "/communityInquiry";
+				location.href = reLoadUrl;
+			}
+		},
+		error: function() {
+			swal({
+				title: "인강인강",
+				text: "문제가 발생하였습니다.\n잠시 후 다시 시도해주세요.",
+				icon: "error",
+				timer: 3000
+			});
+		}
+	});
+}
+</script>
 
 </body>
 </html>
