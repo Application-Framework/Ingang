@@ -147,6 +147,7 @@
 	<update id="updateCourse">
 		UPDATE online_lecture_introduction
 		SET 
+			olt_no = #{olt_no},
 			title = #{title},
 			introduction = #{introduction},
 			content = #{content},

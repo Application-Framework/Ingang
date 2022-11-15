@@ -163,6 +163,55 @@ public class AdminNoteController {
 		return "redirect:" + request.getHeader("referer");
 	}
 	
+	// 노트 수정
+	@RequestMapping(value="/admin/note/updateNote", method=RequestMethod.POST)
+	public String updateNote(HttpServletRequest request, Model model) throws Exception {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.out.println("로그인이 필요합니다.");
+			return "error";
+		}
+		
+		if(member.getM_authority() != 1) {
+			System.out.println("관리자 권한이 필요합니다.");
+			return "error";
+		}
+		
+		System.out.println("수정 시작");
+		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		int m_no = Integer.parseInt(request.getParameter("m_no"));
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String price = request.getParameter("price");
+		String _enable = request.getParameter("enable");
+		
+		if(title == null || content == null || price == null) {
+			System.out.println("빈 칸이 있습니다.");
+			return "error";
+		}
+		
+		int enable = (_enable == null) ? 0 : 1;
+		
+		NoteDTO note = new NoteDTO();
+		note.setOli_no(oli_no);
+		note.setM_no(m_no);
+		note.setTitle(title);
+		note.setContent(content);
+		note.setPrice(Integer.parseInt(price));
+		note.setReg_date(new Date(System.currentTimeMillis()));
+		note.setClassify(0);
+		note.setEnable(enable);
+		
+		noteService.insertNote(note);
+		System.out.println("노트 등록 성공");
+		System.out.println("등록 내용 : " + note);
+
+		// 게시글의 파일 관리
+		fileService.manageFileAfterPostSubmission(content, note.getN_no(), 2);
+		
+		return "redirect:" + request.getHeader("referer");
+	}
+	
 	@ResponseBody
 	@RequestMapping("admin/note/deleteNotes")
 	public void deleteNotes(HttpServletRequest request) throws Exception {

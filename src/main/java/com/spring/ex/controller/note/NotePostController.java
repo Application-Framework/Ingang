@@ -159,7 +159,12 @@ public class NotePostController {
 			return "error";
 		}
 		
+		noteDTO.setTitle(title);
+		noteDTO.setContent(content);
+		noteDTO.setPrice(Integer.parseInt(price));
+		noteDTO.setEnable(Integer.parseInt(enable));
 		
+		noteService.updateNote(noteDTO);
 		
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, noteDTO.getN_no(), 2);

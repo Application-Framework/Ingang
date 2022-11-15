@@ -282,7 +282,7 @@
 			$.ajax({
 				data : data,
 				type : "POST",
-				url : "/noteUploadSummernoteImageFile",
+				url : "/uploadSummernoteImageFileOfNote",
 				contentType : false,
 				enctype : 'multipart/form-data',
 				processData : false,

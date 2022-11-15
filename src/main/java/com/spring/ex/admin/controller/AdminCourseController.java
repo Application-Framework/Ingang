@@ -259,7 +259,7 @@ public class AdminCourseController {
 			return;
 		}
 		
-		// 강의 등록
+		// 강의 수정
 		CourseDTO course = courseService.getCourseDetail(Integer.parseInt(oli_no));
 		course.setOlt_no(Integer.parseInt(olt_no));
 		course.setTitle(title);

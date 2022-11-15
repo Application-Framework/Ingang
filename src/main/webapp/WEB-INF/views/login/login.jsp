@@ -12,8 +12,9 @@
 		<link rel="shortcut icon" type="image/x-icon" href="<c:url value='/resources/img/favicon.ico'/>">
 		
 		<!-- 아이콘 -->
-		<link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-		<link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+		<%-- 로딩이 너무 오래걸려서 주석처리함 --%>
+		<!-- <link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+		<link rel="stylesheet" href="https://fonts.sandbox.google.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" /> -->
 		
 		<!-- CSS here -->
         <link rel="stylesheet" href="<c:url value='/resources/css/bootstrap.min.css'/>">
@@ -31,7 +32,7 @@
 </head>
 <body>
 	<%-- Preloader --%>
-	<jsp:include page="../fix/preloader.jsp" />
+	<%-- <jsp:include page="../fix/preloader.jsp" /> --%>
 	   
 	<%------------ header section  ------------%>
 	<jsp:include page="../fix/header.jsp" />

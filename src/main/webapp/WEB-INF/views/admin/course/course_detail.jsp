@@ -279,6 +279,7 @@
 	    		type: "post",
 	    		success: function() {
 	    			alert("수정 성공");
+	    			window.opener.location.reload();
 	    		}
 	    	});
 		});
