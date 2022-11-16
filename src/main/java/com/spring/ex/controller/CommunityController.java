@@ -27,6 +27,8 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
 import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.MemberDTO;
@@ -41,67 +43,72 @@ public class CommunityController {
 	
 	private PagingService pagingService;
 	
+	//자유게시판
 	@RequestMapping(value = "/communityChats", method = RequestMethod.GET)
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		String searchKeyword = request.getParameter("searchKeyword");
 		String[] searchTag = request.getParameterValues("searchTag");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		CommunityTagSerachDTO ctsDTO = new CommunityTagSerachDTO();
+		
 		
 		map.put("checkClass", "chat");
 		
-		if (searchKeyword == null ){
+		if (searchKeyword == null ||StringUtils.isEmpty(searchKeyword)){
 			map.put("searchKeyword", "noContent");
 			System.out.println("No1 키워드");
-		} else if( searchKeyword =="null") {
-			map.put("searchKeyword", "noContent");
-			System.out.println("No2 키워드");
-		}else if(searchKeyword ==""){
-			map.put("searchKeyword", "noContent");
-			System.out.println("No3 키워드");
 		}else {
 			map.put("searchKeyword", searchKeyword);
 			System.out.println("o 키워드 : " + searchKeyword);
 		}
-		if (searchTag == null) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
 			map.put("searchTag","noTag");
-			System.out.println("noTag case1");
-		}else if(searchTag.length == 0) {
-			map.put("searchTag","noTag");
-			System.out.println("noTag  case2, 길이 :" + searchTag.length);
-		} else {
-			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag + " / "+searchTag.length);
-			map.put("searchTag", searchTag);
-		}
-	
-		/*
-		if (searchKeyword == null && searchTag==null){
-			map.put("searchKeyword", "noContent");
-			map.put("searchTag","noTag");
-			System.out.println("1");
-			resUrl = "community/communityChats";
-		} else if(searchKeyword != null && searchTag==null) {
-			map.put("searchKeyword", searchKeyword);
-			map.put("searchTag","noTag");
-			System.out.println("2");
-			resUrl = "community/communityChats?searchKeyword=" + searchKeyword;
-		}else if(searchKeyword == null && searchTag!=null) {
-			map.put("searchKeyword", "noContent");
-			map.put("searchTag",searchTag);
-			System.out.println("3");
-			resUrl = "community/communityChats?searchTag=" + searchTag;
 		}else {
-			map.put("searchKeyword", searchKeyword);
-			map.put("searchTag",searchTag);
-			System.out.println("4");
-			resUrl = "community/communityChats?searchKeyword="+searchKeyword + "&searchTag=" + searchTag;
+			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag.toString() + " / "+searchTag.length);
+			map.put("searchTag", searchTag);
+			
+			for(String t : searchTag) {
+				int totalCount = cbService.getCommunityBoardTotalCount(map);
+				int isCheckTag = cbService.isCheckTagSearchList(t);
+				System.out.println(isCheckTag);
+				if(isCheckTag == 0 ) {
+					int insertTagNum = cbService.insertTagList(t);
+					
+					ctsDTO.setCtl_no(insertTagNum);
+					ctsDTO.setClassify(1);
+					ctsDTO.setCts_found(0);
+					
+					cbService.serachTagRecord(ctsDTO);
+					
+				}else {
+					if(totalCount > 0) {
+						ctsDTO.setCtl_no(isCheckTag);
+						ctsDTO.setClassify(1);
+						ctsDTO.setCts_found(1);
+						
+						cbService.serachTagRecord(ctsDTO);
+					}else {
+						ctsDTO.setCtl_no(isCheckTag);
+						ctsDTO.setClassify(1);
+						ctsDTO.setCts_found(0);
+						
+						cbService.serachTagRecord(ctsDTO);
+					}
+				}
+			}
 		}
-		*/
+		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
+		if (cbtList.isEmpty()) {
+			model.addAttribute("cbtList", "Empty");
+		}else {
+			model.addAttribute("cbtList", cbtList);
+		}
 		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", cbGoodShow);
@@ -239,9 +246,17 @@ public class CommunityController {
 	public String modfiyPageCommunityBoard(Model model, HttpServletRequest request) throws Exception{
 		int cb_no = Integer.parseInt(request.getParameter("cb_no"));
 		int classify = Integer.parseInt(request.getParameter("classify"));
+		int isOnlineLecture = Integer.parseInt(request.getParameter("isOnlineLecture"));
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("cb_no", cb_no);
 		map.put("classify", classify);
+		if(isOnlineLecture != 0) {
+			map.put("isOnlineLecture", "yesExists");
+		}else if(isOnlineLecture == 0){
+			map.put("isOnlineLecture", "noExists");
+		}else {
+			map.put("isOnlineLecture", "noExists");
+		}
 		
 		
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
@@ -327,29 +342,29 @@ public class CommunityController {
 			map.put("checkClass", "questionAll");
 		}
 		
-		if (searchKeyword == null ){
-			map.put("searchKeyword", "noContent");
-		} else if( searchKeyword =="null") {
-			map.put("searchKeyword", "noContent");
-		}else if(searchKeyword ==""){
+		if (searchKeyword == null ||StringUtils.isEmpty(searchKeyword)){
 			map.put("searchKeyword", "noContent");
 		}else {
 			map.put("searchKeyword", searchKeyword);
 		}
-		if (searchTag == null) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
 			map.put("searchTag","noTag");
-		}else if(searchTag.length == 0) {
-			map.put("searchTag","noTag");
-		} else {
+		}else {
 			map.put("searchTag", searchTag);
 		}
 		
+		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
+		if (cbtList.isEmpty()) {
+			model.addAttribute("cbtList", "Empty");
+		}else {
+			model.addAttribute("cbtList", cbtList);
+		}
 		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", cbGoodShow);
@@ -403,29 +418,29 @@ public class CommunityController {
 			map.put("checkClass", "studieAll");
 		}
 		
-		if (searchKeyword == null ){
-			map.put("searchKeyword", "noContent");
-		} else if( searchKeyword =="null") {
-			map.put("searchKeyword", "noContent");
-		}else if(searchKeyword ==""){
+		if (searchKeyword == null ||StringUtils.isEmpty(searchKeyword)){
 			map.put("searchKeyword", "noContent");
 		}else {
 			map.put("searchKeyword", searchKeyword);
 		}
-		if (searchTag == null) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
 			map.put("searchTag","noTag");
-		}else if(searchTag.length == 0) {
-			map.put("searchTag","noTag");
-		} else {
+		}else {
 			map.put("searchTag", searchTag);
 		}
 		
+		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
 		map.put("PageSize", 10);
 		List<CommunityBoardDTO> cbRegDateList = cbService.getCommunityBoardChatRegDateShowPage(map);
 		List<CommunityBoardDTO> cbGoodShow = cbService.getCommunityBoardChatGoodShowPage(map);
 		
+		if (cbtList.isEmpty()) {
+			model.addAttribute("cbtList", "Empty");
+		}else {
+			model.addAttribute("cbtList", cbtList);
+		}
 		model.addAttribute("cbTag", cbService);
 		model.addAttribute("cbRegDateList", cbRegDateList);
 		model.addAttribute("cbGoodShowList", cbGoodShow);

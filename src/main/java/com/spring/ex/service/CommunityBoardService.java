@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
 import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -63,6 +65,18 @@ public interface CommunityBoardService {
 	
 	//태그 출력
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
+	
+	//인기태그 출력
+	public List<CommunityTagListDTO> getPopularityTagCommunity(HashMap<String, Object> map) throws Exception;
+	
+	//존재하는 태그 명인지 체크
+	public int isCheckTagSearchList(String ctl_name) throws Exception;
+	
+	//존재하지 않는 태그명이면 삽입후 값 반환
+	public int insertTagList(String ctl_name) throws Exception;
+	
+	//커뮤니티 태그 검색 기록
+	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception;
 	
 	//수강후기 게시판 출력
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;

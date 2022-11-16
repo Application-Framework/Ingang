@@ -12,6 +12,8 @@ import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
 import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -116,6 +118,30 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	@Override
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception {
 		return dao.getTagCommunityBoard(cb_no);
+	}
+	
+	//인기태그 출력
+	@Override
+	public List<CommunityTagListDTO> getPopularityTagCommunity(HashMap<String, Object> map) throws Exception {
+		return dao.getPopularityTagCommunity(map);
+	}
+	
+	//존재하는 태그 명인지 체크
+	@Override
+	public int isCheckTagSearchList(String ctl_name) throws Exception {
+		return dao.isCheckTagSearchList(ctl_name);
+	}
+	
+	//존재하지 않는 태그명이면 삽입후 값 반환
+	@Override
+	public int insertTagList(String ctl_name ) throws Exception {
+		return dao.insertTagList(ctl_name);
+	}
+	
+	//커뮤니티 태그 검색 기록
+	@Override
+	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception {
+		dao.serachTagRecord(dto);
 	}
 	
 	//수강후기 게시판 출력

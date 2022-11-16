@@ -10,7 +10,7 @@
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 				,member m
 		WHERE m.m_no = cb.m_no AND flag = 1 
 		<include refid="classifyBoard"></include>
@@ -26,7 +26,7 @@
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 			,member m
 		WHERE m.m_no = cb.m_no AND flag = 1
 		<include refid="classifyBoard"></include>
@@ -35,18 +35,50 @@
 		order by good DESC  LIMIT #{Page}, #{PageSize};
 	</select>
 	
-	<!-- 태그 출력 -->
+	<!-- 게시글 태그 출력 -->
 	<select id="getTagCommunityBoard" resultType="hashMap">
-		SELECT cbt.cb_no, t.tag_name
-		FROM community_board cb, community_board_tag cbt, tag t
-		WHERE cb.cb_no = cbt.cb_no AND t.tag_no = cbt.tag_no AND cb.cb_no = #{cb_no}
+		SELECT cbt.cb_no, ctl_name
+		FROM community_board cb, community_board_tag cbt, community_tag_list ctl
+		WHERE cb.cb_no = cbt.cb_no AND ctl.ctl_no = cbt.ctl_no AND cb.cb_no = #{cb_no}
 	</select>
+	
+	<!-- 인기 태그 출력 -->
+	<select id="getPopularityTagCommunity" resultType="hashMap">
+		SELECT ctl_name, COUNT(*) AS cnt
+		FROM communtiy_tag_serach cts, community_tag_list ctl
+		WHERE cts.ctl_no = ctl.ctl_no 
+				AND cts_date BETWEEN CURDATE()-45 AND CURDATE()
+				AND cts_found = 1
+				<include refid="classifyBoard"></include>
+		GROUP BY ctl.ctl_name
+		ORDER BY cnt DESC
+		LIMIT 0, 9
+	</select>
+	
+	<!-- 존재하는 태그 명인지 체크 -->
+	<select id="isCheckTagSearchList" resultType="int">
+		SELECT IFNULL(ctl_no, COUNT(*)) AS ctl_no
+		FROM community_tag_list
+		WHERE ctl_name = #{ctl_name}
+	</select>
+	
+	<!-- 존재하지 않는 태그명이면 삽입후 값 반환-->
+	<insert id="insertTagList" parameterType="CommunityTagListDTO" keyProperty="ctl_no">
+		INSERT INTO community_tag_list(ctl_name)
+		VALUES(#{ctl_name})
+	</insert>
+	
+	<!-- 커뮤니티 태그 검색 기록 -->
+	<insert id="serachTagRecord">
+		INSERT INTO communtiy_tag_serach(ctl_no, cts_date, classify, cts_found)
+		VALUES(#{ctl_no}, CURDATE(), #{classify}, #{cts_found})
+	</insert>
 
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
 		SELECT COUNT(*) 
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 		WHERE flag = 1 <include refid="classifyBoard"></include><include refid="searchBoard"></include> 
 	</select>
 	
@@ -167,7 +199,7 @@
 			<when test="searchKeyword == 'noContent' and searchTag != 'noTag'">
 				AND cb.cb_no = cbt.cb_no AND(
 				<foreach collection="searchTag" index="index" item="item" separator="or">
-					tag_name LIKE CONCAT('%', #{item} , '%')
+					ctl_name = #{item}
 				</foreach>
 				)
 			</when>
@@ -178,7 +210,7 @@
 				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
 				OR
 				<foreach collection="searchTag" item="item" open="(" close=")" separator="or">
-					tag_name LIKE CONCAT('%', #{item} , '%')
+					ctl_name = #{item}
 				</foreach>
 			</when>
 		</choose>

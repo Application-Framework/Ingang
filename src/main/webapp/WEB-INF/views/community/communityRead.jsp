@@ -35,7 +35,7 @@
 		<div class="container">
 	    	<div style="padding: 20px;">
 	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">이야기를 나눠요</font></h4>
-	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요</font> 
+	    		<font color="#FFFFFF">500만의 커뮤니티!! 함께 토론해봐요 </font> 
 	    	</div>
     	</div>
     </div><br>
@@ -64,7 +64,7 @@
 								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
 								
 								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
-									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${classify})"><i class="far fa-edit"></i> 수정</a></li>
+									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${cbReadPage.classify}, ${cbReadPage.oli_no})"><i class="far fa-edit"></i> 수정</a></li>
 									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
 								</c:if>
 							</ul>
@@ -230,9 +230,9 @@ $('#addGood').click(function(){
 		type: "GET",
 		data: {'cb_no':${cbReadPage.cb_no}},
 		success: function() {
-			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
-			$("#heartDiv").load(reLoadUrl + " #heartDiv");
-			//location.href = reLoadUrl;
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${cbReadPage.classify} + "&isOnlineLecture="+ ${cbReadPage.oli_no};
+			//$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			location.href = reLoadUrl;
 		}
 	});
 });
@@ -244,8 +244,9 @@ $('#subtractGood').click(function(){
 		type: "GET",
 		data: {'cb_no':${cbReadPage.cb_no}},
 		success: function() {
-			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
-			$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${cbReadPage.classify} + "&isOnlineLecture="+ ${cbReadPage.oli_no};
+			//$("#heartDiv").load(reLoadUrl + " #heartDiv");
+			location.href = reLoadUrl;
 		}
 	});
 });
@@ -287,7 +288,7 @@ $('#btnReplyWrite').click(function() {
 					});
 				}
 				else {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${cbReadPage.classify} + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 					location.href = reLoadUrl;
 				}
 			},
@@ -319,7 +320,7 @@ function replyDelete(cbr_no) {
 				});
 			}
 			else {
-				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${classify} + "&isOnlineLecture="+ ${isOnlineLecture};
+				var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=" + ${cbReadPage.classify} + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 				location.href = reLoadUrl;
 			}
 		},
@@ -448,8 +449,8 @@ function boardDelete(cb_no) {
 }
 
 //게시글 수정
-function buttonModify(cb_no, classify) {
-	var urlModify = "modfiyPageCommunityBoard?cb_no=" + cb_no+ "&classify=" + classify;
+function buttonModify(cb_no, classify, isOnlineLecture) {
+	var urlModify = "modfiyPageCommunityBoard?cb_no=" + cb_no+ "&classify=" + classify  + "&isOnlineLecture="+ isOnlineLecture;
 	var popup = window.open(urlModify , '게시글수정' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 }
 
@@ -486,7 +487,7 @@ $('#btnQuestionsCompleted').click(function(){
 				type: "GET",
 				data: {'cb_no':${cbReadPage.cb_no}, 'classify':2},
 				success: function() {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=3" + "&isOnlineLecture="+ ${isOnlineLecture};
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=3" + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 					location.href = reLoadUrl;
 				}
 			});
@@ -513,7 +514,7 @@ $('#btnStudyCompleted').click(function(){
 				type: "GET",
 				data: {'cb_no':${cbReadPage.cb_no}, 'classify':4},
 				success: function() {
-					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=5" + "&isOnlineLecture="+ ${isOnlineLecture};
+					var reLoadUrl = "/communityBoardRead?cb_no=" + ${cbReadPage.cb_no} + "&classify=5" + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 					location.href = reLoadUrl;
 				}
 			});
