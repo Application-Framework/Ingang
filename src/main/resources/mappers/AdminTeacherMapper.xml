@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.AdminTeacherMapper">
+
+	<!-- 강사 게시판 가져오기 -->
+	<select id="getAdminTeacherBoard" resultType="HashMap">
+		
+		<include refid="adminTeacherBoardSQL"/>
+	</select>
+	
+	<!-- 강사 목록 총 개수 가져오기 -->
+	<select id="getAdminTeacherTotalCount" resultType="int">
+		
+		<include refid="adminTeacherBoardSQL"/>
+	</select>
+	
+	<!-- 승인 대기 강사 게시판 가져오기 -->
+	<select id="getAdminPendingTeacherBoard" resultType="HashMap">
+	
+		<include refid="adminPendingTeacherBoardSQL"/>
+	</select>
+	
+	<!-- 승인 대기 강사 목록 총 개수 가져오기 -->
+	<select id="getAdminPendingTeacherTotalCount" resultType="int">
+	
+		<include refid="adminPendingTeacherBoardSQL"/>
+	</select>
+	
+	<!-- 강사 정보 가져오기 -->
+	<select id="getAdminTeacherInfo" resultType="com.spring.ex.TeacherDTO">
+	
+	</select>
+	
+	<!-- 승인 대기강사 정보 가져오기 -->
+	<select id="getAdminPendingTeacherInfo" resultType="com.spring.ex.TeacherRequestDTO">
+	
+	</select>
+	
+	<!--  강사 추가 -->
+	<insert id="insertTeacher">
+	
+	</insert>
+	
+	<!-- 강사 수정 -->
+	<update id="updateTeacher">
+	
+	</update>
+	
+	<!-- 강사 삭제 -->
+	<delete id="deleteTeacher">
+	
+	</delete>
+	
+	
+	<sql id="adminTeacherBoardSQL">
+	
+	</sql>
+	
+	<sql id="adminPendingTeacherBoardSQL">
+		
+	</sql>
+</mapper>

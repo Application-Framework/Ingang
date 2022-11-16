@@ -21,10 +21,25 @@ public class NoteReplyDAOImpl implements NoteReplyDAO{
 	public List<NoteReplyDTO> getNoteReplyList(int n_no) {
 		return sqlSession.selectList(namespace + ".getNoteReplyList", n_no);
 	}
+	
+	// 리뷰 가져오기
+	@Override
+	public NoteReplyDTO getNoteReply(int nr_no) {
+		return sqlSession.selectOne(namespace + ".getNoteReply", nr_no);
+	}
 
 	@Override
 	public int submitNoteReply(NoteReplyDTO dto) {
 		return sqlSession.insert(namespace + ".submitNoteReply", dto);
 	}
 
+	@Override
+	public int updateNoteReply(NoteReplyDTO dto) {
+		return sqlSession.update(namespace + ".updateNoteReply", dto);
+	}
+
+	@Override
+	public int deleteNoteReply(int nr_no) {
+		return sqlSession.delete(namespace + ".deleteNoteReply", nr_no);
+	}
 }

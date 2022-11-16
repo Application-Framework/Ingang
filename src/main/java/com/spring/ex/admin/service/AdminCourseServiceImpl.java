@@ -16,11 +16,13 @@ import com.spring.ex.dao.course.CourseRequestDAO;
 import com.spring.ex.dao.course.CourseSubTypeDAO;
 import com.spring.ex.dao.course.CourseTagDAO;
 import com.spring.ex.dao.course.CourseVideoDAO;
+import com.spring.ex.dao.note.NoteArticleDAO;
 import com.spring.ex.dto.course.CourseDTO;
 import com.spring.ex.dto.course.CourseRequestDTO;
 import com.spring.ex.dto.course.CourseSubTypeDTO;
 import com.spring.ex.dto.course.CourseTagDTO;
 import com.spring.ex.dto.course.CourseVideoDTO;
+import com.spring.ex.dto.note.NoteArticleDTO;
 import com.spring.ex.service.FileService;
 
 @Repository
@@ -46,6 +48,9 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	
 	@Inject
 	private CourseRequestDAO courseRequestDAO;
+	
+	@Inject
+	private NoteArticleDAO noteArticleDAO;
 	
 	@Resource(name="courseImagePath")
 	String courseImagePath;
@@ -91,6 +96,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 			cv.setOli_no(course.getOli_no());
 			cv.setTitle(videoTitles[i]);
 			cv.setS_file_name(videoPaths[i]);
+			cv.setOrder(i+1);
 			courseVideoDAO.submitCourseVideo(cv);
 		}
 
@@ -115,7 +121,7 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 	}
 
 	@Override
-	public int updateCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {
+	public int updateCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] olv_noList, String[] videoTitles, String[] videoPaths) {
 		if(!thumbnail.isEmpty()) {
 			// 기존 강의 표지 삭제
 			if(course.getImg_path() != null) fileService.deleteFileToLocalAndServer(course.getImg_path());
@@ -143,14 +149,41 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 			courseTagDAO.submitCourseTag(ct);
 		}
 		
-		courseVideoDAO.deleteCourseVideo(course.getOli_no());
+		int[] _olv_noList = new int[videoTitles.length];
+		for(int i = 0; i < videoTitles.length; i++) {
+			CourseVideoDTO cv;
+			int _i = i;
+			if(!olv_noList[i].equals("신규") && courseVideoDAO.getCourseVideoList(course.getOli_no()).stream().filter(video -> video.getOlv_no() == Integer.parseInt(olv_noList[_i])).count() != 0) {
+				System.out.println("count() : " + courseVideoDAO.getCourseVideoList(course.getOli_no()).stream().filter(video -> video.getOlv_no() == Integer.parseInt(olv_noList[_i])).count()); 
+				cv = courseVideoDAO.getCourseVideo(Integer.parseInt(olv_noList[i]));
+				cv.setTitle(videoTitles[i]);
+				cv.setS_file_name(videoPaths[i]);
+				cv.setOrder(i+1);
+				courseVideoDAO.updateCourseVideo(cv);
+			}
+			else {
+				cv = new CourseVideoDTO();
+				cv.setOli_no(course.getOli_no());
+				cv.setTitle(videoTitles[i]);
+				cv.setS_file_name(videoPaths[i]);
+				cv.setOrder(i+1);
+				courseVideoDAO.submitCourseVideo(cv);
+			}
+			_olv_noList[i] = cv.getOlv_no();
+		}
+		courseVideoDAO.deleteNotContainedCourseVideo(course.getOli_no(), _olv_noList);
+		
+		/*
 		for(int i = 0; i < videoTitles.length; i++) {
 			CourseVideoDTO cv = new CourseVideoDTO();
 			cv.setOli_no(course.getOli_no());
 			cv.setTitle(videoTitles[i]);
 			cv.setS_file_name(videoPaths[i]);
 			courseVideoDAO.submitCourseVideo(cv);
-		}
+			//List<NoteArticleDTO> nal = noteArticleDAO.getNoteArticleListByOlv_no(cv.getOlv_no());
+			//for
+			//noteArticleDAO.updateNoteArticle(null); cv.getOlv_no();
+		}*/
 
 		// 게시글의 파일 관리
 		try {

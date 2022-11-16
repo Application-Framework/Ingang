@@ -178,10 +178,6 @@
 				
 					<c:out value="${note.content}" escapeXml="false" />
 					
-					<%-- 노트 내용 --%>
-					<div class="mb-3 fs-3 fw-bold">
-						노트 내용
-					</div>
 					<div class="mb-4">
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
@@ -223,7 +219,7 @@
 					</c:forEach>
 					
 					<%-- 리뷰 입력 --%>
-					<c:if test="${purchased == true}">
+					<c:if test="${purchased == true || member.m_authority == 1}">
 						<form action="/notes/submitReply" method="post">
 							<input type="hidden" name="pageNo" value="${pageNo}"/>
 							<div class="d-flex align-items-center select-job-items mb-1">
@@ -251,12 +247,23 @@
 			      <div class="card-body p-4">
 			        <h5 class="card-title mb-4 fw-200">${note.price}원</h5>
 			        <c:if test="${member != null}">
-			        	<c:if test="${purchased == true}">
-			        		<a class="btn head-btn2 mb-3" style="min-width:100%;">구매 완료</a>
-			        	</c:if>
-			        	<c:if test="${purchased == false}">
-					        <a href="javascript:;" onclick="openModal('#purchaseModal')" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
-			        	</c:if>
+			        	<c:choose>
+		        			<%-- 관리자일 때 --%>
+			        		<c:when test="${member.m_authority == 1}">
+			        			<a class="btn head-btn2 mb-3" style="min-width:100%;">관리자 계정</a>
+			        		</c:when>
+				        		<c:when test="${note.m_no == member.m_no}">
+				        			<a class="btn head-btn2 mb-3" style="min-width:100%;">작성자의 노트</a>
+				        		</c:when>
+			        		<c:otherwise>
+			        			<c:if test="${purchased == true}">
+					        		<a class="btn head-btn2 mb-3" style="min-width:100%;">구매 완료</a>
+					        	</c:if>
+					        	<c:if test="${purchased == false}">
+							        <a href="javascript:;" onclick="openModal('#purchaseModal')" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
+					        	</c:if>
+			        		</c:otherwise>
+			        	</c:choose>
 			        </c:if>
 			        <c:if test="${member == null}">
 			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>

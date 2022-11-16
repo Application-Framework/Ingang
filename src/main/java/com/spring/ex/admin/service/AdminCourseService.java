@@ -21,7 +21,7 @@ public interface AdminCourseService {
 	public int createCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
 	
 	// 요청없이 바로 수정
-	public int updateCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
+	public int updateCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] olv_noList, String[] videoTitles, String[] videoPaths);
 	
 	//-------------------------------
 	// 강의 요청 부분

@@ -76,6 +76,12 @@ public interface CourseService {
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
 	
+	// 강의 비디오 수정
+	public int updateCourseVideo(CourseVideoDTO dto);
+	
+	// olv_noList에 포함되어있지 않는 강의 비디오 삭제
+	public int deleteNotContainedCourseVideo(int oli_no, int[] olv_noList);
+	
 	// 태그 리스트에 태그가 있는지 확인
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr);
 	
@@ -91,5 +97,5 @@ public interface CourseService {
 	public MainTypeDTO getMainTypeOfCourse(int oli_no);
 	
 	// 사용자의 강의 저장
-	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
+	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] olv_noList, String[] videoTitles, String[] videoPaths);
 }

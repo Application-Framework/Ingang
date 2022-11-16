@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.TeacherRequestMapper">
+
+	<insert id="insertTeacherRequest">
+		INSERT INTO online_lecture_teacher_request(m_no, email, `name`, phone, main_type_no, introduction, link, rejection_message, approval_status, request_date)
+		VALUES(#{m_no}, #{email}, #{name}, #{phone}, #{main_type_no}, #{introduction}, #{link}, #{rejection_message}, #{approval_status}, NOW())
+
+	</insert>
+	
+	<update id="updateTeacherRequest">
+		UPDATE online_lecture_teacher_request
+		SET 
+			email = #{email},
+			`name` = #{name},
+			phone = #{phone},
+			main_type_no = #{main_type_no},
+			introduction = #{introduction},
+			link = #{link},
+			rejection_message = #{rejection_message},
+			approval_status = #{approval_status}
+		WHERE oltr_no = #{oltr_no}
+	</update>
+</mapper>

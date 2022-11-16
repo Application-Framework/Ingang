@@ -13,6 +13,7 @@ public interface NoteArticleDAO {
 	public int deleteNoteArticle(int na_no);
 	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no);
 	public List<NoteArticleDTO> getNoteArticleList(int n_no);
+	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no);
 	public NoteArticleDTO getNoteArticle(int na_no);
 	public NoteArticleDTO getNoteArticleByN_noOlv_no(int n_no, int olv_no);
 }

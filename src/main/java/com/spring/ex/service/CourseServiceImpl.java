@@ -169,6 +169,16 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
+	public int updateCourseVideo(CourseVideoDTO dto) {
+		return courseVideoDAO.updateCourseVideo(dto);
+	}
+
+	@Override
+	public int deleteNotContainedCourseVideo(int oli_no, int[] olv_noList) {
+		return courseVideoDAO.deleteNotContainedCourseVideo(oli_no, olv_noList);
+	}
+	
+	@Override
 	public boolean containsInTagList(List<CourseTagDTO> tagList, String tag_abbr) {
 		if(tagList == null) return false;
 		for(CourseTagDTO tag : tagList) {
@@ -215,7 +225,7 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {
+	public int saveCourse(CourseDTO dto, String[] categorys, String[] tags, String[] olv_noList, String[] videoTitles, String[] videoPaths) {
 		// 강의 수정일 때
 		System.out.println("저장 시작");
 		int origin_oli_no = dto.getOli_no();
@@ -241,7 +251,7 @@ public class CourseServiceImpl implements CourseService {
 			courseVideoDTO.setOli_no(dto.getOli_no());
 			courseVideoDTO.setTitle(videoTitles[i]);
 			courseVideoDTO.setS_file_name(videoPaths[i]);
-			
+			courseVideoDTO.setOrder(i+1);
 			submitCourseVideo(courseVideoDTO);
 		}
 		

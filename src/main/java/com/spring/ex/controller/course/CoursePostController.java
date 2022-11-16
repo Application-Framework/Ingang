@@ -111,6 +111,7 @@ public class CoursePostController {
 		String level = request.getParameter("level");
 		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
+		String[] olv_noList = request.getParameterValues("olv_no[]");
 		String[] videoTitles = request.getParameterValues("video_titles");
 		String[] videoPaths = request.getParameterValues("video_paths");
 	
@@ -136,7 +137,7 @@ public class CoursePostController {
 		courseDTO.setEnable(1);
 		courseDTO.setOrigin(1);
 		
-		courseService.saveCourse(courseDTO, categorys, tags, videoTitles, videoPaths);
+		courseService.saveCourse(courseDTO, categorys, tags, olv_noList, videoTitles, videoPaths);
 
 		return "redirect:/course/"+courseDTO.getOli_no();
 	}
@@ -232,6 +233,7 @@ public class CoursePostController {
 		String level = request.getParameter("level");
 		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
+		String[] olv_noList = request.getParameterValues("olv_no[]");
 		String[] videoTitles = request.getParameterValues("video_titles");
 		String[] videoPaths = request.getParameterValues("video_paths");
 	
@@ -257,7 +259,7 @@ public class CoursePostController {
 		courseDTO.setEnable(1);
 		courseDTO.setOrigin(0);
 		
-		courseService.saveCourse(courseDTO, categorys, tags, videoTitles, videoPaths);
+		courseService.saveCourse(courseDTO, categorys, tags, olv_noList, videoTitles, videoPaths);
 		
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, courseDTO.getOli_no(), 1);

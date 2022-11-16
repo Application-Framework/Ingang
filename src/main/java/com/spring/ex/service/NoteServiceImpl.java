@@ -101,6 +101,11 @@ public class NoteServiceImpl implements NoteService{
 	}
 
 	@Override
+	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no) {
+		return noteArticleDAO.getNoteArticleListByOlv_no(olv_no);
+	}
+	
+	@Override
 	public NoteArticleDTO getNoteArticle(int na_no) {
 		return noteArticleDAO.getNoteArticle(na_no);
 	}
@@ -109,12 +114,27 @@ public class NoteServiceImpl implements NoteService{
 	public List<NoteReplyDTO> getNoteReplyList(int n_no) {
 		return noteReplyDAO.getNoteReplyList(n_no);
 	}
-
+	
+	@Override
+	public NoteReplyDTO getNoteReply(int nr_no) {
+		return noteReplyDAO.getNoteReply(nr_no);
+	}
+	
 	@Override
 	public int submitNoteReply(NoteReplyDTO dto) {
 		return noteReplyDAO.submitNoteReply(dto);
 	}
 
+	@Override
+	public int updateNoteReply(NoteReplyDTO dto) {
+		return noteReplyDAO.updateNoteReply(dto);
+	}
+
+	@Override
+	public int deleteNoteReply(int nr_no) {
+		return noteReplyDAO.deleteNoteReply(nr_no);
+	}
+	
 	@Override
 	public int getNoteLikeCount(int n_no) {
 		return noteLikeDAO.getNoteLikeCount(n_no);

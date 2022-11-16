@@ -180,16 +180,16 @@
 	
 	<!-- 강의 영상 부분 -->
 	
-	<insert id="submitCourseVideo">
-		INSERT INTO online_lecture_video (oli_no, title, s_file_name)
-		VALUES(#{oli_no}, #{title}, #{s_file_name})
+	<insert id="submitCourseVideo" keyProperty="olv_no" useGeneratedKeys="true">
+		INSERT INTO online_lecture_video (oli_no, title, s_file_name, `order`)
+		VALUES(#{oli_no}, #{title}, #{s_file_name}, #{order})
 	</insert>
 	
 	<select id="getCourseVideoList" resultType="CourseVideoDTO">
 		SELECT *
 		FROM online_lecture_video
 		WHERE oli_no = #{oli_no}
-		ORDER BY olv_no
+		ORDER BY `order`
 	</select>
 	
 	<select id="getCourseVideo" resultType="CourseVideoDTO">
@@ -201,6 +201,23 @@
 	<delete id="deleteCourseVideo">
 		DELETE FROM online_lecture_video
 		WHERE oli_no = #{oli_no}
+	</delete>
+	
+	<!-- 강의 비디오 수정 -->
+	<update id="updateCourseVideo">
+		UPDATE online_lecture_video 
+		SET
+			title = #{title},
+			s_file_name = #{s_file_name},
+			`order` = #{order}
+		WHERE olv_no = #{olv_no}
+	</update>
+	
+	<!-- olv_noList에 포함되어있지 않는 강의 비디오 삭제 -->
+	<delete id="deleteNotContainedCourseVideo">
+		DELETE FROM online_lecture_video
+		WHERE oli_no = #{oli_no} AND olv_no NOT IN 
+		<foreach collection="olv_noList" item="olv_no" open="(" close=")" separator=",">#{olv_no}</foreach>
 	</delete>
 	
 	<!-- 카테고리 부분 -->

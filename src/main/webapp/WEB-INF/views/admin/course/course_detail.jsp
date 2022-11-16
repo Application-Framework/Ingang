@@ -191,14 +191,17 @@
 			<div class="row mb-3" id="videoSection">
 				<div class="fs-4 mb-2">강의 동영상</div>
     			<div class="row ps-4 pb-2">
+    				<div class="col-1 d-flex align-items-center">
+    					#
+    				</div>
     				<div class="col-2 d-flex align-items-center">
     					<label>동영상 제목</label>
     				</div>
-    				<div class="col-8 d-flex align-items-center">
+    				<div class="col-7 d-flex align-items-center">
     					<label>주소</label>
     				</div>
     				<div class="col-1 fs-2">
-    					<a href="javascript:;" onclick="addVideoSlot('', '')"><i class="bi bi-plus-circle"></i></a>
+    					<a href="javascript:;" onclick="addVideoSlot('신규', '', '')"><i class="bi bi-plus-circle"></i></a>
     				</div>
     				<div class="col-1 fs-2">
     					<a href="javascript:;" onclick="removeVideoSlot()"><i class="bi bi-dash-circle"></i></a>
@@ -360,6 +363,8 @@
 					}
 				}
 			});
+			
+			 
 		});
 		// 메인 카테고리가 바뀌었을 때 서브 카테고리 불러오기
 	   	function changeMainCategory() {
@@ -407,9 +412,19 @@
 	 	// 강의 동영상 슬롯 동적 추가
 	    var cnt = 0;
 	    
-	    function addVideoSlot(title, file_name) {
+	    function addVideoSlot(olv_no, title, file_name) {
 	    	cnt = cnt + 1;
-	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
+	    	var tags = "<div class='row ps-4 pb-2' id='v_"+cnt+"'>";
+	    	tags += "<div class='col-1'>No."+olv_no+"</div>";
+			tags += "<div class='col-2'><input type='text' class='form-control' name='video_titles' value='"+title+"' required/></div>";
+			tags += "<div class='col-7'><input type='text' class='form-control' name='video_paths' value='"+file_name+"' required/></div>";
+			tags += "<div class='col-1 fs-2'><a href='javascript:;' id='up_slot'><i class='bi bi-arrow-up-circle'></i></a></div>";
+			tags += "<div class='col-1 fs-2'><a href='javascript:;' id='down_slot'><i class='bi bi-arrow-down-circle'></i></a></div>";
+			tags += "<input type='hidden' name='olv_no[]' value='"+olv_no+"'/>";
+			tags += "</div>";
+			
+			
+	    	$('#videoSection').append(tags);
 	    	changedForm = true;
 	    }
 	    
@@ -420,10 +435,32 @@
 	    	changedForm = true;
 	    }
 		
+	    $(document).on('click', '#up_slot', function() {
+	    	var _idx = $(this).parent().parent().attr('id');
+	    	var idx = parseInt(_idx.substring(2));
+	    	if(idx == 1) return;
+	    	
+	    	$("#v_"+idx).insertBefore("#v_"+(idx-1));
+	    	$("#v_"+idx).attr("id", "v_t")
+	    	$("#v_"+(idx-1)).attr("id", "v_"+idx);
+	    	$("#v_t").attr("id", "v_"+(idx-1));
+	    });
+	    
+	    $(document).on('click', '#down_slot', function() {
+	    	var _idx = $(this).parent().parent().attr('id');
+	    	var idx = parseInt(_idx.substring(2));
+	    	if(idx == cnt) return;
+	    	
+	    	$("#v_"+idx).insertAfter("#v_"+(idx+1));
+	    	$("#v_"+idx).attr("id", "v_t")
+	    	$("#v_"+(idx+1)).attr("id", "v_"+idx);
+	    	$("#v_t").attr("id", "v_"+(idx+1));
+	    });
+	    
 		<c:choose>
 			<c:when test="${videoList != null}">
 				<c:forEach var="video" items="${videoList}">
-					addVideoSlot('${video.title}', '${video.s_file_name}');
+					addVideoSlot('${video.olv_no}', '${video.title}', '${video.s_file_name}');
 				</c:forEach>
 			</c:when>
 			

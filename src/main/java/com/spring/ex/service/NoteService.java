@@ -27,12 +27,16 @@ public interface NoteService {
 	public int deleteNoteArticle(int na_no);
 	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no);
 	public List<NoteArticleDTO> getNoteArticleList(int n_no);
+	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no);
 	public NoteArticleDTO getNoteArticle(int na_no);
 	public NoteArticleDTO getNoteArticleByN_noOlv_no(int n_no, int olv_no);
 	
 	// 리뷰
 	public List<NoteReplyDTO> getNoteReplyList(int n_no);
+	public NoteReplyDTO getNoteReply(int nr_no);
 	public int submitNoteReply(NoteReplyDTO dto);
+	public int updateNoteReply(NoteReplyDTO dto);
+	public int deleteNoteReply(int nr_no);
 	
 	// 좋아요
 	public int getNoteLikeCount(int n_no);

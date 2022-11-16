@@ -60,6 +60,28 @@
 			font-weight: 900;
 			color: #f8ce0b;
 		}
+		
+		.modal{ 
+            position:fixed; 
+            width:100%; height:100%; 
+            background: rgba(0,0,0,0.2); 
+            top:0; 
+            left:0; 
+            display:none; 
+        }
+
+        .modal_content{
+            background:#fff;
+            position: fixed; 
+            top:50%; 
+            left:50%;
+            transform : translate(-50%, -50%);
+            /* text-align:center; */
+            box-sizing:border-box; 
+            line-height:23px;
+            border-style: solid;
+            border-radius: 10px;
+        }
 	</style>
 </head>
 <body>
@@ -70,6 +92,8 @@
 		<hr>
 		<form id="note_form">
 			<input type="hidden" name="n_no" value="${note.n_no}"/>
+			<input type="hidden" name="oli_no" value="${note.oli_no}"/>
+			<input type="hidden" name="m_no" value="${note.m_no}"/>
 			<div class="row mb-3">
 				<div class="col">
 					<div class="input-group">
@@ -123,22 +147,36 @@
 			</div>
 				
 			<h4>노트 소개 내용</h4>
-			
-			<%-- 노트 소개 내용 --%>
 			<div class="row mb-3">
 				<div>
 					<textarea class="summernote" id="content" name="content" rows="10">${note.content}</textarea>
 				</div>
 			</div>
+			<div class="float-end mb-3">
+				<button type="button" id="note_update" class="btn btn-primary" style="width:5rem;">수정</button>
+			</div><br><br>
 			
 			<hr>
 			<div class="text-center">
 				<h4>노트 글 목록</h4>
 			</div>
 			<hr>
-			<div class="row mb-3">
+			<div class="mb-3">
 				<c:forEach var="article" items="${noteArticleList}">
-					<a onclick="openNoteArticleDetail(${article.na_no});" href="javascript:;">${article.title}</a>
+					${article.olv_no} : <a onclick="openModal('#${article.na_no}')" href="javascript:;">${article.title}</a>
+					<div class="float-end me-3">
+						<button type="button" class="btn btn-danger" onclick="deleteNoteArticle(${note.oli_no}, ${article.olv_no})">삭제</button>
+					</div>
+					
+					<%-- 노트 글 모달 --%>
+					<div class="modal" id="${article.na_no}">
+						<div class="modal_content card" style="width:35rem; height:37rem;">
+							<div class="card-body p-4">
+								<h5 class="card-title fw-bold mb-3 text-center">${article.title}</h5>
+								<c:out value="${article.content}" escapeXml="false"/>
+							</div>
+						</div>
+					</div>
 				</c:forEach>
 				<c:if test="${noteArticleList.size() == 0}"><p class="text-center">없음</p></c:if>
 			</div>
@@ -153,7 +191,9 @@
 					<div class="stars-outer">
 		                <div class="stars-inner" style="width:${reply.star_rating*20}%"></div>
 		            </div>
-		            <span class="pr-5 number-rating">(${reply.star_rating})</span><br/>
+		            <span class="pr-5 number-rating">(${reply.star_rating})</span>
+		            <span class="ms-2"><button class="btn btn-danger" onclick="deleteNoteReply(${reply.nr_no})">삭제</button></span><br>
+		            
 		    		<span class="fw-bold"><a href="">${memberService.getMemberByM_no(reply.m_no).m_name}</a></span> <span>${reply.reg_date}</span>
 		    		<p>${reply.content}</p>
 		    		<c:if test="${status.last == false}">
@@ -192,11 +232,6 @@
 				</tbody>
 			</table>
 			<c:if test="${orderHistoryList.size() == 0}"><p class="text-center">없음</p></c:if>
-			
-		
-			<div class="float-end mb-3">
-				<button id="note_update" class="btn btn-primary" style="width:5rem;">수정</button>
-			</div>
 		</form>
 	</div>
 	
@@ -237,6 +272,7 @@
 	    		type: "post",
 	    		success: function() {
 	    			alert("수정 성공");
+	    			window.opener.location.reload();
 	    		},
 	    		error: function() {
 	    			alert("error");
@@ -244,6 +280,61 @@
 	    	});
 		});
 	
+		function deleteNoteArticle(oli_no, olv_no) {
+			if(confirm("정말 노트 글을 삭제하시겠습니까?")) {
+				$.ajax({
+					url: "/deleteNoteArticle",
+					type: "POST",
+					data: {
+						oli_no: oli_no,
+						olv_no: olv_no
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+			}
+		}
+		
+		function deleteNoteReply(nr_no){
+			if(confirm("정말 수강평을 삭제하시겠습니까?")) {
+				$.ajax({
+					url: "/deleteNoteReply",
+					type: "POST",
+					data: {
+						nr_no
+					},
+					success: function() {
+						location.reload();
+					}
+				});
+			}
+		}
+		
+		var selected;
+		// 노트글 모달창 열기
+		function openModal(id) {
+			$(id).fadeIn();
+			selected = id;
+			
+			// 선택된 모달의 textarea의 높이 자동 늘리기
+			var txtArea = $(id).find('textarea');
+			txtArea.height(txtArea.prop('scrollHeight'));
+		}
+		
+		// 노트글 모달창 닫기
+		function closeModal(id) {
+			$(id).fadeOut();
+		}
+		
+		$(function(){ 
+			// 외부영역 클릭 시 팝업 닫기
+			$(document).mouseup(function (e){
+				if($(".modal_content").has(e.target).length === 0)
+					closeModal(selected);
+			});
+		});
+		
 		$(function() {
 			// summernote 옵션 설정
 			$('.summernote').summernote({

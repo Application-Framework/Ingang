@@ -47,6 +47,11 @@ public class NoteArticleDAOImpl implements NoteArticleDAO {
 	}
 	
 	@Override
+	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no) {
+		return sqlSession.selectList(namespace + ".getNoteArticleListByOlv_no", olv_no);
+	}
+	
+	@Override
 	public NoteArticleDTO getNoteArticle(int na_no) {
 		return sqlSession.selectOne(namespace + ".getNoteArticle", na_no);
 	}

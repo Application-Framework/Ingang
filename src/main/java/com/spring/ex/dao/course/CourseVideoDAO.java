@@ -19,4 +19,10 @@ public interface CourseVideoDAO {
 	
 	// 강의 비디오 삭제
 	public int deleteCourseVideo(int oli_no);
+	
+	// 강의 비디오 수정
+	public int updateCourseVideo(CourseVideoDTO dto);
+	
+	// olv_noList에 포함되어있지 않는 강의 비디오 삭제
+	public int deleteNotContainedCourseVideo(int oli_no, int[] olv_noList);
 }

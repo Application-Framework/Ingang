@@ -132,12 +132,34 @@
 		VALUES(#{n_no}, #{m_no}, #{star_rating}, #{content}, #{reg_date})
 	</insert>
 	
-	<!-- 노트 댓글 출력 -->
+	<!-- 노트 댓글 리스트 출력 -->
 	<select id="getNoteReplyList" resultType="NoteReplyDTO">
 		SELECT * 
 		FROM note_reply
 		WHERE n_no = #{n_no}
 	</select>
+	
+	<!-- 노트 댓글 출력 -->
+	<select id="getNoteReply" resultType="NoteReplyDTO">
+		SELECT * 
+		FROM note_reply
+		WHERE nr_no = #{nr_no}
+	</select>
+	
+	<!-- 노트 댓글 수정 -->
+	<update id="updateNoteReply">
+		UPDATE note_reply
+		SET
+			star_rating = #{star_rating},
+			content = #{content}
+		WHERE nr_no = #{nr_no}
+	</update>
+	
+	<!-- 노트 댓글 삭제 -->
+	<delete id="deleteNoteReply">
+		DELETE FROM note_reply
+		WHERE nr_no = #{nr_no}
+	</delete>
 	
 	<!-- 노트 좋아요 추가 -->
 	<insert id="insertNoteLike">
@@ -186,14 +208,23 @@
 	<!-- 노트 글 수정 -->
 	<update id="updateNoteArticle">
 		UPDATE note_article
-		SET title = #{title}, content = #{content}
-		WHERE n_no = #{n_no} AND olv_no = #{olv_no}
+		SET 
+			title = #{title}, 
+			olv_no = #{olv_no},
+			content = #{content}
+		WHERE na_no = #{na_no}
 	</update>
 	
 	<!-- 노트 글 리스트 출력 -->
 	<select id="getNoteArticleList" resultType="NoteArticleDTO">
 		SELECT * FROM note_article
 		WHERE n_no = #{n_no}
+	</select>
+	
+	<!-- 노트 글 리스트 출력 -->
+	<select id="getNoteArticleListByOlv_no" resultType="NoteArticleDTO">
+		SELECT * FROM note_article
+		WHERE olv_no = #{olv_no}
 	</select>
 	
 	<!-- 노트 글 출력 -->

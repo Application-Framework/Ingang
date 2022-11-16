@@ -1,5 +1,6 @@
 package com.spring.ex.admin.controller;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -251,6 +252,7 @@ public class AdminCourseController {
 		String level = request.getParameter("level");
 		String[] categorys = request.getParameterValues("subCategorys");
 		String[] tags = request.getParameterValues("tags");
+		String[] olv_noList = request.getParameterValues("olv_no[]");
 		String[] videoTitles = request.getParameterValues("video_titles");
 		String[] videoPaths = request.getParameterValues("video_paths");
 		
@@ -268,6 +270,6 @@ public class AdminCourseController {
 		course.setPrice(Integer.parseInt(price));
 		course.setLevel(Integer.parseInt(level));
 		
-		adminCourseService.updateCourse(course, thumbnail, categorys, tags, videoTitles, videoPaths);
+		adminCourseService.updateCourse(course, thumbnail, categorys, tags, olv_noList, videoTitles, videoPaths);
 	}
 }

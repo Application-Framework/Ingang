@@ -199,7 +199,7 @@
 					<div class="mb-4">
 						<c:forEach var="note" items="${notes}" begin="0" end="10" step="1">
 							<div class="p-2">
-								<a href="/notes/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getMemberByM_no(note.m_no).m_name}</a> 
+								<a href="/note/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getMemberByM_no(note.m_no).m_name}</a> 
 							</div>
 						</c:forEach>
 					</div>
