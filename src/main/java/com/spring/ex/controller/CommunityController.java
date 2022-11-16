@@ -17,6 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
+import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -514,4 +516,5 @@ public class CommunityController {
 		int res = cbService.deleteInquiry(inq_no);
 		return res;
 	}
+	
 }

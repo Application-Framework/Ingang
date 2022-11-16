@@ -48,7 +48,7 @@
 		
 		<div class="container">
 			<h1>1:1 문의</h1>
-			<hr>
+			<div align="right"><b>No. ${cbReadPage.inq_no }</b></div>
 			<div class="card">
 				<div class="card-body">
 					<h3><i class="fas fa-battery-quarter"></i> 상담내용</h3>
@@ -119,23 +119,10 @@
 				</div><br>
 			</c:if>
 			
-			<div class="d-flex">
-				<div class="ml-auto">
-				<c:if test="${cbReadPage.ia_no  ne null && sessionScope.member ne null && sessionScope.member.getM_authority() eq 1}">
-					<button class="thm-btn-psd" type="button" data-toggle="modal" data-target="#AnswerEditModal">수정</button>
-					<button class="thm-btn-psd" type="button" onclick="boardDelete(${cbReadPage.inq_no})">삭제</button>
-				</c:if>
-				<c:if test="${cbReadPage.ia_no  ne null}">
-					<button class="thm-btn-psd" type="button" onclick="location.href='inquiry'">목록</button>
-				</c:if>
-				</div>
-			</div>
-			
 			<br>
 			<div class="d-flex">
 				<div class="ml-auto">
 				<c:if test="${cbReadPage.ia_no eq null && cbReadPage.m_no eq sessionScope.member.m_no}">
-					<button class="genric-btn danger-border radius" type="button"  onclick="(${cbReadPage.inq_no})">수정</button>
 					<button class="genric-btn danger-border radius" type="button"  onclick="boardDelete(${cbReadPage.inq_no})">삭제</button>
 				</c:if>
 					<button class="genric-btn danger-border radius" type="button" onclick="javascript:history.back();">목록</button>

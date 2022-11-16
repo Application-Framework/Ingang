@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 
@@ -161,6 +162,36 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		return sqlSession.delete(namespace + ".deleteInquiry", inq_no);
 	}
 
+	//1:1문의 답변 작성
+	public int writeInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".writeInquiryAnswer", dto);
+	}
+	
+	//1:1문의 답변 삭제
+	public int deleteInquiryAnswer(int ia_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteInquiryAnswer", ia_no);
+	}
+	
+	//1:1문의 답변완료 상태로 변경
+	public int updateStatementAnswerOk(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerOk", inq_no);
+	}
+	
+	//1:1문의 답변보류 상태로 변경
+	public int updateStatementAnswerDelay(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerDelay", inq_no);
+	}
+	
+	//1:1문의 답변대기 상태로 변경
+	public int updateStatementAnswerDelete(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerDelete", inq_no);
+	}
+	
+	//1:1문의 답변 수정
+	public int updateInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return sqlSession.update(namespace + ".updateInquiryAnswer", dto);
+	}
+	
 	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
 	@Override
 	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception {

@@ -138,7 +138,7 @@
 		WHERE cb_no = #{cb_no}
 	</delete>
 	
-	<!--게시글 댓글 수정  -->
+	<!--게시글 수정  -->
 	<update id="updateCommunityBoard">
 		UPDATE community_board
 		SET title = #{title}, content = #{content}, classify = #{classify}
@@ -261,6 +261,41 @@
 		DELETE FROM inquiry
 		WHERE inq_no = #{inq_no}
 	</delete>
+	
+	<!--1:1 문의하기 답변 작성-->
+	<insert id="writeInquiryAnswer">
+		INSERT INTO inquiry_answer(inq_no, ia_content, ia_reg_date)
+		VALUES(#{inq_no}, #{ia_content}, NOW())
+	</insert>
+	
+	<!--1:1 문의하기 답변 삭제  -->
+	<delete id="deleteInquiryAnswer">
+		DELETE FROM inquiry_answer
+		WHERE ia_no = #{ia_no}
+	</delete>
+	
+	<!-- 1:1문의 답변 등록시 답변완료로 변경 -->
+	<update id="updateStatementAnswerOk">
+		UPDATE inquiry SET statement = 2 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 보류상태로 변경 -->
+	<update id="updateStatementAnswerDelay">
+		UPDATE inquiry SET statement = 1 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 대기상태로 변경 -->
+	<update id="updateStatementAnswerDelete">
+		UPDATE inquiry SET statement = 0 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 수정-->
+	<update id="updateInquiryAnswer">
+		UPDATE inquiry_answer 
+		SET ia_content = #{ia_content},
+			ia_reg_date = NOW()
+		WHERE ia_no = #{ia_no}
+	</update>
 	
 	<sql id="searchInauiry">
 		<if test="searchKeyword != null and searchType != null">

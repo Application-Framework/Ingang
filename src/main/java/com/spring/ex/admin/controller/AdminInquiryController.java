@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.ex.dto.InquiryAnswerDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.service.CommunityBoardService;
 import com.spring.ex.service.PagingService;
@@ -25,7 +26,7 @@ public class AdminInquiryController {
 	private PagingService pagingService;
 	
 	
-	//관리자 페이지 회원 메인페이지
+	//관리자 1:1문의 게시판
 	@RequestMapping(value = "/admin/inquiry", method = RequestMethod.GET)
 	public String adminInquiryList(Model model, HttpServletRequest request) throws Exception {
 		String searchType = request.getParameter("searchType");
@@ -54,7 +55,7 @@ public class AdminInquiryController {
 	}
 	
 	
-	//관리자 페이지 1:1문의 상세 페이지
+	//관리자 1:1문의 상세 페이지
 	@RequestMapping(value = "/admin/inquiryView", method = RequestMethod.GET)
 	public String adminInquiryView(Model model, HttpServletRequest request) throws Exception {
 		int inq_no = Integer.parseInt(request.getParameter("inq_no"));
@@ -85,4 +86,48 @@ public class AdminInquiryController {
 		}
 	}
 	
+	//1:1문의 답변 작성
+	@RequestMapping(value = "/admin/writeInquiryAnswer", method = RequestMethod.POST)
+	@ResponseBody
+	public int writeInquiryAnswer(InquiryAnswerDTO dto, HttpServletRequest request) throws Exception{
+		int res = 0;
+		
+		res += cbService.writeInquiryAnswer(dto);
+		res += cbService.updateStatementAnswerOk(dto.getInq_no());
+		System.out.println(res);
+		
+		return res;
+	}
+	
+	//1:1문의 답변 삭제
+	@RequestMapping(value = "/admin/deleteInquiryAnswer", method = RequestMethod.GET)
+	@ResponseBody
+	public int deleteInquiryAnswer(HttpServletRequest request) throws Exception{
+		int inq_no = Integer.parseInt(request.getParameter("inq_no"));
+		int ia_no = Integer.parseInt(request.getParameter("ia_no"));
+		int res = 0;
+		
+		res += cbService.deleteInquiryAnswer(ia_no);
+		res += cbService.updateStatementAnswerDelete(inq_no);
+		
+		return res;
+	}
+	
+	//1:1문의 답변 보류
+	@RequestMapping(value = "/admin/updateStatementAnswerDelay", method = RequestMethod.GET)
+	@ResponseBody
+	public int updateStatementAnswerDelay(HttpServletRequest request) throws Exception{
+		int inq_no = Integer.parseInt(request.getParameter("inq_no"));
+		
+		int res = cbService.updateStatementAnswerDelay(inq_no);
+		return res;
+	}
+	
+	//1:1문의 답변 수정
+	@RequestMapping(value = "/admin/updateInquiryAnswer", method = RequestMethod.POST)
+	@ResponseBody
+	public int updateInquiryAnswer(InquiryAnswerDTO dto, HttpServletRequest request) throws Exception{
+		int res = cbService.updateInquiryAnswer(dto);
+		return res;
+	}
 }
