@@ -5,59 +5,113 @@
 
 	<!-- 강사 게시판 가져오기 -->
 	<select id="getAdminTeacherBoard" resultType="HashMap">
-		
+		SELECT olt_no, m_no, name, email, reg_date 
 		<include refid="adminTeacherBoardSQL"/>
+		ORDER BY olt_no DESC
+		LIMIT #{nowPage}, #{pageSize}
 	</select>
 	
 	<!-- 강사 목록 총 개수 가져오기 -->
 	<select id="getAdminTeacherTotalCount" resultType="int">
-		
+		SELECT COUNT(*)
 		<include refid="adminTeacherBoardSQL"/>
 	</select>
 	
 	<!-- 승인 대기 강사 게시판 가져오기 -->
 	<select id="getAdminPendingTeacherBoard" resultType="HashMap">
-	
-		<include refid="adminPendingTeacherBoardSQL"/>
+		SELECT oltr_no, m_no, name, email, request_date
+		<include refid="adminPendingBoardSQL"/>
+		ORDER BY oltr_no DESC
+		LIMIT #{nowPage}, #{pageSize}
 	</select>
 	
 	<!-- 승인 대기 강사 목록 총 개수 가져오기 -->
 	<select id="getAdminPendingTeacherTotalCount" resultType="int">
-	
-		<include refid="adminPendingTeacherBoardSQL"/>
+		SELECT COUNT(*)
+		<include refid="adminPendingBoardSQL"/>
 	</select>
 	
 	<!-- 강사 정보 가져오기 -->
 	<select id="getAdminTeacherInfo" resultType="com.spring.ex.TeacherDTO">
-	
+		SELECT * FROM online_lecture_teacher
 	</select>
 	
 	<!-- 승인 대기강사 정보 가져오기 -->
 	<select id="getAdminPendingTeacherInfo" resultType="com.spring.ex.TeacherRequestDTO">
-	
+		SELECT * FROM online_lecture_teacher_request
 	</select>
 	
 	<!--  강사 추가 -->
 	<insert id="insertTeacher">
-	
+		INSERT INTO online_lecture_teacher(m_no, email, name, phone, main_type_no, introduction, link, reg_date)
+		VALUES(#{m_no}, #{email}, #{name}, #{phone}, #{main_type_no}, #{introduction}, #{link}, NOW())
 	</insert>
 	
 	<!-- 강사 수정 -->
 	<update id="updateTeacher">
-	
+		UPDATE online_lecture_teacher
+		SET 
+			email = #{email},
+			name = #{name},
+			phone = #{phone},
+			main_type_no = #{main_type_no},
+			introduction = #{introduction},
+			link = #{link} 
+		WHERE olt_no = #{olt_no}
 	</update>
 	
 	<!-- 강사 삭제 -->
 	<delete id="deleteTeacher">
-	
+		DELETE FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
 	</delete>
 	
 	
 	<sql id="adminTeacherBoardSQL">
-	
+		FROM online_lecture_teacher
+		<if test="searchCategory != null and searchKeyword != null and searchKeyword != ''">
+			WHERE
+			<choose>
+				<when test="searchCategory.equals('olt_no')">
+					olt_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('m_no')">
+					m_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('name')">
+					name LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('email')">
+					email LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('phone')">
+					phone LIKE '%${searchKeyword}%'
+				</when>
+			</choose>
+		</if>
 	</sql>
 	
-	<sql id="adminPendingTeacherBoardSQL">
-		
+	<sql id="adminPendingBoardSQL">
+		FROM online_lecture_teacher_request
+		<if test="searchCategory != null and searchKeyword != null and searchKeyword != ''">
+			WHERE
+			<choose>
+				<when test="searchCategory.equals('oltr_no')">
+					oltr_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('m_no')">
+					m_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('name')">
+					name LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('email')">
+					email LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('phone')">
+					phone LIKE '%${searchKeyword}%'
+				</when>
+			</choose>
+		</if>
 	</sql>
 </mapper>
