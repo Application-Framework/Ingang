@@ -18,6 +18,15 @@ public interface MemberService {
 	//로그인
 	public MemberDTO login(MemberDTO dto) throws Exception;
 	
+	//최초 접속 확인
+	public int checkConMemberLog(int m_no) throws Exception;
+	
+	//최초 접속일 추가
+	public void insertFirstConMemberLog(int m_no) throws Exception;
+	
+	//최근 접속일 수정
+	public void updateConMemberLog(int m_no) throws Exception;
+	
 	// 회원 정보수정
 	public void update(MemberDTO memberDTO) throws Exception;
 	

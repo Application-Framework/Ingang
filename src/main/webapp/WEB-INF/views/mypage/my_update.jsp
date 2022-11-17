@@ -188,25 +188,6 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-lg-3 control-label">성별:</label>
-									<div class="col-lg-8">
-										
-										<input class="form-control" type="text" value="${member.m_sex}" disabled="disabled">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">생일:</label>
-									<div class="col-lg-8">
-										<input class="form-control" type="text" value="${member.m_birth}" disabled="disabled">
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-lg-3 control-label">전화번호:</label>
-									<div class="col-lg-8">
-										<input class="form-control" name="m_phone" type="text" value="${member.m_phone}">
-									</div>
-								</div>
-								<div class="form-group">
 									<label class="col-lg-3 control-label">가입날짜:</label>
 									<div class="col-lg-8">
 										<input class="form-control" type="text" value="${member.reg_date}" disabled="disabled">

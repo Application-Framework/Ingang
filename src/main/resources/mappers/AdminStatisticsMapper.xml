@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.spring.ex.AdminStatisticsMapper">
+
+	<!-- 오늘 방문한 회원수 -->
+	<select id="getTodayVisitorsCount" resultType="int">
+		SELECT COUNT(DISTINCT mcl.m_no)
+		FROM member_connect_log mcl, member m
+		WHERE m.m_no = mcl.m_no and date(con_date) = date(NOW())
+	</select>
+	
+	<!-- 일주일 간 방문한 회원수 -->
+	<select id="getWeekVisitorsCount" resultType="int">
+		SELECT ifnull(SUM(ifnull(a.total,0)), 0) AS 'total'
+		FROM 
+			( 
+		      SELECT con_date, count(DISTINCT m_no) AS total
+		      FROM member_connect_log
+		      WHERE date(con_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL -6 DAY) AND date(NOW())
+		      GROUP BY date(con_date)
+		   ) a  
+		   RIGHT JOIN
+		   ( 
+		   		SELECT selected_date FROM 
+			      	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+			        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+			        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+			        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+			        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+			        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+		  		where date(selected_date) BETWEEN DATE_ADD(DATE(NOW()), INTERVAL -6 DAY) AND date(NOW())
+		   ) b ON date(a.con_date) = date(b.selected_date) 
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 한 달 간 방문한 회원수 -->
+	<select id="getMonthVisitorsCount" resultType="int">
+		SELECT ifnull(SUM(ifnull(a.total,0)), 0) AS 'total'
+		FROM (
+			SELECT con_date AS MONTH, count(DISTINCT m_no) AS total
+			FROM member_connect_log
+			WHERE date(con_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL - 1 month) AND date(NOW())
+			GROUP BY date(con_date)
+		) a  
+		RIGHT JOIN
+		( 
+		     SELECT selected_date FROM 
+			    (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			   where date(selected_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL -1 month) AND date(NOW())
+		) b ON date(a.month) = date(b.selected_date)
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 일 년간 방문한 회원수 -->
+	<select id="getYearVisitorsCount" resultType="int">
+		SELECT ifnull(SUM(ifnull(a.total,0)), 0) AS total
+		FROM (
+			SELECT con_date AS 'month', count(DISTINCT m_no) AS 'total'
+			FROM member_connect_log
+			WHERE date(con_date) BETWEEN DATE_ADD(DATE(NOW()), INTERVAL -1 year) AND date(NOW())
+			GROUP BY DATE_FORMAT(con_date, "%y-%m-%d")
+		) a  
+		RIGHT JOIN
+		( 
+		     SELECT selected_date FROM 
+			    (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			   where DATE(selected_date) BETWEEN DATE_ADD(DATE(NOW()), INTERVAL -1 year) AND DATE(NOW()) AND  DATE_format(selected_date, "%y") = DATE_FORMAT(NOW(), "%y")
+		) b ON DATE(a.month) = DATE(b.selected_date)
+		GROUP BY DATE_FORMAT(b.selected_date, "%y")
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	
+	<!-- 일주일간 회원 접속 그래프 -->
+	<select id="getWeekVisitorsGraph" resultType="HashMap">
+		SELECT DATE_FORMAT(b.selected_date, "%m.%d") AS 'con_date', IFNULL(a.total, 0) AS 'total'
+		FROM 
+			( 
+		      SELECT con_date, count(DISTINCT m_no) AS total
+		      FROM member_connect_log
+		      WHERE date(con_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL -6 DAY) AND date(NOW())
+		      GROUP BY date(con_date)
+		   ) a  
+		   RIGHT JOIN
+		   ( 
+		      SELECT selected_date FROM 
+		      	(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+		   	where date(selected_date) BETWEEN DATE_ADD(DATE(NOW()), INTERVAL -6 DAY) AND date(NOW())
+		   ) b ON date(a.con_date) = date(b.selected_date) 
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 한 달간 회원 접속 그래프 -->
+	<select id="getMonthVisitorsGraph" resultType="HashMap">
+		SELECT DATE_FORMAT(b.selected_date, "%m.%d") AS 'month', ifnull(a.total,0) AS 'total'
+		FROM (
+			SELECT con_date AS MONTH, count(DISTINCT m_no) AS total
+			FROM member_connect_log
+			WHERE date(con_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL - 1 month) AND date(NOW())
+			GROUP BY date(con_date)
+		) a  
+		RIGHT JOIN
+		( 
+			SELECT selected_date FROM 
+				(select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			   where date(selected_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL -1 month) AND date(NOW())
+		) b ON date(a.month) = date(b.selected_date)
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 일 년간 회원 접속 그래프 -->
+	<select id="getYearVisitorsGraph" resultType="HashMap">
+		SELECT DATE_FORMAT(b.selected_date, "%y.%m") AS 'month', ifnull(SUM(ifnull(a.total,0)), 0) AS total
+		FROM (
+			SELECT con_date AS 'month', count(DISTINCT m_no) AS 'total'
+			FROM member_connect_log
+			WHERE DATE(con_date) BETWEEN DATE_ADD(NOW(), INTERVAL -1 year) AND NOW()
+			GROUP BY date(con_date)
+		) a  
+		RIGHT JOIN
+		( 
+		     SELECT selected_date FROM 
+			    (select adddate('1970-01-01',t4.i*10000 + t3.i*1000 + t2.i*100 + t1.i*10 + t0.i) selected_date from
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t0,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t1,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t2,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t3,
+		        (select 0 i union select 1 union select 2 union select 3 union select 4 union select 5 union select 6 union select 7 union select 8 union select 9) t4) v
+			   where date(selected_date) BETWEEN DATE_ADD(date(NOW()), INTERVAL -1 year) AND date(NOW())
+		) b ON date(a.month) = date(b.selected_date)
+		GROUP BY DATE_FORMAT(b.selected_date, "%m")
+		ORDER BY b.selected_date ASC
+	</select>
+	
+	<!-- 강의 판매 비율 -->
+	<select id="getCourseTotalSell" resultType="HashMap">
+		SELECT hol.oli_no, (SELECT title
+							FROM online_lecture_introduction oli
+							WHERE hol.oli_no = oli.oli_no) AS 'title' , round(SUM(payment) / (SELECT SUM(payment) 
+																												FROM history_order_lecture) *  100, 2) AS 'percent'	
+		FROM history_order_lecture hol
+		GROUP BY hol.oli_no
+		ORDER BY percent DESC
+	</select>
+	
+	<!-- 노트 판매 비율 -->
+	<select id="getNoteTotalSell" resultType="HashMap">
+		SELECT hon.n_no AS 'n_no', (SELECT title
+							FROM note n
+							WHERE n.n_no = hon.n_no) AS 'title', round(SUM(payment) / (SELECT SUM(payment) 
+																						FROM history_order_note) *  100, 2) AS 'percent'
+		FROM history_order_note hon
+		GROUP BY hon.n_no
+		ORDER BY percent DESC
+	</select>
+	
+	<!-- 판매된 노트 종류 수 -->
+	<select id="getNoteTotalSellCount" resultType="int">
+		SELECT COUNT(a.result) AS 'resultCount'
+		FROM (
+			SELECT DISTINCT hon.n_no AS 'result'
+								FROM note n, history_order_note hon
+								WHERE n.n_no = hon.n_no
+		) AS a
+	</select>
+</mapper>

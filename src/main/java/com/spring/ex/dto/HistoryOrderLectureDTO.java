@@ -10,6 +10,9 @@ public class HistoryOrderLectureDTO {
 	private Date payment_date;
 	private int payment_status;
 	
+	private int total;
+	private Date selected_date;
+	
 	public int getHol_no() {
 		return hol_no;
 	}
@@ -50,5 +53,19 @@ public class HistoryOrderLectureDTO {
 	public String toString() {
 		return "HistoryOrderLectureDTO [hol_no=" + hol_no + ", oli_no=" + oli_no + ", m_no=" + m_no + ", payment="
 				+ payment + ", payment_date=" + payment_date + ", payment_status=" + payment_status + "]";
+	}
+	
+	
+	public int getTotal() {
+		return total;
+	}
+	public void setTotal(int total) {
+		this.total = total;
+	}
+	public Date getSelected_date() {
+		return selected_date;
+	}
+	public void setSelected_date(Date selected_date) {
+		this.selected_date = selected_date;
 	}
 }

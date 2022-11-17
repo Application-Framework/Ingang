@@ -17,6 +17,9 @@ import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
+import com.spring.ex.dto.TeacherDTO;
+import com.spring.ex.dto.course.CourseReplyDTO;
+import com.spring.ex.service.CourseService;
 import com.spring.ex.service.FileService;
 import com.spring.ex.service.HistoryOrderService;
 import com.spring.ex.service.MemberService;
@@ -37,18 +40,55 @@ public class MyPageController {
 	@Inject
 	private FileService fileUploadService;
 	
+	@Inject
+	private CourseService courseService; 
+	
 	@RequestMapping("/mypage")
 	public String mypage(HttpSession session, HttpServletRequest request, Model model) throws Exception {
 		
 		Integer m_no = (Integer)session.getAttribute("m_no");
 		
+		int checkTeacher = myPageService.checkTeacher(m_no); 
+		
+		System.out.println("MyPageController.mypage() : " + checkTeacher);
+		
+		if(checkTeacher == 1) {
+			System.out.println("강사 입니다");
+			
+			List<TeacherDTO> listTeacherIntro = null;
+			List<TeacherDTO> listTeacher = null;
+			List<CourseReplyDTO> listTeacherCourseReply = null;
+			
+			System.out.println("강사 정보 : " + myPageService.checkTeacherInfo(m_no));
+			listTeacher = myPageService.checkTeacherInfo(m_no);
+			listTeacherIntro = myPageService.teacherIntro(m_no);
+			listTeacherCourseReply = myPageService.teacherCourseReply(m_no);
+			
+			System.out.println("수강평 : " + listTeacherCourseReply);
+			
+			int teacherCourseCount = myPageService.teacherCourseCount(m_no);
+			
+			model.addAttribute("listTeacherIntro", listTeacherIntro);
+			model.addAttribute("listTeacher", listTeacher);
+			model.addAttribute("teacherCourseCount", teacherCourseCount);
+			model.addAttribute("listTeacherCourseReply", listTeacherCourseReply);
+			
+		} else {
+			System.out.println("일반사용자 입니다");
+		}
+		
+		
 		int courseCnt = memberService.countMyCourse(m_no);
 		int noteCnt = memberService.countMyNote(m_no);
 		int postCnt = memberService.countMyPost(m_no);
 		
+		model.addAttribute("checkTeacher", checkTeacher);
 		model.addAttribute("countMyCourse", courseCnt);
 		model.addAttribute("countMyNote", noteCnt);
 		model.addAttribute("countMyPost", postCnt);
+		model.addAttribute("checkTeacher", checkTeacher);
+		
+		model.addAttribute("courseService", courseService);
 		
 		return "mypage";
 	}
@@ -102,7 +142,6 @@ public class MyPageController {
 		String img_path = null;
 		String m_id = request.getParameter("m_id");
 		String m_pw = request.getParameter("m_pw");
-		String m_phone = request.getParameter("m_phone");
 		
 		if(!profile.isEmpty()) { 
 			img_path = fileUploadService.insertFileToLocalAndServer(profile, "/img/profile/uploaded_images");
@@ -111,7 +150,6 @@ public class MyPageController {
 		MemberDTO memberDTO = new MemberDTO();
 		memberDTO.setM_id(m_id);
 		memberDTO.setM_pw(m_pw);
-		memberDTO.setM_phone(m_phone);
 		memberDTO.setImg_path(img_path);
 		
 		// update 후 session 만료
