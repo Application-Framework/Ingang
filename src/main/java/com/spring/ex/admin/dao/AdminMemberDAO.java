@@ -23,6 +23,9 @@ public interface AdminMemberDAO {
 	//회원정보 삭제
 	public int deleteMember(int m_no) throws Exception;
 	
+	// 모든 회원 가져오기
+	public List<MemberDTO> getAllMemberList();
+	
 	//회원정보 강의 구매이력 출력
 	public List<Map<String, Object>> getMemberOrderLecture(HashMap<String, Object> map) throws Exception;
 	public int getMemberOrderLectureTotalCount(HashMap<String, Object> map) throws Exception;
