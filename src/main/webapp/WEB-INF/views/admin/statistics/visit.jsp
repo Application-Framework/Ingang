@@ -96,7 +96,7 @@
 					
 					<!-- 주간 방문자 그래프 -->
 					<div class="row">
-						<div class="col-xl-8 col-lg-7">
+						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">주간 방문자 통계</h6>
@@ -115,31 +115,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-lg-5">
-							<div class="card shadow mb-4">
-								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">회원 성별 비율</h6>
-								</div>
-								<div class="card-body">
-									<div class="chart-pie pt-4 pb-2">
-										<canvas id="myPieChart"></canvas>
-									</div>
-									<div class="mt-4 text-center small">
-										<span class="mr-2">
-											<i class="fas fa-circle text-primary"></i>남성
-										</span>
-										<span class="mr-2">
-											<i class="fas fa-circle text-danger"></i>여성
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					
 					<!-- 한 달간 방문자 그래프 -->
 					<div class="row">
-						<div class="col-xl-8 col-lg-7">
+						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">한 달간 방문자 통계</h6>
@@ -158,31 +138,11 @@
 								</div>
 							</div>
 						</div>
-						<div class="col-xl-4 col-lg-5">
-							<div class="card shadow mb-4">
-								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">회원 성별 비율</h6>
-								</div>
-								<div class="card-body">
-									<div class="chart-pie pt-4 pb-2">
-										<canvas id="myPieChart"></canvas>
-									</div>
-									<div class="mt-4 text-center small">
-										<span class="mr-2">
-											<i class="fas fa-circle text-primary"></i>남성
-										</span>
-										<span class="mr-2">
-											<i class="fas fa-circle text-danger"></i>여성
-										</span>
-									</div>
-								</div>
-							</div>
-						</div>
 					</div>
 					
 					<!-- 일 년간 방문자 그래프 -->
 					<div class="row">
-						<div class="col-xl-8 col-lg-7">
+						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
 									<h6 class="m-0 font-weight-bold text-primary">일 년간 방문자 통계</h6>
@@ -197,26 +157,6 @@
 										<canvas id="myAreaChartYear" width="200" height="100">
 										 	
 										</canvas>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="col-xl-4 col-lg-5">
-							<div class="card shadow mb-4">
-								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">회원 성별 비율</h6>
-								</div>
-								<div class="card-body">
-									<div class="chart-pie pt-4 pb-2">
-										<canvas id="myPieChart"></canvas>
-									</div>
-									<div class="mt-4 text-center small">
-										<span class="mr-2">
-											<i class="fas fa-circle text-primary"></i>남성
-										</span>
-										<span class="mr-2">
-											<i class="fas fa-circle text-danger"></i>여성
-										</span>
 									</div>
 								</div>
 							</div>
@@ -362,45 +302,6 @@
 				}
 			}
 		});
-	</script>
-	
-	<!-- 회원 성별 비율 Chart -->
-	<script>
-	//Set new default font family and font color to mimic Bootstrap's default styling
-	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
-	Chart.defaults.global.defaultFontColor = '#858796';
-	
-	// Pie Chart Example
-	var ctx = document.getElementById("myPieChart");
-	var myPieChart = new Chart(ctx, {
-	type : 'doughnut',
-	data : {
-		labels : [ "남성", "여성" ],
-		datasets : [ {
-			data : [ ${ManRatio}, ${WomanRatio} ],
-			backgroundColor : [ '#007bff', '#dc3545' ],
-			hoverBackgroundColor : [ '#0074F0', '#D03040' ],
-			hoverBorderColor : "rgba(234, 236, 244, 1)",
-		} ],
-	},
-	options : {
-		maintainAspectRatio : false,
-		tooltips : {
-			backgroundColor : "rgb(255,255,255)",
-			bodyFontColor : "#858796",
-			borderColor : '#dddfeb',
-			borderWidth : 1,
-			xPadding : 15,
-			yPadding : 15,
-			displayColors : false,
-			caretPadding : 10,
-		},
-		legend : {
-			display : false
-		},
-		cutoutPercentage : 80,
-	},
-	});
 	</script>
 	
 	<!-- 한 달간 방문자 수 Chart -->

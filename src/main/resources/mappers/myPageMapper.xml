@@ -4,6 +4,46 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spring.mappers.myPageMapper">
 
+	<!-- 강사 자격 확인 -->
+	<select id="checkTeacher" resultType="int">
+		SELECT count(*)
+		FROM member m, online_lecture_teacher olt
+		WHERE m.m_no = olt.m_no AND olt.m_no = #{m_no}
+	</select>
+	
+	<!-- 강사 소개 -->
+	<select id="teacherIntro" resultType="HashMap">
+		SELECT olt.*
+		FROM member m, online_lecture_teacher olt
+		WHERE m.m_no = olt.m_no AND olt.m_no = #{m_no}
+		GROUP BY olt.olt_no
+	</select>
+	
+	<!-- 강사 강의 정보 -->
+	<select id="checkTeacherInfo" resultType="HashMap">
+		SELECT olt.olt_no, m.m_name, oli.oli_no, oli.title, oli.img_path, oli.price
+		FROM member m, online_lecture_teacher olt, online_lecture_introduction oli
+		WHERE m.m_no = olt.m_no AND olt.m_no = #{m_no} AND olt.olt_no = oli.olt_no
+		GROUP BY oli.oli_no
+	</select>
+	
+	<!-- 강사가 올린 강의 갯수 -->
+	<select id="teacherCourseCount" resultType="int">
+		SELECT COUNT(oli.oli_no)
+		FROM member m, online_lecture_teacher olt, online_lecture_introduction oli
+		WHERE m.m_no = olt.m_no AND olt.m_no = #{m_no} AND olt.olt_no = oli.olt_no
+	</select>
+	
+	<!-- 강의 수강평 -->
+	<select id="teacherCourseReply" resultType="HashMap">
+		SELECT olr.*, olr.oli_no, oli.title, oli.olt_no, olt.name
+		FROM online_lecture_reply olr, online_lecture_introduction oli, online_lecture_teacher olt
+		WHERE olr.oli_no = oli.oli_no AND olt.olt_no = oli.olt_no AND olt.m_no = #{m_no}
+		GROUP BY olr_no
+		ORDER BY olr.reg_date desc
+		LIMIT 5
+	</select>
+
 	<!-- 내가 쓴 게시글 목록 -->
 	<select id="myPostList" resultType="HashMap">
 		select *
