@@ -32,12 +32,12 @@
 	</select>
 	
 	<!-- 강사 정보 가져오기 -->
-	<select id="getAdminTeacherInfo" resultType="com.spring.ex.TeacherDTO">
+	<select id="getAdminTeacherInfo" resultType="com.spring.ex.dto.TeacherDTO">
 		SELECT * FROM online_lecture_teacher
 	</select>
 	
 	<!-- 승인 대기강사 정보 가져오기 -->
-	<select id="getAdminPendingTeacherInfo" resultType="com.spring.ex.TeacherRequestDTO">
+	<select id="getAdminPendingTeacherInfo" resultType="com.spring.ex.dto.TeacherRequestDTO">
 		SELECT * FROM online_lecture_teacher_request
 	</select>
 	
