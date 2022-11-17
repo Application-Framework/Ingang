@@ -73,10 +73,13 @@ public interface CommunityBoardService {
 	public int isCheckTagSearchList(String ctl_name) throws Exception;
 	
 	//존재하지 않는 태그명이면 삽입후 값 반환
-	public int insertTagList(String ctl_name) throws Exception;
+	public int insertTagList(CommunityTagListDTO dto) throws Exception;
 	
 	//커뮤니티 태그 검색 기록
 	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception;
+	
+	//태그 여부 확인 및  검색 기록 저장
+	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map) throws Exception;
 	
 	//수강후기 게시판 출력
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;

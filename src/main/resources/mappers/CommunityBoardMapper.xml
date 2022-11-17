@@ -63,9 +63,13 @@
 	</select>
 	
 	<!-- 존재하지 않는 태그명이면 삽입후 값 반환-->
-	<insert id="insertTagList" parameterType="CommunityTagListDTO" keyProperty="ctl_no">
-		INSERT INTO community_tag_list(ctl_name)
-		VALUES(#{ctl_name})
+	<insert id="insertTagList" parameterType="CommunityTagListDTO" useGeneratedKeys="true" keyProperty="ctl_no">
+		INSERT INTO community_tag_list(
+			ctl_name
+		)
+		VALUES(
+			#{ctl_name}
+		)
 	</insert>
 	
 	<!-- 커뮤니티 태그 검색 기록 -->

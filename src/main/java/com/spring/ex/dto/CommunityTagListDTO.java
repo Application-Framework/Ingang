@@ -3,6 +3,8 @@ package com.spring.ex.dto;
 public class CommunityTagListDTO {
 	private int ctl_no;
 	private String ctl_name;
+	
+	
 	public int getCtl_no() {
 		return ctl_no;
 	}
