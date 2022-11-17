@@ -64,7 +64,7 @@
 		<div class="row">
 			<jsp:include page="communityLeftSidebar.jsp" />
 			
-			<div class="col-lg-7 mb-5 mb-lg-0">
+			<div class="col-lg-10 mb-5 mb-lg-0">
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
@@ -155,7 +155,6 @@
 					</div><br>
 				</div>
 			</div>
-			<jsp:include page="communityTagSidebar.jsp" />
 		</div>
 	</div>
     

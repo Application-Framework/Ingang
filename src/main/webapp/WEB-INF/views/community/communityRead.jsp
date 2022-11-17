@@ -73,7 +73,7 @@
 							</P>
 							<ul id="tag-list" style=""> 
 								<c:forEach var="cbTag" items="${cbTag}">
-									<li class="tag-item">#${cbTag.tag_name}</li>
+									<li class="tag-item">#${cbTag.ctl_name}</li>
 								</c:forEach>
 							</ul>
 							
