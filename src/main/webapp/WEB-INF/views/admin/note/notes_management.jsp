@@ -233,8 +233,6 @@
     <script src="https://cdn.jsdelivr.net/gh/bbbootstrap/libraries@main/choices.min.js"></script>
     
     <script>
-    	var rejection_olr_no = 0;
-    
    		// 전체 체크박스 클릭 이벤트
 	    $("#allCheck").click(function () {
 	        $("[name='rowCheck']").prop('checked', $(this).prop('checked'));
