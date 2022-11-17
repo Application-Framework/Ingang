@@ -38,13 +38,8 @@
 	             <h4 class="widget_title">고객센터</h4>
 	             <ul class="list cat-list">
 	                 <li>
-	                     <a href="/community/chats" class="d-flex">
+	                     <a href="/communityInquiry" class="d-flex">
 	                         <p>1:1문의</p>
-	                     </a>
-	                 </li>
-	                 <li>
-	                     <a href="/community/questions" class="d-flex">
-	                         <p>자주찾는질문</p>
 	                     </a>
 	                 </li>
 	             </ul>

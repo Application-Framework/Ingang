@@ -12,6 +12,10 @@ import org.springframework.stereotype.Repository;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
+import com.spring.ex.dto.InquiryAnswerDTO;
+import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 
 
@@ -118,6 +122,30 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		return sqlSession.selectList(namespace + ".getTagCommunityBoard", cb_no);
 	}
 	
+	//인기태그 출력
+	@Override
+	public List<CommunityTagListDTO> getPopularityTagCommunity(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getPopularityTagCommunity", map);
+	}
+	
+	//존재하는 태그 명인지 체크
+	@Override
+	public int isCheckTagSearchList(String ctl_name) throws Exception {
+		return sqlSession.selectOne(namespace + ".isCheckTagSearchList", ctl_name);
+	}
+	
+	//존재하지 않는 태그명이면 삽입후 값 반환
+	@Override
+	public int insertTagList( String ctl_name) throws Exception {
+		return sqlSession.insert(namespace + ".insertTagList", ctl_name);
+	}
+	
+	//커뮤니티 태그 검색 기록
+	@Override
+	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception {
+		sqlSession.insert(namespace + ".serachTagRecord", dto);
+	}
+	
 	//수강후기 게시판 출력
 	@Override
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
@@ -134,7 +162,62 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return sqlSession.update(namespace + ".updateCompletedCommunityBoard", map);
 	}
+	
+	//1:1문의하기 게시판 출력
+	public List<InquiryDTO> getCommunityBoardInquiryPage(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectList(namespace + ".getCommunityBoardInquiryPage", map);
+	}
+	
+	//1:1문의하기 게시판 총 갯수
+	public int getCommunityBoardInquiryPageTotalCount(HashMap<String, Object> map) throws Exception {
+		return sqlSession.selectOne(namespace + ".getCommunityBoardInquiryPageTotalCount", map);
+	}
+	
+	//1:1문의하기 작성
+	public int writeInquiry(InquiryDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".writeInquiry", dto);
+	}
+	
+	//1:1문의하기 상세페이지
+	public Map<String, Object> getInquiryViewPage(int inq_no) throws Exception {
+		return sqlSession.selectOne(namespace + ".getInquiryViewPage", inq_no);
+	}
+	
+	//1:1문의하기 삭제
+	public int deleteInquiry(int inq_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteInquiry", inq_no);
+	}
 
+	//1:1문의 답변 작성
+	public int writeInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".writeInquiryAnswer", dto);
+	}
+	
+	//1:1문의 답변 삭제
+	public int deleteInquiryAnswer(int ia_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteInquiryAnswer", ia_no);
+	}
+	
+	//1:1문의 답변완료 상태로 변경
+	public int updateStatementAnswerOk(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerOk", inq_no);
+	}
+	
+	//1:1문의 답변보류 상태로 변경
+	public int updateStatementAnswerDelay(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerDelay", inq_no);
+	}
+	
+	//1:1문의 답변대기 상태로 변경
+	public int updateStatementAnswerDelete(int inq_no) throws Exception {
+		return sqlSession.update(namespace + ".updateStatementAnswerDelete", inq_no);
+	}
+	
+	//1:1문의 답변 수정
+	public int updateInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return sqlSession.update(namespace + ".updateInquiryAnswer", dto);
+	}
+	
 	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
 	@Override
 	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception {

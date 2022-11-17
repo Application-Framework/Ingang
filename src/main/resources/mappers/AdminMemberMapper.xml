@@ -16,16 +16,91 @@
 	</select>
 	
 	<!-- 회원정보 상세조회 -->
-    <select id="getMemberView" resultType="MemberDTO">
-        SELECT * FROM member WHERE m_no = #{m_no}
-    </select>
-    
-    <!-- 회원정보 삭제 -->
+	<select id="getMemberView" resultType="MemberDTO">
+		SELECT * FROM member WHERE m_no = #{m_no}
+	</select>
+	
+	<!-- 회원정보 삭제 -->
 	<delete id="deleteMember">
 		DELETE FROM member WHERE m_no = #{m_no}
 	</delete>
-    
-   	<sql id="searchAdminMemberBoard">
+
+	<!--회원정보 강의 구매이력 출력  -->
+	<select id="getMemberOrderLecture" resultType="HashMap">
+		SELECT hol.*, title
+		FROM history_order_lecture hol, online_lecture_introduction oli
+		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no  
+		LIMIT #{Page1}, #{PageSize1};
+	</select>
+	
+	<select id="getMemberOrderLectureTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM history_order_lecture hol, online_lecture_introduction oli
+		WHERE hol.m_no = #{m_no} AND hol.oli_no = oli.oli_no
+	</select>
+	
+	<!--회원정보 노트 구매이력 출력  -->
+	<select id="getMemberOrderNote" resultType="HashMap">
+		SELECT *, title 
+		FROM history_order_note hon, note n
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no  
+		LIMIT #{Page2}, #{PageSize2};
+	</select>
+	
+	<select id="getMemberOrderNoteTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM history_order_note hon, note n
+		WHERE hon.m_no = #{m_no} AND hon.n_no = n.n_no 
+	</select>
+	
+	<!--회원정보 작성 게시글 출력  -->
+	<select id="getMemberCommunity" resultType="HashMap">
+		SELECT *
+		FROM community_board
+		WHERE m_no = #{m_no}
+		LIMIT #{Page3}, #{PageSize3};
+	</select>
+	
+	<select id="getMemberCommunityTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM community_board
+		WHERE m_no = #{m_no}
+	</select>
+	
+	<!-- 관리자 페이지 회원 수정 -->
+	<update id="updateAdminMember">
+		UPDATE member
+		SET m_pw = #{m_pw},
+			m_authority = #{m_authority},
+			m_comment = #{m_comment}
+			<if test='img_path != null'>
+				,img_path = #{img_path}
+			</if>
+		WHERE m_no = #{m_no}
+	</update>
+	
+	<!-- 관리자 페이지 회원가입 -->
+	<insert id="signUpAdminMember" parameterType="hashMap">
+		INSERT INTO member(
+			m_id,
+			m_pw,
+			m_name,
+			m_authority,
+			m_comment,
+			reg_date,
+			img_path)
+			VALUES(
+			#{m_id},
+			#{m_pw},
+			#{m_name},
+			#{m_authority},
+			#{m_comment},
+			CURDATE(),
+			#{img_path})
+	</insert>
+	
+	<!-- 회원목록 페이지 검색 -->
+	<sql id="searchAdminMemberBoard">
 		<choose>
 			<when test="searchCategory == 'noSearch'">
 			</when>
@@ -41,12 +116,4 @@
 		</choose>
 	</sql>
 	
-	<select id="getMemberDetail">
-		
-	</select>
-	
-	<!-- 모든 회원 가져오기 -->
-	<select id="getAllMemberList" resultType="MemberDTO">
-		SELECT * FROM member
-	</select>
 </mapper>

@@ -18,11 +18,25 @@ public interface AdminMemberService {
 	public int getMemberTotalCount(HashMap<String, Object> map) throws Exception;
 	
 	//회원 정보 상세조회
-	public Map<String, Object> getMemberView(int m_no) throws Exception;
+	public MemberDTO getMemberView(int m_no) throws Exception;
 	
 	//회원정보 삭제
-	public void deleteMember(int m_no) throws Exception;
+	public int deleteMember(int m_no) throws Exception;
 	
-	// 모든 회원 가져오기
-	public List<MemberDTO> getAllMemberList();
+	//회원정보 강의 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderLecture(HashMap<String, Object> map) throws Exception;
+	public int getMemberOrderLectureTotalCount(HashMap<String, Object> map) throws Exception;
+	
+	//회원정보 노트 구매이력 출력
+	public List<Map<String, Object>> getMemberOrderNote(HashMap<String, Object> map) throws Exception;
+	public int getMemberOrderNoteTotalCount(HashMap<String, Object> map) throws Exception;
+	
+	//회원정보 작성게시글 출력
+	public List<Map<String, Object>> getMemberCommunity(HashMap<String, Object> map) throws Exception;
+	public int getMemberCommunityTotalCount(HashMap<String, Object> map) throws Exception;
+	
+	//관리자페이지 회원 수정
+	public int updateAdminMember(MemberDTO mDto) throws Exception;
+	//관리자페이지 회원 가입
+	public int signUpAdminMember(MemberDTO mDto) throws Exception;
 }

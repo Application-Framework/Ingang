@@ -12,6 +12,10 @@ import com.spring.ex.dao.CommunityBoardDAO;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
+import com.spring.ex.dto.InquiryAnswerDTO;
+import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
@@ -116,6 +120,30 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 		return dao.getTagCommunityBoard(cb_no);
 	}
 	
+	//인기태그 출력
+	@Override
+	public List<CommunityTagListDTO> getPopularityTagCommunity(HashMap<String, Object> map) throws Exception {
+		return dao.getPopularityTagCommunity(map);
+	}
+	
+	//존재하는 태그 명인지 체크
+	@Override
+	public int isCheckTagSearchList(String ctl_name) throws Exception {
+		return dao.isCheckTagSearchList(ctl_name);
+	}
+	
+	//존재하지 않는 태그명이면 삽입후 값 반환
+	@Override
+	public int insertTagList(String ctl_name ) throws Exception {
+		return dao.insertTagList(ctl_name);
+	}
+	
+	//커뮤니티 태그 검색 기록
+	@Override
+	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception {
+		dao.serachTagRecord(dto);
+	}
+	
 	//수강후기 게시판 출력
 	@Override
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {
@@ -129,8 +157,74 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	}
 	
 	//게시판 해결됨, 모집종료로 변경
+	@Override
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception {
 		return dao.updateCompletedCommunityBoard(map);
+	}
+	
+	//1:1문의하기 게시판 출력
+	@Override
+	public List<InquiryDTO> getCommunityBoardInquiryPage(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardInquiryPage(map);
+	}
+	
+	//1:1문의하기 게시판 총 갯수
+	@Override
+	public int getCommunityBoardInquiryPageTotalCount(HashMap<String, Object> map) throws Exception {
+		return dao.getCommunityBoardInquiryPageTotalCount(map);
+	}
+	
+	//1:1문의하기 작성
+	@Override
+	public int writeInquiry(InquiryDTO dto) throws Exception {
+		return dao.writeInquiry(dto);
+	}
+	
+	//1:1문의하기 상세페이지
+	@Override
+	public Map<String, Object> getInquiryViewPage(int inq_no) throws Exception {
+		return dao.getInquiryViewPage(inq_no);
+	}
+	
+	//1:1문의하기 삭제
+	@Override
+	public int deleteInquiry(int inq_no) throws Exception {
+		return dao.deleteInquiry(inq_no);
+	}
+	
+	//1:1문의 답변 작성
+	@Override
+	public int writeInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return dao.writeInquiryAnswer(dto);
+	}
+	
+	//1:1문의 답변 삭제
+	@Override
+	public int deleteInquiryAnswer(int ia_no) throws Exception {
+		return dao.deleteInquiryAnswer(ia_no);
+	}
+	
+	//1:1문의 답변완료 상태로 변경
+	@Override
+	public int updateStatementAnswerOk(int inq_no) throws Exception {
+		return dao.updateStatementAnswerOk(inq_no);
+	}
+	
+	//1:1문의 답변보류 상태로 변경
+	@Override
+	public int updateStatementAnswerDelay(int inq_no) throws Exception {
+		return dao.updateStatementAnswerDelay(inq_no);
+	}
+	
+	//1:1문의 답변대기 상태로 변경
+	@Override
+	public int updateStatementAnswerDelete(int inq_no) throws Exception {
+		return dao.updateStatementAnswerDelete(inq_no);
+	}
+	
+	//1:1문의 답변 수정
+	public int updateInquiryAnswer(InquiryAnswerDTO dto) throws Exception {
+		return dao.updateInquiryAnswer(dto);
 	}
 
 	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
