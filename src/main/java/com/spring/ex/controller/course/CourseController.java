@@ -161,7 +161,8 @@ public class CourseController {
 		if(memberDTO != null) {
 			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
-			if(currentTeacherDTO != null) {
+			
+			if(courseTeacherDTO != null && currentTeacherDTO != null) {
 				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
 			}
 		}
