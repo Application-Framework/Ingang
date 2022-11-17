@@ -89,99 +89,106 @@
 										 </c:otherwise>
 									</c:choose>
 							</ul>
-							
-							<div class="tab-content" id="contentDiv">
-								<div class="tab-pane fade show active" id="qwe">
-									<c:forEach var="cbList" items="${cbRegDateList}">
-										<article class="blog_item">
-											<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-											
-												<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=1&classify=1&isOnlineLecture=${cbList.oli_no}">
-													<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
-													<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
-												</a>
-												<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
-												<ul id="tag-list" style=""> 
-													<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
-														<li class="tag-item">#${cbTag.tag_name}</li>
-													</c:forEach>
-												</ul>
-												<ul class="blog-info-link">
-													<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
-													<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
-													<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
-													<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
-													<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbList.reg_date}" /></font></li>
-												</ul>
-											</div>
-										</article>
-									</c:forEach>
-								</div>
-								<div class="tab-pane fade" id="asd">
+							<c:if test="${Paging.totalCount > 0}">
+								<div class="tab-content" id="contentDiv">
 									<div class="tab-pane fade show active" id="qwe">
-										<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
+										<c:forEach var="cbList" items="${cbRegDateList}">
 											<article class="blog_item">
 												<div class="blog_details" style="padding: 10px 10px 10px 10px;">
-													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1&isOnlineLecture=${cbGoodShowList.oli_no}">
-														<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
-														<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
+												
+													<a class="d-inline-block" href="communityBoardRead?cb_no=${cbList.cb_no}&classify=1&isOnlineLecture=${cbList.oli_no}">
+														<font size="1px;">NO. <c:url value="${cbList.cb_no}"/></font>
+														<h2><c:url value="${fn:substring(cbList.title, 0, 35)}"/></h2>
 													</a>
-													<p style="margin: 0 0px;"><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+													<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
 													<ul id="tag-list" style=""> 
-														<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbGoodShowList.cb_no)}">
-															<li class="tag-item">#${cbTag.tag_name}</li>
+														<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
+															<li class="tag-item">#${cbTag.ctl_name}</li>
 														</c:forEach>
 													</ul>
 													<ul class="blog-info-link">
-														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
-														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
-														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
+														<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbList.m_id}"/></a> </li>
+														<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbList.reply}"/> </a></li>
+														<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbList.good}"/></a></li>
 														<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
-														<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbGoodShowList.reg_date}" /></font></li>
+														<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbList.reg_date}" /></font></li>
 													</ul>
 												</div>
 											</article>
 										</c:forEach>
 									</div>
-								
+									<div class="tab-pane fade" id="asd">
+										<div class="tab-pane fade show active" id="qwe">
+											<c:forEach var="cbGoodShowList" items="${cbGoodShowList}">
+												<article class="blog_item">
+													<div class="blog_details" style="padding: 10px 10px 10px 10px;">
+														<a class="d-inline-block" href="communityBoardRead?cb_no=${cbGoodShowList.cb_no}&classify=1&isOnlineLecture=${cbGoodShowList.oli_no}">
+															<font size="1px;">NO. <c:url value="${cbGoodShowList.cb_no}"/></font>
+															<h2><c:url value="${fn:substring(cbGoodShowList.title, 0, 30)}"/></h2>
+														</a>
+														<p style="margin: 0 0px;"><c:url value="${fn:substring(cbGoodShowList.content,0,200)}"/></p>
+														<ul id="tag-list" style=""> 
+															<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbGoodShowList.cb_no)}">
+																<li class="tag-item">#${cbTag.ctl_name}</li>
+															</c:forEach>
+														</ul>
+														<ul class="blog-info-link">
+															<li><a href="#"><i class="fa fa-user"></i> <c:url value="${cbGoodShowList.m_id}"/></a></li>
+															<li><a href="#"><i class="fa fa-comments"></i> <c:url value="${cbGoodShowList.reply}"/> </a></li>
+															<li><a href="#"><i class="fa fa-heart"></i> <c:url value="${cbGoodShowList.good}"/></a></li>
+															<li><i class="fa fa-clock-o"> </i><font size="2" color="#848484">
+															<fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbGoodShowList.reg_date}" /></font></li>
+														</ul>
+													</div>
+												</article>
+											</c:forEach>
+										</div>
+									
+									</div>
+	
 								</div>
-
-							</div>
+							</c:if>
+							<c:if test="${Paging.totalCount < 1 }">
+								<div align="center" class="col-lg-12" style="margin: 40% 0;">작성된 게시글이 없습니다.</div>
+							</c:if>
+							
 						</div>
 					</div>
 
 
-					<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-						<ul class="pagination" id="pagingDiv">
-							<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
-								</c:otherwise>
-							</c:choose>
-							<!-- 페이지 갯수만큼 버튼 생성 -->
-							<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+					<c:if test="${Paging.totalCount > 10}">
+						<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
+							<ul class="pagination" id="pagingDiv">
+								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 								<c:choose>
-									<c:when test="${i eq Paging.pageNo }">
-										<li class="page-item  active"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+									<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 									</c:when>
 									<c:otherwise>
-										<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 									</c:otherwise>
 								</c:choose>
-							</c:forEach>
-							<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-							<c:choose>
-								<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
-								</c:when>
-								<c:otherwise>
-									<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
-								</c:otherwise>
-							</c:choose>
-						</ul>
-					</nav>
+								<!-- 페이지 갯수만큼 버튼 생성 -->
+								<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+									<c:choose>
+										<c:when test="${i eq Paging.pageNo }">
+											<li class="page-item  active disabled"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+								<c:choose>
+									<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+									</c:when>
+									<c:otherwise>
+										<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+									</c:otherwise>
+								</c:choose>
+							</ul>
+						</nav>
+					</c:if>
 				</div><br>
 			</div>
 			<jsp:include page="communityTagSidebar.jsp" />

@@ -86,13 +86,14 @@
 <script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 <script type="text/javascript">
 
+//자유게시판이 맨 처음에 선택되도록
 $(document).ready(function () {
 	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
 		sessionStorage.setItem("classifyActive", "1"); 
 	}
 	
 })
-
+//카테고리 변경시마다 css변경 및 작성될 카테고리 값 변경
 $(function() {
 	$('.button-class1').click(function(){
 	    if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
@@ -121,12 +122,12 @@ $(function() {
 		if( !$('.button-class1').hasClass('btn btn-outline-danger') ) $('.button-class1').addClass('btn btn-outline-danger');
 	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
 	    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
-	    sessionStorage.setItem("classifyActive", "5"); 
+	    sessionStorage.setItem("classifyActive", "4"); 
 	  });
 
 });
 
-
+//게시글 작성
 $('#btnWrite').click(function() {
 	var m_no = $("#m_no").val();
 	var title = $("#title").val();

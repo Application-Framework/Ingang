@@ -5,6 +5,10 @@
 		<typeAlias type="com.spring.ex.dto.CommunityBoardDTO" alias="CommunityBoardDTO"/>
 		<typeAlias type="com.spring.ex.dto.CommunityBoardReplyDTO" alias="CommunityBoardReplyDTO"/>
 		<typeAlias type="com.spring.ex.dto.CommunityBoardTagDTO" alias="CommunityBoardTagDTO"/>
+		<typeAlias type="com.spring.ex.dto.CommunityTagListDTO" alias="CommunityTagListDTO"/>
+		<typeAlias type="com.spring.ex.dto.CommunityTagSerachDTO" alias="CommunityTagSerachDTO"/>
+		<typeAlias type="com.spring.ex.dto.InquiryDTO" alias="InquiryDTO"/>
+		<typeAlias type="com.spring.ex.dto.InquiryAnswerDTO" alias="InquiryAnswerDTO"/>
 		
 		<typeAlias type="com.spring.ex.dto.MemberDTO" alias="MemberDTO"/>
 		

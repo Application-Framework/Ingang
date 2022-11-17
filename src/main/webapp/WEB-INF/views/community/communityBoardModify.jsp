@@ -200,7 +200,7 @@ $('#btnModify').click(function() {
 				}
 				else {
 					sessionStorage.setItem("classifyActive", "0"); 
-					var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify;
+					var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 					opener.location.replace(reLoadUrl);
 					window.close();
 				}

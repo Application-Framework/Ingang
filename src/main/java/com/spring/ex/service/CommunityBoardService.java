@@ -9,6 +9,10 @@ import org.springframework.stereotype.Service;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityBoardTagDTO;
+import com.spring.ex.dto.CommunityTagListDTO;
+import com.spring.ex.dto.CommunityTagSerachDTO;
+import com.spring.ex.dto.InquiryAnswerDTO;
+import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
 
 @Service
@@ -62,6 +66,18 @@ public interface CommunityBoardService {
 	//태그 출력
 	public List<CommunityBoardTagDTO> getTagCommunityBoard(int cb_no) throws Exception;
 	
+	//인기태그 출력
+	public List<CommunityTagListDTO> getPopularityTagCommunity(HashMap<String, Object> map) throws Exception;
+	
+	//존재하는 태그 명인지 체크
+	public int isCheckTagSearchList(String ctl_name) throws Exception;
+	
+	//존재하지 않는 태그명이면 삽입후 값 반환
+	public int insertTagList(String ctl_name) throws Exception;
+	
+	//커뮤니티 태그 검색 기록
+	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception;
+	
 	//수강후기 게시판 출력
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;
 	
@@ -70,6 +86,39 @@ public interface CommunityBoardService {
 	
 	//게시판 해결됨, 모집종료로 변경
 	public int updateCompletedCommunityBoard(HashMap<String, Object> map) throws Exception;
+	
+	//1:1문의하기 게시판 출력
+	public List<InquiryDTO> getCommunityBoardInquiryPage(HashMap<String, Object> map) throws Exception;
+	
+	//1:1문의하기 게시판 총 갯수
+	public int getCommunityBoardInquiryPageTotalCount(HashMap<String, Object> map) throws Exception;
+	
+	//1:1문의하기 작성
+	public int writeInquiry(InquiryDTO dto) throws Exception;
+	
+	//1:1문의하기 상세페이지
+	public Map<String, Object> getInquiryViewPage(int inq_no) throws Exception;
+	
+	//1:1문의하기 삭제
+	public int deleteInquiry(int inq_no) throws Exception;
+	
+	//1:1문의 답변 작성
+	public int writeInquiryAnswer(InquiryAnswerDTO dto) throws Exception;
+	
+	//1:1문의 답변 삭제
+	public int deleteInquiryAnswer(int ia_no) throws Exception;
+	
+	//1:1문의 답변완료 상태로 변경
+	public int updateStatementAnswerOk(int inq_no) throws Exception;
+	
+	//1:1문의 답변보류 상태로 변경
+	public int updateStatementAnswerDelay(int inq_no) throws Exception;
+	
+	//1:1문의 답변대기 상태로 변경
+	public int updateStatementAnswerDelete(int inq_no) throws Exception;
+	
+	//1:1문의 답변 수정
+	public int updateInquiryAnswer(InquiryAnswerDTO dto) throws Exception;
 	
 	//2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용
 	public List<CommunityBoardDTO> selectCommunityBoardByOli_no(HashMap<String, Object> map) throws Exception;

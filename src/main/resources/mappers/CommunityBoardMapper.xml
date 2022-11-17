@@ -10,7 +10,7 @@
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 				,member m
 		WHERE m.m_no = cb.m_no AND flag = 1 
 		<include refid="classifyBoard"></include>
@@ -26,7 +26,7 @@
 				(SELECT COUNT(*) FROM community_board_good cbg WHERE cb.cb_no=cbg.cb_no) `good`,
 				m_id
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 			,member m
 		WHERE m.m_no = cb.m_no AND flag = 1
 		<include refid="classifyBoard"></include>
@@ -35,18 +35,50 @@
 		order by good DESC  LIMIT #{Page}, #{PageSize};
 	</select>
 	
-	<!-- 태그 출력 -->
+	<!-- 게시글 태그 출력 -->
 	<select id="getTagCommunityBoard" resultType="hashMap">
-		SELECT cbt.cb_no, t.tag_name
-		FROM community_board cb, community_board_tag cbt, tag t
-		WHERE cb.cb_no = cbt.cb_no AND t.tag_no = cbt.tag_no AND cb.cb_no = #{cb_no}
+		SELECT cbt.cb_no, ctl_name
+		FROM community_board cb, community_board_tag cbt, community_tag_list ctl
+		WHERE cb.cb_no = cbt.cb_no AND ctl.ctl_no = cbt.ctl_no AND cb.cb_no = #{cb_no}
 	</select>
+	
+	<!-- 인기 태그 출력 -->
+	<select id="getPopularityTagCommunity" resultType="hashMap">
+		SELECT ctl_name, COUNT(*) AS cnt
+		FROM communtiy_tag_serach cts, community_tag_list ctl
+		WHERE cts.ctl_no = ctl.ctl_no 
+				AND cts_date BETWEEN CURDATE()-45 AND CURDATE()
+				AND cts_found = 1
+				<include refid="classifyBoard"></include>
+		GROUP BY ctl.ctl_name
+		ORDER BY cnt DESC
+		LIMIT 0, 9
+	</select>
+	
+	<!-- 존재하는 태그 명인지 체크 -->
+	<select id="isCheckTagSearchList" resultType="int">
+		SELECT IFNULL(ctl_no, COUNT(*)) AS ctl_no
+		FROM community_tag_list
+		WHERE ctl_name = #{ctl_name}
+	</select>
+	
+	<!-- 존재하지 않는 태그명이면 삽입후 값 반환-->
+	<insert id="insertTagList" parameterType="CommunityTagListDTO" keyProperty="ctl_no">
+		INSERT INTO community_tag_list(ctl_name)
+		VALUES(#{ctl_name})
+	</insert>
+	
+	<!-- 커뮤니티 태그 검색 기록 -->
+	<insert id="serachTagRecord">
+		INSERT INTO communtiy_tag_serach(ctl_no, cts_date, classify, cts_found)
+		VALUES(#{ctl_no}, CURDATE(), #{classify}, #{cts_found})
+	</insert>
 
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
 		SELECT COUNT(*) 
 		FROM community_board cb LEFT JOIN community_board_tag cbt ON cb.cb_no = cbt.cb_no
-								LEFT JOIN tag t ON t.tag_no = cbt.tag_no
+								LEFT JOIN community_tag_list ctl ON ctl.ctl_no = cbt.ctl_no
 		WHERE flag = 1 <include refid="classifyBoard"></include><include refid="searchBoard"></include> 
 	</select>
 	
@@ -138,7 +170,7 @@
 		WHERE cb_no = #{cb_no}
 	</delete>
 	
-	<!--게시글 댓글 수정  -->
+	<!--게시글 수정  -->
 	<update id="updateCommunityBoard">
 		UPDATE community_board
 		SET title = #{title}, content = #{content}, classify = #{classify}
@@ -167,7 +199,7 @@
 			<when test="searchKeyword == 'noContent' and searchTag != 'noTag'">
 				AND cb.cb_no = cbt.cb_no AND(
 				<foreach collection="searchTag" index="index" item="item" separator="or">
-					tag_name LIKE CONCAT('%', #{item} , '%')
+					ctl_name = #{item}
 				</foreach>
 				)
 			</when>
@@ -178,7 +210,7 @@
 				AND (title LIKE  CONCAT('%', #{searchKeyword}, '%') OR content LIKE CONCAT('%', #{searchKeyword}, '%'))
 				OR
 				<foreach collection="searchTag" item="item" open="(" close=")" separator="or">
-					tag_name LIKE CONCAT('%', #{item} , '%')
+					ctl_name = #{item}
 				</foreach>
 			</when>
 		</choose>
@@ -225,6 +257,95 @@
 		WHERE cb_no = #{cb_no}; 
 	</update>
 	
+	<!-- 1:1문의하기 게시판 출력 -->
+	<select id="getCommunityBoardInquiryPage" resultType="hashMap">
+		SELECT i.*, m.m_id, m.m_name
+		FROM inquiry i, member m
+		WHERE i.m_no = m.m_no
+		<include refid="searchInauiry"></include> 
+		ORDER BY i.reg_date DESC
+		LIMIT #{Page}, #{PageSize};
+	</select>
+	
+	<!-- 1:1문의하기 게시판 총 갯수 -->
+	<select id="getCommunityBoardInquiryPageTotalCount" resultType="int">
+		SELECT COUNT(*)
+		FROM inquiry i, member m
+		WHERE i.m_no = m.m_no 
+		<include refid="searchInauiry"></include> 
+	</select>
+	
+	<!--1:1 문의하기 작성-->
+	<insert id="writeInquiry">
+		INSERT INTO inquiry(m_no, category, title, content, statement ,reg_date)
+		VALUES(#{m_no}, #{category}, #{title}, #{content}, 0, NOW());
+	</insert>
+	
+	<!--1:1 문의하기 상세페이지  -->
+	<select id="getInquiryViewPage" resultType="hashMap">
+		SELECT i.*, ia.*, m.m_id, m.m_name
+		FROM inquiry i LEFT OUTER join inquiry_answer ia ON ia.inq_no = i.inq_no , member m
+		WHERE i.inq_no = #{inq_no} AND i.m_no = m.m_no; 
+	</select>
+	
+	<!--1:1 문의하기 삭제  -->
+	<delete id="deleteInquiry">
+		DELETE FROM inquiry
+		WHERE inq_no = #{inq_no}
+	</delete>
+	
+	<!--1:1 문의하기 답변 작성-->
+	<insert id="writeInquiryAnswer">
+		INSERT INTO inquiry_answer(inq_no, ia_content, ia_reg_date)
+		VALUES(#{inq_no}, #{ia_content}, NOW())
+	</insert>
+	
+	<!--1:1 문의하기 답변 삭제  -->
+	<delete id="deleteInquiryAnswer">
+		DELETE FROM inquiry_answer
+		WHERE ia_no = #{ia_no}
+	</delete>
+	
+	<!-- 1:1문의 답변 등록시 답변완료로 변경 -->
+	<update id="updateStatementAnswerOk">
+		UPDATE inquiry SET statement = 2 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 보류상태로 변경 -->
+	<update id="updateStatementAnswerDelay">
+		UPDATE inquiry SET statement = 1 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 대기상태로 변경 -->
+	<update id="updateStatementAnswerDelete">
+		UPDATE inquiry SET statement = 0 WHERE inq_no = #{inq_no}
+	</update>
+	
+	<!-- 1:1문의 답변 수정-->
+	<update id="updateInquiryAnswer">
+		UPDATE inquiry_answer 
+		SET ia_content = #{ia_content},
+			ia_reg_date = NOW()
+		WHERE ia_no = #{ia_no}
+	</update>
+	
+	<sql id="searchInauiry">
+		<if test="searchKeyword != null and searchType != null">
+			<choose>
+				<when test="searchType == 'title'">
+					AND i.title LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'category'">
+					AND i.category LIKE CONCAT('%', #{searchKeyword}, '%')
+				</when>
+				<when test="searchType == 'm_id'">
+					AND m.m_id LIKE  CONCAT('%', #{searchKeyword}, '%')
+				</when>
+			</choose>
+		</if>
+	</sql>
+	
+	<!--홍일 작성 아래  -->
 	<!-- 2022-09-03 김홍일 / 강의 상세 페이지의 커뮤니티 탭 조건 -->
 	<sql id="selectCommunityBoardByOli_noCondition">
 		WHERE oli_no = #{oli_no} AND 
