@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!doctype html>
 <html>
 <head>
@@ -323,7 +324,7 @@
 			<div class="col-lg-4">
 			    <div class="card">
 			      <div class="card-body p-4">
-			        <h5 class="card-title mb-4 fw-200">${course.price}원</h5>
+			        <h5 class="card-title mb-4 fw-200"><fmt:formatNumber value="${course.price}"/>원</h5>
 			        <c:if test="${member != null}">
 			        	<c:choose>
 			        		<c:when test="${isCurrentCourseTeacher == true}">
