@@ -72,7 +72,7 @@
 							<form action="communityReviews">
 								<div class="row">
 									<div class="col-lg-10" align="left">
-										<input type="text" class="form-control" name="searchKeyword" placeholder='내용을 검색해보세요!'>
+										<input type="text" class="form-control" name="searchKeyword" placeholder='내용을 검색해보세요!' <c:if test="${searchKeyword ne null}"> value = "${searchKeyword}" </c:if>>
 									</div>
 									<div class="col-lg-2" align="left" style="padding-left: 7px;">
 										<input type="submit" class="genric-btn danger-border radius" value="검색" style="width: 100%;">

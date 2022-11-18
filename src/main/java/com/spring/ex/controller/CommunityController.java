@@ -56,6 +56,7 @@ public class CommunityController {
 			System.out.println("No1 키워드");
 		}else {
 			map.put("searchKeyword", searchKeyword);
+			model.addAttribute("searchKeyword", searchKeyword);
 			System.out.println("o 키워드 : " + searchKeyword);
 		}
 		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
@@ -323,6 +324,7 @@ public class CommunityController {
 			map.put("searchKeyword", "noContent");
 		}else {
 			map.put("searchKeyword", searchKeyword);
+			model.addAttribute("searchKeyword", searchKeyword);
 		}
 		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
 			map.put("searchTag","noTag");
@@ -367,6 +369,7 @@ public class CommunityController {
 		}else if(searchKeyword ==""){
 			map.put("searchKeyword", "noContent");
 		}else {
+			model.addAttribute("searchKeyword", searchKeyword);
 			map.put("searchKeyword", searchKeyword);
 		}
 		
@@ -404,6 +407,7 @@ public class CommunityController {
 			map.put("searchKeyword", "noContent");
 		}else {
 			map.put("searchKeyword", searchKeyword);
+			model.addAttribute("searchKeyword", searchKeyword);
 		}
 		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
 			map.put("searchTag","noTag");

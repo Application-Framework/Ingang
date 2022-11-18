@@ -53,7 +53,7 @@
 							<form id="searchForm" action="communityQuestions">
 								<div class="row">
 									<div class="col-lg-10" >
-										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
+										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!' <c:if test="${searchKeyword ne null}"> value = "${searchKeyword}" </c:if>>
 										<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 										<ul id="tag-list"> </ul>
 									</div>

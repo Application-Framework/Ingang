@@ -23,6 +23,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 	
+	<style type="text/css">
+	[placeholder]:empty:before {
+  display: block;
+  content: attr(placeholder);
+  color: #a6a6a6;
+}</style>
 </head>
 
 <body>
@@ -50,12 +56,13 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form id="searchForm" action="communityChats">
+						<form id="searchForm" >
 							<div class="row">
 								<div class="col-lg-10" >
-									<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!'>
+									<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!' <c:if test="${searchKeyword ne null}"> value = "${searchKeyword}" </c:if>>
 									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
-									<ul id="tag-list"> </ul>
+									<ul id="tag-list">
+									</ul>
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
 									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
