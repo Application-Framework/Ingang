@@ -134,14 +134,51 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//존재하지 않는 태그명이면 삽입후 값 반환
 	@Override
-	public int insertTagList(String ctl_name ) throws Exception {
-		return dao.insertTagList(ctl_name);
+	public int insertTagList(CommunityTagListDTO dto ) throws Exception {
+		return dao.insertTagList(dto);
 	}
 	
 	//커뮤니티 태그 검색 기록
 	@Override
 	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception {
 		dao.serachTagRecord(dto);
+	}
+	
+	//태그 여부 확인 및  검색 기록 저장
+	@Override
+	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map) throws Exception {
+		CommunityTagSerachDTO ctsDTO = new CommunityTagSerachDTO();
+		CommunityTagListDTO ctlDTO = new CommunityTagListDTO();
+		for(String t : tagList) {
+			int totalCount = getCommunityBoardTotalCount(map);
+			int isCheckTag = isCheckTagSearchList(t);
+			System.out.println(isCheckTag);
+			if(isCheckTag == 0 ) {
+				ctlDTO.setCtl_name(t);
+				int insertTagNum = insertTagList(ctlDTO);
+				
+				ctsDTO.setCtl_no(ctlDTO.getCtl_no());
+				ctsDTO.setClassify(1);
+				ctsDTO.setCts_found(0);
+				
+				serachTagRecord(ctsDTO);
+				
+			}else {
+				if(totalCount > 0) {
+					ctsDTO.setCtl_no(isCheckTag);
+					ctsDTO.setClassify(1);
+					ctsDTO.setCts_found(1);
+					
+					serachTagRecord(ctsDTO);
+				}else {
+					ctsDTO.setCtl_no(isCheckTag);
+					ctsDTO.setClassify(1);
+					ctsDTO.setCts_found(0);
+					
+					serachTagRecord(ctsDTO);
+				}
+			}
+		}
 	}
 	
 	//수강후기 게시판 출력

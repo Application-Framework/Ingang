@@ -136,8 +136,8 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//존재하지 않는 태그명이면 삽입후 값 반환
 	@Override
-	public int insertTagList( String ctl_name) throws Exception {
-		return sqlSession.insert(namespace + ".insertTagList", ctl_name);
+	public int insertTagList(CommunityTagListDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".insertTagList", dto);
 	}
 	
 	//커뮤니티 태그 검색 기록
