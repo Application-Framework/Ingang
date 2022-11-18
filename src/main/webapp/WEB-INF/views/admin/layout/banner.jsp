@@ -37,7 +37,7 @@
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="member">
+		<a class="nav-link" href="/admin/teacher">
 			<i class="fas fa-fw fa-table"></i>
 			<span>강사 목록</span>
 		</a>

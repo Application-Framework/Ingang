@@ -76,7 +76,16 @@
 										</td>
 										<td>${course.oli_no}</td>
 										<td><a onclick="openCourseDetail(${course.oli_no});" href="javascript:;">${course.title}</a></td>
-										<td><a href="">${course.teacher_name}</a></td>
+										<c:choose>
+											<%-- 강사일 때 --%>
+											<c:when test="${course.olt_no != 0}">
+												<td><a onclick="openTeacherDetail(${course.olt_no});" href="javascript:;">${course.teacher_name}</a></td>
+											</c:when>
+											<%-- 관리자 일 때 --%>
+											<c:otherwise>
+												<td>${course.teacher_name}</td>
+											</c:otherwise>
+										</c:choose>
 										<td>${course.price}</td>
 										<td>${course.level}</td>
 										<td>${course.reg_date}</td>
@@ -241,6 +250,22 @@
 			var top = (window.screen.height / 2) - (height/2);
 
 			var url = "/admin/course/"+oli_no;
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+	 	}
+	 	
+	 	// 강사 상세 창 띄우기
+	 	function openTeacherDetail(olt_no) {
+	 		// 창 크기 지정
+			var width = window.screen.width * 55 / 100;
+			var height = window.screen.height * 85 / 100;
+	
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+	
+			var url = "/admin/teacher/teacherDetail?olt_no="+olt_no;
 			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
 			console.log(option);
 			window.open(url, "_blank", option);

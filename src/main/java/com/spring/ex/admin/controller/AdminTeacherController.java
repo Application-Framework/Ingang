@@ -11,10 +11,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.spring.ex.admin.service.AdminCourseService;
+import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.admin.service.AdminTeacherService;
 import com.spring.ex.dto.TeacherDTO;
 import com.spring.ex.dto.TeacherRequestDTO;
+import com.spring.ex.service.CourseService;
 import com.spring.ex.service.PagingService;
+import com.spring.ex.service.TypeService;
 
 @Controller
 public class AdminTeacherController {
@@ -22,7 +26,17 @@ public class AdminTeacherController {
 	@Inject
 	private AdminTeacherService adminTeacherService;
 	
-	private PagingService pagingService;
+	@Inject
+	private TypeService typeService;
+	
+	@Inject
+	private AdminMemberService adminMemberService;
+	
+	@Inject
+	private CourseService courseService;
+	
+	@Inject
+	private AdminCourseService adminCourseService;
 	
 	// 강사 대시보드 페이지
 	@RequestMapping("admin/teacher")
@@ -33,7 +47,7 @@ public class AdminTeacherController {
 		
 		int teacherTotalCount = adminTeacherService.getAdminTeacherTotalCount(searchCategory, searchKeyword);
 		final int pageSize = 10;
-		pagingService = new PagingService(request, teacherTotalCount, pageSize);
+		PagingService pagingService = new PagingService(request, teacherTotalCount, pageSize);
 		List<Map<String,Object>> teacherBoard =  adminTeacherService.getAdminTeacherBoard(searchCategory, searchKeyword, pagingService.getNowPage(), pageSize);
 		
 		model.addAttribute("pendingTotalCount", pendingTotalCount);
@@ -41,6 +55,8 @@ public class AdminTeacherController {
 		model.addAttribute("searchKeyword", searchKeyword);
 		model.addAttribute("teacherBoard", teacherBoard);
 		model.addAttribute("paging", pagingService.getPaging());
+		model.addAttribute("mainCategoryList", typeService.getMainTypeList());
+		model.addAttribute("memberList", adminMemberService.getAllMemberList());
 		
 		return "admin/teacher/teacher_dashboard";
 	}
@@ -53,7 +69,7 @@ public class AdminTeacherController {
 		
 		int pendingTotalCount = adminTeacherService.getAdminPendingTeacherTotalCount(searchCategory, searchKeyword);
 		final int pageSize = 10;
-		pagingService = new PagingService(request, pendingTotalCount, pageSize);
+		PagingService pagingService = new PagingService(request, pendingTotalCount, pageSize);
 		
 		List<Map<String,Object>> pendingBoard = adminTeacherService.getAdminPendingTeacherBoard(searchCategory, searchKeyword, pagingService.getNowPage(), pageSize);
 		
@@ -70,9 +86,29 @@ public class AdminTeacherController {
 	@RequestMapping("admin/teacher/teacherDetail")
 	public String adminTeacherDetailPage(HttpServletRequest request, Model model) {
 		int olt_no = Integer.parseInt(request.getParameter("olt_no"));
+		String searchCategory = request.getParameter("searchCategory");
+		String searchKeyword = request.getParameter("searchKeyword");
+		System.out.println("olt_no : " + olt_no);
+		System.out.println("searchCategory : " + searchCategory);
+		System.out.println("searchKeyword : " + searchKeyword);
+		System.out.println("page : " + request.getParameter("page"));
+		
 		TeacherDTO teacher = adminTeacherService.getAdminTeacherInfo(olt_no);
+		int teacherCoursetotalCount = adminCourseService.getTeacherCoursePostCount(olt_no, searchCategory, searchKeyword);
+		System.out.println("teacherCoursetotalCount : " + teacherCoursetotalCount);
+		final int pageSize = 10;
+		PagingService pagingService = new PagingService(request, teacherCoursetotalCount, pageSize);
+		System.out.println("pagingService.getNowPage() : " + pagingService.getNowPage());
+		List<Map<String,Object>> teacherCourseBoard = adminCourseService.getTeacherCourseBoard(olt_no, searchCategory, searchKeyword, pagingService.getNowPage(), pageSize);
+		System.out.println("teacherCourseBoard : " + teacherCourseBoard);
+		
 		
 		model.addAttribute("teacher", teacher);
+		model.addAttribute("allMainCategoryList", typeService.getMainTypeList());
+		model.addAttribute("searchCategory", searchCategory);
+		model.addAttribute("searchKeyword", searchKeyword);
+		model.addAttribute("teacherCourseBoard", teacherCourseBoard);
+		model.addAttribute("paging", pagingService.getPaging());
 		
 		return "admin/teacher/teacher_detail";
 	}
@@ -89,9 +125,8 @@ public class AdminTeacherController {
 	}
 	
 	// 강사 추가
-	@ResponseBody
 	@RequestMapping("admin/teacher/insertTeacher")
-	public void insertTeacher(HttpServletRequest request) {
+	public String insertTeacher(HttpServletRequest request) {
 		int m_no = Integer.parseInt(request.getParameter("m_no"));
 		String email = request.getParameter("email");
 		String name = request.getParameter("name");
@@ -111,6 +146,8 @@ public class AdminTeacherController {
 		
 		adminTeacherService.insertTeacher(teacher);
 		System.out.println("강사 추가 : " + teacher);
+		
+		return "redirect:" + request.getHeader("referer");
 	}
 	
 	// 강사 수정
@@ -141,11 +178,13 @@ public class AdminTeacherController {
 	
 	// 강사 삭제
 	@ResponseBody
-	@RequestMapping("admin/teacher/deleteTeacher")
+	@RequestMapping("admin/teacher/deleteTeachers")
 	public void deleteTeacher(HttpServletRequest request) {
-		int olt_no = Integer.parseInt(request.getParameter("olt_no"));
-		adminTeacherService.deleteTeacher(olt_no);
-		System.out.println("강사 삭제 : " + olt_no);
+		String[] olt_noList = request.getParameterValues("olt_noList");
+		for(String olt_no : olt_noList) {
+			adminTeacherService.deleteTeacher( Integer.parseInt(olt_no));
+			System.out.println("강사 삭제 : " + olt_no);
+		}
 	}
 	
 	// 강사 승인

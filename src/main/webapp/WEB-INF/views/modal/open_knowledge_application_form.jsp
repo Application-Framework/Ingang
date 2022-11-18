@@ -34,8 +34,7 @@
 			<div class="mb-4">
 				<label class="form-label">희망분야</label><span class="modal_label--essential">*</span>
 				<div class="form-text">아직 계획 중인 강의가 없으시다면 지식공유자의 직무와 연관된 분야를 골라주세요.</div>
-	        	<select name="hope_main_category" class="nice-select" style="float:none;" required>
-	        		<option value="">test</option>
+	        	<select name="main_type_no" class="nice-select" style="float:none;" required>
 	        		<c:forEach var="category" items="${mainCategoryList}">
 	        			<option value="${category.main_type_no}">${category.main_type_name}</option>
 	        		</c:forEach>
@@ -54,7 +53,7 @@
 			</div>
 		</div>
 		<div class="mt-auto">
-			<input type="submit" class="single-input genric-btn primary radius w-100" value="제출"/>
+			<input id="form_submit" type="button" class="single-input genric-btn primary radius w-100" value="제출"/>
  		</div>
 	</div>
 </div>

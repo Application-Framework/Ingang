@@ -105,7 +105,7 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-xl-12">
-						<h1 class="title">나의 지식에 가치를 부여하세요</h3>
+						<h1 class="title">나의 지식에 가치를 부여하세요</h1>
 						<p class="subtitle">전체 지식공유자 평균 수익 3025만원!!<br>
 						나의 지식을 나눠 사람들에게 배움의 기회를 주고, 의미있는 대가를 가져가세요.<br>
 						인강인강은 지식으로 의미있는 수익과 공유가 가능한 한국 유일한 플랫폼 입니다.</p>
@@ -130,7 +130,7 @@
 		</div>
 	</div>
     
-    <form class="h-100" action="/submitOpenKnowledgeApplication" method="post">
+    <form class="h-100" id="open_knowledge_form">
 	    <div class="modal" id="open_knowledge_modal">
 	        <div class="modal_content card card-body d-flex" id="open_knowledge_modal_content" title="클릭하면 창이 닫힙니다.">
 	        	
@@ -176,6 +176,22 @@
         		}
         	});
         }
+        
+        // 제출 시 이벤트
+        $(document).on("click", "#form_submit", function() {
+        	$.ajax({
+        		url: "/submitOpenKnowledgeApplication",
+        		type: "post",
+        		data: $("#open_knowledge_form").serialize(),
+        		success: function() {
+        			alert("성공적으로 제출 되었습니다. 관리자의 검토 후 승인이 완료되면 지식 공유를 할 수 있습니다.");
+        			location.href="/";
+        		},
+        		error: function() {
+        			alert("error");
+        		}
+        	});
+        });
     </script>
 </body>
 </html>

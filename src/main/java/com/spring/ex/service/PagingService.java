@@ -1,7 +1,5 @@
 package com.spring.ex.service;
 
-import java.util.HashMap;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.spring.ex.dto.PagingDTO;

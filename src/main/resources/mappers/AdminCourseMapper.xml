@@ -5,7 +5,7 @@
 	
 	<!-- 강의 게시판 가져오기 -->
 	<select id="getCourseBoard" resultType="HashMap">
-		SELECT oli.oli_no, oli.title, IFNULL(olt.name, "관리자") AS teacher_name, oli.price, oli.level, oli.reg_date 
+		SELECT oli.oli_no, oli.title, oli.olt_no, IFNULL(olt.name, "관리자") AS teacher_name, oli.price, oli.level, oli.reg_date 
 		<include refid="courseBoardSQL" />
 		ORDER BY oli_no DESC
 		LIMIT #{nowPage}, #{pageSize}
@@ -15,6 +15,20 @@
 	<select id="getCoursePostCount" resultType="int">
 		SELECT COUNT(*)
 		<include refid="courseBoardSQL" />
+	</select>
+	
+	<!-- 강의 게시판 가져오기 -->
+	<select id="getTeacherCourseBoard" resultType="HashMap">
+		SELECT oli_no, title, price, level, reg_date 
+		<include refid="teacherCourseBoardSQL" />
+		ORDER BY oli_no DESC
+		LIMIT #{nowPage}, #{pageSize}
+	</select>
+	
+	<!-- 강의 게시물 총 개수 가져오기 -->
+	<select id="getTeacherCoursePostCount" resultType="int">
+		SELECT COUNT(*)
+		<include refid="teacherCourseBoardSQL" />
 	</select>
 	
 	<!-- 모든 강의 가져오기 -->
@@ -27,7 +41,7 @@
 		FROM online_lecture_introduction oli LEFT OUTER JOIN online_lecture_teacher olt
 			ON oli.olt_no = olt.olt_no
 		WHERE oli.origin = 1
-		<if test="searchCategory != null and searchKeyword != null">
+		<if test="searchCategory != null and searchKeyword != null and searchKeyword != ''">
 			<choose>
 				<when test="searchCategory.equals('course_title')">
 					AND oli.title LIKE '%${searchKeyword}%'
@@ -37,6 +51,33 @@
 				</when>
 				<when test="searchCategory.equals('teacher_email')">
 					AND olt.email LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('olt_no')">
+					AND olt.olt_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('oli_no')">
+					AND oli.oli_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('level')">
+					AND oli.level = #{searchKeyword}
+				</when>
+			</choose>
+		</if>  
+	</sql>
+	
+	<sql id="teacherCourseBoardSQL">
+		FROM online_lecture_introduction
+		WHERE origin = 1 AND olt_no = #{olt_no}
+		<if test="searchCategory != null and searchKeyword != null and searchKeyword != ''">
+			<choose>
+				<when test="searchCategory.equals('oli_no')">
+					AND oli_no = #{searchKeyword}
+				</when>
+				<when test="searchCategory.equals('title')">
+					AND title LIKE '%${searchKeyword}%'
+				</when>
+				<when test="searchCategory.equals('level')">
+					AND level = #{searchKeyword}
 				</when>
 			</choose>
 		</if>  

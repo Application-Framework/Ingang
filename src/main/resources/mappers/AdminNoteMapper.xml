@@ -4,7 +4,7 @@
 <mapper namespace="com.spring.ex.AdminNoteMapper">
 	
 	<select id="getAdminNoteBoard" resultType="HashMap">
-		SELECT n_no, oli_no, m.m_name, title, n.price, n.reg_date  
+		SELECT n_no, oli_no, m.m_no, m.m_name, title, n.price, n.reg_date  
 		<include refid="adminNoteBoardSQL" />
 		ORDER BY n_no DESC
 		LIMIT #{nowPage}, #{pageSize}

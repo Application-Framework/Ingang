@@ -45,8 +45,8 @@
 					<div class="row mb-3 pl-3">
 						<form action="/admin/note/notes-management" role="form" method="GET" class="form-inline">
 							<select class="form-control" id="searchCategory" name="searchCategory">
-							<option value="n_no" <c:if test="${searchCategory == 'n_no'}">selected</c:if>>노트번호</option>
-							<option value="oli_no" <c:if test="${searchCategory == 'oli_no'}">selected</c:if>>강의번호</option>
+								<option value="n_no" <c:if test="${searchCategory == 'n_no'}">selected</c:if>>노트번호</option>
+								<option value="oli_no" <c:if test="${searchCategory == 'oli_no'}">selected</c:if>>강의번호</option>
 								<option value="title" <c:if test="${searchCategory == 'title'}">selected</c:if>>노트명</option>
 								<option value="m_name" <c:if test="${searchCategory == 'm_name'}">selected</c:if>>작성자명</option>
 								<option value="m_id" <c:if test="${searchCategory == 'm_id'}">selected</c:if>>작성자ID</option>
@@ -91,7 +91,7 @@
 										<c:if test="${note.oli_no == 0}"><td>${note.oli_no}</td></c:if>
 										<c:if test="${note.oli_no != 0}"><td><a onclick="openCourseDetail(${note.oli_no});" href="javascript:;">${note.oli_no}</a></td></c:if>
 										<c:if test="${note.m_name == null}"><td>관리자</td></c:if>
-										<c:if test="${note.m_name != null}"><td><a href="">${note.m_name}</a></td></c:if>
+										<c:if test="${note.m_name != null}"><td><a href="javascript:void(window.open('/admin/memberDetail?m_no=${note.m_no}', '상세페이지' , 'width=1280px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));">${note.m_name}</a></td></c:if>
 										<td><a onclick="openNoteDetail(${note.n_no});" href="javascript:;">${note.title}</a></td>
 										<td>${note.price}</td>
 										<td>${note.reg_date}</td>

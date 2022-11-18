@@ -67,6 +67,17 @@ public class AdminCourseServiceImpl implements AdminCourseService {
 		return adminCourseDAO.getCoursePostCount(searchCategory, searchKeyword);
 	}
 
+	// 강사의 강의 게시물 총 개수 가져오기
+	@Override
+	public List<Map<String, Object>> getTeacherCourseBoard(int olt_no, String searchCategory, String searchKeyword, int nowPage, int pageSize) {
+		return adminCourseDAO.getTeacherCourseBoard(olt_no, searchCategory, searchKeyword, nowPage, pageSize);
+	}
+
+	@Override
+	public int getTeacherCoursePostCount(int olt_no, String searchCategory, String searchKeyword) {
+		return adminCourseDAO.getTeacherCoursePostCount(olt_no, searchCategory, searchKeyword);
+	}
+	
 	// 강의 요청없이 바로 생성
 	@Override
 	public int createCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths) {

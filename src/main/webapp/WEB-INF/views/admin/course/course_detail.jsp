@@ -252,7 +252,7 @@
 				alert("로그인이 필요합니다");
 				return;
 			</c:if>
-			<c:if test="${member.m_authority == 0}">
+			<c:if test="${member.m_authority != 1}">
 				alert("관리자 권한이 없습니다.");
 				return;
 			</c:if>

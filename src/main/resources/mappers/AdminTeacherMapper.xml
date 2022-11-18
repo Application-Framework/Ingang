@@ -34,11 +34,13 @@
 	<!-- 강사 정보 가져오기 -->
 	<select id="getAdminTeacherInfo" resultType="com.spring.ex.dto.TeacherDTO">
 		SELECT * FROM online_lecture_teacher
+		WHERE olt_no = #{olt_no}
 	</select>
 	
 	<!-- 승인 대기강사 정보 가져오기 -->
 	<select id="getAdminPendingTeacherInfo" resultType="com.spring.ex.dto.TeacherRequestDTO">
 		SELECT * FROM online_lecture_teacher_request
+		WHERE oltr_no = #{oltr_no}
 	</select>
 	
 	<!--  강사 추가 -->
@@ -93,8 +95,9 @@
 	
 	<sql id="adminPendingBoardSQL">
 		FROM online_lecture_teacher_request
+		WHERE approval_status = 0
 		<if test="searchCategory != null and searchKeyword != null and searchKeyword != ''">
-			WHERE
+			AND
 			<choose>
 				<when test="searchCategory.equals('oltr_no')">
 					oltr_no = #{searchKeyword}

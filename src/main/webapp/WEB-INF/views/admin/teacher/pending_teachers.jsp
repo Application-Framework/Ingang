@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>인강인강 승인 대기중인 강의 관리</title>
+<title>인강인강 승인 대기중인 강사 관리</title>
 	<style>
 		.table td {
 			vertical-align: middle!important;
@@ -27,19 +27,21 @@
 				<!-- 본문 -->
 				<div class="container-fluid">
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
-						<h1 class="h3 mb-0 text-gray-800">승인 대기중인 강의 관리</h1>
+						<h1 class="h3 mb-0 text-gray-800">승인 대기중인 강사 관리</h1>
 					</div>
 					<hr>
 					
 					<div class="row mb-3 pl-3">
-						<form action="/admin/course/pending-courses" role="form" method="GET" class="form-inline">
+						<form action="/admin/teacher/pending-teachers" role="form" method="GET" class="form-inline">
 							<select class="form-control" id="searchCategory" name="searchCategory">
-								<option value="course_title" <c:if test="${searchCategory == 'course_title'}">selected</c:if>>강의명</option>
-								<option value="teacher_name" <c:if test="${searchCategory == 'teacher_name'}">selected</c:if>>강사명</option>
-								<option value="teacher_email" <c:if test="${searchCategory == 'teacher_email'}">selected</c:if>>이메일</option>
+								<option value="oltr_no" <c:if test="${searchCategory == 'oltr_no'}">selected</c:if>>강의요청No</option>
+								<option value="m_no" <c:if test="${searchCategory == 'm_no'}">selected</c:if>>회원No</option>
+								<option value="name" <c:if test="${searchCategory == 'name'}">selected</c:if>>이름</option>
+								<option value="email" <c:if test="${searchCategory == 'email'}">selected</c:if>>이메일</option>
+								<option value="phone" <c:if test="${searchCategory == 'phone'}">selected</c:if>>phone</option>
 							</select>
 							<div class="ml-3">
-								<input value="${search}" type="text" id="searchKeyword" name="search" placeholder="검색어를 입력하세요." class="form-control">
+								<input value="${searchKeyword}" type="text" id="searchKeyword" name="search" placeholder="검색어를 입력하세요." class="form-control">
 								<button type="submit" class="btn px-3 btn-primary">
 									<i class="fas fa-search"></i>
 								</button>
@@ -55,27 +57,27 @@
 										<input id="allCheck" type="checkbox" name="allCheck">
 									</th>
 									<th>강의No</th>
-									<th>원본No</th>
-									<th>강의명</th>
-									<th>강사명</th>
+									<th>회원No</th>
+									<th>이름</th>
+									<th>이메일</th>
 									<th>요청날짜</th>
 									<th></th>
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach var="cr" items="${courseRequestList}">
+								<c:forEach var="pb" items="${pendingBoard}">
 									<tr>
 										<td>
-											<input name="rowCheck" type="checkbox" value="${cr.olr_no}">			
+											<input name="rowCheck" type="checkbox" value="${pb.oltr_no}">			
 										</td>
-										<td>${cr.oli_no}</td>
-										<td><a href="">${cr.origin_oli_no}</a></td>
-										<td><a onclick="openCourseDetail(${cr.oli_no})" href="javascript:;">${cr.course_title}</a></td>
-										<td><a href="" target="_blank">${cr.teacher_name}</a></td>
-										<td>${cr.request_datetime}</td>
+										<td>${pb.oltr_no}</td>
+										<td><a href="javascript:void(window.open('/admin/memberDetail?m_no=${pb.m_no}', '상세페이지' , 'width=1280px,height=840px,left=300,top=100, scrollbars=yes, resizable=no'));">${pb.m_no}</a></td>
+										<td>${pb.name}</td>
+										<td>${pb.email}</td>
+										<td>${pb.request_datetime}</td>
 										<td>
-											<input type="button" class="btn btn-info" value="승인" onclick="approvalCourseRequest(${cr.olr_no});">
-											<button type="button" class="btn btn-secondary" onclick="rejectCourseRequest(${cr.olr_no});">거절</button>
+											<input type="button" class="btn btn-info" value="승인" onclick="approvalTeacher(${pb.oltr_no});">
+											<button type="button" class="btn btn-secondary" onclick="rejectTeacher(${pb.oltr_no});">거절</button>
 										</td>
 									</tr>
 								</c:forEach>
@@ -92,12 +94,12 @@
 								<c:choose>
 									<c:when test="${paging.pageNo eq paging.firstPageNo }">
 										<li class="page-item disabled">
-											<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
+											<a class="page-link" onclick="redirectPage(${paging.prevPageNo})">Previus</a>
 										</li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item">
-											<a class="page-link" href="/admin/course/pending-courses?page=${paging.prevPageNo}">Previus</a>
+											<a class="page-link" onclick="redirectPage(${paging.prevPageNo})">Previus</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
@@ -106,12 +108,12 @@
 									<c:choose>
 										<c:when test="${i eq paging.pageNo }">
 											<li class="page-item disabled">
-												<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+												<a class="page-link" onclick="redirectPage(${i})"><c:out value="${i }"/></a>
 											</li>
 										</c:when>
 										<c:otherwise>
 											<li class="page-item">
-												<a class="page-link" href="/admin/course/pending-courses?page=${i}"><c:out value="${i }"/></a>
+												<a class="page-link" onclick="redirectPage(${i})"><c:out value="${i }"/></a>
 											</li>
 										</c:otherwise>
 									</c:choose>
@@ -120,12 +122,12 @@
 								<c:choose>
 									<c:when test="${paging.pageNo eq paging.finalPageNo }">
 										<li class="page-item disabled">
-											<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
+											<a class="page-link" onclick="redirectPage(${paging.nextPageNo})">Next</a>
 										</li>
 									</c:when>
 									<c:otherwise>
 										<li class="page-item">
-											<a class="page-link" href="/admin/course/pending-courses?page=${paging.nextPageNo}">Next</a>
+											<a class="page-link" onclick="redirectPage(${paging.nextPageNo})">Next</a>
 										</li>
 									</c:otherwise>
 								</c:choose>
@@ -164,7 +166,7 @@
 	</div>
     
     <script>
-    	var rejection_olr_no = 0;
+    	var rejection_oltr_no = 0;
     
    		// 전체 체크박스 클릭 이벤트
 	    $("#allCheck").click(function () {
@@ -172,13 +174,13 @@
 	    });
    		
    		// 요청 승인
-   		function approvalCourseRequest(olr_no) {
+   		function approvalTeacher(oltr_no) {
    			if(confirm("정말 승인하시겠습니까?")) {
    				$.ajax({
-   					url: "/approvalCourseRequest",
+   					url: "/admin/teacher/approvalTeacher",
    					type: "post",
    					data: {
-	   					olr_no: olr_no
+	   					oltr_no: oltr_no
    					},
    					success: function() {
    						location.reload();
@@ -189,8 +191,8 @@
    	
    		
    		// 요청 거절
-   		function rejectCourseRequest(olr_no) {
-   			rejection_olr_no = olr_no;
+   		function rejectTeacher(oltr_no) {
+   			rejection_oltr_no = oltr_no;
    			$("#rejection_message").val('');
    			$("#rejectionModal").modal('show');
    		}
@@ -201,11 +203,11 @@
    				return;
    			}
    			$.ajax({
-				url: "/rejectCourseRequest",
+				url: "/admin/teacher/rejectTeacher",
 				type: "post",
 				data: {
-  						olr_no: rejection_olr_no,
-  						rejection_message: $("#rejection_message").val()
+					oltr_no: rejection_oltr_no,
+					rejection_message: $("#rejection_message").val()
 				},
 				success: function() {
 					location.reload();
@@ -213,8 +215,8 @@
 			});
    		});
     
-   		// 강의 상세 창 띄우기
-	 	function openCourseDetail(oli_no) {
+   		// 회원 상세 창 띄우기
+	 	function openMemberDetail(m_no) {
 	 		// 창 크기 지정
 			var width = window.screen.width * 55 / 100;
 			var height = window.screen.height * 85 / 100;
@@ -223,11 +225,25 @@
 			var left = (window.screen.width / 2) - (width/2);
 			var top = (window.screen.height / 2) - (height/2);
 
-			var url = "/admin/course/"+oli_no;
+			var url = "/admin/member/memberDetail?m_no="+m_no;
 			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
 			console.log(option);
 			window.open(url, "_blank", option);
 	 	}
+   		
+	 	function redirectPage(pageNo) {
+	    	url = new URL(location.origin + location.pathname);
+	    	
+	    	<c:if test="${searchCategory != null}">
+	    		url.searchParams.set('searchCategory', "${searchCategory}");
+	    	</c:if>
+	    	<c:if test="${searchKeyword != null}">
+	    		url.searchParams.set('searchKeyword', "${searchKeyword}");
+	    	</c:if>
+	    	
+	    	url.searchParams.set('page', pageNo);
+	    	location.href = url;
+	    }
     </script>
     
 	<!-- Chart -->

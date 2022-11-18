@@ -17,6 +17,12 @@ public interface AdminCourseService {
 	// 강의 게시물 총 개수 가져오기
 	public int getCoursePostCount(String searchCategory, String searchKeyword);
 	
+	// 강사의 강의 게시판 가져오기
+	public List<Map<String, Object>> getTeacherCourseBoard(int olt_no, String searchCategory, String searchKeyword, int nowPage, int pageSize);
+	
+	// 강의 게시물 총 개수 가져오기
+	public int getTeacherCoursePostCount(int olt_no, String searchCategory, String searchKeyword);
+	
 	// 요청없이 바로 생성
 	public int createCourse(CourseDTO course, MultipartFile thumbnail, String[] categorys, String[] tags, String[] videoTitles, String[] videoPaths);
 	
