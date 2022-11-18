@@ -46,7 +46,7 @@
 	<section >
 		<div class="container">
 			<div class="row">
-				<div class="col-lg-10 posts-list">
+				<div class="col-lg-10">
 					<div class="single-post">
 						<div class="blog_details">
 							<h2>${cbReadPage.title}</h2>
@@ -61,16 +61,18 @@
 									 </c:otherwise>
 								</c:choose>
 								
-								<li><a href="#"><i class="fa fa-clock"></i> ${cbReadPage.reg_date}</a></li>
+								<li><a href="#"><i class="fa fa-clock"></i> <fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbReadPage.reg_date}" /></a></li>
 								
 								<c:if test="${sessionScope.member.getM_no() eq cbReadPage.m_no}">
 									<li><a href="javascript:void(0)" onclick="buttonModify(${cbReadPage.cb_no}, ${cbReadPage.classify}, ${cbReadPage.oli_no})"><i class="far fa-edit"></i> 수정</a></li>
 									<li><a href="javascript:void(0)" onclick="boardDelete(${cbReadPage.cb_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
 								</c:if>
 							</ul>
-							<P>
-								${cbReadPage.content}
-							</P>
+							<div>
+								<P>
+									${cbReadPage.content}
+								</P>
+							</div>
 							<ul id="tag-list" style=""> 
 								<c:forEach var="cbTag" items="${cbTag}">
 									<li class="tag-item">#${cbTag.ctl_name}</li>
@@ -100,7 +102,7 @@
 											</div>
 										</div>
 										<p class="comment">
-											${fn:substring(cbReadPage.oli_content, 0 ,170)}
+											${fn:substring(cbReadPage.introduction, 0 ,170)}
 										</p>
 									</div>
 								</div>
@@ -123,7 +125,7 @@
 											<div class="d-flex align-items-center">
 												<ul class="blog-info-link mt-3 mb-4">
 													<li><a href="#"><i class="fa fa-user"></i> <c:out value="${cbrList.m_id}"/></a></li>
-													<li><a href="#"><i class="fa fa-clock"></i> <c:out value="${cbrList.reg_date}"/></a></li>
+													<li><a href="#"><i class="fa fa-clock"></i> <fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${cbrList.reg_date}" /></a></li>
 													<c:if test="${sessionScope.member.getM_no() eq cbrList.m_no}">
 														<li><a href="javascript:void(0)" onclick="replyEdit(${cbrList.cbr_no}, '${cbrList.content}')"><i class="far fa-edit"></i> 수정</a></li>
 														<li><a href="javascript:void(0)" onclick="replyDelete(${cbrList.cbr_no})"><i class="fas fa-trash-alt"></i> 삭제</a></li>
@@ -131,7 +133,7 @@
 												</ul>
 											</div>
 										</div>
-										<p class="comment">
+										<p id="replyContentSection${cbrList.cbr_no}" class="comment">
 											<c:out value="${cbrList.content}"/>
 										</p>
 									</div>
@@ -161,8 +163,7 @@
 							</c:when>
 							<c:otherwise>
 								<div align="center"><a href="loginPageView">
-									<button type="button"  class="button button-contactForm btn_1 boxed-btn" style="width: 80%;">로그인 후, 댓글 작성이 가능합니다!</button>
-									</a>
+									<button type="button"  class="button button-contactForm btn_1 boxed-btn" style="width: 80%;">로그인 후, 댓글 작성이 가능합니다!</button></a>
 								</div><br>
 							</c:otherwise>
 						</c:choose>
@@ -217,11 +218,23 @@
 			<!--================ Blog Area end =================-->
 	<%------------ footer section  ------------%>
 	<jsp:include page="../fix/footer.jsp" />
-	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
-	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 <%-- Jquery Plugins, main Jquery --%>
-<script src="<c:url value='/resources/js/plugins.js'/>"></script>
-<script src="<c:url value='/resources/js/main.js'/>"></script>
+    <<script src="<c:url value='/resources/js/vendor/modernizr-3.5.0.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/popper.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/jquery.slicknav.min.js'/>"></script>
+
+    <script src="<c:url value='/resources/js/slick.min.js'/>"></script>
+    
+
+    <script src="<c:url value='/resources/js/jquery.scrollUp.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/jquery.nice-select.min.js'/>"></script>
+    <script src="<c:url value='/resources/js/jquery.sticky.js'/>"></script>
+    
+    
+    <script src="<c:url value='/resources/js/plugins.js'/>"></script>
+    <script src="<c:url value='/resources/js/main.js'/>"></script>
 <script>
 $('#addGood').click(function(){
 	console.log("asdsd");
@@ -341,10 +354,11 @@ function replyEdit(cbr_no, reply) {
 	
 	htmls += '<form action="travelreplyModify" method="POST" class="contact-one__form">';
 	htmls += '<div class="input-group">';
-	htmls += '<textarea id="replyEditContent" name="Content" placeholder="댓글을 입력하세요..." cols="100">'+reply+'</textarea>';
-	htmls += '<button id="btnReplyModify" name="btnReplyModify" class="thm-btn-psd2" type="button" onclick="replySave('+cbr_no+')">등록</button>';
-	htmls += '<button class="thm-btn-psd2" type="button" onclick="replyCancel(' + cbr_no + ', \'' + reply + '\')">취소</button>';
-	htmls += '</div>';
+	htmls += '<textarea id="replyEditContent" name="Content" class="form-control w-100" placeholder="댓글을 입력하세요..." cols="100">'+reply+'</textarea>';
+	htmls += '<div class="col-lg-12" align="right" style="padding: 0 0;">'
+	htmls += '<button id="btnReplyModify" name="btnReplyModify" class="genric-btn danger-border" type="button" onclick="replySave('+cbr_no+')">등록</button>';
+	htmls += '<button class="genric-btn danger-border radius" type="button" onclick="replyCancel(' + cbr_no + ', \'' + reply + '\')">취소</button>';
+	htmls += '</div></div>';
 	htmls += '</form>';
 	
 	$("#replyContentSection"+cbr_no).html(htmls);
@@ -354,20 +368,18 @@ function replyEdit(cbr_no, reply) {
 /* 댓글 수정 취소 */
 function replyCancel(cbr_no, reply) {
 	var htmls = "";
-	
 	htmls += reply;
-	
 	$("#replyContentSection"+cbr_no).html(htmls);
 }
 
 /* 댓글 수정 등록 */
 function replySave(cbr_no) {
 	var Content = $("#replyEditContent").val();
-	var param = {'Content': Content, 'cbr_no': cbr_no};
+	var param = {'content': Content, 'cbr_no': cbr_no};
 	
 	if(!Content) {
 		swal({
-			title: "여행포토",
+			title: "댓글수정",
 			text: "댓글이 입력되지 않았습니다.",
 			icon: "warning",
 			timer: 3000
@@ -376,7 +388,7 @@ function replySave(cbr_no) {
 	}
 	else {
 		$.ajax({
-			url: "travelreplyModify",
+			url: "updateReplyCommunityBoard",
 			type: "POST",
 			data: param,
 			success: function(data) {
@@ -389,20 +401,7 @@ function replySave(cbr_no) {
 					});
 				}
 				else {
-					swal({
-						title: "댓글수정",
-						text: "댓글이 성공적으로 수정되었습니다.",
-						icon: "success",
-						buttons : {
-							confirm : {
-								value : true
-							}
-						}
-					}).then((result) => {
-						if(result) {
-							location.reload();
-						}
-					});
+					location.reload();
 				}
 			},
 			error: function() {

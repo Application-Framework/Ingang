@@ -88,8 +88,8 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 	
 	//게시물 댓글 수정
 	@Override
-	public int updateReplyCommunityBoard(int cbr_no) throws Exception {
-		return sqlSession.update(namespace + ".updateReplyCommunityBoard", cbr_no);
+	public int updateReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception {
+		return sqlSession.update(namespace + ".updateReplyCommunityBoard", dto);
 	}
 	
 	//게시물 댓글 삭제

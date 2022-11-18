@@ -104,7 +104,7 @@
 												<p style="margin: 0 0px;"><c:url value="${fn:substring(cbList.content,0,200)}"/></p>
 												<ul id="tag-list" style=""> 
 													<c:forEach var="cbTag" items="${cbTag.getTagCommunityBoard(cbList.cb_no)}">
-														<li class="tag-item">#${cbTag.tag_name}</li>
+														<li class="tag-item">#${cbTag.ctl_name}</li>
 													</c:forEach>
 												</ul>
 												<ul class="blog-info-link">

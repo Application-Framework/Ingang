@@ -49,7 +49,11 @@
 		WHERE cts.ctl_no = ctl.ctl_no 
 				AND cts_date BETWEEN CURDATE()-45 AND CURDATE()
 				AND cts_found = 1
-				<include refid="classifyBoard"></include>
+				<choose>
+					<when test="tagClassify == 1">AND cts.classify = 1</when>
+					<when test="tagClassify == 2">AND cts.classify = 2</when>
+					<otherwise>AND cts.classify = 3</otherwise>
+				</choose>
 		GROUP BY ctl.ctl_name
 		ORDER BY cnt DESC
 		LIMIT 0, 9
@@ -94,7 +98,7 @@
 				(SELECT COUNT(*) FROM community_board_reply cbr WHERE cb.cb_no=cbr.cb_no) `cbr.conunt`,
 				m_id,
 				oli.title AS oli_title,
-				oli.content AS oli_content,
+				oli.introduction AS introduction,
 				oli.img_path AS oli_img_path,
 				olt.name AS olt_name
 			FROM community_board cb, member m, online_lecture_introduction oli, online_lecture_teacher olt
@@ -153,7 +157,7 @@
 	<update id="updateReplyCommunityBoard">
 		UPDATE community_board_reply
 		SET content = #{content}
-		WHERE m_no = #{m_no}; 
+		WHERE cbr_no = #{cbr_no}; 
 	</update>
 	
 	<!--게시글 댓글 삭제  -->	

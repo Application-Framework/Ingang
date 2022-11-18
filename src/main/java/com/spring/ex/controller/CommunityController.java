@@ -49,6 +49,7 @@ public class CommunityController {
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
 		
 		map.put("checkClass", "chat");
+		map.put("tagClassify", 1);
 		
 		if (searchKeyword == null ||StringUtils.isEmpty(searchKeyword)){
 			map.put("searchKeyword", "noContent");
@@ -62,8 +63,9 @@ public class CommunityController {
 		}else {
 			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag.toString() + " / "+searchTag.length);
 			map.put("searchTag", searchTag);
-			
-			cbService.doIsCheckAndRecordSerachTag(searchTag, map);
+
+			//태그 검색 확인 및 기록/ 1:자유게시판 2:질문답변 3:스터디)
+			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 1);
 		}
 		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
@@ -178,6 +180,12 @@ public class CommunityController {
 	@RequestMapping(value = "/writeReplyCommunityBoard" ,  method = RequestMethod.POST)
 	public @ResponseBody int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception{
 		return cbService.writeReplyCommunityBoard(dto);
+	}
+	
+	//게시글 댓글 수정
+	@RequestMapping(value = "/updateReplyCommunityBoard" ,  method = RequestMethod.POST)
+	public @ResponseBody int updateReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception{
+		return cbService.updateReplyCommunityBoard(dto);
 	}
 	
 	//게시글 댓글 삭제
@@ -299,9 +307,8 @@ public class CommunityController {
 		String[] searchTag = request.getParameterValues("searchTag");
 		String checkClass = request.getParameter("checkClassify");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		CommunityTagSerachDTO ctsDTO = new CommunityTagSerachDTO();
-		CommunityTagListDTO ctlDTO = new CommunityTagListDTO();
 		
+		map.put("tagClassify", 2);
 		if(checkClass == null) {
 			map.put("checkClass", "questionAll");
 		}else if(checkClass.equals("noSolution")){
@@ -322,7 +329,7 @@ public class CommunityController {
 		}else {
 			map.put("searchTag", searchTag);
 			
-			cbService.doIsCheckAndRecordSerachTag(searchTag, map);
+			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 2);
 		}
 		
 		
@@ -381,9 +388,8 @@ public class CommunityController {
 		String[] searchTag = request.getParameterValues("searchTag");
 		String checkClass = request.getParameter("checkClassify");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
-		CommunityTagSerachDTO ctsDTO = new CommunityTagSerachDTO();
-		CommunityTagListDTO ctlDTO = new CommunityTagListDTO();
 		
+		map.put("tagClassify", 3);
 		if(checkClass == null) {
 			map.put("checkClass", "studieAll");
 		}else if(checkClass.equals("offerStudie")){
@@ -404,7 +410,7 @@ public class CommunityController {
 		}else {
 			map.put("searchTag", searchTag);
 			
-			cbService.doIsCheckAndRecordSerachTag(searchTag, map);
+			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 3);
 		}
 		
 		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);

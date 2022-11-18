@@ -50,7 +50,7 @@ public interface CommunityBoardDAO {
 	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception;
 	
 	//게시물 댓글 수정
-	public int updateReplyCommunityBoard(int cbr_no) throws Exception;
+	public int updateReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception;
 	
 	//게시물 댓글 삭제
 	public int deleteReplyCommunityBoard(int cbr_no) throws Exception;

@@ -86,8 +86,8 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//게시물 댓글 수정
 	@Override
-	public int updateReplyCommunityBoard(int cbr_no) throws Exception {
-		return dao.updateReplyCommunityBoard(cbr_no);
+	public int updateReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception {
+		return dao.updateReplyCommunityBoard(dto);
 	}
 	
 	//게시물 댓글 삭제
@@ -146,38 +146,33 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 	
 	//태그 여부 확인 및  검색 기록 저장
 	@Override
-	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map) throws Exception {
+	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map, int tagClassify) throws Exception {
 		CommunityTagSerachDTO ctsDTO = new CommunityTagSerachDTO();
 		CommunityTagListDTO ctlDTO = new CommunityTagListDTO();
+		
 		for(String t : tagList) {
 			int totalCount = getCommunityBoardTotalCount(map);
 			int isCheckTag = isCheckTagSearchList(t);
-			System.out.println(isCheckTag);
+			ctsDTO.setClassify(tagClassify);
+			
+			//처음보는 태그명일시 community_tag_list테이블에 삽입, 키 값 반환
+			//반환 받은 키 값으로 communtiy_tag_serach테이블에 들어갈 키 값 설정
 			if(isCheckTag == 0 ) {
 				ctlDTO.setCtl_name(t);
 				int insertTagNum = insertTagList(ctlDTO);
+				ctsDTO.setCtl_no(ctlDTO.getCtl_no());	
 				
-				ctsDTO.setCtl_no(ctlDTO.getCtl_no());
-				ctsDTO.setClassify(1);
-				ctsDTO.setCts_found(0);
-				
-				serachTagRecord(ctsDTO);
-				
+				ctsDTO.setCts_found(0);					// 해당 태그 발견시 1, 미발견 0
 			}else {
+				ctsDTO.setCtl_no(isCheckTag);
+				
 				if(totalCount > 0) {
-					ctsDTO.setCtl_no(isCheckTag);
-					ctsDTO.setClassify(1);
 					ctsDTO.setCts_found(1);
-					
-					serachTagRecord(ctsDTO);
 				}else {
-					ctsDTO.setCtl_no(isCheckTag);
-					ctsDTO.setClassify(1);
 					ctsDTO.setCts_found(0);
-					
-					serachTagRecord(ctsDTO);
 				}
 			}
+			serachTagRecord(ctsDTO); // communtiy_tag_serach에 Insurt
 		}
 	}
 	

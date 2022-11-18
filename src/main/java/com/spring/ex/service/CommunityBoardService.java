@@ -49,7 +49,7 @@ public interface CommunityBoardService {
 	public int writeReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception;
 	
 	//게시물 댓글 수정
-	public int updateReplyCommunityBoard(int cbr_no) throws Exception;
+	public int updateReplyCommunityBoard(CommunityBoardReplyDTO dto) throws Exception;
 	
 	//게시물 댓글 삭제
 	public int deleteReplyCommunityBoard(int cbr_no) throws Exception;
@@ -79,7 +79,7 @@ public interface CommunityBoardService {
 	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception;
 	
 	//태그 여부 확인 및  검색 기록 저장
-	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map) throws Exception;
+	public void doIsCheckAndRecordSerachTag(String[] tagList, HashMap<String, Object> map, int tagClassify) throws Exception;
 	
 	//수강후기 게시판 출력
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;
