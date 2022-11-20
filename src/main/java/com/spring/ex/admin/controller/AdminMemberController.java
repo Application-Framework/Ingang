@@ -39,44 +39,31 @@ public class AdminMemberController {
 	public String adminMemberMain(Model model, HttpServletRequest request) throws Exception {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("searchCategory", "noSearch");
+		String searchKeyword = request.getParameter("searchKeyword");
+		String searchCategory = request.getParameter("searchCategory");
+		
+		if (searchKeyword == null && searchCategory == null) {
+			model.addAttribute("searchCategory", "no");
+			model.addAttribute("searchKeyword", "no");
+			map.put("searchCategory", "noSearch");
+		}else {
+			model.addAttribute("searchCategory", searchCategory);
+			model.addAttribute("searchKeyword", searchKeyword);
+			map.put("searchCategory", searchCategory);
+			map.put("searchKeyword", searchKeyword);
+		}
+		
 		pagingService = new PagingService(request, service.getMemberTotalCount(map), 10);
 		map.put("Page", pagingService.getNowPage());
 		map.put("PageSize", 10);
 		
 		List<MemberDTO> adminMemberList = service.getMemberList(map);
-		
 		model.addAttribute("adminMemberList", adminMemberList);
 		model.addAttribute("Paging", pagingService.getPaging());
 		
 		return "admin/member/memberlist";
 	}
 	
-	//회원 검색
-	@RequestMapping(value = "/admin/memberSearchList", method = RequestMethod.GET)
-	public String memberSearchList(HttpServletRequest request, Model model) throws Exception {
-		String searchKeyword = request.getParameter("searchKeyword");
-		String searchCategory = request.getParameter("searchCategory");
-		
-		System.out.println( searchCategory + "  "+ searchKeyword);
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		
-		map.put("searchCategory", searchCategory);
-		map.put("searchKeyword", searchKeyword);
-		
-		pagingService = new PagingService(request, service.getMemberTotalCount(map), 10);
-		map.put("Page", pagingService.getNowPage());
-		map.put("PageSize", 10);
-		
-		List<MemberDTO> adminMemberList = service.getMemberList(map);
-		
-		model.addAttribute("adminMemberList", adminMemberList);
-		model.addAttribute("Paging", pagingService.getPaging());
-		model.addAttribute("searchCategory", searchCategory);
-		model.addAttribute("searchKeyword", searchKeyword);
-		
-		return "admin/member/memberlist";
-	}
 	
 	//관리자 페이지 회원 상세 페이지
 	@RequestMapping(value = "/admin/memberDetail", method = RequestMethod.GET)
