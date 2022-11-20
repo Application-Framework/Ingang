@@ -25,7 +25,7 @@
 					<hr>
 					<div class="row">
 						<div class="col-sm-8">
-							<form action="/admin/memberSearchList" role="form" method="GET" class="form-inline">
+							<form action="/admin/memberList" role="form" method="GET" class="form-inline">
 								<select class="form-control" id="searchCategory" name="searchCategory">
 									<option value="m_no">회원번호</option>
 									<option value="m_id">아이디</option>
@@ -142,6 +142,42 @@
 								<li class="page-item">
 									<a class="page-link" href="memberList?page=${Paging.nextPageNo}">Next</a>
 								</li>
+							</c:otherwise>
+						</c:choose>
+						
+						<c:choose>
+							<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
+							</c:when>
+							<c:when test="${Paging.pageNo ne Paging.firstPageNo && searchCategory ne 'no' && searchKeyword ne 'no'}">
+								<li class="page-item"><a href="memberList?page=${Paging.prevPageNo}&searchCategory=${searchCategory}&searchKeyword=${searchKeyword}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item"><a href="memberList?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
+							</c:otherwise>
+						</c:choose>
+						<!-- 페이지 갯수만큼 버튼 생성 -->
+						<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+							<c:choose>
+								<c:when test="${i eq Paging.pageNo }">
+									<li class="page-item active disabled"> <a href="" class="page-link"><c:out value="${i }"/></a> </li>
+								</c:when>
+								<c:when test="${i ne Paging.pageNo && searchCategory ne 'no' && searchKeyword ne 'no'}">
+									<li class="page-item"> <a href="memberList?page=${i}&searchCategory=${searchCategory}&searchKeyword=${searchKeyword}" class="page-link"><c:out value="${i }"/></a> </li>
+								</c:when>
+								<c:otherwise>
+									<li class="page-item"> <a href="memberList?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+								</c:otherwise>
+							</c:choose>
+						</c:forEach>
+						<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+						<c:choose>
+							<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+							</c:when>
+							<c:when test="${Paging.pageNo ne Paging.finalPageNo && searchCategory ne 'no' && searchKeyword ne 'no'}">
+								<li class="page-item"><a href="memberList?page=${Paging.nextPageNo}&searchCategory=${searchCategory}&searchKeyword=${searchKeyword}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+							</c:when>
+							<c:otherwise>
+								<li class="page-item"><a href="memberList?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
 							</c:otherwise>
 						</c:choose>
 					</ul>
