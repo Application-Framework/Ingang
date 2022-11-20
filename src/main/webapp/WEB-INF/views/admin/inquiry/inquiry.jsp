@@ -33,11 +33,11 @@
 						<div class="col-sm-8">
 							<form action="inquiry" role="form" method="GET" class="form-inline">
 								<select class="form-control" id="searchType" name="searchType">
-									<option value="m_id" >작성자(ID)</option>
-									<option value="category">카테고리</option>
-									<option value="title">제목</option>
+									<option value="m_id"  <c:if test="${searchType eq 'm_id'}">selected="selected"</c:if>>작성자(ID)</option>
+									<option value="category" <c:if test="${searchType eq 'category'}">selected="selected"</c:if>>카테고리</option>
+									<option value="title" <c:if test="${searchType eq 'title'}">selected="selected"</c:if>>제목</option>
 								</select>
-								<input type="text"  id="searchKeyword" name="searchKeyword"class="form-control ml-1 mr-1" placeholder="검색어를 입력해주세요" required>
+								<input type="text"  id="searchKeyword" name="searchKeyword" <c:if test="${searchKeyword ne 'no'}"> value="${searchKeyword}"</c:if> class="form-control ml-1 mr-1" placeholder="검색어를 입력해주세요" required>
 								<button type="submit" class="btn px-3 btn-primary">
 									<i class="fas fa-search"></i>
 								</button>
@@ -72,28 +72,33 @@
 							</tr>
 						</thead>
 						<tbody>
-						<c:forEach items="${cbInquiry}" var="cbInquiry">
-							<tr>
-								<th><input type="checkbox"name="RowCheck" value="${cbInquiry.inq_no }"></th>
-								<td>${cbInquiry.inq_no }</td>
-								<td><span class="inquiry-category">${cbInquiry.category }</span></td>
-								<td><a href="inquiryView?inq_no=${cbInquiry.inq_no }">${cbInquiry.title }</a></td>
-								<td>${cbInquiry.m_name}</td>
-								<td>${cbInquiry.m_id}</td>
-								<td><fmt:formatDate value="${cbInquiry.reg_date }" pattern="yyyy-MM-dd a h:mm"/></td>
-							<c:choose>
-								<c:when test="${cbInquiry.statement eq 0}">
-									<td><span class="inquiry-status status-0">답변대기</span></td>
-								</c:when>
-								<c:when test="${cbInquiry.statement eq 1}">
-									<td><span class="inquiry-status status-1">답변보류</span></td>
-								</c:when>
-								<c:otherwise>
-									<td><span class="inquiry-status status-2">답변완료</span></td>
-								</c:otherwise>
-							</c:choose>
-							</tr>
-						</c:forEach>
+							<c:forEach items="${cbInquiry}" var="cbInquiry">
+								<tr>
+									<th><input type="checkbox"name="RowCheck" value="${cbInquiry.inq_no }"></th>
+									<td>${cbInquiry.inq_no }</td>
+									<td><span class="inquiry-category">${cbInquiry.category }</span></td>
+									<td><a href="inquiryView?inq_no=${cbInquiry.inq_no }">${cbInquiry.title }</a></td>
+									<td>${cbInquiry.m_name}</td>
+									<td>${cbInquiry.m_id}</td>
+									<td><fmt:formatDate value="${cbInquiry.reg_date }" pattern="yyyy-MM-dd a h:mm"/></td>
+								<c:choose>
+									<c:when test="${cbInquiry.statement eq 0}">
+										<td><span class="inquiry-status status-0">답변대기</span></td>
+									</c:when>
+									<c:when test="${cbInquiry.statement eq 1}">
+										<td><span class="inquiry-status status-1">답변보류</span></td>
+									</c:when>
+									<c:otherwise>
+										<td><span class="inquiry-status status-2">답변완료</span></td>
+									</c:otherwise>
+								</c:choose>
+								</tr>
+							</c:forEach>
+							<c:if test="${Paging.totalCount < 1}">
+								<tr align="center" >
+									<td rowspan="10" colspan="10"><div align="center" class="col-sm-12" style="margin: 20% 0;">게시글이 없습니다.</div></td>
+								</tr>
+							</c:if>
 						</tbody>
 					</table>
 					<!-- 게시글 페이징 처리(기준 10개) -->
