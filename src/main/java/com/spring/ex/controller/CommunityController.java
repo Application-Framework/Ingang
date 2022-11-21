@@ -219,7 +219,21 @@ public class CommunityController {
 	@RequestMapping(value = "/doWriteCommunityBoard", method = RequestMethod.POST)
 	@ResponseBody
 	public int communityBoardWrite(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
+		String[] searchTag = request.getParameterValues("searchTag");
+		ArrayList<String> searchTagList = new ArrayList<String>();
 		int res = cbService.writeCommunityBoard(dto);
+		System.out.println("res 게시글 작성 : "+res);
+		
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag) ) {
+		}else {
+			for (String t : searchTag) {
+				searchTagList.add(t);
+				System.out.println(t);
+			}
+			searchTagList.removeAll(Arrays.asList("", null));
+			cbService.modifyTagBoard(searchTagList, dto.getCb_no());
+		}
+		
 		return res;
 	}
 	
@@ -248,7 +262,7 @@ public class CommunityController {
 			map.put("isOnlineLecture", "noExists");
 		}
 		
-		
+		model.addAttribute("searchTagList", cbService.getTagCommunityBoard(cb_no));
 		model.addAttribute("cbReadPage", cbService.getReadCommunityBoard(map));
 		model.addAttribute("classify", classify);
 		return "community/communityBoardModify";
@@ -258,6 +272,22 @@ public class CommunityController {
 	@RequestMapping(value = "/doModfiyCommunityBoard", method = RequestMethod.POST)
 	@ResponseBody
 	public int doModfiyCommunityBoard(CommunityBoardDTO dto, HttpServletRequest request) throws Exception{
+		String[] searchTag = request.getParameterValues("searchTag");
+		ArrayList<String> searchTagList = new ArrayList<String>();
+		System.out.println(searchTag);
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag) ) {
+			
+		}else {
+			cbService.deleteCommunityBoardTag(dto.getCb_no());
+			
+			for (String t : searchTag) {
+				searchTagList.add(t);
+				System.out.println(t);
+			}
+			searchTagList.removeAll(Arrays.asList("", null));
+			cbService.modifyTagBoard(searchTagList, dto.getCb_no());
+		}
+		
 		int res = cbService.updateCommunityBoard(dto);
 		System.out.println("res : "+ res);
 		System.out.println(dto.getCb_no());

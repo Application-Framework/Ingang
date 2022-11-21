@@ -146,6 +146,16 @@ public class CommunityBoardDAOImpl implements CommunityBoardDAO{
 		sqlSession.insert(namespace + ".serachTagRecord", dto);
 	}
 	
+	//해당 게시글 태그 추가
+	@Override
+	public int insertCommunityBoardTag(CommunityBoardTagDTO dto) throws Exception {
+		return sqlSession.insert(namespace + ".insertCommunityBoardTag", dto);
+	}
+	//해당 게시글 태그 삭제 
+	@Override
+	public int deleteCommunityBoardTag(int cb_no) throws Exception {
+		return sqlSession.delete(namespace + ".deleteCommunityBoardTag", cb_no);
+	}
 	//수강후기 게시판 출력
 	@Override
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {

@@ -176,6 +176,41 @@ public class CommunityBoardServiceImpl implements CommunityBoardService{
 		}
 	}
 	
+	//해당 게시글 태그 추가
+	@Override
+	public int insertCommunityBoardTag(CommunityBoardTagDTO dto) throws Exception {
+		return dao.insertCommunityBoardTag(dto);
+	}
+	
+	//해당 게시글 태그 삭제
+	@Override
+	public int deleteCommunityBoardTag(int cb_no) throws Exception {
+		return dao.deleteCommunityBoardTag(cb_no);
+	}
+	
+	//태그 여부 확인 및 해당 게시글 태그 저장
+	public void modifyTagBoard(List<String> tagList, int cb_no) throws Exception {
+		CommunityBoardTagDTO cbtDTO = new CommunityBoardTagDTO();
+		CommunityTagListDTO ctlDTO = new CommunityTagListDTO();
+		
+		for(String t : tagList) {
+			int isCheckTag = isCheckTagSearchList(t);
+			
+			if(isCheckTag == 0 ) {
+				ctlDTO.setCtl_name(t);
+				int insertTagNum = insertTagList(ctlDTO);
+				cbtDTO.setCtl_no(ctlDTO.getCtl_no());
+				
+			}else {
+				cbtDTO.setCtl_no(isCheckTag);
+				
+			}
+			cbtDTO.setCb_no(cb_no);
+			insertCommunityBoardTag(cbtDTO);
+		}
+		
+	}
+	
 	//수강후기 게시판 출력
 	@Override
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception {

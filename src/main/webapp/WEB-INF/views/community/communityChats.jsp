@@ -59,7 +59,7 @@
 			<br>
 				<div class="blog_left_sidebar">
 					<article class="blog_item">
-						<form id="searchForm" >
+						<form id="searchForm" action="communityChats">
 							<div class="row">
 								<div class="col-lg-10" >
 									<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!' <c:if test="${searchKeyword ne null}"> value = "${searchKeyword}" </c:if>>
@@ -241,8 +241,9 @@ $(document).ready(function() {
 	});
 });
 
+var popup;
 $('#buttonWrite').click(function(){
-	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+	popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
 
@@ -262,6 +263,14 @@ $('#btnBoardSearch').click(function(){
 	
 })
 
+function reloadPage() {
+	setTimeout(function() {
+		//opener.location.replace(reLoadUrl);
+		//window.close();
+		if(popup!= null) popup.close();
+		location.reload();
+	}, 500);
+}
 
 </script>
 </body>

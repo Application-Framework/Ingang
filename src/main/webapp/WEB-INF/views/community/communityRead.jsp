@@ -446,10 +446,11 @@ function boardDelete(cb_no) {
 	});
 }
 
+var popup;
 //게시글 수정
 function buttonModify(cb_no, classify, isOnlineLecture) {
 	var urlModify = "modfiyPageCommunityBoard?cb_no=" + cb_no+ "&classify=" + classify  + "&isOnlineLecture="+ isOnlineLecture;
-	var popup = window.open(urlModify , '게시글수정' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+	popup = window.open(urlModify , '게시글수정' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 }
 
 /*우측 사이드바*/
@@ -520,6 +521,15 @@ $('#btnStudyCompleted').click(function(){
 	})
 	
 });
+
+function reloadPage() {
+	setTimeout(function() {
+		//opener.location.replace(reLoadUrl);
+		//window.close();
+		if(popup!= null) popup.close();
+		location.reload();
+	}, 500);
+}
 </script>
 </body>
 </html>

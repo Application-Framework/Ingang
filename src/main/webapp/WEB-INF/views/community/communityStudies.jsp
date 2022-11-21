@@ -244,9 +244,9 @@ var counter = 0;
 		sessionStorage.setItem("sTabActive", "a2"); 
 	});
 
-	
+var popup;
 $('#buttonWrite').click(function(){
-	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
+	popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
 });
 
 $('#buttonNoLogin').click(function(){
@@ -261,6 +261,15 @@ $('#buttonNoLogin').click(function(){
 $('#btnBoardSearch').click(function(){
 	$("#searchForm").submit();
 })
+
+function reloadPage() {
+	setTimeout(function() {
+		//opener.location.replace(reLoadUrl);
+		//window.close();
+		if(popup!= null) popup.close();
+		location.reload();
+	}, 500);
+}
 
 </script>
 </body>

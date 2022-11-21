@@ -79,6 +79,12 @@ public interface CommunityBoardDAO {
 	//커뮤니티 태그 검색 기록
 	public void serachTagRecord(CommunityTagSerachDTO dto) throws Exception;
 	
+	//해당 게시글 태그 추가
+	public int insertCommunityBoardTag(CommunityBoardTagDTO dto) throws Exception;
+	
+	//해당 게시글 태그 삭제
+	public int deleteCommunityBoardTag(int cb_no) throws Exception;
+	
 	//수강후기 게시판 출력
 	public List<CourseReplyDTO> getReviewCommunityBoard(HashMap<String, Object> map) throws Exception;
 	

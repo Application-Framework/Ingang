@@ -49,22 +49,24 @@
 				</div>
 			</div><br>
 			<div class="d-flex flex-column">
-				<form>
+				<form action="doWriteCommunityBoard" id="searchForm" name="searchForm" method="POST">
 					<div class="form-group row">
 						<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
+						<!-- <input type="hidden" id="classify" name="classify" value="1"> -->
 						<div class="col-xs-12 col-md-12">
 							제목
 							<div class="input-group my-2 mb-1">
-								<input type="text" id="title" class="form-control" placeholder="제목을 입력해 주세요.">
+								<input type="text" id="title" name="title" class="form-control" placeholder="제목을 입력해 주세요.">
 							</div>
 						</div><br><br>
 						
 						<div class="col-xs-12 col-md-12">
 							태그
 							<div class="input-group my-2 mb-1">
-								<input type="text" value=""  id="tag" class="form-control" placeholder="태그를 설정해주세요.">
+								<input type="text" name="tag" id="tag" class="form-control" placeholder="태그를 설정해주세요.">
 							</div>
 							<ul id="tag-list"> </ul>
+							<div id="sdata"></div>
 						</div>
 					</div>
 					
@@ -90,12 +92,25 @@
 $(document).ready(function () {
 	if(sessionStorage.getItem("classifyActive")==null || sessionStorage.getItem("classifyActive")=="0"){
 		sessionStorage.setItem("classifyActive", "1"); 
+	    var fClassify = $("<input type='hidden' value='"+ 1 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	}
 	
 })
 //카테고리 변경시마다 css변경 및 작성될 카테고리 값 변경
 $(function() {
+	var counter = 0;
+	<c:forEach var="searchTagList" items="${searchTagList}">
+		$("#tag-list").append("<li class='tag-item'>" + "${searchTagList.ctl_name}" + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
+		var test = $("<input type='hidden' value='${searchTagList.ctl_name}' class='test_obj' name='searchTag' id='" + counter + "'>");
+		$("#sdata").append(test);
+		addTag("${searchTagList}");
+		tagArray.push("${searchTagList.ctl_name}");
+	</c:forEach>	
+	
 	$('.button-class1').click(function(){
+		var div = document.getElementById('classify');
+		div.remove();
 	    if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 	    if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
@@ -103,9 +118,13 @@ $(function() {
 	    if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
 	    if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
 	    sessionStorage.setItem("classifyActive", "1"); 
+	    var fClassify = $("<input type='hidden' value='"+ 1 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	});
 	
 	$('.button-class2').click(function(){
+		var div = document.getElementById('classify');
+		div.remove();
 		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
@@ -113,9 +132,13 @@ $(function() {
 		if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
 		if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
 		sessionStorage.setItem("classifyActive", "2"); 
+	    var fClassify = $("<input type='hidden' value='"+ 2 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	});
 	
 	$('.button-class3').click(function(){
+		var div = document.getElementById('classify');
+		div.remove();
 		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
@@ -123,19 +146,23 @@ $(function() {
 	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
 	    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
 	    sessionStorage.setItem("classifyActive", "4"); 
+	    var fClassify = $("<input type='hidden' value='"+ 4 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	  });
 
 });
 
 //게시글 작성
 $('#btnWrite').click(function() {
-	var m_no = $("#m_no").val();
-	var title = $("#title").val();
-	var content = $("#content").val();
+	var cb_no = $("#cb_no").val();
 	var goint = sessionStorage.getItem("classifyActive");
 	var classify = parseInt(goint); 
-	var param = {'m_no': m_no , 'title': title,'content': content, 'classify': classify};
+	var formData = $("#searchForm").serialize();
 	
+	sessionStorage.setItem("classifyActive", "0"); 
+	$("#searchForm").submit();
+	opener.reloadPage();
+	/*
 	if(!title) {
 		swal({
 			title: "글작성",
@@ -184,6 +211,8 @@ $('#btnWrite').click(function() {
 			}
 		});
 	}
+	*/
+	
 })
 </script>
 </body>

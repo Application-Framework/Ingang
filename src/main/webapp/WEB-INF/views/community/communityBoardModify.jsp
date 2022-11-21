@@ -32,7 +32,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
 <link rel="stylesheet"href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css" />
 <link rel="stylesheet" href="<c:url value='/resources/css/community/tag.css'/>">
-<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
 
 <title>게시글 작성</title>
 </head>
@@ -50,10 +49,12 @@
 				</div>
 			</div><br>
 			<div class="d-flex flex-column">
-				<form>
+				<form id="searchForm" action="doModfiyCommunityBoard" method="POST" >
 					<div class="form-group row">
 						<input type="hidden" id="cb_no" name="cb_no" value="${cbReadPage.cb_no}">
 						<input type="hidden" id="m_no" name="m_no" value="${sessionScope.member.getM_no()}">
+						<input type="hidden" id="title" name="title" value="${cbReadPage.title}">
+						<input type="hidden" id="classify" name="classify" value="${cbReadPage.classify}">
 						<div class="col-xs-12 col-md-12">
 							제목
 							<div class="input-group my-2 mb-1">
@@ -64,9 +65,10 @@
 						<div class="col-xs-12 col-md-12">
 							태그
 							<div class="input-group my-2 mb-1">
-								<input type="text" value=""  id="tag" class="form-control" placeholder="태그를 설정해주세요.">
+								<input type="text"  name="tag"  id="tag" class="form-control" placeholder="태그를 설정해주세요.">
 							</div>
 							<ul id="tag-list"> </ul>
+							<div id="sdata"></div>
 						</div>
 					</div>
 					
@@ -89,6 +91,15 @@
 //Classify따라서 자동으로 바뀌도록, Modal에 하면 변경하고 수정페이지 재출력시 이전껄로 적용되어서
 //현재 페이지 url에서 원하는 값 가져온 것
 $(document).ready(function () {
+	var counter = 0;
+	<c:forEach var="searchTagList" items="${searchTagList}">
+		$("#tag-list").append("<li class='tag-item'>" + "${searchTagList.ctl_name}" + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
+		var test = $("<input type='hidden' value='${searchTagList.ctl_name}' class='test_obj' name='searchTag' id='" + counter + "'>");
+		$("#sdata").append(test);
+		addTag("${searchTagList}");
+		tagArray.push("${searchTagList.ctl_name}");
+	</c:forEach>	
+	
 	const url = new URL( window.location.href);
 	const urlParams = url.searchParams;
 	const urlClassify = urlParams.get('classify');
@@ -121,11 +132,12 @@ $(document).ready(function () {
 	}
 	
 })
-	
 
 
 $(function() {
 	$('.button-class1').click(function(){
+		var dfClassify = document.getElementById('classify');
+		dfClassify.remove();
 	    if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 	    if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
@@ -133,9 +145,13 @@ $(function() {
 	    if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
 	    if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
 	    sessionStorage.setItem("classifyActive", "1"); 
+	    var fClassify = $("<input type='hidden' value='"+ 1 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	});
 	
 	$('.button-class2').click(function(){
+		var div = document.getElementById('classify');
+		div.remove();
 		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
@@ -143,9 +159,13 @@ $(function() {
 		if( $('.button-class3').hasClass('btn btn-danger') ) $('.button-class3').removeClass('btn btn-danger');
 		if( !$('.button-class3').hasClass('btn btn-outline-danger') ) $('.button-class3').addClass('btn btn-outline-danger');
 		sessionStorage.setItem("classifyActive", "2"); 
+	    var fClassify = $("<input type='hidden' value='"+ 2 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	});
 	
 	$('.button-class3').click(function(){
+		var div = document.getElementById('classify');
+		div.remove();
 		if( $(this).hasClass('btn btn-outline-danger') ) $(this).removeClass('btn btn-outline-danger');
 		if( !$(this).hasClass('btn btn-danger') ) $(this).addClass('btn btn-danger');
 		if( $('.button-class1').hasClass('btn btn-danger') ) $('.button-class1').removeClass('btn btn-danger');
@@ -153,6 +173,8 @@ $(function() {
 	    if( $('.button-class2').hasClass('btn btn-danger') ) $('.button-class2').removeClass('btn btn-danger');
 	    if( !$('.button-class2').hasClass('btn btn-outline-danger') ) $('.button-class2').addClass('btn btn-outline-danger');
 	    sessionStorage.setItem("classifyActive", "4"); 
+	    var fClassify = $("<input type='hidden' value='"+ 4 +"' id='classify' name='classify'>");
+		$("#sdata").append(fClassify);
 	  });
 
 });
@@ -160,11 +182,32 @@ $(function() {
 
 $('#btnModify').click(function() {
 	var cb_no = $("#cb_no").val();
+	var goint = sessionStorage.getItem("classifyActive");
+	var classify = parseInt(goint); 
+	var formData = $("#searchForm").serialize();
+	
+	sessionStorage.setItem("classifyActive", "0"); 
+	var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify + "&isOnlineLecture="+ ${cbReadPage.oli_no};
+	$("#searchForm").submit();
+	opener.reloadPage();
+   // self.close();
+    /*
+	setTimeout(function() {
+		//opener.location.replace(reLoadUrl);
+		//window.close();
+		opener.reloadPage();
+	    self.close();
+	}, 300);
+    */
+})
+	/*
+	var cb_no = $("#cb_no").val();
 	var title = $("#title").val();
+	//var searchTag = $(".searchTag").val();
 	var content = $("#content").val();
 	var goint = sessionStorage.getItem("classifyActive");
 	var classify = parseInt(goint); 
-	var param = {'cb_no': cb_no, 'title': title,'content': content, 'classify': classify};
+	var param = {'cb_no': cb_no, 'title': title,'content': content, 'classify': classify, 'searchTag':tagArray};
 	
 	if(!title) {
 		swal({
@@ -199,6 +242,7 @@ $('#btnModify').click(function() {
 					});
 				}
 				else {
+					console.log(tagArray);
 					sessionStorage.setItem("classifyActive", "0"); 
 					var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 					opener.location.replace(reLoadUrl);
@@ -216,6 +260,7 @@ $('#btnModify').click(function() {
 		});
 	}
 })
+*/
 </script>
 </body>
 </html>

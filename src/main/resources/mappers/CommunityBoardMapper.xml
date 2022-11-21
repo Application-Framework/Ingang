@@ -82,6 +82,18 @@
 		VALUES(#{ctl_no}, CURDATE(), #{classify}, #{cts_found})
 	</insert>
 
+	<!-- 해당 게시글 태그 추가 -->
+	<insert id="insertCommunityBoardTag">
+		INSERT INTO community_board_tag(cb_no, ctl_no)
+		VALUES(#{cb_no}, #{ctl_no})
+	</insert>
+	
+	<!-- 해당 게시글 태그 삭제 -->
+	<delete id="deleteCommunityBoardTag">
+		DELETE FROM community_board_tag
+		WHERE cb_no = #{cb_no}
+	</delete>
+	
 	<!-- 게시판 총 갯수 -->
 	<select id="getCommunityBoardTotalCount" resultType="int">
 		SELECT COUNT(*) 
@@ -167,7 +179,7 @@
 	</delete>
 	
 	<!--게시글 작성-->
-	<insert id="writeCommunityBoard">
+	<insert id="writeCommunityBoard" parameterType="CommunityBoardDTO" useGeneratedKeys="true" keyProperty="cb_no">
 		INSERT INTO community_board(oli_no, m_no, title, content, hit, reg_date, classify, flag)
 		VALUES(0, #{m_no}, #{title}, #{content}, 0, NOW(), #{classify}, 1);
 	</insert>
