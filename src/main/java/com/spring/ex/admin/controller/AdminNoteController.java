@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.spring.ex.admin.service.AdminCourseService;
 import com.spring.ex.admin.service.AdminMemberService;
 import com.spring.ex.admin.service.AdminNoteService;
+import com.spring.ex.admin.service.AdminStatisticsService;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.note.NoteArticleDTO;
@@ -52,16 +53,20 @@ public class AdminNoteController {
 	@Inject
 	private MemberService memberService;
 	
+	@Inject AdminStatisticsService statisticsService;
+	
 	// 노트 관리 대시보드 페이지
 	@RequestMapping("/admin/note")
-	public String noteDashboard(Model model) {
+	public String noteDashboard(Model model) throws Exception {
 		List<Map<String, Object>> noteOrderBy7Days = historyOrderService.getNoteOrderBy7Days();
 	 	Map<String, Object> todayOrder = noteOrderBy7Days.get(noteOrderBy7Days.size() -1);
 		int todaySubmittedNoteCount = historyOrderService.getTodaySubmittedNoteCount();
-	 	
+		List<HistoryOrderNoteDTO> HistoryOrderNoteDTOTotal = statisticsService.getNoteTotalSell(); // 전체 노트 판매 비율
+		
 		model.addAttribute("todayOrder", todayOrder);
 		model.addAttribute("noteOrderBy7Days", noteOrderBy7Days);
 		model.addAttribute("todaySubmittedNoteCount", todaySubmittedNoteCount);
+		model.addAttribute("listNoteTotal", HistoryOrderNoteDTOTotal);
 		
 		return "admin/note/note_dashboard";
 	}
