@@ -3,6 +3,8 @@ package com.spring.ex.controller;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -27,7 +29,6 @@ import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.CommunityBoardReplyDTO;
 import com.spring.ex.dto.CommunityTagListDTO;
-import com.spring.ex.dto.CommunityTagSerachDTO;
 import com.spring.ex.dto.InquiryDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseReplyDTO;
@@ -46,7 +47,8 @@ public class CommunityController {
 	public String chats(Model model, HttpServletRequest request) throws Exception{
 		String searchKeyword = request.getParameter("searchKeyword");
 		String[] searchTag = request.getParameterValues("searchTag");
-		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<String> searchTagList = new ArrayList<String>();
 		
 		map.put("checkClass", "chat");
 		map.put("tagClassify", 1);
@@ -59,12 +61,23 @@ public class CommunityController {
 			model.addAttribute("searchKeyword", searchKeyword);
 			System.out.println("o 키워드 : " + searchKeyword);
 		}
-		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag) ) {
 			map.put("searchTag","noTag");
 		}else {
-			System.out.println("Yes Tag case3, 태그/길이 :" + searchTag.toString() + " / "+searchTag.length);
-			map.put("searchTag", searchTag);
+			
+			for (String t : searchTag) {
+				System.out.println(searchTagList.size());
+				searchTagList.add(t);
+			}
+			searchTagList.removeAll(Arrays.asList("", null));
+			
+			
+			model.addAttribute("searchTagList", searchTagList);
+			
+			System.out.println("Yes Tag case3, 태그/길이 :" + searchTagList.size());
+			map.put("searchTag", searchTagList);
 
+			//System.out.println(searchTagList);
 			//태그 검색 확인 및 기록/ 1:자유게시판 2:질문답변 3:스터디)
 			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 1);
 		}
@@ -307,7 +320,8 @@ public class CommunityController {
 		String searchKeyword = request.getParameter("searchKeyword");
 		String[] searchTag = request.getParameterValues("searchTag");
 		String checkClass = request.getParameter("checkClassify");
-		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		HashMap<String, Object> map = new HashMap<String, Object>();
+		ArrayList<String> searchTagList = new ArrayList<String>();
 		
 		map.put("tagClassify", 2);
 		if(checkClass == null) {
@@ -326,16 +340,20 @@ public class CommunityController {
 			map.put("searchKeyword", searchKeyword);
 			model.addAttribute("searchKeyword", searchKeyword);
 		}
-		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag) ) {
 			map.put("searchTag","noTag");
 		}else {
-			map.put("searchTag", searchTag);
+			for (String t : searchTag) {
+				System.out.println(searchTagList.size());
+				searchTagList.add(t);
+			}
+			searchTagList.removeAll(Arrays.asList("", null));
 			
+			model.addAttribute("searchTagList", searchTagList);
+			
+			map.put("searchTag", searchTagList);
 			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 2);
 		}
-		
-		
-		
 		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);
 		map.put("Page",  pagingService.getNowPage());
@@ -391,6 +409,7 @@ public class CommunityController {
 		String[] searchTag = request.getParameterValues("searchTag");
 		String checkClass = request.getParameter("checkClassify");
 		HashMap<String, Object> map = new HashMap<String, Object>(); 
+		ArrayList<String> searchTagList = new ArrayList<String>();
 		
 		map.put("tagClassify", 3);
 		if(checkClass == null) {
@@ -409,13 +428,21 @@ public class CommunityController {
 			map.put("searchKeyword", searchKeyword);
 			model.addAttribute("searchKeyword", searchKeyword);
 		}
-		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag)) {
+		if (searchTag == null || searchTag.length == 0 || StringUtils.isEmpty(searchTag) ) {
 			map.put("searchTag","noTag");
 		}else {
-			map.put("searchTag", searchTag);
+			for (String t : searchTag) {
+				System.out.println(searchTagList.size());
+				searchTagList.add(t);
+			}
+			searchTagList.removeAll(Arrays.asList("", null));
 			
+			model.addAttribute("searchTagList", searchTagList);
+			
+			map.put("searchTag", searchTagList);
 			cbService.doIsCheckAndRecordSerachTag(searchTag, map, 3);
 		}
+		
 		
 		List<CommunityTagListDTO> cbtList= cbService.getPopularityTagCommunity(map);
 		pagingService = new PagingService(request, cbService.getCommunityBoardTotalCount(map), 10);

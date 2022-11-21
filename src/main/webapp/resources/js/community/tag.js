@@ -38,8 +38,9 @@
           // 태그 중복 검사
           if (result.length == 0) {
             $("#tag-list").append("<li class='tag-item'>" + tagValue + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
-            addTag(tagValue);
-			const testo = $("<input type='hidden' value=" + tagValue + " name='searchTag'>");
+			const testo = $("<input type='hidden' class='test_obj' value=" + tagValue + " name='searchTag' id='" + counter + "'>");
+			 addTag(tagValue);
+			//$("#sdata").append(testo);
 			$("#searchForm").append(testo);
 			
             tagArray.push(tagValue);
@@ -65,5 +66,12 @@ $(document) .on("click", ".del-btn", function (e) {
 		return item !== tag[index];
 	});
 	tag[index] = "";
+	var obj = document.getElementsByClassName('test_obj');
+	console.log(obj[index]);
+	obj[index].remove();
+	
+	//var div = document.getElementById('#index');
+	//div.remove();
+	
 	$(this).parent().remove();
 });

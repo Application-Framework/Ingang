@@ -237,7 +237,6 @@
     <script src="<c:url value='/resources/js/main.js'/>"></script>
 <script>
 $('#addGood').click(function(){
-	console.log("asdsd");
 	$.ajax({
 		url: "addGoodCommunityBoard",
 		type: "GET",

@@ -56,6 +56,7 @@
 										<input type="text" class="form-control" id="searchKeyword"  name="searchKeyword" placeholder='내용을 검색해보세요!' <c:if test="${searchKeyword ne null}"> value = "${searchKeyword}" </c:if>>
 										<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 										<ul id="tag-list"> </ul>
+										<div id="sdata"></div>
 									</div>
 									<div class="col-lg-2" style="padding:0 15px;">
 										<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
@@ -238,6 +239,14 @@
 		sessionStorage.setItem("qTabActive", "a2"); 
 	});
 
+var counter = 0;
+<c:forEach var="searchTagList" items="${searchTagList}">
+	$("#tag-list").append("<li class='tag-item'>" + "${searchTagList}" + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
+	var test = $("<input type='hidden' value="+ "${searchTagList}" +" class='test_obj' name='searchTag' id='" + counter + "'>");
+	$("#sdata").append(test);
+	addTag("${searchTagList}");
+	tagArray.push("${searchTag}");
+</c:forEach>
 
 $('#buttonWrite').click(function(){
 	var popup = window.open('communityBoardWrite', '게시글작성' , 'width=930px,height=840px,left=300,top=100, scrollbars=yes, resizable=no');
@@ -253,6 +262,7 @@ $('#buttonNoLogin').click(function(){
 });
 
 $('#btnBoardSearch').click(function(){
+	var formData = $("#searchForm").serialize();
 	$("#searchForm").submit();
 })
 

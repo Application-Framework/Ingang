@@ -28,7 +28,10 @@
   display: block;
   content: attr(placeholder);
   color: #a6a6a6;
-}</style>
+  
+  
+}
+</style>
 </head>
 
 <body>
@@ -63,6 +66,7 @@
 									<input type="text" class="form-control" id="tag" name="tag" placeholder='태그로 검색해보세요!' style="margin-top: 10px;">
 									<ul id="tag-list">
 									</ul>
+									<div id="sdata"></div>
 								</div>
 								<div class="col-lg-2" style="padding:0 15px;">
 									<input type="button" class="genric-btn danger-border radius"  id="btnBoardSearch" value="검색" style="width: 100%;" >
@@ -71,14 +75,12 @@
 						</form>
 					</article>
 					
-					<div class="container">
+					<div class="container" id="boardDiv">
 						<div class="row">
-						
 							<ul class="nav nav-tabs" id="myTab" style="width: 100%;">
 								<li class="nav-item" id="myTabActive1" style="width: 15%;"><a class="nav-link active" data-toggle="tab" href="#qwe"><h6 style="color: #5D5D5D;" align="center"> 최신순</h6></a></li>
 								<li class="nav-item" id="myTabActive2" style="width: 15%;"><a class="nav-link" data-toggle="tab" href="#asd" ><h6 style="color: #5D5D5D;" align="center">좋아요순</h6></a></li>
 								<li class="nav-item" id="myTabActive3" style="width: 58%; " ><a class="nav-link" data-toggle="tab" href="#asdff" style="display: none;" ></a></li>
-
 									<c:choose>
 										<c:when test="${sessionScope.member.getM_id() ne null }"> 
 										<li class="nav-item" id="myTabActive6" style="width: 12%;">
@@ -160,48 +162,46 @@
 							</c:if>
 							
 						</div>
-					</div>
-
-
-					<c:if test="${Paging.totalCount > 10}">
-						<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
-							<ul class="pagination" id="pagingDiv">
-								<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
-								<c:choose>
-									<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
-									</c:when>
-									<c:otherwise>
-										<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
-									</c:otherwise>
-								</c:choose>
-								<!-- 페이지 갯수만큼 버튼 생성 -->
-								<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+						<c:if test="${Paging.totalCount > 10}">
+							<nav class="blog-pagination justify-content-center d-flex" style="margin: 0px;">
+								<ul class="pagination" id="pagingDiv">
+									<!-- 첫 페이지면 Disabled 아니라면 Enabled -->
 									<c:choose>
-										<c:when test="${i eq Paging.pageNo }">
-											<li class="page-item  active disabled"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+										<c:when test="${Paging.pageNo eq Paging.firstPageNo }">
 										</c:when>
 										<c:otherwise>
-											<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+											<li class="page-item"><a href="communityChats?page=${Paging.prevPageNo}" class="page-link" aria-label="Previous"> <i class="ti-angle-left"></i> </a></li>
 										</c:otherwise>
 									</c:choose>
-								</c:forEach>
-								<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
-								<c:choose>
-									<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
-									</c:when>
-									<c:otherwise>
-										<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
-									</c:otherwise>
-								</c:choose>
-							</ul>
-						</nav>
-					</c:if>
+									<!-- 페이지 갯수만큼 버튼 생성 -->
+									<c:forEach var="i" begin="${Paging.startPageNo }" end="${Paging.endPageNo }" step="1">
+										<c:choose>
+											<c:when test="${i eq Paging.pageNo }">
+												<li class="page-item  active disabled"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+											</c:when>
+											<c:otherwise>
+												<li class="page-item"> <a href="communityChats?page=${i}" class="page-link"><c:out value="${i }"/></a> </li>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+									<!-- 마지막 페이지면 Disabled 아니라면 Enabled -->
+									<c:choose>
+										<c:when test="${Paging.pageNo eq Paging.finalPageNo }">
+										</c:when>
+										<c:otherwise>
+											<li class="page-item"><a href="communityChats?page=${Paging.nextPageNo}" class="page-link" aria-label="Next"> <i class="ti-angle-right"></i></a></li>
+										</c:otherwise>
+									</c:choose>
+								</ul>
+							</nav>
+						</c:if>
+					</div>
 				</div><br>
 			</div>
 			<jsp:include page="communityTagSidebar.jsp" />
 		</div>
 	</div>
-    
+
     <%------------ footer section  ------------%>
     <jsp:include page="../fix/footer.jsp" />
     
@@ -211,8 +211,17 @@
     <%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
     <script src="<c:url value='/resources/js/main.js'/>"></script>
-<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
+	<script src="<c:url value='/resources/js/community/tag.js'/>"></script>
+
 <script type="text/javascript">
+var counter = 0;
+<c:forEach var="searchTagList" items="${searchTagList}">
+	$("#tag-list").append("<li class='tag-item'>" + "${searchTagList}" + "<span class='del-btn' idx='" + counter + "'>x</span></li>&nbsp;");
+	var test = $("<input type='hidden' value="+ "${searchTagList}" +" class='test_obj' name='searchTag' id='" + counter + "'>");
+	$("#sdata").append(test);
+	addTag("${searchTagList}");
+	tagArray.push("${searchTag}");
+</c:forEach>
 
 
 $(document).ready(function() {
@@ -247,8 +256,12 @@ $('#buttonNoLogin').click(function(){
 });
 
 $('#btnBoardSearch').click(function(){
+	
+	var formData = $("#searchForm").serialize();
 	$("#searchForm").submit();
+	
 })
+
 
 </script>
 </body>
