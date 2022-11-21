@@ -23,7 +23,7 @@
 					<div class="d-sm-flex align-items-center justify-content-between mb-4">
 						<h1 class="h3 mb-0 text-gray-800">방문자 통계</h1>
 					</div>
-					<div class="row">
+					<div class="row" style="margin-bottom: 30px;">
 						<div class="col-xl-3 col-md-6 mb-4">
 							<div class="card border-left-primary shadow h-100 py-2">
 								<div class="card-body">
@@ -95,7 +95,10 @@
 					</div>
 					
 					<!-- 주간 방문자 그래프 -->
-					<div class="row">
+					<div style="margin-bottom: 10px;">
+						<h3 class="h3 mb-0 text-gray-800">주간 방문자 통계</h3>
+					</div>
+					<div class="row" style="margin-bottom: 30px;">
 						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -118,7 +121,10 @@
 					</div>
 					
 					<!-- 한 달간 방문자 그래프 -->
-					<div class="row">
+					<div style="margin-bottom: 10px;">
+						<h3 class="h3 mb-0 text-gray-800">한 달간 방문자 통계</h3>
+					</div>
+					<div class="row" style="margin-bottom: 30px;">
 						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
@@ -141,6 +147,9 @@
 					</div>
 					
 					<!-- 일 년간 방문자 그래프 -->
+					<div style="margin-bottom: 10px;">
+						<h3 class="h3 mb-0 text-gray-800">일 년간 방문자 통계</h3>
+					</div>
 					<div class="row">
 						<div class="col-xl-12 col-lg-7">
 							<div class="card shadow mb-4">
