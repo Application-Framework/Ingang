@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.mappers.adminCommunityMapper">
+	
+	<!-- 자유게시판 부분 -->
+	<select id="getFreeBoardPage" resultType="HashMap">
+		SELECT cb.cb_no, cb.m_no, cb.oli_no, cb.title, m.m_name, m.m_id, cb.hit, cb.reg_date,
+		(SELECT COUNT(*) FROM community_board_good cbg WHERE cbg.cb_no = cb.cb_no) like_cnt
+		<include refid="freeSearch"></include>
+		GROUP BY cb.cb_no
+		<choose>
+			<when test='order == null'>
+				ORDER BY cb.cb_no DESC
+			</when>
+			<when test='order.equals("new")'>
+				ORDER BY cb.cb_no desc
+			</when>
+			<when test='order.equals("like")'>
+				ORDER BY like_cnt DESC
+			</when>
+		</choose>
+		
+		LIMIT #{page}, #{pageSize}
+	</select>
+	
+	<!-- 자유게시판 -->
+	<select id="freeboard" resultType="HashMap">
+		SELECT cb.cb_no, cb.m_no, cb.oli_no, cb.title, m.m_name, m.m_id, cb.hit, cb.reg_date
+		<include refid="freeSearch"></include>
+		GROUP BY cb.cb_no
+	</select>
+	
+	<!-- 자유게시판 게시글 수 -->
+	<select id="getAdminCommunityBoardTotalCount" resultType="int">
+		SELECT COUNT(DISTINCT cb.cb_no)
+		FROM community_board cb
+		WHERE classify = 1 
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</select>
+	
+	<sql id="freeSearch">
+		FROM community_board cb, member m, online_lecture_introduction oli
+		WHERE cb.m_no = m.m_no AND classify = 1
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</sql>
+	
+	<!-- 좋아요 부분 -->
+	<select id="getFreeBoardLikeCount" resultType="int">
+		SELECT COUNT(*)
+		FROM community_board_good
+		WHERE cb_no = #{cb_no}
+	</select>
+
+	<!-- 질문&답변 -->
+	<select id="QnA" resultType="HashMap">
+		SELECT cb.cb_no, cb.m_no, cb.oli_no, cb.title, m.m_name, m.m_id, cb.hit, cb.reg_date
+		FROM community_board cb, member m, online_lecture_introduction oli
+		WHERE cb.m_no = m.m_no AND classify = 2 or classify = 3
+		GROUP BY cb.cb_no
+	</select>
+	
+	<!-- 질문 & 답변 게시판 부분 -->
+	<select id="getQnABoardPage" resultType="HashMap">
+		SELECT cb.cb_no, cb.m_no, cb.oli_no, cb.title, m.m_name, m.m_id, cb.hit, cb.reg_date,
+		(SELECT COUNT(*) FROM community_board_good cbg WHERE cbg.cb_no = cb.cb_no) like_cnt
+		<include refid="qnaSearch"></include>
+		GROUP BY cb.cb_no
+		<choose>
+			<when test='order == null'>
+				ORDER BY cb.cb_no DESC
+			</when>
+			<when test='order.equals("new")'>
+				ORDER BY cb.cb_no desc
+			</when>
+			<when test='order.equals("like")'>
+				ORDER BY like_cnt DESC
+			</when>
+		</choose>
+		
+		LIMIT #{page}, #{pageSize}
+	</select>
+	
+	<sql id="qnaSearch">
+		FROM community_board cb, member m, online_lecture_introduction oli
+		WHERE (cb.m_no = m.m_no AND cb.title LIKE '%${searchTitle}%' AND classify = 2) 
+				OR (cb.m_no = m.m_no AND cb.title LIKE '%${searchTitle}%' AND classify = 3)
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</sql>
+	
+	<!-- 질문 & 답변 게시판 게시글 수 -->
+	<select id="getAdminQnABoardTotalCount" resultType="int">
+		SELECT COUNT(DISTINCT cb.cb_no)
+		FROM community_board cb
+		WHERE classify = 2 or classify = 3 
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</select>
+
+	<!-- 수강후기 게시판 부분 -->
+	<select id="getReviewBoardPage" resultType="HashMap">
+		SELECT olr.olr_no, olr.m_no, olr.oli_no, oli.title, olr.content, m.m_name, m.m_id, olr.star_rating, olr.reg_date
+		<include refid="reviewSearch"></include>
+		GROUP BY olr.olr_no
+		<choose>
+			<when test='order == null'>
+				ORDER BY olr.olr_no DESC
+			</when>
+			<when test='order.equals("new")'>
+				ORDER BY olr.olr_no desc
+			</when>
+			<when test='order.equals("rating")'>
+				ORDER BY olr.star_rating DESC
+			</when>
+		</choose>
+		
+		LIMIT #{page}, #{pageSize}
+	</select>
+
+	<sql id="reviewSearch">
+		FROM online_lecture_introduction oli, online_lecture_reply olr, member m
+		WHERE olr.m_no = m.m_no AND oli.oli_no = olr.oli_no
+		<if test="searchTitle != null">
+			AND oli.title LIKE '%${searchTitle}%'
+		</if>
+	</sql>
+	
+	<!-- 수강후기 게시판 게시글 수 -->
+	<select id="getAdminReviewBoardTotalCount" resultType="int">
+		SELECT COUNT(DISTINCT olr.oli_no)
+		FROM online_lecture_introduction oli, online_lecture_reply olr
+		WHERE oli.oli_no = olr.oli_no
+		<if test="searchTitle != null">
+			AND oli.title LIKE '%${searchTitle}%'
+		</if>
+	</select>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteAdminReview">
+		DELETE FROM online_lecture_reply WHERE olr_no = #{olr_no}
+	</delete>
+
+	<!-- 스터디 -->
+	<select id="getStudyBoardPage" resultType="HashMap">
+		SELECT cb.cb_no, cb.m_no, cb.oli_no, cb.title, m.m_name, m.m_id, cb.hit, cb.reg_date,
+		(SELECT COUNT(*) FROM community_board_good cbg WHERE cbg.cb_no = cb.cb_no) like_cnt
+		<include refid="studySearch"></include>
+		GROUP BY cb.cb_no
+		<choose>
+			<when test='order == null'>
+				ORDER BY cb.cb_no DESC
+			</when>
+			<when test='order.equals("new")'>
+				ORDER BY cb.cb_no desc
+			</when>
+			<when test='order.equals("like")'>
+				ORDER BY like_cnt DESC
+			</when>
+		</choose>
+		
+		LIMIT #{page}, #{pageSize}
+	</select>
+	
+	<sql id="studySearch">
+		FROM community_board cb, member m, online_lecture_introduction oli
+		WHERE (cb.m_no = m.m_no AND cb.title LIKE '%${searchTitle}%' AND classify = 4) 
+				OR (cb.m_no = m.m_no AND cb.title LIKE '%${searchTitle}%' AND classify = 5)
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</sql>
+	
+	<!-- 스터디 게시판 게시글 수 -->
+	<select id="getAdminStudyBoardTotalCount" resultType="int">
+		SELECT COUNT(DISTINCT cb.cb_no)
+		FROM community_board cb
+		WHERE classify = 4 or classify = 5
+		<if test="searchTitle != null">
+			AND cb.title LIKE '%${searchTitle}%'
+		</if>
+	</select>
+	
+	<!-- 게시글 상세조회 -->
+	<select id="getBoardView" resultType="HashMap">
+		SELECT cb.*, m.m_name, m.m_id, oli.title as oli_title
+		FROM community_board cb, member m, online_lecture_introduction oli
+		WHERE cb.cb_no = #{cb_no} AND cb.m_no = m.m_no
+		GROUP BY cb.cb_no
+	</select>
+	
+	<!-- 관리자 페이지 게시글 작성 -->
+	<insert id="insertAdminBoard" parameterType="hashMap">
+		INSERT INTO community_board(
+			oli_no,
+			m_no,
+			title,
+			content,
+			hit,
+			reg_date,
+			classify,
+			flag)
+			VALUES(
+			0,
+			6,
+			#{title},
+			#{content},
+			0,
+			CURDATE(),
+			#{classify},
+			#{flag})
+	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateAdminBoard">
+		UPDATE community_board
+			SET title = #{title}, content = #{content}
+		WHERE cb_no = #{cb_no}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteAdminBoard">
+		DELETE FROM community_board WHERE cb_no = #{cb_no}
+	</delete>
+	
+</mapper>

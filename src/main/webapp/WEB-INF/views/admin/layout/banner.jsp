@@ -47,25 +47,25 @@
 		<div class="sidebar-heading">커뮤니티 관리</div>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="order">
+		<a class="nav-link" href="/admin/freeboard">
 			<i class="fas fa-fw fa-table"></i>
 			<span>자유게시판</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="order">
+		<a class="nav-link" href="/admin/QnA">
 			<i class="fas fa-fw fa-table"></i>
 			<span>질문&답변</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="order">
+		<a class="nav-link" href="/admin/review">
 			<i class="fas fa-fw fa-table"></i>
 			<span>수강후기</span>
 		</a>
 	</li>
 	<li class="nav-item">
-		<a class="nav-link" href="order">
+		<a class="nav-link" href="/admin/study">
 			<i class="fas fa-fw fa-table"></i>
 			<span>스터디</span>
 		</a>

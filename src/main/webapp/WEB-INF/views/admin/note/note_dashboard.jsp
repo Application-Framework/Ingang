@@ -95,7 +95,28 @@
 								</div>
 							</div>
 						</div>
-						
+						<!-- 노트 구매 비율 chart -->
+						<div class="col-xl-4 col-lg-5">
+							<div class="card shadow mb-4">
+								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+									<h6 class="m-0 font-weight-bold text-primary">노트 구매 비율</h6>
+								</div>
+								<div class="card-body">
+									<div class="chart-pie pt-4 pb-2">
+										<canvas id="myPieChartNote"></canvas>
+									</div>
+									<div class="mt-4 text-center small">
+										<c:set var="i" value="0" />
+										<span id="spanColor" class="mr-2">
+											<c:forEach var="listNoteTotal" items="${listNoteTotal}">
+													<i class="fas fa-circle" onload="makeColor2()" id="circle2[${i}]" style="float: left;"></i><div style="font-size: 12px; color: black;">${listNoteTotal.title}(${listNoteTotal.percent}%)</div> <br>
+												<c:set var="i" value="${i+1}"/>
+											</c:forEach>
+										</span>
+									</div>
+								</div>
+							</div>
+						</div>
 					</div>
 				</div>
 				<!-- 본문 -->
@@ -244,5 +265,85 @@
 		});
 	</script>
 	
+	<!-- 노트 구매 비율 Chart -->
+	<script>
+	
+	var OrderTitle2 = new Array();
+	var Earnings2 = new Array();
+	
+	<c:forEach var="listNoteTotal" items="${listNoteTotal}">
+		OrderTitle2.push("${listNoteTotal.title}");
+		Earnings2.push("${listNoteTotal.percent}");
+	</c:forEach>
+
+	<!-- 랜덤 색상 생성 -->
+		$(function(){
+			var newColor2 = new Array();
+			var rgbColor2 = new Array();
+			
+			for(var i=0; i < OrderTitle2.length; i++) {
+				newColor2[i] = '#' + Math.round(Math.random() * 0xffffff).toString(16);
+			}
+			
+			for(var i=0; i < OrderTitle2.length; i++) {
+				document.getElementById('circle2[' + i + ']').style.color = newColor2[i];
+				console.log(document.getElementById('circle2[' + i + ']'));
+				
+				// 색상 확인
+				var element2 = document.getElementById('circle2[' + i + ']');
+				var cssObj2 = window.getComputedStyle(element2);
+				var bgColor2 = cssObj2.getPropertyValue('color');
+				rgbColor2.push(bgColor2);
+				
+			}
+		
+		
+	//Set new default font family and font color to mimic Bootstrap's default styling
+	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
+	Chart.defaults.global.defaultFontColor = '#858796';
+	
+	// Pie Chart Example
+	var ctx2 = document.getElementById("myPieChartNote");
+
+	<c:set var='i' value='0'/>
+	var arr2 = newColor2;
+	
+	var myPieChartNote = new Chart(ctx2, {
+	type : 'doughnut',
+	data : {
+		labels : OrderTitle2 ,
+		datasets : [ {
+			data : Earnings2 ,
+			backgroundColor : [ // 구매 비율 통계 color
+				arr2[${i}], arr2[${i+1}], arr2[${i+2}], arr2[${i+3}], arr2[${i+4}], 
+				arr2[${i+5}], arr2[${i+6}], arr2[${i+7}], arr2[${i+8}], arr2[${i+9}]
+				
+				],
+			hoverBackgroundColor : [ // 구매 비율 통계 hover color
+				 /* '#0074F0', '#D03040', '#8033de', '#4fc4db', '#dbd24f' */  ],
+		}],
+	},
+	options : {
+		maintainAspectRatio : false,
+		tooltips : {
+			backgroundColor : "rgb(255,255,255)",
+			bodyFontColor : "#858796",
+			borderColor : '#dddfeb',
+			borderWidth : 1,
+			xPadding : 15,
+			yPadding : 15,
+			displayColors : false,
+			caretPadding : 10,
+		},
+		legend : {
+			display : false
+		},
+		cutoutPercentage : 80,
+	},
+	});
+	
+	
+		});
+	</script>
 </body>
 </html>

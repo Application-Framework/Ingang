@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.ex.admin.service.AdminCourseService;
+import com.spring.ex.admin.service.AdminStatisticsService;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseDTO;
@@ -58,18 +59,22 @@ public class AdminCourseController {
 	@Inject
 	private FileService fileService;
 	
+	@Inject AdminStatisticsService statisticsService;
+	
 	// 강의 관리 대시보드 페이지
 	@RequestMapping("/admin/course")
-	public String courseDashboard(Model model) {
+	public String courseDashboard(Model model) throws Exception {
 		int pendingCoursesCount = adminCourseService.getPendingCoursesCount();
 		
 	 	List<Map<String, Object>> courseOrderBy7Days = historyOrderService.getCourseOrderBy7Days();
 	 	Map<String, Object> todayOrder = courseOrderBy7Days.get(courseOrderBy7Days.size() -1);
-		
+	 	List<HistoryOrderLectureDTO> HistoryOrderLectureDTOTotal = statisticsService.getCourseTotalSell(); // 전체 강의 판매 비율
+	 	
+	 	
 		model.addAttribute("pendingCoursesCount", pendingCoursesCount);
 		model.addAttribute("todayOrder", todayOrder);
 		model.addAttribute("courseOrderBy7Days", courseOrderBy7Days);
-		
+		model.addAttribute("listCourseTotal", HistoryOrderLectureDTOTotal);
 		return "admin/course/course_dashboard";
 	}
 	

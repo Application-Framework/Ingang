@@ -88,14 +88,24 @@
 								</div>
 							</div>
 						</div>
+						<!-- 강의 구매 비율 chart -->
 						<div class="col-xl-4 col-lg-5">
 							<div class="card shadow mb-4">
 								<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-									<h6 class="m-0 font-weight-bold text-primary">판매 카테고리 비율</h6>
+									<h6 class="m-0 font-weight-bold text-primary">강의 구매 비율</h6>
 								</div>
 								<div class="card-body">
-									<div class="chart-area">
-										<canvas id="myPieChart"></canvas>
+									<div class="chart-pie pt-4 pb-2">
+										<canvas id="myPieChartCourse"></canvas>
+									</div>
+									<div class="mt-4 text-center small">
+										<c:set var="i" value="0" />
+										<span id="spanColor" class="mr-2">
+											<c:forEach var="listCourseTotal" items="${listCourseTotal}">
+													<i class="fas fa-circle" onload="makeColor()" id="circle1[${i}]" style="float: left;"></i><div style="font-size: 12px; color: black;">${listCourseTotal.title}(${listCourseTotal.percent}%)</div> <br>
+												<c:set var="i" value="${i+1}"/>
+											</c:forEach>
+										</span>
 									</div>
 								</div>
 							</div>
@@ -242,24 +252,63 @@
 		});
 	</script>
 	
-	<!-- 판매 카테고리 비율 Chart -->
+	<!-- 강의 구매 비율 Chart -->
 	<script>
+	
+	var OrderTitle1 = new Array();
+	var Earnings1 = new Array();
+	
+	<c:forEach var="listCourseTotal" items="${listCourseTotal}">
+		OrderTitle1.push("${listCourseTotal.title}");
+		Earnings1.push("${listCourseTotal.percent}");
+	</c:forEach>
+
+	<!-- 랜덤 색상 생성 -->
+		$(function(){
+			var newColor1 = new Array();
+			var rgbColor1 = new Array();
+			
+			for(var i=0; i < OrderTitle1.length; i++) {
+				newColor1[i] = '#' + Math.round(Math.random() * 0xffffff).toString(16);
+			}
+			
+			for(var i=0; i < OrderTitle1.length; i++) {
+				document.getElementById('circle1[' + i + ']').style.color = newColor1[i];
+				console.log(document.getElementById('circle1[' + i + ']'));
+				
+				// 색상 확인
+				var element1 = document.getElementById('circle1[' + i + ']');
+				var cssObj1 = window.getComputedStyle(element1);
+				var bgColor1 = cssObj1.getPropertyValue('color');
+				rgbColor1.push(bgColor1);
+				
+			}
+		
+		
 	//Set new default font family and font color to mimic Bootstrap's default styling
 	Chart.defaults.global.defaultFontFamily = 'Nunito', '-apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif';
 	Chart.defaults.global.defaultFontColor = '#858796';
 	
 	// Pie Chart Example
-	var ctx = document.getElementById("myPieChart");
+	var ctx = document.getElementById("myPieChartCourse");
+
+	<c:set var='i' value='0'/>
+	var arr = newColor1;
+	
 	var myPieChart = new Chart(ctx, {
 	type : 'doughnut',
 	data : {
-		labels : [ "웹 개발", "프론트엔드", "백엔드", "프로그래밍 언어" ],
+		labels : OrderTitle1 ,
 		datasets : [ {
-			data : [ 2, 1, 3, 2],
-			backgroundColor : [ '#007bff', '#dc3545', '#34bd3e', '#34a0bd', '#bd6834' ],
-			/* hoverBackgroundColor : [ '#0074F0', '#D03040' ], */
-			hoverBorderColor : "rgba(234, 236, 244, 1)",
-		} ],
+			data : Earnings1 ,
+			backgroundColor : [ // 구매 비율 통계 color
+				arr[${i}], arr[${i+1}], arr[${i+2}], arr[${i+3}], arr[${i+4}], 
+				arr[${i+5}], arr[${i+6}], arr[${i+7}], arr[${i+8}], arr[${i+9}]
+				
+				],
+			hoverBackgroundColor : [ // 구매 비율 통계 hover color
+				 /* '#0074F0', '#D03040', '#8033de', '#4fc4db', '#dbd24f' */  ],
+		}],
 	},
 	options : {
 		maintainAspectRatio : false,
@@ -274,11 +323,14 @@
 			caretPadding : 10,
 		},
 		legend : {
-			display : true
+			display : false
 		},
 		cutoutPercentage : 80,
 	},
 	});
+	
+	
+		});
 	</script>
 </body>
 </html>
