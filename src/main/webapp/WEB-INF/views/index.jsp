@@ -236,7 +236,7 @@
 			                <div class="card shadow-sm mb-3">
 				                <img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
 				                <div class="card-body">
-					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
+					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/course/${list.oli_no}">${list.title}</a></div>
 					                <div style="font-size: 10px;">${list.reg_date}</div>
 					                <div id="teacher-name" class="card-text">${list.name}</div>
 					                <div class="stars-outer">
@@ -281,7 +281,7 @@
 			                <div class="card shadow-sm mb-3">
 				                <img src="<c:url value='${list.img_path}'/>" style="height:150px"/>
 				                <div class="card-body">
-					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/courses/${list.oli_no}">${list.title}</a></div>
+					                <div id="course-title" class="card-text" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; height:50px; overflow:hidden; text-overflow:ellipsis"><a href="/course/${list.oli_no}">${list.title}</a></div>
 					                <div style="font-size: 10px;">${list.reg_date}</div>
 					                <div id="teacher-name" class="card-text">${list.name}</div>
 					                <div class="stars-outer">
@@ -308,150 +308,6 @@
         <!-- 신규 강의 end -->
         
         <!-- 입문자용 강의 Start -->
-        <div class="our-services section-pad-t30">
-            <div class="container">
-                <!-- Section Tittle -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="section-tittle text-center">
-                        	<span>코딩을 배우고 싶은 분들을 위한</span>
-                            <h2>입문자용 강의</h2>
-                        </div>
-                    </div>
-                </div>
-                <div class="row d-flex justify-contnet-center">
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-6">
-						<div class="card shadow-sm mb-3">
-	                        <svg class="bd-placeholder-img card-img-top" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"></rect></svg>
-	
-	                        <div class="card-body">
-	                        	<div id="course-title" class="card-text"><a href="/courses_detail">공공데이터로 파이썬 분석 시작하기</a></div>
-		                        <div id="teacher-name" class="card-text">박조은</div>
-		                        <div class="stars-outer">
-		                        	<div class="stars-inner" style="width:65%"></div>
-		                        </div>
-								<span class="number-rating">(14)</span>
-								<div id="course-price" class="card-text">₩66,000</div>
-	                    	</div>
-                        </div>
-					</div>
-                </div>
-                <!-- More Btn -->
-                <!-- Section Button -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="browse-btn2 text-center mt-50">
-                            <a href="/courses" class="border-btn2">입문자용 강의 전체보기</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <!-- 입문자용 강의 end -->
         
         <!-- 이 주의 노트 start -->

@@ -135,7 +135,7 @@
 								<c:forEach items="${adminMemberLectureList}" var="LectureList">
 									<tr>
 										<td>L-${LectureList.hol_no }</td>
-										<td><a href="/ex/detailInfo?PID=${LectureList.oli_no}" target="_blank">${LectureList.title}</a></td>
+										<td><a onclick="openCourseDetail(${LectureList.oli_no})" href="javascript:;">${LectureList.title}</a></td>
 										<td>${LectureList.payment }</td>
 										<td>${LectureList.payment_date }</td>
 										<c:choose>
@@ -191,7 +191,7 @@
 									<c:forEach items="${adminMemberNoteList}" var="NoteList">
 									<tr>
 										<td>N-${NoteList.hon_no }</td>
-										<td><a href="/ex/detailInfo?PID=${NoteList.n_no}" target="_blank">${NoteList.title}</a></td>
+										<td><a href="javascript:openNoteDetail(${NoteList.n_no});">${NoteList.title}</a></td>
 										<td>${NoteList.payment }</td>
 										<td>${NoteList.payment_date }</td>
 										<c:choose>
@@ -267,7 +267,7 @@
 												<td><font size="3">스터디(모집완료)</font></td>
 											</c:when>
 										</c:choose>
-										<td><a href="/ex/detailInfo?PID=${cList.cb_no}" target="_blank">${cList.title}</a></td>
+										<td>${cList.title}</td>
 										<td>${cList.hit }</td>
 										<td>${cList.reg_date }</td>
 										<c:choose>
@@ -347,6 +347,38 @@ $('#btnAdminModify').click(function() {
 	});
 	
 })
+
+		// 강의 상세 창 띄우기
+	 	function openCourseDetail(oli_no) {
+	 		// 창 크기 지정
+			var width = window.screen.width * 55 / 100;
+			var height = window.screen.height * 85 / 100;
+
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+
+			var url = "/admin/course/"+oli_no;
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+	 	}
+	 	
+		//노트 상세 창 띄우기
+		function openNoteDetail(n_no) {
+			// 창 크기 지정
+			var width = window.screen.width * 55 / 100;
+			var height = window.screen.height * 85 / 100;
+		
+			// pc화면기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2);
+			var top = (window.screen.height / 2) - (height/2);
+		
+			var url = "/admin/note/"+n_no;
+			var option = "width = " + width + ", height = " + height + ", left=" + left + ", top = " + top;
+			console.log(option);
+			window.open(url, "_blank", option);
+		}
 </script>
 </body>
 </html>

@@ -102,10 +102,4 @@
 			<span>1:1 문의</span>
 		</a>
 	</li>
-	<li class="nav-item">
-		<a class="nav-link" href="faq">
-			<i class="fas fa-fw fa-table"></i>
-			<span>FAQ 목록</span>
-		</a>
-	</li>
 </ul>

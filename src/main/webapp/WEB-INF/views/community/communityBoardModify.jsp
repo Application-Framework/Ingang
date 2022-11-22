@@ -185,8 +185,8 @@ $('#btnModify').click(function() {
 	var goint = sessionStorage.getItem("classifyActive");
 	var classify = parseInt(goint); 
 	var formData = $("#searchForm").serialize();
+	sessionStorage.setItem("classifyActive", "4"); 
 	
-	sessionStorage.setItem("classifyActive", "0"); 
 	var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 	$("#searchForm").submit();
 	opener.reloadPage();

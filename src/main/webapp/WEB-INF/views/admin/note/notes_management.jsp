@@ -305,7 +305,7 @@
 			window.open(url, "_blank", option);
 	 	}
 	 	
-		// 강의 상세 창 띄우기
+		// 노트 상세 창 띄우기
 	 	function openNoteDetail(n_no) {
 	 		// 창 크기 지정
 			var width = window.screen.width * 55 / 100;
