@@ -15,4 +15,5 @@ public interface TeacherService {
 	public int deleteCourseTeacher(int olt_no);
 	public int checkTeacherByM_no(int m_no);
 	public List<TeacherDTO> getTeacherList();
+	public boolean isTeacherOfThisCourse(int oli_no, int m_no);
 }

@@ -292,4 +292,11 @@ public class MyPageController {
 		
 		return "/mypage/my_post";
 	}
+	
+	@RequestMapping("/error")
+	public String errorPage(Model model) {
+		model.addAttribute("errorMessage", "에러 발생!");
+		
+		return "errorPage";
+	}
 }

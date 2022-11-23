@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
@@ -146,25 +147,24 @@ public class CourseController {
 	public String courses_detail(Model model, HttpServletRequest request, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
-		boolean existLike = false;
-		// 접속한 회원이 현재 강의의 강사인지 확인
-		boolean isCurrentCourseTeacher = false;
-		
-		/* 테스트를 위해 비활성화
-		if(memberDTO.getM_authority() != 1 && courseDTO.getOrigin() == 0) {
-			System.err.println("원본이 아닌 페이지에 접속을 시도했습니다.");
-			return "error";
+		if(courseDTO == null) {
+			model.addAttribute("errorMessage", "존재하지 않는 강의입니다.");
+			return "errorPage";
 		}
-		*/
 		
-		if(memberDTO != null) {
-			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false;
-			
-			if(courseTeacherDTO != null && currentTeacherDTO != null) {
-				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
-			}
+		TeacherDTO teacher = teacherService.getTeacherInfo(courseDTO.getOlt_no());
+		if(teacher == null) {
+			model.addAttribute("errorMessage", "존재하지 않는 강사입니다.");
+			return "errorPage";
+		}
+		
+		boolean isExistLike = courseService.existCourseLike(pageNo, memberDTO.getM_no());;
+		boolean isCurrentCourseTeacher = teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no());
+		
+		if(memberDTO.getM_authority() != 1 && courseDTO.getOrigin() == 0) {
+			System.err.println("원본이 아닌 강의에 접속을 시도했습니다.");
+			model.addAttribute("errorMessage", "원본이 아닌 강의에 접속을 시도했습니다.");
+			return "errorPage";
 		}
 		
 		List<CourseReplyDTO> replys = courseService.getCourseReplys(pageNo);
@@ -181,28 +181,19 @@ public class CourseController {
 		
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
-		int stdCnt = 0;
-		
-		System.out.println("강의 상세 페이지 정보 출력");
-		System.out.println(courseDTO);
-		System.out.println(courseTeacherDTO);
-		System.out.println(replys);
-		System.out.println(tags);
-		System.out.println(likeCnt);
-		System.out.println(videos);
-		System.out.println(notes);
+		int stdCnt = historyOrderService.getHistoryOrderLectureListByOli_no(pageNo).size();
 		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
 		model.addAttribute("typeService", typeService);
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("teacher", courseTeacherDTO);
+		model.addAttribute("teacher", teacher);
 		model.addAttribute("replys", replys);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
 		model.addAttribute("stdCnt", stdCnt);
-		model.addAttribute("existLike", existLike);
+		model.addAttribute("existLike", isExistLike);
 		model.addAttribute("pageNo", pageNo);
 		model.addAttribute("videos", videos);
 		model.addAttribute("contentType", "main");
@@ -214,37 +205,29 @@ public class CourseController {
 		return "course/course_detail";
 	}
 	
-	/*
-	 * @RequestMapping("/courses/{pageNo}/main") public String course_main(Model
-	 * model) { model.addAttribute("contentType", "main");
-	 * 
-	 * return "course/course_detail"; }
-	 */
-	
 	@RequestMapping("/course/{pageNo}/community")
 	public String course_community(HttpServletRequest request, Model model, @PathVariable int pageNo) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
-		TeacherDTO courseTeacherDTO = teacherService.getTeacherInfo(courseDTO.getOlt_no());
+		if(courseDTO == null) {
+			model.addAttribute("errorMessage", "존재하지 않는 강의입니다.");
+			return "errorPage";
+		}
+		
+		TeacherDTO teacher = teacherService.getTeacherInfo(courseDTO.getOlt_no());
+		if(teacher == null) {
+			model.addAttribute("errorMessage", "존재하지 않는 강사입니다.");
+			return "errorPage";
+		}
+		
 		List<CourseTagDTO> tags = courseService.getCourseTags(pageNo);
 		int likeCnt = courseService.getCourseLikeCount(pageNo);
 		float starAvg = courseService.getCourseStarAvg(pageNo);
-		boolean existLike = false;
-		boolean isCurrentCourseTeacher = false;
-		if(memberDTO != null) {
-			TeacherDTO currentTeacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-			existLike = (courseService.existCourseLike(pageNo, memberDTO.getM_no()) == 1) ? true : false; 
-			if(currentTeacherDTO != null) {
-				if(courseTeacherDTO.getOlt_no() == currentTeacherDTO.getOlt_no()) isCurrentCourseTeacher = true;
-			}
-		}
-		int stdCnt = 0;
+		boolean existLike = courseService.existCourseLike(pageNo, memberDTO.getM_no());
+		boolean isCurrentCourseTeacher = teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no());
+		int stdCnt = historyOrderService.getHistoryOrderLectureListByOli_no(pageNo).size();
 		
 		String search = request.getParameter("search");
-		if(search == null) search = "";
-		
-		System.out.println("search : " + search);
-		
 		String classify = request.getParameter("classify");
 		if(classify == null) classify = "2"; // default로 질문 게시판 설정
 		
@@ -252,17 +235,34 @@ public class CourseController {
 		cbMap.put("oli_no", pageNo);
 		cbMap.put("search", search);
 		cbMap.put("classify", Integer.parseInt(classify));
-		pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		
+		try {
+			pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		}
+		catch(Exception e) {
+			System.err.println(e.getStackTrace()[0].getLineNumber()); 
+			model.addAttribute("errorMessage", pageNo + "강의의 커뮤니티 게시물의 총 개수를 가져올 수 없습니다.");
+			return "errorPage";
+		}
+		
 		cbMap.put("page", pagingService.getNowPage());
 		cbMap.put("pageSize", 10);
-		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		List<CommunityBoardDTO> cbList;
+		try {
+			cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		}
+		catch(Exception e) {
+			System.err.println(e.getStackTrace()[0].getLineNumber()); 
+			model.addAttribute("errorMessage", pageNo + "강의의 커뮤니티를 가져올 수 없습니다.");
+			return "errorPage";
+		}
 		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("tagService", tagService);
 		model.addAttribute("typeService", typeService);
 		model.addAttribute("cbService", cbService);
 		model.addAttribute("course", courseDTO);
-		model.addAttribute("teacher", courseTeacherDTO);
+		model.addAttribute("teacher", teacher);
 		model.addAttribute("tags", tags);
 		model.addAttribute("likeCnt", likeCnt);
 		model.addAttribute("starAvg", starAvg);
@@ -276,41 +276,73 @@ public class CourseController {
 		model.addAttribute("isCurrentCourseTeacher", isCurrentCourseTeacher);
 		model.addAttribute("mainCategory", courseService.getMainTypeOfCourse(pageNo).getMain_type_name());
 		model.addAttribute("subCategoryList", courseService.getCourseSubTypeList(pageNo));
+		
 		return "course/course_detail";
 	}
 	
 	// 강의 재생 페이지
 	@RequestMapping("/course/{oli_no}/play/{order}")
-	public String course_play(HttpServletRequest request, Model model, @PathVariable("oli_no") int oli_no, @PathVariable("order") int order) throws Exception {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
+	public String course_play(HttpServletRequest request, Model model, @PathVariable("oli_no") int oli_no, @PathVariable("order") int order) {
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			model.addAttribute("errorMessage", "로그인이 필요합니다.");
+			return "errorPage";
+		}
+		
+		HistoryOrderLectureDTO hol = historyOrderService.getHistoryOrderLectureByOli_noM_no(oli_no, member.getM_no());
+		if(member.getM_authority() != 1 && !teacherService.isTeacherOfThisCourse(oli_no, member.getM_no()) && hol == null) {
+			model.addAttribute("errorMessage", "강의를 시청할 권한이 없습니다.");
+			return "errorPage";
+		}
+		
 		CourseVideoDTO courseVideoDTO = courseService.getCourseVideoByOli_noAndOrder(oli_no, order);
+		if(courseVideoDTO == null) {
+			model.addAttribute("errorMessage", "강의의 동영상 정보를 가져올 수 없습니다.");
+			return "errorPage";
+		}
+		
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
-		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(oli_no, memberDTO.getM_no());
-		System.out.println(noteDTO);
+		if(videoList.size() == 0) {
+			model.addAttribute("errorMessage", "강의의 동영상 리스트 정보를 가져올 수 없습니다.");
+			return "errorPage";
+		}
+		
+		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
 		if(noteDTO != null) {
 			NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOrder(noteDTO.getN_no(), order);
-			System.out.println(noteArticleDTO);
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
 		
 		String search = request.getParameter("search");
 		String classify = request.getParameter("classify");
 		
-		if(search == null) 
-			search = "";
 		// 커뮤니티 불러오기
 		HashMap<String, Object> cbMap = new HashMap<String, Object>();
 		cbMap.put("oli_no", oli_no);
 		cbMap.put("search", search);
-		if(classify != null)
-			cbMap.put("classify", Integer.parseInt(classify));
+		if(classify != null) cbMap.put("classify", Integer.parseInt(classify));
 		else cbMap.put("classify", 2);
-		pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		
+		try {
+			pagingService = new PagingService(request, cbService.selectCommunityBoardTotalCountByOli_no(cbMap), 10);
+		}
+		catch(Exception e) {
+			System.err.println(e.getStackTrace()[0].getLineNumber()); 
+			model.addAttribute("errorMessage", oli_no + "강의의 커뮤니티 게시물의 총 개수를 가져올 수 없습니다.");
+			return "errorPage";
+		}
 		cbMap.put("page", pagingService.getNowPage());
 		cbMap.put("pageSize", 10);
-		List<CommunityBoardDTO> cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		List<CommunityBoardDTO> cbList;
+		try {
+			cbList = cbService.selectCommunityBoardByOli_no(cbMap);
+		}
+		catch(Exception e) {
+			System.err.println(e.getStackTrace()[0].getLineNumber()); 
+			model.addAttribute("errorMessage", oli_no + "강의의 커뮤니티를 가져올 수 없습니다.");
+			return "errorPage";
+		}
 		
-		System.out.println(cbList);
 		
 		model.addAttribute("memberService", memberService);
 		model.addAttribute("cbService", cbService);
@@ -325,19 +357,30 @@ public class CourseController {
 		return "course/course_play";
 	}
 	
+	@ResponseBody
 	@RequestMapping("/courseClickedLike")
 	public String clickedLikeInCourse(HttpServletRequest request) {
-		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		//int m_no = Integer.parseInt(request.getParameter("m_no"));
-		String status = request.getParameter("status");
-		if(status.equals("true")) {
-			courseService.insertCourseLike(oli_no, memberDTO.getM_no());
-		}
-		else {
-			courseService.deleteCourseLike(oli_no, memberDTO.getM_no());
+		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
+		if(member == null) {
+			System.err.println("로그인이 필요합니다.");
+			return "member";
 		}
 		
-		return "redirect:" + request.getHeader("referer");
+		String _oli_no = request.getParameter("oli_no");
+		if(_oli_no == null) {
+			System.err.println("강의를 찾을 수 없습니다.");
+			return "course";
+		}
+		int oli_no = Integer.parseInt(_oli_no);
+		boolean isExistLike = courseService.existCourseLike(oli_no, member.getM_no());
+		
+		if(isExistLike == true) {
+			courseService.insertCourseLike(oli_no, member.getM_no());
+		}
+		else {
+			courseService.deleteCourseLike(oli_no, member.getM_no());
+		}
+		
+		return "success";
 	}
 }

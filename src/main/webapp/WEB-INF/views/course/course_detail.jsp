@@ -408,14 +408,11 @@
 		
 		// 좋아요 클릭 이벤트
 		function clickedHeart(x) {
-			var status;
 			var likeCnt = parseInt($('#likeCnt').html());
 			if(x.classList.contains("bi-heart-fill")) {
-				status = false;
 				likeCnt = likeCnt - 1; 
 			}
 			else {
-				status = true;
 				likeCnt = likeCnt + 1; 
 			}
 		       
@@ -428,8 +425,18 @@
 				url: '/courseClickedLike',
 				type: 'post',
 				data: {
-					status: status,
 					oli_no: ${pageNo}
+				},
+				success: function(status) {
+					if(status.equals("member")) {
+						alert("로그인이 필요합니다.");
+					}
+					else if(status.equals("course")) {
+						alert("강의를 찾을 수 없습니다.");
+					}
+				},
+				error: function() {
+					alert("DB에 좋아요 저장을 실패했습니다.");
 				}
 			});
 		}
@@ -452,8 +459,13 @@
 				data: {
 					oli_no: ${pageNo}
 				},
-				success: function() {
-					location.reload();
+				success: function(data) {
+					if(data.responseCode.equals("error")) {
+						alert(data.message);
+					}
+					else {
+						location.reload();
+					}
 				},
 				error: function() {
 					alert("error");

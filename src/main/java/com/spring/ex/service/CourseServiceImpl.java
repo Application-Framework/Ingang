@@ -114,8 +114,10 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int existCourseLike(int oli_no, int m_no) {
-		return courseLikeDAO.existCourseLike(oli_no, m_no);
+	public boolean existCourseLike(int oli_no, int m_no) {
+		if(courseLikeDAO.existCourseLike(oli_no, m_no) == 1)
+			return true;
+		else return false;
 	}
 
 	@Override

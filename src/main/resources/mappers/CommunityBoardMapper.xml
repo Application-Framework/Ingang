@@ -373,9 +373,12 @@
 			<when test="classify == 2">classify IN (2, 3)</when>
 			<when test="classify == 4">classify IN (4, 5)</when>
 			<otherwise>classify = #{classify}</otherwise>
-		</choose> AND
-			(title LIKE '%${search}%' OR 
-			content LIKE '%${search}%')
+		</choose> 
+		
+		<if test="search != null and search != ''">
+			AND (title LIKE '%${search}%' OR 
+				content LIKE '%${search}%')
+		</if>
 	</sql>
 	<!-- 2022-09-02 김홍일 / 강의 상세 페이지의 커뮤니티 탭에 표시될 내용 -->
 	<select id="selectCommunityBoardByOli_no" resultType="CommunityBoardDTO">

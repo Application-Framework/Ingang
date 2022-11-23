@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!doctype html>
 <html>
@@ -8,12 +9,9 @@
 </head>
 <body>
 	<div class="container">
-		<div style="margin:10% 10% 10% 10%;">
-		   <!--  파일첨부 -->
-		    <form  action="upload" method="post"  enctype="multipart/form-data">
-		        <input type="file" name="file"/>
-		        <input class="btn btn-primary btn-sm"  type="submit" value="업로드"/>
-		    </form>
+		<div class="text-center p-3">
+			<img src='<c:url value="resources/img/sunki.png"></c:url>' style="width:250px;"/>
+			<h5 class="p-3">❝ ${errorMessage} ❞</h5>
 		</div>
 	 </div>
  </body>

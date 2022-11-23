@@ -63,14 +63,16 @@ public class CoursePostController {
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
 			System.out.println("로그인이 필요합니다.");
-			return "error";
+			model.addAttribute("errorMessage", "로그인이 필요합니다.");
+			return "errorPage";
 		}
 		
-		//TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-		/*if(teacherDTO == null) {
+		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(member.getM_no());
+		if(teacherDTO == null) {
 			System.out.println("강사 자격이 없습니다.");
-			return "error";
-		}*/
+			model.addAttribute("errorMessage", "강의 생성 권한이 없습니다.");
+			return "errorPage";
+		}
 		
 		String actionURL = "/submitCourse";
 		if(member.getM_authority() == 1) {
@@ -86,6 +88,7 @@ public class CoursePostController {
 			model.addAttribute("allSubCategoryList", typeService.getSubTypeListOfMainType(Integer.parseInt(main_type_no)));
 		model.addAttribute("allTagList", tagService.getTagList());
 		model.addAttribute("teacherList", teacherService.getTeacherList());
+		
 		return "course/course_write";
 	}
 	
@@ -95,13 +98,15 @@ public class CoursePostController {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
-			return "error";
+			model.addAttribute("errorMessage", "로그인이 필요합니다.");
+			return "errorPage";
 		}
 		
 		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
 		if(teacherDTO == null) {
 			System.out.println("강의 생성 권한이 없습니다.");
-			return "error";
+			model.addAttribute("errorMessage", "강의 생성 권한이 없습니다.");
+			return "errorPage";
 		}
 		
 		String title = request.getParameter("title");
@@ -122,7 +127,8 @@ public class CoursePostController {
 		
 		if(memberDTO == null || title == null || introduction == null || content == null || img_path == null || price == null || level == null || categorys == null || tags == null) {
 			System.out.println("빈 칸이 있습니다.");
-			return "error";
+			model.addAttribute("errorMessage", "빈 칸이 있습니다.");
+			return "errorPage";
 		}
 		
 		// 강의 등록
@@ -145,34 +151,34 @@ public class CoursePostController {
 	// 강의 수정 페이지
 	@RequestMapping("/rewriteCourse")
 	public String rewriteCourse(HttpServletRequest request, Model model) {
-		String _pageNo = request.getParameter("no");
-		if(_pageNo == null) {
-			System.out.println("강의를 찾을 수 없습니다.");
-			return "error";
+		int pageNo;
+		try {
+			pageNo = Integer.parseInt(request.getParameter("no"));
 		}
-		int pageNo = Integer.parseInt(_pageNo);
+		catch(Exception e) {
+			System.out.println("강의번호가 올바르지 않습니다.");
+			model.addAttribute("errorMessage", "강의번호가 올바르지 않습니다.");
+			return "errorPage";
+		}
 		
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
-			return "error";
+			model.addAttribute("errorMessage", "로그인이 필요합니다.");
+			return "errorPage";
 		}
 		
-		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-		if(teacherDTO == null) {
-			System.out.println("강사 자격이 없습니다.");
-			return "error";
+		if(memberDTO.getM_authority() != 1 && teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no()) == false) {
+			System.out.println("강의를 수정할 권한이 없습니다.");
+			model.addAttribute("errorMessage", "강의를 수정할 권한이 없습니다.");
+			return "errorPage";
 		}
 		
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		if(courseDTO == null) {
 			System.out.println("존재하지 않는 강의입니다.");
-			return "error";
-		}
-		
-		if(teacherDTO.getOlt_no() != courseDTO.getOlt_no()) {
-			System.out.println("강의 수정 권한이 없습니다.");
-			return "error";
+			model.addAttribute("errorMessage", "존재하지 않는 강의입니다.");
+			return "errorPage";
 		}
 		
 		List<CourseSubTypeDTO> myCategoryList = courseService.getCourseSubTypeList(pageNo);
@@ -190,17 +196,21 @@ public class CoursePostController {
 		model.addAttribute("courseService", courseService);
 		model.addAttribute("actionURL", "/updateCourse");
 		model.addAttribute("teacherList", teacherService.getTeacherList());
+		
 		return "course/course_write";
 	}
 	
 	@RequestMapping("/updateCourse")
 	public String updateCourse(HttpServletRequest request, Model model, @RequestParam("thumbnail") MultipartFile thumbnail) throws Exception {
-		String _pageNo = request.getParameter("pageNo");
-		if(_pageNo == null) {
-			System.out.println("강의를 찾을 수 없습니다.");
-			return "error";
+		int pageNo;
+		try {
+			pageNo = Integer.parseInt(request.getParameter("no"));
 		}
-		int pageNo = Integer.parseInt(_pageNo);
+		catch(Exception e) {
+			System.out.println("강의번호가 올바르지 않습니다.");
+			model.addAttribute("errorMessage", "강의번호가 올바르지 않습니다.");
+			return "errorPage";
+		}
 		
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
@@ -268,49 +278,62 @@ public class CoursePostController {
 	}
 	
 	// 강의 수정 취소
+	/*
 	@RequestMapping("/cancelCourse")
-	public void cancelCourse(HttpServletRequest request) throws Exception {
+	public String cancelCourse(HttpServletRequest request, Model model) throws Exception {
 		System.out.println("강의 수정 취소");
-		int pageNo = Integer.parseInt(request.getParameter("pageNo"));
+		String _pageNo = request.getParameter("pageNo");
+		if(_pageNo == null) {
+			System.out.println("강의를 찾을 수 없습니다.");
+			model.addAttribute("errorMessage", "강의를 찾을 수 없습니다.");
+		}
+		int pageNo = Integer.parseInt(_pageNo);
 		
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
+		if(courseDTO == null) {
+			System.out.println("존재하지 않는 강의입니다.");
+			model.addAttribute("errorMessage", "존재하지 않는 강의입니다.");
+			return "errorPage";
+		}
 		
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(courseDTO.getContent(), courseDTO.getOli_no(), 1);
 	}
+	*/
 	
 	// 게시물 삭제
 	@RequestMapping("/deleteCourse")
-	public String deleteCourse(HttpServletRequest request) throws Exception {
-		String _pageNo = request.getParameter("no");
-		if(_pageNo == null) {
-			System.out.println("강의를 찾을 수 없습니다.");
-			return "error";
+	public String deleteCourse(HttpServletRequest request, Model model) throws Exception {
+		int pageNo;
+		try {
+			pageNo = Integer.parseInt(request.getParameter("no"));
 		}
-		int pageNo = Integer.parseInt(_pageNo);
+		catch(Exception e) {
+			System.out.println("강의번호가 올바르지 않습니다.");
+			model.addAttribute("errorMessage", "강의번호가 올바르지 않습니다.");
+			return "errorPage";
+		}
 		
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
 			System.out.println("로그인이 필요합니다.");
-			return "error";
+			model.addAttribute("errorMessage", "로그인이 필요합니다.");
+			return "errorPage";
 		}
 		
-		TeacherDTO teacherDTO = teacherService.getTeacherInfoByM_no(memberDTO.getM_no());
-		if(teacherDTO == null) {
-			System.out.println("강사 자격이 없습니다.");
-			return "error";
+		if(memberDTO.getM_authority() != 1 && teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no()) == false) {
+			System.out.println("삭제할 권한이 없습니다.");
+			model.addAttribute("errorMessage", "삭제할 권한이 없습니다.");
+			return "errorPage";
 		}
 		
 		CourseDTO courseDTO = courseService.getCourseDetail(pageNo);
 		if(courseDTO == null) {
 			System.out.println("존재하지 않는 강의입니다.");
-			return "error";
+			model.addAttribute("errorMessage", "존재하지 않는 강의입니다.");
+			return "errorPage";
 		}
 		
-		if(teacherDTO.getOlt_no() != courseDTO.getOlt_no()) {
-			System.out.println("강의 삭제 권한이 없습니다.");
-			return "error";
-		}
 		// 섬네일 삭제
 		fileService.deleteFileToLocalAndServer(courseDTO.getImg_path());
 		fileService.deleteAllFileOfPost(pageNo, 1);

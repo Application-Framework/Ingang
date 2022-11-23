@@ -44,5 +44,5 @@ public interface MemberDAO {
 	public Integer countMyPost(Integer m_no) throws Exception;
 	
 	// primary key로 멤버 가져오기
-	public MemberDTO getMemberByM_no(int m_no) throws Exception;
+	public MemberDTO getMemberByM_no(int m_no);
 }
