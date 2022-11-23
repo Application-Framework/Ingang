@@ -51,9 +51,6 @@ public class NoteController {
 	
 	// 노트 검색 페이지
 	public String showNotes(HttpServletRequest request, Model model, String main_type, String sub_type) {
-		System.out.println("main_type : " + main_type);
-		System.out.println("sub_type : " + sub_type);
-		
 		String searchTitle = request.getParameter("s");
 		String order = request.getParameter("order");
 		String _tags = request.getParameter("tags");
@@ -77,7 +74,6 @@ public class NoteController {
 		countMap.put("charge", charge);
 		
 		int totalCount = noteService.getNoteTotalCount(countMap);
-		System.out.println("totalCount : " + totalCount);
 		
 		pagingService = new PagingService(request, totalCount, pageSize);
 		HashMap<String, Object> pageMap = new HashMap<String, Object>();

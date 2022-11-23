@@ -84,7 +84,7 @@
 		WHERE n.oli_no = oli.oli_no AND n.oli_no = oltag.oli_no AND n.oli_no = olst.oli_no AND n.enable = 1
 		
 		<if test="searchTitle != null">
-			n.title LIKE '%${searchTitle}%'
+			AND n.title LIKE '%${searchTitle}%'
 		</if>
 		
 		<if test='main_type_abbr != null'>
@@ -112,10 +112,10 @@
 		
 		<if test="charge != null">
 			<if test="charge.equals('free')">
-				AND oli.price = 0
+				AND n.price = 0
 			</if>
 			<if test="charge.equals('paid')">
-				AND oli.price > 0
+				AND n.price > 0
 			</if>
 		</if>
 	</sql>
