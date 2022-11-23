@@ -76,6 +76,9 @@ public interface CourseService {
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
 	
+	// 강의 비디오 가져오기
+	public CourseVideoDTO getCourseVideoByOli_noAndOrder(int oli_no, int order);
+	
 	// 강의 비디오 수정
 	public int updateCourseVideo(CourseVideoDTO dto);
 	

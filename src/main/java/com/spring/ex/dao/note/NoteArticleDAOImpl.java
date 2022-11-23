@@ -33,6 +33,7 @@ public class NoteArticleDAOImpl implements NoteArticleDAO {
 		return sqlSession.delete(namespace + ".deleteNoteArticle", na_no);
 	}
 	
+	/*
 	@Override
 	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
@@ -40,16 +41,19 @@ public class NoteArticleDAOImpl implements NoteArticleDAO {
 		map.put("olv_no", olv_no);
 		return sqlSession.delete(namespace + ".deleteNoteArticleByN_noAndOlv_no", map);
 	}
+	*/
 
 	@Override
 	public List<NoteArticleDTO> getNoteArticleList(int n_no) {
 		return sqlSession.selectList(namespace + ".getNoteArticleList", n_no);
 	}
 	
+	/*
 	@Override
 	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no) {
 		return sqlSession.selectList(namespace + ".getNoteArticleListByOlv_no", olv_no);
 	}
+	*/
 	
 	@Override
 	public NoteArticleDTO getNoteArticle(int na_no) {
@@ -57,10 +61,10 @@ public class NoteArticleDAOImpl implements NoteArticleDAO {
 	}
 	
 	@Override
-	public NoteArticleDTO getNoteArticleByN_noOlv_no(int n_no, int olv_no) {
+	public NoteArticleDTO getNoteArticleByN_noOrder(int n_no, int order) {
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
 		map.put("n_no", n_no);
-		map.put("olv_no", olv_no);
-		return sqlSession.selectOne(namespace + ".getNoteArticleByN_noOlv_no", map);
+		map.put("order", order);
+		return sqlSession.selectOne(namespace + ".getNoteArticleByN_noOrder", map);
 	}
 }

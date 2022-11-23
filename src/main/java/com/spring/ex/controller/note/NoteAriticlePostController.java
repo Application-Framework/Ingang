@@ -126,7 +126,7 @@ public class NoteAriticlePostController {
 		}
 		
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		int olv_no = Integer.parseInt(request.getParameter("olv_no"));
+		int order = Integer.parseInt(request.getParameter("order"));
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		
@@ -138,11 +138,11 @@ public class NoteAriticlePostController {
 		System.out.println("content : " + content);
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
-		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
+		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOrder(note.getN_no(), order);
 		if(noteArticle == null) {
 			noteArticle = new NoteArticleDTO();
 			noteArticle.setN_no(note.getN_no());
-			noteArticle.setOlv_no(olv_no);
+			noteArticle.setOrder(order);
 			noteArticle.setTitle(title);
 			noteArticle.setContent(content);
 			
@@ -151,7 +151,7 @@ public class NoteAriticlePostController {
 		}
 		else {
 			noteArticle.setN_no(note.getN_no());
-			noteArticle.setOlv_no(olv_no);
+			noteArticle.setOrder(order);
 			noteArticle.setTitle(title);
 			noteArticle.setContent(content);
 			
@@ -173,15 +173,15 @@ public class NoteAriticlePostController {
 		}
 		
 		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		int olv_no = Integer.parseInt(request.getParameter("olv_no"));
+		int order = Integer.parseInt(request.getParameter("order"));
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
-		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOlv_no(note.getN_no(), olv_no);
+		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOrder(note.getN_no(), order);
 		if(note.getM_no() != member.getM_no() && member.getM_authority() != 1) {
 			System.out.println("노트의 작성자가 아닙니다.");
 			return;
 		}
-		noteService.deleteNoteArticleByN_noAndOlv_no(note.getN_no(), olv_no);
+		noteService.deleteNoteArticle(noteArticle.getNa_no());
 		fileService.deleteAllFileOfPost(noteArticle.getNa_no(), 3);
 	}
 	

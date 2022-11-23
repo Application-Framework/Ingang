@@ -162,6 +162,11 @@ public class CourseServiceImpl implements CourseService {
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
 		return courseVideoDAO.getCourseVideoList(oli_no);
 	}
+	
+	@Override
+	public CourseVideoDTO getCourseVideoByOli_noAndOrder(int oli_no, int order) {
+		return courseVideoDAO.getCourseVideoByOli_noAndOrder(oli_no, order);
+	}
 
 	@Override
 	public CourseVideoDTO getCourseVideo(int olv_no) {

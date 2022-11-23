@@ -3,7 +3,7 @@ package com.spring.ex.dto.note;
 public class NoteArticleDTO {
 	private int na_no;
 	private int n_no;
-	private int olv_no;
+	private int order;
 	private String title;
 	private String content;
 	
@@ -19,11 +19,11 @@ public class NoteArticleDTO {
 	public void setN_no(int n_no) {
 		this.n_no = n_no;
 	}
-	public int getOlv_no() {
-		return olv_no;
+	public int getOrder() {
+		return order;
 	}
-	public void setOlv_no(int olv_no) {
-		this.olv_no = olv_no;
+	public void setOrder(int order) {
+		this.order = order;
 	}
 	public String getTitle() {
 		return title;
@@ -39,7 +39,7 @@ public class NoteArticleDTO {
 	}
 	@Override
 	public String toString() {
-		return "NoteArticleDTO [na_no=" + na_no + ", n_no=" + n_no + ", olv_no=" + olv_no + ", title=" + title
+		return "NoteArticleDTO [na_no=" + na_no + ", n_no=" + n_no + ", order=" + order + ", title=" + title
 				+ ", content=" + content + "]";
 	}
 }

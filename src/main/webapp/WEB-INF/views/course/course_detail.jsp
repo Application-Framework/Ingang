@@ -187,7 +187,7 @@
 					<div class="mb-4">
 						<c:forEach var="video" items="${videos}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/course/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
+								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/course/${pageNo}/play/${video.order}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
 							</div>
 						</c:forEach>
 					</div>

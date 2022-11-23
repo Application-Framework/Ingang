@@ -42,13 +42,13 @@ public class NotePostController {
 	@RequestMapping(value="/createNote", method=RequestMethod.POST)
 	public String createNote(HttpServletRequest request, Model model) throws Exception {
 		String _oli_no = request.getParameter("oli_no");
-		String _olv_no = request.getParameter("olv_no");
-		if(_oli_no == null || _olv_no == null) {
+		String _order = request.getParameter("order");
+		if(_oli_no == null || _order == null) {
 			System.out.println("잘못된 URL 입니다.");
 			return "error";
 		}
 		int oli_no = Integer.parseInt(_oli_no);
-		int olv_no = Integer.parseInt(_olv_no);
+		int order = Integer.parseInt(_order);
 		
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
 		if(memberDTO == null) {
@@ -86,7 +86,7 @@ public class NotePostController {
 		// 게시글의 파일 관리
 		fileService.manageFileAfterPostSubmission(content, note.getN_no(), 2);
 		
-		return "redirect:/course/" + oli_no + "/play/" + olv_no;
+		return "redirect:/course/" + oli_no + "/play/" + order;
 	}
 	
 	// rewriteNote

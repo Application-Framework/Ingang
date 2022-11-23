@@ -280,15 +280,15 @@ public class CourseController {
 	}
 	
 	// 강의 재생 페이지
-	@RequestMapping("/course/{oli_no}/play/{olv_no}")
-	public String course_play(HttpServletRequest request, Model model, @PathVariable int oli_no, @PathVariable int olv_no) throws Exception {
+	@RequestMapping("/course/{oli_no}/play/{order}")
+	public String course_play(HttpServletRequest request, Model model, @PathVariable("oli_no") int oli_no, @PathVariable("order") int order) throws Exception {
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		CourseVideoDTO courseVideoDTO = courseService.getCourseVideo(olv_no);
+		CourseVideoDTO courseVideoDTO = courseService.getCourseVideoByOli_noAndOrder(oli_no, order);
 		List<CourseVideoDTO> videoList = courseService.getCourseVideoList(oli_no);
 		NoteDTO noteDTO = noteService.getNoteByOli_noM_no(oli_no, memberDTO.getM_no());
 		System.out.println(noteDTO);
 		if(noteDTO != null) {
-			NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOlv_no(noteDTO.getN_no(), olv_no);
+			NoteArticleDTO noteArticleDTO = noteService.getNoteArticleByN_noOrder(noteDTO.getN_no(), order);
 			System.out.println(noteArticleDTO);
 			model.addAttribute("noteArticle", noteArticleDTO);
 		}
@@ -316,7 +316,7 @@ public class CourseController {
 		model.addAttribute("cbService", cbService);
 		model.addAttribute("video", courseVideoDTO);
 		model.addAttribute("oli_no", oli_no);
-		model.addAttribute("olv_no", olv_no);
+		model.addAttribute("order", order);
 		model.addAttribute("videoList", videoList);
 		model.addAttribute("type", "content");
 		model.addAttribute("note", noteDTO);

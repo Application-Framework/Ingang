@@ -81,6 +81,9 @@
 								</c:forEach>
 							</tbody>
 						</table>
+						<c:if test="${courseRequestList.size() == 0}">
+							<h5 class="text-center">승인 대기중인 강의가 없습니다.</h5>
+						</c:if>
 					</div>
 					
 					<c:if test="${paging.totalCount > 10}">

@@ -153,10 +153,13 @@
     		<div class="row mb-4" id="videoSection">
     			<div class="fs-4 mb-2">강의 동영상</div>
     			<div class="row ps-4 pb-2">
+    				<div class="col-1 d-flex align-items-center">
+    					<label>순서</label>
+    				</div>
     				<div class="col-2 d-flex align-items-center">
     					<label>동영상 제목</label>
     				</div>
-    				<div class="col-8 d-flex align-items-center">
+    				<div class="col-7 d-flex align-items-center">
     					<label>주소</label>
     				</div>
     				<div class="col-1 fs-2">
@@ -306,6 +309,16 @@
 	    		alert('editor content is empty');
 	    		return false;
 	    	}
+	    	
+	    	$('[name=video_paths]').each(function () {
+	    		console.log($(this).val());
+	    		console.log($(this).val().indexOf("embed"));
+	    		if($(this).val().indexOf("embed") == -1) {
+	    			alert("youtube 주소 형식이 embed가 아닙니다.");
+	    			return;
+	    		}
+	    	});
+	    	
 	    	submitted = true;
 	    	
 	    	var form = $('#frmCourse')[0];
@@ -318,8 +331,7 @@
 	    		data: formData,
 	    		type: "post",
 	    		success: function() {
-					window.close();
-	    			window.opener.location.reload();
+	    			alert("강의 요청이 완료되었습니다. 관리자가 승인하면 변경된 내용이 반영됩니다.");
 	    		}
 	    	});
 	    });
@@ -376,7 +388,15 @@
 	    
 	    function addVideoSlot(title, file_name) {
 	    	cnt = cnt + 1;
-	    	$('#videoSection').append("<div class='row ps-4 pb-2' id='v_" + cnt + "'><div class='col-2'><input type='text' class='form-control' name='video_titles' value='" + title + "' required/></div><div class='col-10'><input type='text' class='form-control' name='video_paths' value='" + file_name + "' required/></div></div>");
+	    	var tags = "<div class='row ps-4 pb-2' id='v_"+cnt+"'>";
+	    	tags += "<div class='col-1' id='cnt'>"+cnt+"</div>";
+			tags += "<div class='col-2'><input type='text' class='form-control' name='video_titles' value='"+title+"' required/></div>";
+			tags += "<div class='col-7'><input type='text' class='form-control' name='video_paths' value='"+file_name+"' required/></div>";
+			tags += "<div class='col-1 fs-2'><a href='javascript:;' id='up_slot'><i class='bi bi-arrow-up-circle'></i></a></div>";
+			tags += "<div class='col-1 fs-2'><a href='javascript:;' id='down_slot'><i class='bi bi-arrow-down-circle'></i></a></div>";
+			tags += "</div>";
+			
+	    	$('#videoSection').append(tags);
 	    	changedForm = true;
 	    }
 	    
@@ -386,6 +406,35 @@
 	    	cnt = cnt - 1;
 	    	changedForm = true;
 	    }
+	    
+	    $(document).on('click', '#up_slot', function() {
+	    	var _idx = $(this).parent().parent().attr('id');
+	    	var idx = parseInt(_idx.substring(2));
+	    	if(idx == 1) return;
+	    	
+	    	$("#v_"+idx).insertBefore("#v_"+(idx-1));
+	    	$("#v_"+idx).attr("id", "v_t")
+	    	$("#v_"+(idx-1)).attr("id", "v_"+idx);
+	    	$("#v_t").attr("id", "v_"+(idx-1));
+	    	
+	    	$("#v_"+idx).find("#cnt").html(idx);
+	    	$("#v_"+(idx-1)).find("#cnt").html((idx-1));
+	    	//console.log($("#v_"+idx).find("#cnt").val());
+	    });
+	    
+	    $(document).on('click', '#down_slot', function() {
+	    	var _idx = $(this).parent().parent().attr('id');
+	    	var idx = parseInt(_idx.substring(2));
+	    	if(idx == cnt) return;
+	    	
+	    	$("#v_"+idx).insertAfter("#v_"+(idx+1));
+	    	$("#v_"+idx).attr("id", "v_t")
+	    	$("#v_"+(idx+1)).attr("id", "v_"+idx);
+	    	$("#v_t").attr("id", "v_"+(idx+1));
+	    	
+	    	$("#v_"+idx).find("#cnt").html(idx);
+	    	$("#v_"+(idx+1)).find("#cnt").html((idx+1));
+	    });
 		
 		<c:choose>
 			<c:when test="${videoList != null}">

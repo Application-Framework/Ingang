@@ -198,6 +198,12 @@
 		WHERE olv_no = #{olv_no}
 	</select>
 	
+	<select id="getCourseVideoByOli_noAndOrder" resultType="CourseVideoDTO">
+		SELECT *
+		FROM online_lecture_video
+		WHERE oli_no = #{oli_no} AND `order` = #{order}
+	</select>
+	
 	<delete id="deleteCourseVideo">
 		DELETE FROM online_lecture_video
 		WHERE oli_no = #{oli_no}

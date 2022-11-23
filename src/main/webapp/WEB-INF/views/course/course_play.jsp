@@ -58,21 +58,21 @@
             	<div class="h-100 d-flex justify-content-evenly align-items-center">
             		<div class="col-3 text-center">
 		           		<c:choose>
-			            	<c:when test="${olv_no == videoList[0].olv_no}">
+			            	<c:when test="${order == videoList[0].order}">
 			            		<a class="link-light">첫번째수업</a>
 			            	</c:when>
 			            	<c:otherwise>
-			            		<a class="link-light" href="${olv_no-1}">이전 수업</a>
+			            		<a class="link-light" href="${order-1}">이전 수업</a>
 			            	</c:otherwise>
 		            	</c:choose>
 	            	</div>
 	            	<div class="col-3 text-center">
 		            	<c:choose>
-			            	<c:when test="${olv_no == videoList[videoList.size()-1].olv_no}">
+			            	<c:when test="${order == videoList[videoList.size()-1].order}">
 			            		<a class="link-light">마지막수업</a>
 			            	</c:when>
 		            		<c:otherwise>
-		            			<a class="link-light" href="${olv_no+1}">다음 수업</a>
+		            			<a class="link-light" href="${order+1}">다음 수업</a>
 		            		</c:otherwise>
 		           		</c:choose>
 	           		</div> 
@@ -93,10 +93,10 @@
 		        	</div>
 		        	
 		        	<c:forEach var="video" items="${videoList}">
-			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${olv_no == video.olv_no}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
+			        	<div class="content d-flex align-items-center px-3 py-3 <c:choose><c:when test='${order == video.order}'>selected</c:when><c:otherwise>notSelected</c:otherwise></c:choose>">
 			        		<i class="fs-5 bi bi-play-circle me-2"></i>
 				       		<div class="fs-5">${video.title}</div>
-				       		<a class="stretched-link" href="${video.olv_no}"></a>
+				       		<a class="stretched-link" href="${video.order}"></a>
 			       		</div>
 		       		</c:forEach>
 	       		</div> 
@@ -183,7 +183,7 @@
 					        	<iframe name="dummyframe" id="dummyframe" style="display: none"></iframe>
 					        	<form action="/saveNoteArticle" target="dummyframe" method="post">
 					        		<input type="hidden" name="oli_no" value="${oli_no}"/>
-					        		<input type="hidden" name="olv_no" value="${olv_no}"/>
+					        		<input type="hidden" name="order" value="${order}"/>
 						        	<input class="form-control mb-1" type="text" id="na_title" name="title" value="${noteArticle.title}" placeholder="노트 제목" />
 					        		<textarea id="summernote_article" name="content" rows=5 placeholder="content">${noteArticle.content}</textarea>
 						        	<div class="d-flex flex-row-reverse mt-2">
@@ -206,7 +206,7 @@
 					            <div class="card-body m-3">
 					                <form action="/createNote" method="post">
 					                	<input type="hidden" name="oli_no" value="${oli_no}"/>
-					                	<input type="hidden" name="olv_no" value="${olv_no}"/>
+					                	<input type="hidden" name="order" value="${order}"/>
 							    		<div class="row mb-1">
 							   				<label class="col-sm-2 col-form-label fs-5 text-start">노트명</label>
 							   				<div class="col-sm-10">
@@ -392,7 +392,7 @@
 				type: "POST",
 				data: {
 					oli_no: ${oli_no},
-					olv_no: ${olv_no},
+					order: ${order},
 					title: $("#na_title").val(),
 					content: $("#summernote_article").val()
 				},
@@ -409,7 +409,7 @@
 					type: "POST",
 					data: {
 						oli_no: ${oli_no},
-						olv_no: ${olv_no}
+						order: ${order}
 					},
 					success: function() {
 						$("#noteArticle").load(location.href + " #noteArticle>*", function() {
@@ -423,7 +423,7 @@
 		
 		function loadCommunity(search, classify) {
 			$.ajax({
-				url: "/course/${oli_no}/play/${olv_no}",
+				url: "/course/${oli_no}/play/${order}",
 				type: "post",
 				dataType: "html",
 				data: {
