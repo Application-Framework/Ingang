@@ -427,16 +427,16 @@
 				data: {
 					oli_no: ${pageNo}
 				},
-				success: function(status) {
-					if(status.equals("member")) {
-						alert("로그인이 필요합니다.");
-					}
-					else if(status.equals("course")) {
-						alert("강의를 찾을 수 없습니다.");
+				success: function(data) {
+					console.log(data);
+					alert(data.message);
+					if(data.responseCode == 'success') {
+						console.log("asdf");
+						alert(data.message);
 					}
 				},
 				error: function() {
-					alert("DB에 좋아요 저장을 실패했습니다.");
+					alert("error");
 				}
 			});
 		}
@@ -460,7 +460,7 @@
 					oli_no: ${pageNo}
 				},
 				success: function(data) {
-					if(data.responseCode.equals("error")) {
+					if(data.responseCode == "error") {
 						alert(data.message);
 					}
 					else {

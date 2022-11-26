@@ -322,14 +322,11 @@
 		
 		// 좋아요 클릭 이벤트
 		function clickedHeart(x) {
-			var status;
 			var likeCnt = parseInt($('#likeCnt').html());
 			if(x.classList.contains("bi-heart-fill")) {
-				status = false;
 				likeCnt = likeCnt - 1; 
 			}
 			else {
-				status = true;
 				likeCnt = likeCnt + 1; 
 			}
 		       
@@ -342,8 +339,15 @@
 				url: '/noteClickedLike',
 				type: 'post',
 				data: {
-					status: status,
 					n_no: ${pageNo}
+				},
+				success: function(data) {
+					if(data.responseCode == 'error') {
+						alert(data.message);
+					}
+				},
+				error: function() {
+					alert("error");
 				}
 			});
 		}
@@ -379,9 +383,17 @@
 				data: {
 					n_no: ${pageNo}
 				},
-				success: function() {
-					location.reload();
-				}
+				success: function(data) {
+					if(data.responseCode == 'error') {
+						alert(data.message);
+					}
+					else {
+						location.reload();
+					}
+				},
+				error: function() {
+					alert("error");
+				}				
 			});
 		}
 		
@@ -394,8 +406,16 @@
 						oli_no: oli_no,
 						order: order
 					},
-					success: function() {
-						location.reload();
+					success: function(data) {
+						if(data.responseCode == 'error') {
+							alert(data.message);
+						}
+						else {
+							location.reload();
+						}
+					},
+					error: function() {
+						alert("error");
 					}
 				});
 			}

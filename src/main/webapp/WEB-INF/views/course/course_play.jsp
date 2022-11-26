@@ -396,8 +396,16 @@
 					title: $("#na_title").val(),
 					content: $("#summernote_article").val()
 				},
-				success: function() {
-					$("#noteArticleResult").load(location.href + " #noteArticleResult>*", "");
+				success: function(data) {
+					if(data.responseCode == "error") {
+						alert(data.message);
+					}
+					else {
+						$("#noteArticleResult").load(location.href + " #noteArticleResult>*", "");
+					}
+				},
+				error: function() {
+					alert("error");
 				}
 			});
 		}
@@ -411,11 +419,19 @@
 						oli_no: ${oli_no},
 						order: ${order}
 					},
-					success: function() {
-						$("#noteArticle").load(location.href + " #noteArticle>*", function() {
-							// 로드가 끝나고 실행
-							initSummernote();
-						});
+					success: function(data) {
+						if(data.responseCode == "error") {
+							alert(data.message);
+						}
+						else {
+							$("#noteArticle").load(location.href + " #noteArticle>*", function() {
+								// 로드가 끝나고 실행
+								initSummernote();
+							});
+						}
+					},
+					error: function() {
+						alert("error");
 					}
 				});
 			}

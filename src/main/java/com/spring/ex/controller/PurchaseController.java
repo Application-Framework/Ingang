@@ -32,7 +32,7 @@ public class PurchaseController {
 	private NoteService noteService;
 	
 	@ResponseBody
-	@RequestMapping(value="/purchaseCourse", method=RequestMethod.POST)
+	@RequestMapping(value="/purchaseCourse", method=RequestMethod.POST, produces="application/json; charset=utf8")
 	public String purchaseCourse(HttpServletRequest request, Model model) throws Exception {
 		JsonObject jsonObject = new JsonObject();
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
@@ -81,7 +81,7 @@ public class PurchaseController {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value="/purchaseNote", method=RequestMethod.POST)
+	@RequestMapping(value="/purchaseNote", method=RequestMethod.POST, produces="application/json; charset=utf8")
 	public String purchaseNote(HttpServletRequest request) {
 		JsonObject jsonObject = new JsonObject();
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");

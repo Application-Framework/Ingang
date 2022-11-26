@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonObject;
 import com.spring.ex.dto.CommunityBoardDTO;
 import com.spring.ex.dto.HistoryOrderLectureDTO;
 import com.spring.ex.dto.MemberDTO;
@@ -153,15 +154,15 @@ public class CourseController {
 		}
 		
 		TeacherDTO teacher = teacherService.getTeacherInfo(courseDTO.getOlt_no());
-		if(teacher == null) {
+		if(courseDTO.getOlt_no() != 0 && teacher == null) {
 			model.addAttribute("errorMessage", "존재하지 않는 강사입니다.");
 			return "errorPage";
 		}
 		
-		boolean isExistLike = courseService.existCourseLike(pageNo, memberDTO.getM_no());;
-		boolean isCurrentCourseTeacher = teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no());
+		boolean isExistLike = false; 
+		boolean isCurrentCourseTeacher = false;
 		
-		if(memberDTO.getM_authority() != 1 && courseDTO.getOrigin() == 0) {
+		if(courseDTO.getOrigin() == 0) {
 			System.err.println("원본이 아닌 강의에 접속을 시도했습니다.");
 			model.addAttribute("errorMessage", "원본이 아닌 강의에 접속을 시도했습니다.");
 			return "errorPage";
@@ -174,6 +175,8 @@ public class CourseController {
 		
 		// 회원이 강의를 구매했는지 확인
 		if(memberDTO != null) {
+			isExistLike = courseService.existCourseLike(pageNo, memberDTO.getM_no());
+			isCurrentCourseTeacher = teacherService.isTeacherOfThisCourse(pageNo, memberDTO.getM_no());
 			HistoryOrderLectureDTO historyOrderLectureDTO = historyOrderService.getHistoryOrderLectureByOli_noM_no(pageNo, memberDTO.getM_no());
 			boolean purchased = (historyOrderLectureDTO != null) ? true : false;
 			model.addAttribute("purchased", purchased);
@@ -215,7 +218,7 @@ public class CourseController {
 		}
 		
 		TeacherDTO teacher = teacherService.getTeacherInfo(courseDTO.getOlt_no());
-		if(teacher == null) {
+		if(courseDTO.getOlt_no() != 0 && teacher == null) {
 			model.addAttribute("errorMessage", "존재하지 않는 강사입니다.");
 			return "errorPage";
 		}
@@ -358,20 +361,28 @@ public class CourseController {
 	}
 	
 	@ResponseBody
-	@RequestMapping("/courseClickedLike")
+	@RequestMapping(value="/courseClickedLike", produces="application/json; charset=utf8")
 	public String clickedLikeInCourse(HttpServletRequest request) {
+		JsonObject jsonObject = new JsonObject();
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
 			System.err.println("로그인이 필요합니다.");
-			return "member";
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인이 필요합니다.");
+			return jsonObject.toString();
 		}
 		
-		String _oli_no = request.getParameter("oli_no");
-		if(_oli_no == null) {
-			System.err.println("강의를 찾을 수 없습니다.");
-			return "course";
+		int oli_no;
+		try {
+			oli_no = Integer.parseInt(request.getParameter("oli_no"));
 		}
-		int oli_no = Integer.parseInt(_oli_no);
+		catch(Exception e) {
+			System.err.println("강의를 찾을 수 없습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "강의를 찾을 수 없습니다.");
+			return jsonObject.toString();
+		}
+			
 		boolean isExistLike = courseService.existCourseLike(oli_no, member.getM_no());
 		
 		if(isExistLike == true) {
@@ -381,6 +392,7 @@ public class CourseController {
 			courseService.deleteCourseLike(oli_no, member.getM_no());
 		}
 		
-		return "success";
+		jsonObject.addProperty("responseCode", "success");
+		return jsonObject.toString();
 	}
 }

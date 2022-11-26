@@ -10,7 +10,7 @@
 <body>
 	<div class="container">
 		<div class="text-center p-3">
-			<img src='<c:url value="resources/img/sunki.png"></c:url>' style="width:250px;"/>
+			<img src='<c:url value="/resources/img/sunki.png"></c:url>' style="width:250px;"/>
 			<h5 class="p-3">❝ ${errorMessage} ❞</h5>
 		</div>
 	 </div>

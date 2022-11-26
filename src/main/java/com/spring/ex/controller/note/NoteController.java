@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonObject;
 import com.spring.ex.dto.HistoryOrderNoteDTO;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.dto.course.CourseDTO;
@@ -174,19 +176,37 @@ public class NoteController {
 		return "note/note_detail";
 	}
 	
-
-	@RequestMapping("/noteClickedLike")
+	@ResponseBody
+	@RequestMapping(value="/noteClickedLike", produces="application/json; charset=utf8")
 	public String noteClickedLike(HttpServletRequest request) {
+		JsonObject jsonObject = new JsonObject();
 		MemberDTO memberDTO = (MemberDTO)request.getSession().getAttribute("member");
-		int n_no = Integer.parseInt(request.getParameter("n_no"));
-		String status = request.getParameter("status");
-		if(status.equals("true")) {
+		if(memberDTO == null) {
+			System.err.println("로그인이 필요합니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인이 필요합니다.");
+			return jsonObject.toString();
+		}
+		
+		int n_no;
+		try {
+			n_no = Integer.parseInt(request.getParameter("n_no"));
+		}
+		catch(Exception e) {
+			System.err.println("노트 번호가 올바르지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인이 필요합니다.");
+			return jsonObject.toString();
+		}
+		
+		if(noteService.existNoteLike(n_no, memberDTO.getM_no()) == 0) {
 			noteService.insertNoteLike(n_no, memberDTO.getM_no());
 		}
 		else {
-			noteService.deleteNoteLike(n_no, memberDTO.getM_no());
+			noteService.deleteNoteLike(n_no, memberDTO.getM_no());			
 		}
 		
-		return "redirect:" + request.getHeader("referer");
+		jsonObject.addProperty("responseCode", "success");
+		return jsonObject.toString();
 	}
 }

@@ -58,19 +58,19 @@ public class NoteAriticlePostController {
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
 			System.out.println("로그인이 필요합니다.");
-			return "error";
+			return "errorPage";
 		}
 		
 		NoteArticleDTO noteArticle = noteService.getNoteArticle(na_no);
 		if(noteArticle == null) {
 			System.out.println("노트 글을 찾을 수 없습니다.");
-			return "error";
+			return "errorPage";
 		}
 		
 		HistoryOrderNoteDTO historyOrderNote = historyOrderService.getHistoryOrderNoteByN_noM_no(noteArticle.getN_no(), member.getM_no());
 		if(historyOrderNote == null) {
 			System.out.println("노트를 구매하지 않은 사용자입니다.");
-			return "error";
+			return "errorPage";
 		}
 		
 		NoteDTO note = noteService.getNote(noteArticle.getN_no());
@@ -117,27 +117,57 @@ public class NoteAriticlePostController {
 	
 	// 노트 글 저장
 	@ResponseBody
-	@RequestMapping("/saveNoteArticle")
+	@RequestMapping(value="/saveNoteArticle", produces="application/json; charset=utf8")
 	public String saveNoteArticle(HttpServletRequest request) throws Exception {
+		JsonObject jsonObject = new JsonObject();
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
-			System.out.println("로그인이 필요합니다.");
-			return "error";
+			System.err.println("로그인이 필요합니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인이 필요합니다.");
+			return jsonObject.toString();
 		}
 		
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		int order = Integer.parseInt(request.getParameter("order"));
+		int oli_no;
+		try {
+			oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		}
+		catch(Exception e) {
+			System.err.println("강의번호가 올바르지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "강의번호가 올바르지 않습니다.");
+			return jsonObject.toString();
+		}
+		
+		int order;
+		try {
+			order = Integer.parseInt(request.getParameter("order"));
+		}
+		catch(Exception e) {
+			System.err.println("노트 order번호가 올바르지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "노트 order번호가 올바르지 않습니다.");
+			return jsonObject.toString();
+		}
+		 
 		String title = request.getParameter("title");
 		String content = request.getParameter("content");
 		
 		if(title == null || content == null) {
-			System.out.println("빈 칸이 있습니다.");
-			return "error";
+			System.err.println("빈 칸이 있습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "빈 칸이 있습니다.");
+			return jsonObject.toString();
 		}
 		
-		System.out.println("content : " + content);
-		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
+		if(note == null) {
+			System.err.println("노트 정보를 가져올 수 없습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "노트 정보를 가져올 수 없습니다.");
+			return jsonObject.toString();
+		}
+		
 		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOrder(note.getN_no(), order);
 		if(noteArticle == null) {
 			noteArticle = new NoteArticleDTO();
@@ -160,29 +190,65 @@ public class NoteAriticlePostController {
 		}
 		
 		fileService.manageFileAfterPostSubmission(content, noteArticle.getNa_no(), 3);
-		return "success";
+		
+		jsonObject.addProperty("responseCode", "success");
+		return jsonObject.toString();
 	}
 	
 	@ResponseBody
-	@RequestMapping("/deleteNoteArticle")
-	public void deleteNoteArticle(HttpServletRequest request) throws Exception {
+	@RequestMapping(value="/deleteNoteArticle", produces="application/json; charset=utf8")
+	public String deleteNoteArticle(HttpServletRequest request) throws Exception {
+		JsonObject jsonObject = new JsonObject();
 		MemberDTO member = (MemberDTO)request.getSession().getAttribute("member");
 		if(member == null) {
-			System.out.println("로그인이 필요합니다.");
-			return;
+			System.err.println("로그인이 필요합니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인이 필요합니다.");
+			return jsonObject.toString();
 		}
 		
-		int oli_no = Integer.parseInt(request.getParameter("oli_no"));
-		int order = Integer.parseInt(request.getParameter("order"));
+		int oli_no;
+		try {
+			oli_no = Integer.parseInt(request.getParameter("oli_no"));
+		}
+		catch(Exception e) {
+			System.err.println("강의번호가 올바르지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "강의번호가 올바르지 않습니다.");
+			return jsonObject.toString();
+		}
+		
+		int order;
+		try {
+			order = Integer.parseInt(request.getParameter("order"));
+		}
+		catch(Exception e) {
+			System.err.println("노트 order번호가 올바르지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "노트 order번호가 올바르지 않습니다.");
+			return jsonObject.toString();
+		}
 		
 		NoteDTO note = noteService.getNoteByOli_noM_no(oli_no, member.getM_no());
+		if(note == null) {
+			System.err.println("노트 정보를 가져올 수 없습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "노트 정보를 가져올 수 없습니다.");
+			return jsonObject.toString();
+		}
+		
 		NoteArticleDTO noteArticle = noteService.getNoteArticleByN_noOrder(note.getN_no(), order);
 		if(note.getM_no() != member.getM_no() && member.getM_authority() != 1) {
-			System.out.println("노트의 작성자가 아닙니다.");
-			return;
+			System.err.println("노트의 작성자가 아닙니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "노트의 작성자가 아닙니다.");
+			return jsonObject.toString();
 		}
 		noteService.deleteNoteArticle(noteArticle.getNa_no());
 		fileService.deleteAllFileOfPost(noteArticle.getNa_no(), 3);
+		
+		jsonObject.addProperty("responseCode", "success");
+		return jsonObject.toString();
 	}
 	
 	// 서버에만 이미지 임시로 저장
