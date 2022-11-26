@@ -85,14 +85,17 @@ public class NoteServiceImpl implements NoteService{
 		return noteArticleDAO.deleteNoteArticle(na_no);
 	}
 	
+	/*
 	@Override
 	public int deleteNoteArticleByN_noAndOlv_no(int n_no, int olv_no) {
 		return noteArticleDAO.deleteNoteArticleByN_noAndOlv_no(n_no, olv_no);
 	}
+	*/
 
+	
 	@Override
-	public NoteArticleDTO getNoteArticleByN_noOlv_no(int n_no, int olv_no) {
-		return noteArticleDAO.getNoteArticleByN_noOlv_no(n_no, olv_no);
+	public NoteArticleDTO getNoteArticleByN_noOrder(int n_no, int order) {
+		return noteArticleDAO.getNoteArticleByN_noOrder(n_no, order);
 	}
 
 	@Override
@@ -100,10 +103,12 @@ public class NoteServiceImpl implements NoteService{
 		return noteArticleDAO.getNoteArticleList(n_no);
 	}
 
+	/*
 	@Override
 	public List<NoteArticleDTO> getNoteArticleListByOlv_no(int olv_no) {
 		return noteArticleDAO.getNoteArticleListByOlv_no(olv_no);
 	}
+	*/
 	
 	@Override
 	public NoteArticleDTO getNoteArticle(int na_no) {

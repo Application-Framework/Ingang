@@ -125,6 +125,9 @@
             form.search-box .search-form {
                 width: auto;
             }
+            .choices__list--dropdown {
+            	z-index: 999;
+            }
         </style>
    </head>
 
@@ -172,7 +175,7 @@
                                     <%-- 검색 필터 --%>
 									<div class="d-flex align-items-center mb-3">
 	                                	<div class="w-100">
-	                                        <span>${totalCount} course found</span>
+	                                        <span>${totalCount} note found</span>
 	                                    </div>
 	                                    
 	                                    <div class="flex-shrink-1 pe-2 text-center">
@@ -217,7 +220,7 @@
 					    			</div>
 									
                                     <%-- 노트 리스트 출력 부분 --%>
-                                    <div class="row row-cols-4 mb-3">
+                                    <div id="content" class="row row-cols-4 mb-3">
                                     	<c:forEach var="list" items="${nlist}">
 	                                        <div class="col">
 	                                            <div class="card shadow-sm mb-3">
@@ -241,7 +244,7 @@
                             </section>
                             
                             <%-- 페이지 번호 --%>
-                            <div class="pagination-area pb-115 text-center mt-5">
+                            <div id="pagination" class="pagination-area pb-115 text-center mt-5">
                                 <div class="container">
                                     <div class="row">
                                         <div class="col-xl-12">

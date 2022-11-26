@@ -114,8 +114,10 @@ public class CourseServiceImpl implements CourseService {
 	}
 
 	@Override
-	public int existCourseLike(int oli_no, int m_no) {
-		return courseLikeDAO.existCourseLike(oli_no, m_no);
+	public boolean existCourseLike(int oli_no, int m_no) {
+		if(courseLikeDAO.existCourseLike(oli_no, m_no) == 1)
+			return true;
+		else return false;
 	}
 
 	@Override
@@ -161,6 +163,11 @@ public class CourseServiceImpl implements CourseService {
 	@Override
 	public List<CourseVideoDTO> getCourseVideoList(int oli_no) {
 		return courseVideoDAO.getCourseVideoList(oli_no);
+	}
+	
+	@Override
+	public CourseVideoDTO getCourseVideoByOli_noAndOrder(int oli_no, int order) {
+		return courseVideoDAO.getCourseVideoByOli_noAndOrder(oli_no, order);
 	}
 
 	@Override

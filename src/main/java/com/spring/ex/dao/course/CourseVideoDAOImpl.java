@@ -35,6 +35,15 @@ public class CourseVideoDAOImpl implements CourseVideoDAO {
 	}
 
 	@Override
+	public CourseVideoDTO getCourseVideoByOli_noAndOrder(int oli_no, int order) {
+		Map<String, Integer> map = new HashMap<String, Integer>();
+		map.put("oli_no", oli_no);
+		map.put("order", order);
+		
+		return sqlSession.selectOne(namespace + ".getCourseVideoByOli_noAndOrder", map);
+	}
+	
+	@Override
 	public int deleteCourseVideo(int oli_no) {
 		return sqlSession.delete(namespace + ".deleteCourseVideo", oli_no);
 	}
@@ -51,5 +60,4 @@ public class CourseVideoDAOImpl implements CourseVideoDAO {
 		map.put("olv_noList", olv_noList);
 		return sqlSession.delete(namespace + ".deleteNotContainedCourseVideo", map);
 	}
-
 }

@@ -187,7 +187,7 @@
 					<div class="mb-4">
 						<c:forEach var="video" items="${videos}">
 							<div class="p-2">
-								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/course/${pageNo}/play/${video.olv_no}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
+								<a <c:if test="${purchased == true || isCurrentCourseTeacher == true}">href="/course/${pageNo}/play/${video.order}"</c:if> class="link-secondary" target="_blank">${video.title}</a>
 							</div>
 						</c:forEach>
 					</div>
@@ -408,14 +408,11 @@
 		
 		// 좋아요 클릭 이벤트
 		function clickedHeart(x) {
-			var status;
 			var likeCnt = parseInt($('#likeCnt').html());
 			if(x.classList.contains("bi-heart-fill")) {
-				status = false;
 				likeCnt = likeCnt - 1; 
 			}
 			else {
-				status = true;
 				likeCnt = likeCnt + 1; 
 			}
 		       
@@ -428,8 +425,18 @@
 				url: '/courseClickedLike',
 				type: 'post',
 				data: {
-					status: status,
 					oli_no: ${pageNo}
+				},
+				success: function(data) {
+					console.log(data);
+					alert(data.message);
+					if(data.responseCode == 'success') {
+						console.log("asdf");
+						alert(data.message);
+					}
+				},
+				error: function() {
+					alert("error");
 				}
 			});
 		}
@@ -452,8 +459,13 @@
 				data: {
 					oli_no: ${pageNo}
 				},
-				success: function() {
-					location.reload();
+				success: function(data) {
+					if(data.responseCode == "error") {
+						alert(data.message);
+					}
+					else {
+						location.reload();
+					}
 				},
 				error: function() {
 					alert("error");

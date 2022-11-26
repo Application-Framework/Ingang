@@ -181,10 +181,11 @@
 					<div class="mb-4">
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
-								<a href="javascript:;" <c:if test="${purchased == true || note.m_no == member.m_no}">onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
+								<a href="javascript:;" <c:if test="${purchased == true || note.m_no == member.m_no || member.m_authority == 1}">
+									onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
 								<div class="float-end me-3">
-									<span><a href="/course/${note.oli_no}/play/${article.olv_no}">수정</a></span>
-						    		<span>| <a href="javascript:;" onclick="deleteNoteArticle(${note.oli_no}, ${article.olv_no})">삭제</a></span>
+									<span><a href="/course/${note.oli_no}/play/${article.order}">수정</a></span>
+						    		<span>| <a href="javascript:;" onclick="deleteNoteArticle(${note.oli_no}, ${article.order})">삭제</a></span>
 					    		</div>
 							</div>
 							
@@ -321,14 +322,11 @@
 		
 		// 좋아요 클릭 이벤트
 		function clickedHeart(x) {
-			var status;
 			var likeCnt = parseInt($('#likeCnt').html());
 			if(x.classList.contains("bi-heart-fill")) {
-				status = false;
 				likeCnt = likeCnt - 1; 
 			}
 			else {
-				status = true;
 				likeCnt = likeCnt + 1; 
 			}
 		       
@@ -341,8 +339,15 @@
 				url: '/noteClickedLike',
 				type: 'post',
 				data: {
-					status: status,
 					n_no: ${pageNo}
+				},
+				success: function(data) {
+					if(data.responseCode == 'error') {
+						alert(data.message);
+					}
+				},
+				error: function() {
+					alert("error");
 				}
 			});
 		}
@@ -378,23 +383,39 @@
 				data: {
 					n_no: ${pageNo}
 				},
-				success: function() {
-					location.reload();
-				}
+				success: function(data) {
+					if(data.responseCode == 'error') {
+						alert(data.message);
+					}
+					else {
+						location.reload();
+					}
+				},
+				error: function() {
+					alert("error");
+				}				
 			});
 		}
 		
-		function deleteNoteArticle(oli_no, olv_no) {
+		function deleteNoteArticle(oli_no, order) {
 			if(confirm("정말 노트 글을 삭제하시겠습니까?")) {
 				$.ajax({
 					url: "/deleteNoteArticle",
 					type: "POST",
 					data: {
 						oli_no: oli_no,
-						olv_no: olv_no
+						order: order
 					},
-					success: function() {
-						location.reload();
+					success: function(data) {
+						if(data.responseCode == 'error') {
+							alert(data.message);
+						}
+						else {
+							location.reload();
+						}
+					},
+					error: function() {
+						alert("error");
 					}
 				});
 			}

@@ -44,7 +44,7 @@ public interface CourseService {
 	public int deleteCourseLike(int oli_no, int m_no);
 	
 	// 좋아요가 존재하는지
-	public int existCourseLike(int oli_no, int m_no);
+	public boolean existCourseLike(int oli_no, int m_no);
 	
 	// 강의 등록
 	public int insertCourse(CourseDTO courseDTO);
@@ -75,6 +75,9 @@ public interface CourseService {
 	
 	// 강의 비디오 가져오기
 	public CourseVideoDTO getCourseVideo(int olv_no);
+	
+	// 강의 비디오 가져오기
+	public CourseVideoDTO getCourseVideoByOli_noAndOrder(int oli_no, int order);
 	
 	// 강의 비디오 수정
 	public int updateCourseVideo(CourseVideoDTO dto);
