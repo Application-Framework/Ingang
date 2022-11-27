@@ -352,12 +352,15 @@
 			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">수강신청 하기</a>
 			        </c:if>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
-			        	<c:if test="${member != null}">
-							<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
-						</c:if>
-						<c:if test="${member == null}">
-							<i class="bi bi-heart me-1" style="font-size:25px;"></i>
-						</c:if>
+			        	<c:choose>
+			        		<c:when test="${member != null && isCurrentCourseTeacher == false && member.m_authority != 1}">
+			        			<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
+			        		</c:when>
+			        		
+			        		<c:otherwise>
+			        			<i class="bi bi-heart me-1" style="font-size:25px;"></i>
+			        		</c:otherwise>
+			        	</c:choose>
 						<span id="likeCnt" style="font-size:23px">${likeCnt}</span>
 					</span>
 			      </div>
