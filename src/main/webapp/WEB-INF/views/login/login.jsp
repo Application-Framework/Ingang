@@ -44,7 +44,7 @@
                 <div class="col-lg-6">
                     <div class="login__form">
                         <h3>로그인</h3>
-                        <form role="form" method="post" autocomplete="off">
+                        <form id="loginForm">
                             <div class="input__item">
                                 <input type="text" name="m_id" class="form-control" placeholder="id를 입력해 주세요">
                                 <span class="material-symbols-outlined">
@@ -57,7 +57,7 @@
                                 	lock
                                 </span>
                             </div>
-                            <button type="submit" class="btn head-btn2">로그인</button>
+                            <button id="signInButton" type="button" class="btn head-btn2">로그인</button>
                         </form>
                         <a href="#" class="forget_pass">비밀번호 찾기</a>
                     </div>
@@ -77,11 +77,9 @@
     <jsp:include page="../fix/footer.jsp" />
 
 	<%------------ All JS Custom Plugins Link Here here -----------%>
-	<script
-		src="<c:url value='/resources/js/vendor/modernizr-3.5.0.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/vendor/modernizr-3.5.0.min.js'/>"></script>
 	<%-- Jquery, Popper, Bootstrap --%>
-	<script
-		src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
+	<script src="<c:url value='/resources/js/vendor/jquery-1.12.4.min.js'/>"></script>
 	<script src="<c:url value='/resources/js/popper.min.js'/>"></script>
 	<script src="<c:url value='/resources/js/bootstrap.min.js'/>"></script>
 	<%-- Jquery Mobile Menu --%>
@@ -112,5 +110,26 @@
 	<%-- Jquery Plugins, main Jquery --%>
 	<script src="<c:url value='/resources/js/plugins.js'/>"></script>
 	<script src="<c:url value='/resources/js/main.js'/>"></script>
+	
+	<script>
+		$("#signInButton").click(function() {
+			$.ajax({
+				url: "/signIn",
+				type: "post",
+				data: $("#loginForm").serialize(),
+				success: function(data) {
+					if(data.responseCode == "error") {
+						alert(data.message);
+					}
+					else if(data.responseCode == "success"){
+						location.href = data.url;
+					}
+				},
+				error: function() {
+					alert("error");
+				}
+			});
+		});
+	</script>
 </body>
 </html>

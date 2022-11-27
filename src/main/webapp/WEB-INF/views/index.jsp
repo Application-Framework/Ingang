@@ -437,7 +437,7 @@
        
         <script>
 			var target = document.getElementById("select1");
-			target.options[target.selectedIndex].text
+			//target.options[target.selectedIndex].text
 			
 			$('#searchBtn').click(function() {
 				var select1 = $('#select1').val();
