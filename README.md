@@ -65,7 +65,7 @@ admin courses
 
 ## Role
 
-Main page, my page, statistics, admin community : [Kim Sunki](https://github.com/m9613163) 
+Main page, my page, statistics, admin community : [Hong Sunki](https://github.com/m9613163) 
 
 Courses, notes, teacher : [Kim Hongil](https://github.com/Hoil2)
 
