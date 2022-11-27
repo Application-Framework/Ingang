@@ -3,13 +3,13 @@ package com.spring.ex.controller;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.swing.JOptionPane;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.JsonObject;
 import com.spring.ex.dto.MemberDTO;
 import com.spring.ex.service.MemberService;
 
@@ -29,20 +29,22 @@ public class LoginController {
 	}
 	
 	// 로그인
-	@RequestMapping(value = "/loginPageView", method = RequestMethod.POST)
-	public String postLogin(MemberDTO dto, HttpServletRequest request) throws Exception {
-		HttpSession session = request.getSession();
-
-		MemberDTO login = service.login(dto);
+	@ResponseBody
+	@RequestMapping(value = "/signIn", method = RequestMethod.POST, produces="application/json; charset=utf8")
+	public String signIn(MemberDTO login, HttpServletRequest request) throws Exception {
+		JsonObject jsonObject = new JsonObject();
+		login = service.login(login);
 		
+		// 로그인 실패
 		if (login == null) {
-
-			JOptionPane msg = new JOptionPane();
-			msg.showMessageDialog(null, "올바른 아이디 또는 패스워드를 입력해주세요");
-			
-			return "redirect:/loginPageView";
+			System.err.println("로그인 정보가 일치하지 않습니다.");
+			jsonObject.addProperty("responseCode", "error");
+			jsonObject.addProperty("message", "로그인 정보가 일치하지 않습니다.");
+			return jsonObject.toString();
 		} 
+		// 로그인 성공
 		else {
+			HttpSession session = request.getSession();
 			session.setAttribute("member", login);
 			session.setAttribute("m_no", login.getM_no());
 			
@@ -58,7 +60,10 @@ public class LoginController {
 			if(redirectURL == null || redirectURL.toString().indexOf("/loginPageView") != -1)
 				redirectURL = "/";
 			
-			return "redirect:" + redirectURL.toString();
+			System.out.println("로그인 성공 : " + login);
+			jsonObject.addProperty("responseCode", "success");
+			jsonObject.addProperty("url", redirectURL.toString());
+			return jsonObject.toString();
 		}
 	}
 	

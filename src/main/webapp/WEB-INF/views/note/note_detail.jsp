@@ -137,7 +137,7 @@
 		            </div>
 		            <span class="pr-5 number-rating">(${starAvg})</span>
 		            <span>${replys.size()}개의 수강평 ∙ </span> <span>${stdCnt}명의 수강생</span>
-		            <p class="text-white">${teacher.name}</p>
+		            <p class="text-white">${memberService.getMemberByM_no(note.m_no).m_name}</p>
 		            <div class="d-flex align-items-center items-link ">
 		            	<span class="fs-4 pe-2 text-white">#</span>
 		            	<c:forEach var="tag" items="${tags}">
@@ -178,15 +178,23 @@
 				
 					<c:out value="${note.content}" escapeXml="false" />
 					
+					<%-- 노트 내용 --%>
+					<div class="mb-3 fs-3 fw-bold">
+						노트 내용
+					</div>
+					
 					<div class="mb-4">
 						<c:forEach var="article" items="${articles}">
 							<div class="p-2">
 								<a href="javascript:;" <c:if test="${purchased == true || note.m_no == member.m_no || member.m_authority == 1}">
 									onclick="openModal('#${article.na_no}')"</c:if> class="link-secondary">${article.title}</a>
-								<div class="float-end me-3">
-									<span><a href="/course/${note.oli_no}/play/${article.order}">수정</a></span>
-						    		<span>| <a href="javascript:;" onclick="deleteNoteArticle(${note.oli_no}, ${article.order})">삭제</a></span>
-					    		</div>
+								
+								<c:if test="${note.m_no == member.m_no}">
+									<div class="float-end me-3">
+										<span><a href="/course/${note.oli_no}/play/${article.order}">수정</a></span>
+							    		<span>| <a href="javascript:;" onclick="deleteNoteArticle(${note.oli_no}, ${article.order})">삭제</a></span>
+						    		</div>
+					    		</c:if>
 							</div>
 							
 							<%-- 노트 글 모달 --%>
@@ -218,6 +226,10 @@
 			    		<p>${reply.content}</p>
 				    	<hr>
 					</c:forEach>
+					
+					<c:if test="${replys.size() == 0}">
+						<h5>리뷰가 없습니다.</h5>
+					</c:if>
 					
 					<%-- 리뷰 입력 --%>
 					<c:if test="${purchased == true || member.m_authority == 1}">
@@ -270,12 +282,15 @@
 			        	<a href="/loginPageView" class="btn btn-primary mb-3" style="min-width:100%;">구매 하기</a>
 			        </c:if>
 			        <span class="d-flex justify-content-center" data-cnt="398" data-target="PC">
-			        	<c:if test="${member != null}">
-							<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
-						</c:if>
-						<c:if test="${member == null}">
-							<i class="bi bi-heart me-1" style="font-size:25px;"></i>
-						</c:if>
+			        	<c:choose>
+			        		<c:when test="${member != null && note.m_no != member.m_no && member.m_authority != 1}">
+			        			<i onclick="clickedHeart(this)" id="like" class="bi bi-heart me-1" style="font-size:25px;"></i>
+			        		</c:when>
+			        		
+			        		<c:otherwise>
+			        			<i class="bi bi-heart me-1" style="font-size:25px;"></i>
+			        		</c:otherwise>
+			        	</c:choose>
 						<span id="likeCnt" style="font-size:23px">${likeCnt}</span>
 					</span>
 			      </div>

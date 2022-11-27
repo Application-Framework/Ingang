@@ -294,7 +294,7 @@ public class CourseController {
 		
 		HistoryOrderLectureDTO hol = historyOrderService.getHistoryOrderLectureByOli_noM_no(oli_no, member.getM_no());
 		if(member.getM_authority() != 1 && !teacherService.isTeacherOfThisCourse(oli_no, member.getM_no()) && hol == null) {
-			model.addAttribute("errorMessage", "강의를 시청할 권한이 없습니다.");
+			model.addAttribute("errorMessage", "강의에 접속할 권한이 없습니다.");
 			return "errorPage";
 		}
 		
@@ -385,7 +385,7 @@ public class CourseController {
 			
 		boolean isExistLike = courseService.existCourseLike(oli_no, member.getM_no());
 		
-		if(isExistLike == true) {
+		if(isExistLike == false) {
 			courseService.insertCourseLike(oli_no, member.getM_no());
 		}
 		else {

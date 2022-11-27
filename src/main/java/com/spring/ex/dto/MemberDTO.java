@@ -59,7 +59,9 @@ public class MemberDTO {
 	public void setImg_path(String img_path) {
 		this.img_path = img_path;
 	}
-	
-	
-	
+	@Override
+	public String toString() {
+		return "MemberDTO [m_no=" + m_no + ", m_id=" + m_id + ", m_pw=" + m_pw + ", m_name=" + m_name + ", m_authority="
+				+ m_authority + ", m_comment=" + m_comment + ", reg_date=" + reg_date + ", img_path=" + img_path + "]";
+	}
 }

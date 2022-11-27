@@ -40,7 +40,7 @@
 	  border-radius : 8px;
 	  display : none;
 	  position : absolute;
-	  z-index : 1; /*다른 요소들보다 앞에 배치*/
+	  z-index : 999; /*다른 요소들보다 앞에 배치*/
 	  font-weight: 400;
 	  background-color: #f9f9f9;
 	  min-width : 400px;

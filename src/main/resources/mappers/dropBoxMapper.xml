@@ -19,7 +19,6 @@
 		select count(*)
 		from online_lecture_introduction oli, online_lecture_like oll
 		where oll.m_no = #{m_no} and oli.oli_no = oll.oli_no
-		group by oll.oli_no
 	</select>
 	
 </mapper>
