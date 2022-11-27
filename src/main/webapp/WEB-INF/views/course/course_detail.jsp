@@ -60,6 +60,9 @@
 			text-decoration: none;
 		}
 		
+		a:hover {
+			color: #0a58ca;
+		}
 		.nice-select {
 		    width: 50px;
 		    height: 30px;
@@ -193,17 +196,19 @@
 					</div>
 					
 					<%-- 관련 노트 --%>
-					<div class="mb-3 fs-3 fw-bold">
-						관련 노트
-					</div>
-					
-					<div class="mb-4">
-						<c:forEach var="note" items="${notes}" begin="0" end="10" step="1">
-							<div class="p-2">
-								<a href="/note/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getMemberByM_no(note.m_no).m_name}</a> 
-							</div>
-						</c:forEach>
-					</div>
+					<c:if test="${notes.size() != 0}">
+						<div class="mb-3 fs-3 fw-bold">
+							관련 노트
+						</div>
+						
+						<div class="mb-4">
+							<c:forEach var="note" items="${notes}" begin="0" end="10" step="1">
+								<div class="p-2">
+									<a href="/note/${note.n_no}">제목 : ${note.title} / 작성자:${memberService.getMemberByM_no(note.m_no).m_name}</a> 
+								</div>
+							</c:forEach>
+						</div>
+					</c:if>
 					<%-- 수강평 --%>
 					<div id="reviews" class="mb-3 fs-3 fw-bold">
 						수강평
@@ -219,6 +224,10 @@
 			    		<p>${reply.content}</p>
 				    	<hr>
 					</c:forEach>
+					
+					<c:if test="${replys.size() == 0}">
+						<h5>수강평이 없습니다.</h5>
+					</c:if>
 					
 					<%-- 수강평 입력 --%>
 					<c:if test="${purchased == true}">
@@ -428,10 +437,7 @@
 					oli_no: ${pageNo}
 				},
 				success: function(data) {
-					console.log(data);
-					alert(data.message);
-					if(data.responseCode == 'success') {
-						console.log("asdf");
+					if(data.responseCode == 'error') {
 						alert(data.message);
 					}
 				},
