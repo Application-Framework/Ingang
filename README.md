@@ -23,13 +23,14 @@ Everyone can apply for a teacher on our site, but they need to be examined by a 
 
 ## ScreenShot
 
-![main page](images/main.png)
 
-main page
+<table>
+    <tr>
+        <td valign=top><img src="images/main.png"><p>main page</p></td>
+        <td valign=top><img src="images/courses.png"><p>courses search page</p></td>
+    </tr>
+</div>
 
-![courses search page](images/courses.png)
-
-courses search page
 
 ![course detail page](images/course_16.png)
 
@@ -71,7 +72,7 @@ Courses, notes, teacher : [Kim Hongil](https://github.com/Hoil2)
 
 Community : [Kim Yohan](https://github.com/choum97)
 
-my page : [Jeon suhyeon](https://github.com/Jeonsuhyeonn)
+My page : [Jeon suhyeon](https://github.com/Jeonsuhyeonn)
 
 ## SQL
 
