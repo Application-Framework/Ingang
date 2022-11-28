@@ -24,7 +24,7 @@ Everyone can apply for a teacher on our site, but they need to be examined by a 
 
 [Hong Sunki](https://github.com/m9613163) 
 
-[Jeon suhyeon](https://github.com/Jeonsuhyeonn)
+[Jeon Suhyeon](https://github.com/Jeonsuhyeonn)
 
 ## SQL
 
