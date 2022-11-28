@@ -10,26 +10,21 @@ Everyone can apply for a teacher on our site, but they need to be examined by a 
 
 ## Development Enviroment
 
-- OS : Window 10
-- IDE : Eclipse (ver 2020-06)
-- Spring Framwork (Lecacy Project)
-- JSP
-- Java
-- Bootstrap 4 and 5
-- Jquery
-- Server : apache tomcat 9.0.43
-- Database : MariaDB
-    - GUI : HeidiSQL
+- Eclipse
+- Spring Framework Legacy
+- Java SE 8
+- Apache tomcat 9.0.43
+- MariaDB
 
-## Role
+## Team members
 
-Main page, my page, statistics, admin community : [Hong Sunki](https://github.com/m9613163) 
+[Kim Yohan](https://github.com/choum97)
 
-Courses, notes, teacher : [Kim Hongil](https://github.com/Hoil2)
+[Kim Hongil](https://github.com/Hoil2)
 
-Community : [Kim Yohan](https://github.com/choum97)
+[Hong Sunki](https://github.com/m9613163) 
 
-My page : [Jeon suhyeon](https://github.com/Jeonsuhyeonn)
+[Jeon suhyeon](https://github.com/Jeonsuhyeonn)
 
 ## SQL
 
@@ -37,25 +32,15 @@ My page : [Jeon suhyeon](https://github.com/Jeonsuhyeonn)
 
 ## ScreenShot
 
-<table>
-    <tr>
-        <td width="50%"><img src="images/main.png"><p>main page</p></td>
-        <td width="50%"><img src="images/courses.png"><p>courses search page</p></td>
-    </tr>
-    <tr>
-        <td><img src="images/course_16.png"><p>course detail page</p></td>
-        <td><img src="images/note_42.png"><p>note detail page</p></td>
-    </tr>
-    <tr>
-        <td><img src="images/community.png"><p>community</p></td>
-        <td><img src="images/courses_history.png"><p>mypage</p></td>
-    </tr>
-    <tr>
-        <td><img src="images/admin_main_dashboard.png"><p>admin main dashboard</p></td>
-        <td><img src="images/admin_review.png"><p>admin review</p></td>
-    </tr>
-    <tr>
-        <td><img src="images/admin_visit.png"><p>admin courses</p></td>
-        <td><img src="images/admin_courses.png"><p>admin review</p></td>
-    </tr>
-</div>
+![main](images/main.png)
+main page
+![courses](images/courses.png)
+courses search page
+![course](images/course_16.png)
+course detail page
+![community](images/community.png)
+community
+![admin main dashboard](images/admin_main_dashboard.png)
+admin main dashboard
+![admin statistics](images/admin_visit.png)
+admin statistics
