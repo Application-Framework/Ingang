@@ -522,12 +522,12 @@ $('#btnStudyCompleted').click(function(){
 	
 });
 
-function reloadPage() {
+//폼으로 submit한다음 상세페이지 새로고침
+function reloadPage(reLoadUrl) {
 	setTimeout(function() {
-		//opener.location.replace(reLoadUrl);
-		//window.close();
 		if(popup!= null) popup.close();
-		location.reload();
+		//location.reload();
+		location.href=reLoadUrl; //reLoadUrl 게시글 종류 변하면 바뀐것 따라서 새로고침시키도록
 	}, 500);
 }
 </script>

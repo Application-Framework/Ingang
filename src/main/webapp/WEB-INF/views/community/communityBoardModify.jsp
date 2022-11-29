@@ -189,7 +189,7 @@ $('#btnModify').click(function() {
 	
 	var reLoadUrl = "/communityBoardRead?cb_no=" + cb_no + "&classify=" + classify + "&isOnlineLecture="+ ${cbReadPage.oli_no};
 	$("#searchForm").submit();
-	opener.reloadPage();
+	opener.reloadPage(reLoadUrl);
    // self.close();
     /*
 	setTimeout(function() {
