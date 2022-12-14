@@ -212,6 +212,7 @@
 		WHERE olr.oli_no = oli.oli_no AND olr.m_no = m.m_no <include refid="searchReview"></include> 
 	</select>
 	
+	<!-- 커뮤니티 게시판 태그(갯수만큼 or로) 및 키워드 검색 -->
 	<sql id="searchBoard">
 		<choose>
 			<when test="searchKeyword == 'noContent' and searchTag == 'noTag'">
@@ -235,6 +236,8 @@
 			</when>
 		</choose>
 	</sql>
+	
+	<!-- 커뮤니티 게시판 종류 1:자유게시판, 2 3:질문답변(미완, 해결완), 4 5:스터디(모집중, 종료) -->
 	<sql id="classifyBoard">
 		<choose>
 			<when test="checkClass == 'chat'">
@@ -260,6 +263,8 @@
 			</when>
 		</choose>
 	</sql>
+	
+	<!-- 커뮤니티 수강 후기 게시판 검색 -->
 	<sql id="searchReview">
 		<choose>
 			<when test="searchKeyword == 'noContent'">
@@ -349,6 +354,7 @@
 		WHERE ia_no = #{ia_no}
 	</update>
 	
+	<!--1:1문의 게시판 검색(제목, 카테고리, 회원아이디 중 하나로)  -->
 	<sql id="searchInauiry">
 		<if test="searchKeyword != null and searchType != null">
 			<choose>
