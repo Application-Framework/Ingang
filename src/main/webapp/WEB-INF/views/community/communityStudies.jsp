@@ -32,8 +32,13 @@
     <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
-    <div class="container-flex">
-    	<img src='<c:url value="/resources/img/community/community_studies_banner.PNG" />' alt="" width="100%" height="100px" >
+	<div class="container-flex" style="background-color: #000a12; width: 100%; height: 100px;">
+		<div class="container">
+	    	<div style="padding: 20px;">
+	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">함께 성장할 스터디를 모집해보세요</font></h4>
+	    		<font color="#FFFFFF">강의 수강에서 더 나아가 함께 스터디까지! </font> 
+	    	</div>
+    	</div>
     </div><br>
     <div class="container">
     	<div class="row">

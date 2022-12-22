@@ -55,8 +55,13 @@
     <%------------ header section  ------------%>
     <jsp:include page="../fix/header.jsp" />
     
-	<div class="container-flex">
-    	<img src='<c:url value="/resources/img/community/community_reviews_banner.PNG" />' alt="" width="100%" height="100px">
+	<div class="container-flex" style="background-color: #000a12; width: 100%; height: 100px;">
+		<div class="container">
+	    	<div style="padding: 20px;">
+	    		<h4 class="font-weight-bold"><font color="#FFFFFF" style="font-family:; ">수강평</font></h4>
+	    		<font color="#FFFFFF">실시간으로 올라오는 진짜 수강평!!</font> 
+	    	</div>
+    	</div>
     </div><br>
    
     <!--================Blog Area =================-->
