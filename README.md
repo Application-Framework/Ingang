@@ -1,12 +1,6 @@
 # Ingang
 
-Ingang is an online lecture web platform. We are made for beginner developers or someone.
-
-This website is offering free and pay online lectures. Each course has many videos connected by Youtube. Also, a student can write a note to be related the course, and it is salable to another student.
-
-If you have any questions, you can write it in the community, and maybe the teacher will reply to your question.
-
-Everyone can apply for a teacher on our site, but they need to be examined by a site manager.
+Ingang is an online lecture platform designed for beginner developers or anyone interested in learning. The website offers both free and paid online lectures. Each course is made up of multiple videos linked from YouTube, allowing students to take notes and share them with others. If you have any questions, you can post them in the community and teachers may respond. Anyone can apply to be a teacher on our site, but they must be vetted by the site manager.
 
 ## Development Enviroment
 
